@@ -42,21 +42,15 @@
     }
 
     header {
-      background: var(--card);
-      border: 1px solid var(--table-border);
-      border-radius: 16px;
-      padding: 12px 14px;
-      box-shadow: none;
+      display: flex;
+      justify-content: flex-end;
+      padding: 0;
       position: relative;
-      overflow: hidden;
+      z-index: 40;
     }
 
     header::before {
-      content: "";
-      position: absolute;
-      inset: 0 0 auto 0;
-      height: 6px;
-      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      content: none;
     }
 
     header .topRow {
@@ -229,6 +223,7 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.18s ease;
+      z-index: 20;
     }
 
     .drawerOverlay.open {
@@ -250,6 +245,7 @@
       box-shadow: -24px 0 60px rgba(0, 0, 0, 0.35);
       display: flex;
       flex-direction: column;
+      z-index: 30;
     }
 
     .drawer.open {
@@ -339,7 +335,6 @@
     }
 
     @media (max-width: 640px) {
-      header,
       article {
         padding: 20px;
       }
@@ -389,7 +384,6 @@
           <span>メニュー</span>
         </button>
       </div>
-      <span id="updated" hidden></span>
     </header>
 
     <article id="content">
@@ -400,12 +394,13 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
     const content = document.getElementById("content");
-    const updated = document.getElementById("updated");
     const menuButton = document.getElementById("menuButton");
     const drawer = document.getElementById("drawer");
     const drawerOverlay = document.getElementById("drawerOverlay");
     const closeButton = document.getElementById("closeButton");
     const reportList = document.getElementById("reportList");
+    let openRaf = 0;
+    let closeTimer = 0;
 
     function getSelectedReportId() {
       const params = new URLSearchParams(window.location.search);
@@ -423,28 +418,53 @@
       history.pushState({}, "", url);
     }
 
+    function isDrawerShowing() {
+      return drawer.hidden === false;
+    }
+
+    function syncMenuButtonState() {
+      const open = isDrawerShowing();
+      menuButton.setAttribute("aria-expanded", open ? "true" : "false");
+      menuButton.setAttribute("aria-label", open ? "レポート一覧を閉じる" : "レポート一覧を開く");
+    }
+
     function openDrawer() {
+      if (isDrawerShowing()) return;
+      if (closeTimer) window.clearTimeout(closeTimer);
+      closeTimer = 0;
       drawer.hidden = false;
       drawerOverlay.hidden = false;
-      requestAnimationFrame(() => {
+      if (openRaf) cancelAnimationFrame(openRaf);
+      openRaf = requestAnimationFrame(() => {
+        openRaf = 0;
         drawer.classList.add("open");
         drawerOverlay.classList.add("open");
         drawer.setAttribute("aria-hidden", "false");
-        menuButton.setAttribute("aria-expanded", "true");
+        syncMenuButtonState();
         closeButton.focus();
       });
     }
 
     function closeDrawer() {
+      if (!isDrawerShowing()) return;
+      if (openRaf) cancelAnimationFrame(openRaf);
+      openRaf = 0;
       drawer.classList.remove("open");
       drawerOverlay.classList.remove("open");
       menuButton.focus();
       drawer.setAttribute("aria-hidden", "true");
-      menuButton.setAttribute("aria-expanded", "false");
-      window.setTimeout(() => {
+      syncMenuButtonState();
+      if (closeTimer) window.clearTimeout(closeTimer);
+      closeTimer = window.setTimeout(() => {
+        closeTimer = 0;
         drawer.hidden = true;
         drawerOverlay.hidden = true;
       }, 220);
+    }
+
+    function toggleDrawer() {
+      if (isDrawerShowing()) closeDrawer();
+      else openDrawer();
     }
 
     function setLoading(message) {
@@ -453,7 +473,6 @@
 
     function setError(message) {
       content.innerHTML = `<p>${message}</p>`;
-      if (updated) updated.textContent = "更新日時が取得できません";
     }
 
     function enhanceContent(root) {
@@ -504,7 +523,6 @@
 
       const title = current.title || "旅行レポート";
       document.title = title;
-      if (updated) updated.textContent = new Date().toLocaleString("ja-JP");
 
       renderMenu(manifest, current.id);
 
@@ -539,7 +557,7 @@
       }
     }
 
-    menuButton.addEventListener("click", openDrawer);
+    menuButton.addEventListener("click", toggleDrawer);
     closeButton.addEventListener("click", closeDrawer);
     drawerOverlay.addEventListener("click", closeDrawer);
     window.addEventListener("keydown", (event) => {
