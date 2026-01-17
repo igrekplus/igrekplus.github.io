@@ -278,17 +278,6 @@
       font-size: 12px;
     }
 
-    .closeButton {
-      appearance: none;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(255, 255, 255, 0.08);
-      color: var(--drawer-ink);
-      border-radius: 12px;
-      padding: 10px 12px;
-      cursor: pointer;
-      font: inherit;
-    }
-
     .drawerBody {
       overflow: auto;
       padding: 12px;
@@ -368,9 +357,8 @@
 </head>
 <body>
   <div id="drawerOverlay" class="drawerOverlay" hidden></div>
-  <aside id="drawer" class="drawer" aria-hidden="true" hidden>
+  <aside id="drawer" class="drawer" aria-hidden="true" hidden tabindex="-1">
     <div class="drawerHeader">
-      <button id="closeButton" class="closeButton" type="button">閉じる</button>
       <div>
         <h2>レポート一覧</h2>
         <p>最新 → 過去</p>
@@ -402,7 +390,6 @@
     const menuButton = document.getElementById("menuButton");
     const drawer = document.getElementById("drawer");
     const drawerOverlay = document.getElementById("drawerOverlay");
-    const closeButton = document.getElementById("closeButton");
     const reportList = document.getElementById("reportList");
     let openRaf = 0;
     let closeTimer = 0;
@@ -443,7 +430,9 @@
         drawer.classList.add("open");
         drawerOverlay.classList.add("open");
         drawer.setAttribute("aria-hidden", "false");
-        closeButton.focus();
+        const firstItem = reportList.querySelector("button");
+        if (firstItem) firstItem.focus();
+        else drawer.focus();
       });
     }
 
@@ -561,7 +550,6 @@
     }
 
     menuButton.addEventListener("click", toggleDrawer);
-    closeButton.addEventListener("click", closeDrawer);
     drawerOverlay.addEventListener("click", closeDrawer);
     window.addEventListener("keydown", (event) => {
       if (event.key === "Escape") closeDrawer();
