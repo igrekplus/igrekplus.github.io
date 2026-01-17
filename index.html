@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>2025-2026 年末年始 神戸旅行行程表</title>
+  <title>旅行レポート</title>
   <style>
     :root {
       --bg: #f6f4f1;
@@ -12,6 +12,9 @@
       --muted: #5b6470;
       --accent: #0b6b5f;
       --table-border: #e3e7ee;
+      --drawer: #0f1115;
+      --drawer-ink: #f4f7fb;
+      --drawer-muted: rgba(244, 247, 251, 0.7);
     }
 
     * {
@@ -40,6 +43,13 @@
       box-shadow: 0 16px 30px rgba(0, 0, 0, 0.08);
     }
 
+    header .topRow {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
     header h1 {
       margin: 0 0 8px;
       font-size: clamp(24px, 4vw, 36px);
@@ -50,6 +60,52 @@
       margin: 0;
       color: var(--muted);
       font-size: 14px;
+    }
+
+    header .metaRow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .menuButton {
+      appearance: none;
+      border: 1px solid var(--table-border);
+      background: #ffffff;
+      color: var(--ink);
+      border-radius: 12px;
+      padding: 10px 12px;
+      cursor: pointer;
+      font: inherit;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: transform 0.08s ease, box-shadow 0.12s ease;
+    }
+
+    .menuButton:hover {
+      box-shadow: 0 10px 18px rgba(0, 0, 0, 0.08);
+      transform: translateY(-1px);
+    }
+
+    .menuIcon {
+      width: 18px;
+      height: 14px;
+      display: inline-flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .menuIcon span {
+      height: 2px;
+      width: 100%;
+      background: var(--ink);
+      border-radius: 2px;
+      opacity: 0.9;
     }
 
     article {
@@ -111,10 +167,130 @@
       padding: 40px 0;
     }
 
+    .drawerOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease;
+    }
+
+    .drawerOverlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100dvh;
+      width: min(420px, 92vw);
+      background: linear-gradient(180deg, rgba(30, 34, 45, 0.96), rgba(15, 17, 21, 0.98));
+      color: var(--drawer-ink);
+      transform: translateX(100%);
+      transition: transform 0.22s ease;
+      border-left: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: -24px 0 60px rgba(0, 0, 0, 0.35);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawerHeader {
+      padding: 18px 18px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .drawerHeader h2 {
+      margin: 0;
+      font-size: 16px;
+      letter-spacing: 0.02em;
+    }
+
+    .drawerHeader p {
+      margin: 4px 0 0;
+      color: var(--drawer-muted);
+      font-size: 12px;
+    }
+
+    .closeButton {
+      appearance: none;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--drawer-ink);
+      border-radius: 12px;
+      padding: 10px 12px;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .drawerBody {
+      overflow: auto;
+      padding: 12px;
+    }
+
+    .reportList {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 8px;
+    }
+
+    .reportLink {
+      width: 100%;
+      text-align: left;
+      appearance: none;
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--drawer-ink);
+      border-radius: 14px;
+      padding: 12px 12px;
+      cursor: pointer;
+      font: inherit;
+      display: grid;
+      gap: 4px;
+      transition: transform 0.08s ease, background 0.12s ease;
+    }
+
+    .reportLink:hover {
+      background: rgba(255, 255, 255, 0.10);
+      transform: translateY(-1px);
+    }
+
+    .reportLink[aria-current="true"] {
+      border-color: rgba(255, 255, 255, 0.26);
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    .reportTitle {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+
+    .reportMeta {
+      font-size: 12px;
+      color: var(--drawer-muted);
+    }
+
     @media (max-width: 640px) {
       header,
       article {
         padding: 20px;
+      }
+
+      header .topRow {
+        align-items: flex-start;
       }
 
       article table {
@@ -124,10 +300,36 @@
   </style>
 </head>
 <body>
+  <div id="drawerOverlay" class="drawerOverlay" hidden></div>
+  <aside id="drawer" class="drawer" aria-hidden="true" hidden>
+    <div class="drawerHeader">
+      <div>
+        <h2>レポート一覧</h2>
+        <p>最新 → 過去</p>
+      </div>
+      <button id="closeButton" class="closeButton" type="button">閉じる</button>
+    </div>
+    <div class="drawerBody">
+      <ul id="reportList" class="reportList"></ul>
+    </div>
+  </aside>
+
   <main class="container">
     <header>
-      <h1>2025-2026 年末年始 神戸旅行行程表</h1>
-      <p class="updated">最終更新: <span id="updated">読み込み中...</span></p>
+      <div class="topRow">
+        <div>
+          <h1 id="pageTitle">旅行レポート</h1>
+          <p class="updated">最終更新: <span id="updated">読み込み中...</span></p>
+        </div>
+        <button id="menuButton" class="menuButton" type="button" aria-label="レポート一覧を開く" aria-expanded="false" aria-controls="drawer">
+          <span class="menuIcon" aria-hidden="true"><span></span><span></span><span></span></span>
+          <span>メニュー</span>
+        </button>
+      </div>
+      <div class="metaRow">
+        <span id="reportDate">開始日: -</span>
+        <span id="reportId">ID: -</span>
+      </div>
     </header>
 
     <article id="content">
@@ -139,17 +341,146 @@
   <script>
     const content = document.getElementById("content");
     const updated = document.getElementById("updated");
+    const pageTitle = document.getElementById("pageTitle");
+    const reportDate = document.getElementById("reportDate");
+    const reportId = document.getElementById("reportId");
+    const menuButton = document.getElementById("menuButton");
+    const drawer = document.getElementById("drawer");
+    const drawerOverlay = document.getElementById("drawerOverlay");
+    const closeButton = document.getElementById("closeButton");
+    const reportList = document.getElementById("reportList");
 
-    fetch("itinerary.md")
-      .then((response) => response.text())
-      .then((markdown) => {
-        content.innerHTML = marked.parse(markdown);
-        updated.textContent = new Date().toLocaleString("ja-JP");
-      })
-      .catch(() => {
-        content.innerHTML = "<p>旅程の読み込みに失敗しました。</p>";
-        updated.textContent = "更新日時が取得できません";
+    function getSelectedReportId() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get("r");
+      return id && id.trim() ? id.trim() : null;
+    }
+
+    function setSelectedReportId(id) {
+      const url = new URL(window.location.href);
+      if (!id) {
+        url.searchParams.delete("r");
+      } else {
+        url.searchParams.set("r", id);
+      }
+      history.pushState({}, "", url);
+    }
+
+    function openDrawer() {
+      drawer.hidden = false;
+      drawerOverlay.hidden = false;
+      requestAnimationFrame(() => {
+        drawer.classList.add("open");
+        drawerOverlay.classList.add("open");
+        drawer.setAttribute("aria-hidden", "false");
+        menuButton.setAttribute("aria-expanded", "true");
       });
+    }
+
+    function closeDrawer() {
+      drawer.classList.remove("open");
+      drawerOverlay.classList.remove("open");
+      drawer.setAttribute("aria-hidden", "true");
+      menuButton.setAttribute("aria-expanded", "false");
+      window.setTimeout(() => {
+        drawer.hidden = true;
+        drawerOverlay.hidden = true;
+      }, 220);
+    }
+
+    function setLoading(message) {
+      content.innerHTML = `<div class="loading">${message}</div>`;
+    }
+
+    function setError(message) {
+      content.innerHTML = `<p>${message}</p>`;
+      updated.textContent = "更新日時が取得できません";
+    }
+
+    function renderMenu(manifest, currentId) {
+      reportList.innerHTML = "";
+      for (const item of manifest) {
+        const li = document.createElement("li");
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "reportLink";
+        button.setAttribute("aria-current", item.id === currentId ? "true" : "false");
+        button.innerHTML = `
+          <div class="reportTitle"></div>
+          <div class="reportMeta"></div>
+        `;
+        button.querySelector(".reportTitle").textContent = item.title;
+        button.querySelector(".reportMeta").textContent = item.startDate ? `開始日: ${item.startDate}` : "";
+        button.addEventListener("click", () => {
+          setSelectedReportId(item.id);
+          loadReport(manifest, item.id);
+          closeDrawer();
+        });
+        li.appendChild(button);
+        reportList.appendChild(li);
+      }
+    }
+
+    async function loadReport(manifest, requestedId) {
+      const current = requestedId
+        ? manifest.find((item) => item.id === requestedId) || manifest[0]
+        : manifest[0];
+
+      if (!current) {
+        setError("レポートが見つかりませんでした。");
+        return;
+      }
+
+      const title = current.title || "旅行レポート";
+      document.title = title;
+      pageTitle.textContent = title;
+      reportDate.textContent = `開始日: ${current.startDate || "-"}`;
+      reportId.textContent = `ID: ${current.id || "-"}`;
+      updated.textContent = new Date().toLocaleString("ja-JP");
+
+      renderMenu(manifest, current.id);
+
+      setLoading("レポートを読み込み中です...");
+      try {
+        const response = await fetch(current.path, { cache: "no-cache" });
+        if (!response.ok) throw new Error("fetch failed");
+        const markdown = await response.text();
+        content.innerHTML = marked.parse(markdown);
+      } catch {
+        setError("レポートの読み込みに失敗しました。");
+      }
+    }
+
+    async function init() {
+      setLoading("レポート一覧を読み込み中です...");
+      try {
+        const response = await fetch("reports/manifest.json", { cache: "no-cache" });
+        if (!response.ok) throw new Error("fetch failed");
+        const manifest = await response.json();
+
+        if (!Array.isArray(manifest) || manifest.length === 0) {
+          setError("レポート一覧が空です。");
+          return;
+        }
+
+        const requestedId = getSelectedReportId();
+        await loadReport(manifest, requestedId);
+      } catch {
+        setError("レポート一覧の読み込みに失敗しました。");
+      }
+    }
+
+    menuButton.addEventListener("click", openDrawer);
+    closeButton.addEventListener("click", closeDrawer);
+    drawerOverlay.addEventListener("click", closeDrawer);
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeDrawer();
+    });
+    window.addEventListener("popstate", () => {
+      init();
+    });
+
+    init();
   </script>
 </body>
 </html>
