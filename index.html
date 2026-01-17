@@ -401,6 +401,7 @@
     const reportList = document.getElementById("reportList");
     let openRaf = 0;
     let closeTimer = 0;
+    let drawerState = "closed";
 
     function getSelectedReportId() {
       const params = new URLSearchParams(window.location.search);
@@ -418,18 +419,15 @@
       history.pushState({}, "", url);
     }
 
-    function isDrawerShowing() {
-      return drawer.hidden === false;
-    }
-
-    function syncMenuButtonState() {
-      const open = isDrawerShowing();
+    function setMenuButtonState(open) {
       menuButton.setAttribute("aria-expanded", open ? "true" : "false");
       menuButton.setAttribute("aria-label", open ? "レポート一覧を閉じる" : "レポート一覧を開く");
     }
 
     function openDrawer() {
-      if (isDrawerShowing()) return;
+      if (drawerState === "open") return;
+      drawerState = "open";
+      setMenuButtonState(true);
       if (closeTimer) window.clearTimeout(closeTimer);
       closeTimer = 0;
       drawer.hidden = false;
@@ -440,20 +438,20 @@
         drawer.classList.add("open");
         drawerOverlay.classList.add("open");
         drawer.setAttribute("aria-hidden", "false");
-        syncMenuButtonState();
         closeButton.focus();
       });
     }
 
     function closeDrawer() {
-      if (!isDrawerShowing()) return;
+      if (drawerState === "closed") return;
+      drawerState = "closed";
       if (openRaf) cancelAnimationFrame(openRaf);
       openRaf = 0;
       drawer.classList.remove("open");
       drawerOverlay.classList.remove("open");
-      menuButton.focus();
       drawer.setAttribute("aria-hidden", "true");
-      syncMenuButtonState();
+      setMenuButtonState(false);
+      menuButton.focus();
       if (closeTimer) window.clearTimeout(closeTimer);
       closeTimer = window.setTimeout(() => {
         closeTimer = 0;
@@ -463,7 +461,7 @@
     }
 
     function toggleDrawer() {
-      if (isDrawerShowing()) closeDrawer();
+      if (drawerState === "open") closeDrawer();
       else openDrawer();
     }
 
