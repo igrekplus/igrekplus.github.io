@@ -46,7 +46,6 @@
       justify-content: flex-end;
       padding: 0;
       position: relative;
-      z-index: 40;
     }
 
     header::before {
@@ -94,6 +93,8 @@
       display: inline-flex;
       align-items: center;
       gap: 10px;
+      position: relative;
+      z-index: 40;
       transition: transform 0.08s ease, box-shadow 0.12s ease;
     }
 
@@ -257,8 +258,12 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-start;
       gap: 14px;
+    }
+
+    .drawerHeader > div {
+      flex: 1;
     }
 
     .drawerHeader h2 {
@@ -365,11 +370,11 @@
   <div id="drawerOverlay" class="drawerOverlay" hidden></div>
   <aside id="drawer" class="drawer" aria-hidden="true" hidden>
     <div class="drawerHeader">
+      <button id="closeButton" class="closeButton" type="button">閉じる</button>
       <div>
         <h2>レポート一覧</h2>
         <p>最新 → 過去</p>
       </div>
-      <button id="closeButton" class="closeButton" type="button">閉じる</button>
     </div>
     <div class="drawerBody">
       <ul id="reportList" class="reportList"></ul>
