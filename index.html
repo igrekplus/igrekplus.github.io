@@ -44,8 +44,8 @@
     header {
       background: var(--card);
       border: 1px solid var(--table-border);
-      border-radius: 18px;
-      padding: 22px 24px 18px;
+      border-radius: 16px;
+      padding: 12px 14px;
       box-shadow: none;
       position: relative;
       overflow: hidden;
@@ -61,8 +61,8 @@
 
     header .topRow {
       display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
+      align-items: center;
+      justify-content: flex-end;
       gap: 16px;
     }
 
@@ -384,19 +384,12 @@
   <main class="container">
     <header>
       <div class="topRow">
-        <div>
-          <h1 id="pageTitle">旅行レポート</h1>
-          <p class="updated">最終更新: <span id="updated">読み込み中...</span></p>
-        </div>
         <button id="menuButton" class="menuButton" type="button" aria-label="レポート一覧を開く" aria-expanded="false" aria-controls="drawer">
           <span class="menuIcon" aria-hidden="true"><span></span><span></span><span></span></span>
           <span>メニュー</span>
         </button>
       </div>
-      <div class="metaRow">
-        <span id="reportDate">開始日: -</span>
-        <span id="reportId">ID: -</span>
-      </div>
+      <span id="updated" hidden></span>
     </header>
 
     <article id="content">
@@ -408,9 +401,6 @@
   <script>
     const content = document.getElementById("content");
     const updated = document.getElementById("updated");
-    const pageTitle = document.getElementById("pageTitle");
-    const reportDate = document.getElementById("reportDate");
-    const reportId = document.getElementById("reportId");
     const menuButton = document.getElementById("menuButton");
     const drawer = document.getElementById("drawer");
     const drawerOverlay = document.getElementById("drawerOverlay");
@@ -463,7 +453,7 @@
 
     function setError(message) {
       content.innerHTML = `<p>${message}</p>`;
-      updated.textContent = "更新日時が取得できません";
+      if (updated) updated.textContent = "更新日時が取得できません";
     }
 
     function enhanceContent(root) {
@@ -514,10 +504,7 @@
 
       const title = current.title || "旅行レポート";
       document.title = title;
-      pageTitle.textContent = title;
-      reportDate.textContent = `開始日: ${current.startDate || "-"}`;
-      reportId.textContent = `ID: ${current.id || "-"}`;
-      updated.textContent = new Date().toLocaleString("ja-JP");
+      if (updated) updated.textContent = new Date().toLocaleString("ja-JP");
 
       renderMenu(manifest, current.id);
 
