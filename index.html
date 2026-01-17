@@ -374,12 +374,14 @@
         drawerOverlay.classList.add("open");
         drawer.setAttribute("aria-hidden", "false");
         menuButton.setAttribute("aria-expanded", "true");
+        closeButton.focus();
       });
     }
 
     function closeDrawer() {
       drawer.classList.remove("open");
       drawerOverlay.classList.remove("open");
+      menuButton.focus();
       drawer.setAttribute("aria-hidden", "true");
       menuButton.setAttribute("aria-expanded", "false");
       window.setTimeout(() => {
