@@ -185,11 +185,21 @@
       margin: 0;
     }
 
+    .tableWrap.wideTable table {
+      width: max-content;
+      min-width: 100%;
+    }
+
     article th,
     article td {
       border: 1px solid var(--table-border);
       padding: 10px 12px;
       vertical-align: top;
+    }
+
+    .tableWrap.wideTable th,
+    .tableWrap.wideTable td {
+      white-space: nowrap;
     }
 
     article th {
@@ -474,6 +484,11 @@
         if (parent && parent.classList.contains("tableWrap")) continue;
         const wrapper = document.createElement("div");
         wrapper.className = "tableWrap";
+        const firstRow = table.querySelector("tr");
+        const columnCount = firstRow ? firstRow.children.length : 0;
+        if (columnCount >= 6) {
+          wrapper.classList.add("wideTable");
+        }
         table.replaceWith(wrapper);
         wrapper.appendChild(table);
       }
