@@ -1,5 +1,29 @@
 [
   {
+    "id": "camp-candidates",
+    "title": "気になったキャンプ場リスト",
+    "startDate": "2026-04-06",
+    "path": "reports/camp-candidates.md"
+  },
+  {
+    "id": "camp-wooddeck",
+    "title": "ウッドデッキキャンプ場比較",
+    "startDate": "2026-04-06",
+    "path": "reports/camp-wooddeck.md"
+  },
+  {
+    "id": "camp-rentalcar",
+    "title": "レンタカー比較まとめ",
+    "startDate": "2026-04-05",
+    "path": "reports/camp-rentalcar.md"
+  },
+  {
+    "id": "camp-bihin",
+    "title": "キャンプ備品チェックリスト",
+    "startDate": "2026-04-05",
+    "path": "reports/camp-bihin.md"
+  },
+  {
     "id": "2026-06-overseas-5friends",
     "title": "2026年6月：2泊3日 海外5人旅 調査レポート（Ver.9）",
     "startDate": "2026-06-26",
