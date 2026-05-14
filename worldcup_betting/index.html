@@ -1,0 +1,4551 @@
+﻿<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>2026W杯_フォーメーションボード_選手予想</title>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --panel: #ffffff;
+      --text: #1e2933;
+      --muted: #66788a;
+      --line: #d9e2ec;
+      --blue: #005bac;
+      --red: #d71920;
+      --pitch: #26824a;
+      --pitch-dark: #1f6f3f;
+      --shadow: 0 10px 28px rgba(15, 23, 42, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      overflow: hidden;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .shell {
+      height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      overflow: hidden;
+    }
+
+    .owner-tabs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 18px 0;
+    }
+
+    .owner-tab {
+      min-height: 38px;
+      padding: 0 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px 8px 0 0;
+      background: #e8edf3;
+      color: var(--muted);
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .owner-tab.active {
+      background: #fff;
+      color: var(--blue);
+      border-bottom-color: #fff;
+    }
+
+    .app {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(560px, 1fr) 430px;
+      gap: 18px;
+      padding: 0 18px 18px;
+      overflow: hidden;
+    }
+
+    .app.single-panel {
+      grid-template-columns: 1fr;
+      padding-top: 8px;
+    }
+
+    .app.single-panel .bench {
+      display: none;
+    }
+
+    .app.single-panel .owner-only-action {
+      display: none;
+    }
+
+    body.screenshot-mode .owner-tabs {
+      display: none;
+    }
+
+    body.screenshot-mode .app {
+      grid-template-columns: minmax(0, 980px);
+      justify-content: center;
+      padding-top: 14px;
+    }
+
+    body.screenshot-mode .bench,
+    body.screenshot-mode .owner-only-action,
+    body.screenshot-mode .rating-mark.clickable,
+    body.screenshot-mode .edit-player-button {
+      display: none;
+    }
+
+    body.screenshot-mode .toolbar-actions {
+      display: flex;
+    }
+
+    .screenshot-return {
+      display: none;
+    }
+
+    body.screenshot-mode .screenshot-return {
+      display: inline-flex;
+    }
+
+    body.screenshot-mode .board-title {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    body.screenshot-mode .pitch-wrap {
+      padding: 18px;
+    }
+
+    body.screenshot-mode .pitch {
+      min-height: 760px;
+    }
+
+    .board,
+    .bench {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+      min-width: 0;
+    }
+
+    .board {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    .board.with-panel {
+      grid-template-rows: auto minmax(360px, 1fr) auto;
+    }
+
+    .board.explain-only {
+      grid-template-rows: auto 1fr;
+    }
+
+    .board.explain-only .pitch-wrap {
+      display: none;
+    }
+
+    .board.explain-only .view-panel {
+      border-top: 0;
+    }
+
+    .board.bet-only {
+      grid-template-rows: auto 1fr;
+    }
+
+    .board.bet-only .pitch-wrap {
+      display: none;
+    }
+
+    .board.bet-only .view-panel {
+      border-top: 0;
+    }
+
+    .board.roster-only {
+      grid-template-rows: auto 1fr;
+    }
+
+    .board.roster-only .pitch-wrap {
+      display: none;
+    }
+
+    .board.roster-only .view-panel {
+      border-top: 0;
+    }
+
+    .board.compare-only {
+      grid-template-rows: auto 1fr;
+    }
+
+    .board.compare-only .pitch-wrap {
+      display: none;
+    }
+
+    .board.compare-only .view-panel {
+      border-top: 0;
+    }
+
+    .board.compare-only #comparisonPanel {
+      min-height: 0;
+      overflow-y: auto;
+      padding-top: 18px;
+    }
+
+    .app.single-panel .player-card.on-pitch {
+      cursor: default;
+    }
+
+    .board-header {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .board-header-main {
+      min-width: 0;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .board-title {
+      display: none;
+    }
+
+    .count {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      margin-top: 0;
+      padding: 2px 10px;
+      border: 2px solid rgba(0, 91, 172, 0.22);
+      border-radius: 999px;
+      color: var(--blue);
+      background: #eef6ff;
+      font-size: 16px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .count.over-limit {
+      color: #fff;
+      background: var(--red);
+      border-color: var(--red);
+    }
+
+    .status {
+      margin-top: 1px;
+      min-height: 14px;
+      color: var(--red);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .action-group {
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 5px;
+      padding: 3px 6px;
+      border: 1px solid rgba(217, 226, 236, 0.9);
+      border-radius: 8px;
+      background: #f8fafc;
+    }
+
+    .action-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .formation-button {
+      flex: 0 0 auto;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--text);
+      background: #fff;
+      min-height: 38px;
+      padding: 0 10px;
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .formation-button:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .utility-button,
+    .reset {
+      flex: 0 0 auto;
+      min-height: 36px;
+      padding: 0 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .utility-button {
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: #fff;
+      font-size: 13px;
+    }
+
+    .utility-button:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .formation-button:disabled,
+    .utility-button:disabled,
+    .reset:disabled {
+      opacity: 0.52;
+      cursor: not-allowed;
+    }
+
+    .utility-button.active {
+      color: #fff;
+      background: #334155;
+      border-color: #334155;
+    }
+
+    .primary-button {
+      color: #fff;
+      background: var(--blue);
+      border-color: var(--blue);
+    }
+
+    .primary-button:hover {
+      color: #fff;
+      background: #004889;
+      border-color: #004889;
+    }
+
+    .save-state {
+      flex: 0 0 auto;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .reset {
+      border: 1px solid rgba(215, 25, 32, 0.46);
+      color: var(--red);
+      background: #fff5f5;
+      min-height: 36px;
+      padding: 0 12px;
+      font-size: 13px;
+    }
+
+    .reset:hover {
+      border-color: var(--red);
+      background: #ffe7e7;
+    }
+
+    .pitch-wrap {
+      min-height: 0;
+      padding: 16px;
+    }
+
+    .view-panel {
+      display: none;
+      border-top: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .view-panel.active {
+      display: block;
+    }
+
+    .compare-courts {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      padding: 18px 16px 14px;
+    }
+
+    .compare-court {
+      min-width: 0;
+    }
+
+    .compare-title {
+      margin: 0 0 8px;
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .compare-pitch {
+      position: relative;
+      width: 100%;
+      height: clamp(420px, 58vh, 620px);
+      min-height: 420px;
+      overflow: hidden;
+      border-radius: 8px;
+      border: 3px solid rgba(255, 255, 255, 0.92);
+      background:
+        repeating-linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.05) 0,
+          rgba(255, 255, 255, 0.05) 10%,
+          transparent 10%,
+          transparent 20%
+        ),
+        linear-gradient(90deg, var(--pitch), var(--pitch-dark));
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+    }
+
+    .compare-pitch::before,
+    .compare-pitch::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .compare-pitch::before {
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(255,255,255,0.86) 0 2px, transparent 2px),
+        radial-gradient(circle at 50% 0%, transparent 0 62px, rgba(255,255,255,0.86) 63px 65px, transparent 66px),
+        radial-gradient(circle at 50% 0%, rgba(255,255,255,0.92) 0 4px, transparent 5px);
+    }
+
+    .compare-pitch::after {
+      left: 50%;
+      top: 82%;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.92);
+      transform: translate(-50%, -50%);
+    }
+
+    .compare-pitch .area {
+      position: absolute;
+      pointer-events: none;
+      border: 2px solid rgba(255, 255, 255, 0.86);
+    }
+
+    .compare-pitch .area.penalty {
+      left: 22%;
+      bottom: -2px;
+      width: 56%;
+      height: 28%;
+    }
+
+    .compare-pitch .area.goal-area {
+      left: 36%;
+      bottom: -2px;
+      width: 28%;
+      height: 11%;
+    }
+
+    .compare-pitch .area.goal {
+      left: 43%;
+      bottom: -9px;
+      width: 14%;
+      height: 9px;
+      border-top: 0;
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    .compare-pitch .area.arc {
+      left: 50%;
+      top: 82%;
+      width: 118px;
+      height: 118px;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      clip-path: inset(0 0 50% 0);
+    }
+
+    .compare-pitch .guide-label {
+      font-size: clamp(18px, 2.8vw, 34px);
+    }
+
+    .compare-card {
+      position: absolute;
+      z-index: 3;
+      width: 126px;
+      min-height: 60px;
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr);
+      gap: 6px;
+      align-items: center;
+      padding: 6px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.18);
+      transform: translate(-50%, -50%);
+      user-select: none;
+    }
+
+    .compare-card .photo {
+      width: 42px;
+      height: 42px;
+      font-size: 16px;
+    }
+
+    .compare-card .name {
+      font-size: 11px;
+    }
+
+    .compare-card .meta {
+      gap: 4px;
+    }
+
+    .compare-card .position {
+      min-width: 28px;
+      padding: 1px 4px;
+      font-size: 9px;
+    }
+
+    .compare-card .number-badge {
+      min-width: 22px;
+      padding: 1px 4px;
+      font-size: 9px;
+    }
+
+    .compare-card .club {
+      display: none;
+    }
+
+    .compare-diff {
+      padding: 0 14px 14px;
+    }
+
+    .compare-link-actions {
+      display: flex;
+      justify-content: center;
+      padding: 0 14px 16px;
+    }
+
+    .diff-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .diff-column {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f8fafc;
+      min-width: 0;
+    }
+
+    .diff-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      font-weight: 900;
+    }
+
+    .diff-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 10px 12px 12px;
+      color: var(--text);
+      font-size: 13px;
+    }
+
+    .diff-empty {
+      color: var(--muted);
+    }
+
+    .position-guide-panel {
+      padding: 14px;
+      overflow-x: auto;
+    }
+
+    .bet-panel {
+      padding: 16px;
+      overflow-y: auto;
+    }
+
+    .bet-card {
+      max-width: 1080px;
+      margin: 0 auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 16px;
+    }
+
+    .bet-grid {
+      display: grid;
+      grid-template-columns: minmax(180px, 240px);
+      gap: 12px;
+    }
+
+    .bet-field {
+      display: grid;
+      gap: 6px;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .bet-field input {
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 0 10px;
+      font: inherit;
+      font-size: 16px;
+    }
+
+    .bet-error {
+      min-height: 20px;
+      margin-top: 10px;
+      color: var(--red);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .bet-result {
+      display: grid;
+      gap: 8px;
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 8px;
+      background: #eef6ff;
+      color: var(--text);
+      font-weight: 800;
+    }
+
+    .bet-result-main {
+      color: var(--blue);
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .bet-result-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      border-top: 1px solid rgba(0, 91, 172, 0.14);
+      padding-top: 8px;
+    }
+
+    .official-squad {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .official-squad-head {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .official-squad-count.warning {
+      color: var(--red);
+    }
+
+    .official-squad-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 8px;
+      max-height: 360px;
+      overflow-y: auto;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f8fafc;
+    }
+
+    .official-player {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 8px;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .official-player input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--blue);
+    }
+
+    .official-player-meta {
+      min-width: 0;
+      display: grid;
+      gap: 2px;
+    }
+
+    .official-player-name,
+    .official-player-sub {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .official-player-sub {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .bet-hit-lists {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .bet-hit-box {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 10px;
+      min-width: 0;
+    }
+
+    .bet-hit-box h3 {
+      margin: 0 0 8px;
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .bet-hit-box div {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.6;
+    }
+
+    .roster-panel {
+      padding: 14px;
+      overflow-y: auto;
+    }
+
+    .roster-tools {
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) 180px;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .roster-tools input,
+    .roster-tools select {
+      min-height: 40px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 0 10px;
+      font: inherit;
+      background: #fff;
+    }
+
+    .roster-summary {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .roster-pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 5px 10px;
+      background: #f8fafc;
+    }
+
+    .roster-import {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 10px;
+    }
+
+    .roster-import-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .roster-sticky {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      margin: -14px -14px 12px;
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .roster-import textarea {
+      width: 100%;
+      min-height: 96px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 8px 10px;
+      font: inherit;
+    }
+
+    .import-result {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .import-result:empty {
+      display: none;
+    }
+
+    .roster-pill.warning {
+      color: #fff;
+      background: var(--red);
+      border-color: var(--red);
+    }
+
+    .roster-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .roster-group {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f8fafc;
+      padding: 10px;
+    }
+
+    .roster-group-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .roster-group-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 10px;
+    }
+
+    .roster-card {
+      display: grid;
+      grid-template-columns: 54px minmax(0, 1fr);
+      gap: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 10px;
+    }
+
+    .roster-card .meta {
+      flex-wrap: wrap;
+    }
+
+    .roster-country {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .flag-img {
+      width: 22px;
+      height: 15px;
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      object-fit: cover;
+      background: #fff;
+    }
+
+    .roster-card-actions {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .roster-card-actions button {
+      flex: 1 1 130px;
+    }
+
+    .roster-action-add {
+      color: #fff;
+      background: #0f766e;
+      border-color: #0f766e;
+    }
+
+    .roster-action-add:hover {
+      color: #fff;
+      background: #115e59;
+      border-color: #115e59;
+    }
+
+    .roster-action-remove {
+      color: var(--red);
+      background: #fff5f5;
+      border-color: rgba(215, 25, 32, 0.45);
+    }
+
+    .roster-action-remove:hover {
+      color: var(--red);
+      background: #ffe7e7;
+      border-color: var(--red);
+    }
+
+    .position-explorer {
+      display: grid;
+      grid-template-columns: minmax(320px, 0.9fr) minmax(280px, 0.8fr);
+      gap: 14px;
+      margin-bottom: 16px;
+      min-width: 0;
+    }
+
+    .position-map {
+      position: relative;
+      min-height: 520px;
+      border-radius: 8px;
+      border: 3px solid rgba(255, 255, 255, 0.92);
+      overflow: hidden;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.05) 0,
+          rgba(255, 255, 255, 0.05) 10%,
+          transparent 10%,
+          transparent 20%
+        ),
+        linear-gradient(90deg, var(--pitch), var(--pitch-dark));
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+    }
+
+    .position-map::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(to bottom, rgba(255,255,255,0.86) 0 2px, transparent 2px),
+        radial-gradient(circle at 50% 0%, transparent 0 72px, rgba(255,255,255,0.86) 73px 75px, transparent 76px),
+        radial-gradient(circle at 50% 0%, rgba(255,255,255,0.92) 0 4px, transparent 5px);
+    }
+
+    .position-map .area.penalty {
+      left: 22%;
+      bottom: -2px;
+      width: 56%;
+      height: 28%;
+    }
+
+    .position-map .area.goal-area {
+      left: 36%;
+      bottom: -2px;
+      width: 28%;
+      height: 11%;
+    }
+
+    .position-map .area.goal {
+      left: 43%;
+      bottom: -9px;
+      width: 14%;
+      height: 9px;
+      border-top: 0;
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    .position-map .area.arc {
+      left: 50%;
+      top: 82%;
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      clip-path: inset(0 0 50% 0);
+    }
+
+    .position-label {
+      position: absolute;
+      z-index: 3;
+      transform: translate(-50%, -50%);
+      min-width: 64px;
+      min-height: 36px;
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      border-radius: 999px;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 900;
+      box-shadow: 0 5px 16px rgba(15, 23, 42, 0.22);
+    }
+
+    .position-label.active {
+      outline: 3px solid rgba(255, 255, 255, 0.7);
+      outline-offset: 3px;
+    }
+
+    .pos-label-gk {
+      background: #7c3aed;
+    }
+
+    .pos-label-df {
+      background: #0369a1;
+    }
+
+    .pos-label-mf {
+      background: #15803d;
+    }
+
+    .pos-label-omf {
+      background: #b45309;
+    }
+
+    .pos-label-cf {
+      background: #dc2626;
+    }
+
+    .position-detail {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: #f8fafc;
+      min-width: 0;
+    }
+
+    .position-detail h2 {
+      margin: 0 0 8px;
+      font-size: 20px;
+    }
+
+    .position-detail dl {
+      margin: 0;
+      display: grid;
+      gap: 9px;
+    }
+
+    .position-detail dt {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .position-detail dd {
+      margin: 2px 0 0;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .detail-examples {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .detail-example-groups {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .detail-example-block {
+      min-width: 0;
+    }
+
+    .example-section {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: #fff;
+    }
+
+    .example-section h3 {
+      margin: 0 0 10px;
+      font-size: 15px;
+    }
+
+    .example-groups {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .example-group-title {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .example-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .example-card {
+      width: 120px;
+      min-width: 120px;
+      display: grid;
+      justify-items: center;
+      gap: 7px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 8px;
+      background: #f8fafc;
+      text-align: center;
+    }
+
+    .example-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: linear-gradient(145deg, var(--blue), var(--red));
+      font-weight: 900;
+    }
+
+    .example-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .example-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      font-weight: 900;
+      font-size: 13px;
+      line-height: 1.25;
+    }
+
+    .example-club {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.25;
+    }
+
+    .position-guide-table {
+      width: 100%;
+      min-width: 760px;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .position-guide-table th,
+    .position-guide-table td {
+      border: 1px solid var(--line);
+      padding: 10px;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    .position-guide-table th {
+      background: #eef6ff;
+      color: var(--blue);
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .pitch {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 680px;
+      overflow: hidden;
+      border-radius: 8px;
+      border: 3px solid rgba(255, 255, 255, 0.92);
+      background:
+        repeating-linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.05) 0,
+          rgba(255, 255, 255, 0.05) 10%,
+          transparent 10%,
+          transparent 20%
+        ),
+        linear-gradient(90deg, var(--pitch), var(--pitch-dark));
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+    }
+
+    .pitch::before,
+    .pitch::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .pitch::before {
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(255,255,255,0.86) 0 2px, transparent 2px),
+        radial-gradient(circle at 50% 0%, transparent 0 86px, rgba(255,255,255,0.86) 87px 89px, transparent 90px),
+        radial-gradient(circle at 50% 0%, rgba(255,255,255,0.92) 0 4px, transparent 5px);
+    }
+
+    .pitch::after {
+      left: 50%;
+      top: 82%;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.92);
+      transform: translate(-50%, -50%);
+    }
+
+    .area {
+      position: absolute;
+      pointer-events: none;
+      border: 2px solid rgba(255, 255, 255, 0.86);
+    }
+
+    .area.penalty {
+      left: 22%;
+      bottom: -2px;
+      width: 56%;
+      height: 28%;
+    }
+
+    .area.goal-area {
+      left: 36%;
+      bottom: -2px;
+      width: 28%;
+      height: 11%;
+    }
+
+    .area.goal {
+      left: 43%;
+      bottom: -9px;
+      width: 14%;
+      height: 9px;
+      border-top: 0;
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    .area.arc {
+      left: 50%;
+      top: 82%;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      clip-path: inset(0 0 50% 0);
+    }
+
+    .guide-label {
+      position: absolute;
+      left: 50%;
+      z-index: 1;
+      color: rgba(255, 255, 255, 0.28);
+      font-size: clamp(24px, 4vw, 48px);
+      font-weight: 900;
+      letter-spacing: 0;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+    }
+
+    .guide-gk {
+      top: 90%;
+    }
+
+    .guide-df {
+      top: 72%;
+    }
+
+    .guide-dmf {
+      top: 52%;
+    }
+
+    .guide-omf {
+      top: 34%;
+    }
+
+    .guide-cf {
+      top: 14%;
+    }
+
+    .bench {
+      display: grid;
+      grid-template-rows: auto auto auto minmax(0, 1fr);
+      height: 100%;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .bench-head {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .bench-title {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.4;
+      font-weight: 800;
+    }
+
+    .bench-sub {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .rating-summary {
+      margin-top: 10px;
+      display: block;
+    }
+
+    .rating-total {
+      grid-column: 1 / -1;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 7px 8px;
+      background: #eef6ff;
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 900;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .rating-pill {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 6px 4px;
+      text-align: center;
+      background: #f8fafc;
+      font-size: 13px;
+      font-weight: 900;
+      white-space: nowrap;
+      display: none;
+    }
+
+    .bench-pool {
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto auto minmax(0, 1fr);
+      overflow: hidden;
+    }
+
+    .bench-sort-actions {
+      display: flex;
+      justify-content: flex-start;
+      gap: 8px;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .sort-button {
+      min-height: 30px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #f8fafc;
+      color: var(--text);
+      cursor: pointer;
+      padding: 0 12px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .sort-button:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .decision-area {
+      min-height: 124px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .decision-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 10px 12px 6px;
+    }
+
+    .decision-title {
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .decision-count {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .decision-list {
+      min-height: 72px;
+      max-height: 164px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 0 12px 12px;
+    }
+
+    .bench-list {
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: #f8fafc;
+    }
+
+    .bench-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .bench-group + .bench-group {
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+    }
+
+    .bench-group-title {
+      position: sticky;
+      top: -12px;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 7px 8px;
+      border-radius: 6px;
+      background: #e8edf3;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .bench-group-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .player-card {
+      width: 100%;
+      min-height: 82px;
+      display: grid;
+      grid-template-columns: 54px minmax(0, 1fr);
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
+    }
+
+    .player-card:active {
+      cursor: grabbing;
+    }
+
+    .player-card.on-pitch {
+      position: absolute;
+      z-index: 3;
+      width: 166px;
+      min-height: 70px;
+      grid-template-columns: 54px minmax(0, 1fr);
+      gap: 8px;
+      padding: 7px;
+      transform: translate(-50%, -50%);
+      box-shadow: var(--shadow);
+    }
+
+    .player-card.on-pitch .photo {
+      width: 54px;
+      height: 54px;
+      font-size: 20px;
+    }
+
+    .player-card.on-pitch .name {
+      font-size: 12px;
+    }
+
+    .player-card.on-pitch .position {
+      min-width: 32px;
+      max-width: 42px;
+      padding: 2px 5px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 10px;
+    }
+
+    .photo {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: linear-gradient(145deg, var(--blue), var(--red));
+      font-size: 20px;
+      font-weight: 800;
+      flex: 0 0 auto;
+    }
+
+    .photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .info {
+      min-width: 0;
+    }
+
+    .name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 15px;
+      line-height: 1.25;
+      font-weight: 800;
+    }
+
+    .meta {
+      margin-top: 4px;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      min-width: 0;
+      flex-wrap: nowrap;
+    }
+
+    .rating-mark {
+      flex: 0 0 auto;
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: #fff;
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .rating-mark.clickable {
+      cursor: pointer;
+    }
+
+    .rating-mark.clickable:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .number-badge {
+      flex: 0 0 auto;
+      min-width: 30px;
+      border-radius: 999px;
+      padding: 2px 7px;
+      color: #fff;
+      background: #334155;
+      font-size: 12px;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .player-card.on-pitch .number-badge {
+      min-width: 27px;
+      padding: 2px 5px;
+      font-size: 10px;
+    }
+
+    .edit-player-button {
+      flex: 0 0 auto;
+      min-height: 24px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0 8px;
+      color: var(--muted);
+      background: #fff;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .edit-player-button:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .player-card.on-pitch .edit-player-button {
+      min-height: 20px;
+      padding: 0 5px;
+      font-size: 9px;
+    }
+
+    .player-card.locked {
+      cursor: default;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      place-items: center;
+      padding: 18px;
+      background: rgba(15, 23, 42, 0.45);
+    }
+
+    .modal-backdrop.active {
+      display: grid;
+    }
+
+    .modal {
+      width: min(440px, 100%);
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #fff;
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    .modal h2 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .modal-meta {
+      display: grid;
+      gap: 4px;
+      margin-bottom: 12px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .modal label {
+      display: grid;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .modal input {
+      min-height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 0 10px;
+      font: inherit;
+    }
+
+    .modal-error {
+      min-height: 18px;
+      margin-top: 8px;
+      color: var(--red);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .position {
+      flex: 0 0 auto;
+      min-width: 34px;
+      text-align: center;
+      border-radius: 999px;
+      padding: 2px 7px;
+      color: #fff;
+      background: var(--red);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .position.pos-gk {
+      background: #7c3aed;
+    }
+
+    .position.pos-df {
+      background: #0369a1;
+    }
+
+    .position.pos-mf {
+      background: #15803d;
+    }
+
+    .position.pos-fw {
+      background: #dc2626;
+    }
+
+    .position.pos-mix {
+      background: #b45309;
+    }
+
+    .club {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .player-card.on-pitch .club {
+      display: none;
+    }
+
+    .dragging-source {
+      opacity: 0.35;
+    }
+
+    .drag-ghost {
+      position: fixed;
+      z-index: 9999;
+      width: 174px;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      box-shadow: var(--shadow);
+    }
+
+    .drop-active {
+      outline: 3px solid rgba(0, 91, 172, 0.35);
+      outline-offset: -3px;
+    }
+
+    @media (max-width: 920px) {
+      body {
+        overflow: auto;
+      }
+
+      .shell {
+        height: auto;
+        min-height: 100vh;
+        overflow: visible;
+      }
+
+      .app {
+        grid-template-columns: 1fr;
+        height: auto;
+        min-height: 100vh;
+        overflow: visible;
+      }
+
+      .compare-courts {
+        grid-template-columns: 1fr;
+      }
+
+      .diff-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .bet-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .bet-hit-lists {
+        grid-template-columns: 1fr;
+      }
+
+      .roster-tools {
+        grid-template-columns: 1fr;
+      }
+
+      .position-explorer {
+        grid-template-columns: 1fr;
+      }
+
+      .position-map {
+        min-height: 460px;
+      }
+
+      .detail-example-groups {
+        grid-template-columns: 1fr;
+      }
+
+      .example-groups {
+        grid-template-columns: 1fr;
+      }
+
+      .board-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .toolbar-actions {
+        justify-content: flex-start;
+        width: 100%;
+      }
+
+      .action-group {
+        flex: 1 1 260px;
+        align-items: flex-start;
+      }
+
+      .action-group .formation-button,
+      .action-group .utility-button,
+      .action-group .reset {
+        flex: 1 1 auto;
+      }
+
+      .pitch {
+        min-height: 500px;
+        max-height: 68vh;
+      }
+
+      .bench {
+        height: auto;
+        min-height: 520px;
+      }
+
+      .bench-list {
+        max-height: 560px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .owner-tabs {
+        padding: 10px 10px 0;
+      }
+
+      .app {
+        gap: 12px;
+        padding: 0 10px 12px;
+      }
+
+      .pitch-wrap {
+        padding: 10px;
+      }
+
+      .pitch {
+        min-height: 430px;
+      }
+
+      .guide-label {
+        font-size: 24px;
+      }
+
+      .position-guide-panel {
+        padding: 10px;
+      }
+
+      .position-map {
+        min-height: 390px;
+      }
+
+      .compare-pitch {
+        height: 390px;
+        min-height: 390px;
+      }
+
+      .compare-card {
+        width: 122px;
+        grid-template-columns: 38px minmax(0, 1fr);
+      }
+
+      .compare-card .photo {
+        width: 38px;
+        height: 38px;
+      }
+
+      .example-card {
+        width: 118px;
+        min-width: 118px;
+      }
+
+      .example-avatar {
+        width: 72px;
+        height: 72px;
+      }
+
+      .position-label {
+        min-width: 54px;
+        min-height: 32px;
+        font-size: 12px;
+      }
+
+      .player-card.on-pitch {
+        width: 146px;
+        grid-template-columns: 46px minmax(0, 1fr);
+        gap: 6px;
+        padding: 6px;
+      }
+
+      .player-card.on-pitch .photo {
+        width: 46px;
+        height: 46px;
+      }
+
+      .player-card.on-pitch .name {
+        font-size: 11px;
+      }
+
+      .player-card.on-pitch .position,
+      .player-card.on-pitch .number-badge {
+        font-size: 9px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="owner-tabs" aria-label="予想者">
+      <button class="owner-tab active" type="button" data-view="owner" data-owner="karin">かりん予想（日本代表）</button>
+      <button class="owner-tab" type="button" data-view="owner" data-owner="ryo">りょう予想（日本代表）</button>
+      <button class="owner-tab" type="button" data-view="compare">比較コート（日本代表）</button>
+      <button class="owner-tab" type="button" data-view="bet">賭け結果</button>
+      <button class="owner-tab" type="button" data-view="roster">選手一覧</button>
+      <button class="owner-tab" type="button" data-view="positions">ポジション解説</button>
+    </nav>
+
+    <main class="app" id="app">
+      <section class="board" id="board" aria-label="フォーメーションボード">
+        <div class="toolbar board-header">
+          <div class="board-header-main">
+            <h1 class="board-title" id="boardTitle">かりんのフォーメーションボード</h1>
+            <div class="count" id="pitchCount">ピッチ: 0人/11人</div>
+            <div class="status" id="statusMessage"></div>
+          </div>
+          <div class="toolbar-actions">
+            <span class="save-state" id="saveState">自動保存待機中</span>
+            <div class="action-group owner-only-action" aria-label="フォーメーション">
+              <span class="action-label">フォーメーション：</span>
+              <button class="formation-button" type="button" data-formation="3-4-2-1">3-4-2-1</button>
+              <button class="formation-button" type="button" data-formation="4-2-3-1">4-2-3-1</button>
+              <button class="formation-button" type="button" data-formation="5-4-1">5-4-1</button>
+            </div>
+            <div class="action-group owner-only-action" aria-label="操作">
+              <span class="action-label">操作：</span>
+              <button class="utility-button" type="button" id="sortByRatingButton">優先順に並べる</button>
+              <button class="utility-button" type="button" id="lockButton">配置ロック</button>
+              <button class="utility-button" type="button" id="screenshotButton">スクショ用</button>
+            </div>
+            <div class="action-group owner-only-action" aria-label="共有">
+              <span class="action-label">共有：</span>
+              <button class="utility-button" type="button" id="exportButton">エクスポート</button>
+              <button class="utility-button" type="button" id="importButton">インポート</button>
+            </div>
+            <div class="action-group owner-only-action" aria-label="ピッチ配置リセット">
+              <button class="reset" type="button" id="resetButton">ピッチ配置をリセット</button>
+            </div>
+            <button class="utility-button screenshot-return" type="button" id="screenshotReturnButton">編集に戻る</button>
+          </div>
+        </div>
+        <div class="pitch-wrap">
+          <div class="pitch" id="pitch">
+            <div class="area goal"></div>
+            <div class="area penalty"></div>
+            <div class="area goal-area"></div>
+            <div class="area arc"></div>
+            <div class="guide-label guide-gk">GK</div>
+            <div class="guide-label guide-df">DF</div>
+            <div class="guide-label guide-dmf">DMF</div>
+            <div class="guide-label guide-omf">OMF/WG</div>
+            <div class="guide-label guide-cf">CF</div>
+          </div>
+        </div>
+        <section class="view-panel" id="comparisonPanel" aria-label="比較コート">
+          <div class="compare-courts">
+            <section class="compare-court">
+              <h2 class="compare-title">かりん案</h2>
+              <div class="compare-pitch" id="karinComparePitch">
+                <div class="area goal"></div>
+                <div class="area penalty"></div>
+                <div class="area goal-area"></div>
+                <div class="area arc"></div>
+                <div class="guide-label guide-gk">GK</div>
+                <div class="guide-label guide-df">DF</div>
+                <div class="guide-label guide-dmf">DMF</div>
+                <div class="guide-label guide-omf">OMF/WG</div>
+                <div class="guide-label guide-cf">CF</div>
+              </div>
+            </section>
+            <section class="compare-court">
+              <h2 class="compare-title">りょう案</h2>
+              <div class="compare-pitch" id="ryoComparePitch">
+                <div class="area goal"></div>
+                <div class="area penalty"></div>
+                <div class="area goal-area"></div>
+                <div class="area arc"></div>
+                <div class="guide-label guide-gk">GK</div>
+                <div class="guide-label guide-df">DF</div>
+                <div class="guide-label guide-dmf">DMF</div>
+                <div class="guide-label guide-omf">OMF/WG</div>
+                <div class="guide-label guide-cf">CF</div>
+              </div>
+            </section>
+          </div>
+          <div class="compare-diff">
+            <div class="diff-grid">
+              <section class="diff-column">
+                <div class="diff-head"><span>かりんのみ</span><span id="karinOnlyCount">0人</span></div>
+                <div class="diff-list" id="karinOnlyList"></div>
+              </section>
+              <section class="diff-column">
+                <div class="diff-head"><span>共通</span><span id="commonCount">0人</span></div>
+                <div class="diff-list" id="commonList"></div>
+              </section>
+              <section class="diff-column">
+                <div class="diff-head"><span>りょうのみ</span><span id="ryoOnlyCount">0人</span></div>
+                <div class="diff-list" id="ryoOnlyList"></div>
+              </section>
+            </div>
+          </div>
+          <div class="compare-link-actions">
+            <button class="utility-button" type="button" id="showBetButton">賭け結果を見る</button>
+          </div>
+        </section>
+        <section class="view-panel bet-panel" id="betPanel" aria-label="賭け結果">
+          <div class="bet-card">
+            <div class="bet-grid">
+              <label class="bet-field">
+                1人あたり金額
+                <input id="betAmountInput" type="text" inputmode="numeric" autocomplete="off">
+              </label>
+            </div>
+            <div class="official-squad">
+              <div class="official-squad-head">
+                <span>正式招集メンバー</span>
+                <span class="official-squad-count" id="officialSquadCount">正式招集メンバー選択数：0人 / 26人</span>
+              </div>
+              <div class="official-squad-list" id="officialSquadList"></div>
+            </div>
+            <div class="bet-error" id="betError"></div>
+            <div class="bet-result" id="betResult">
+              <div class="bet-result-main" id="betResultMain">同点のため支払いなし</div>
+              <div class="bet-result-row"><span>正式招集メンバー選択数</span><span id="betOfficialCountResult">0人 / 26人</span></div>
+              <div class="bet-result-row"><span>かりん選出メンバーの的中人数</span><span id="betKarinResult">0人</span></div>
+              <div class="bet-result-row"><span>りょう選出メンバーの的中人数</span><span id="betRyoResult">0人</span></div>
+              <div class="bet-result-row"><span>差分人数</span><span id="betDiffResult">0人</span></div>
+              <div class="bet-result-row"><span>支払額</span><span id="betPaymentResult">0円</span></div>
+              <div class="bet-result-row"><span>勝者</span><span id="betWinnerResult">引き分け</span></div>
+              <div class="bet-result-row"><span>支払い方向</span><span id="betDirectionResult">なし</span></div>
+              <div class="bet-hit-lists">
+                <section class="bet-hit-box">
+                  <h3>かりん的中選手</h3>
+                  <div id="betKarinHits">なし</div>
+                </section>
+                <section class="bet-hit-box">
+                  <h3>かりん外れ選手</h3>
+                  <div id="betKarinMisses">なし</div>
+                </section>
+                <section class="bet-hit-box">
+                  <h3>りょう的中選手</h3>
+                  <div id="betRyoHits">なし</div>
+                </section>
+                <section class="bet-hit-box">
+                  <h3>りょう外れ選手</h3>
+                  <div id="betRyoMisses">なし</div>
+                </section>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="view-panel roster-panel" id="rosterPanel" aria-label="選手一覧">
+          <div class="roster-sticky">
+            <div class="roster-tools">
+              <input id="rosterSearchInput" type="search" placeholder="選手名・クラブで検索">
+              <select id="rosterPositionFilter" aria-label="ポジションで絞り込み">
+                <option value="all">全ポジション</option>
+                <option value="GK">GK</option>
+                <option value="DF">DF</option>
+                <option value="MF">MF</option>
+                <option value="OMF/WG">OMF/WG</option>
+                <option value="CF">CF</option>
+              </select>
+            </div>
+            <div class="roster-summary">
+              <span class="roster-pill" id="rosterTotalCount">候補者総数：0人</span>
+              <span class="roster-pill" id="karinRosterCount">かりん：0人</span>
+              <span class="roster-pill" id="ryoRosterCount">りょう：0人</span>
+            </div>
+          </div>
+          <div class="roster-import">
+            <div class="roster-import-row">
+              <button class="utility-button" type="button" id="playerImportButton">Excelデータを取り込む</button>
+            </div>
+            <textarea id="playerImportText" placeholder="Excelの選手一覧をコピーして、ここにTSV形式で貼り付け"></textarea>
+            <div class="import-result" id="playerImportResult"></div>
+          </div>
+          <div class="roster-grid" id="rosterList"></div>
+        </section>
+        <section class="view-panel position-guide-panel" id="positionPanel" aria-label="ポジション解説">
+          <div class="position-explorer">
+            <div class="position-map" aria-label="ポジション配置図">
+              <div class="area goal"></div>
+              <div class="area penalty"></div>
+              <div class="area goal-area"></div>
+              <div class="area arc"></div>
+              <button class="position-label pos-label-gk active" type="button" data-position-code="GK" style="left:50%; top:90%;">GK</button>
+              <button class="position-label pos-label-df" type="button" data-position-code="CB" style="left:50%; top:73%;">CB</button>
+              <button class="position-label pos-label-df" type="button" data-position-code="SB/WB" style="left:18%; top:66%;">SB/WB</button>
+              <button class="position-label pos-label-df" type="button" data-position-code="SB/WB" style="left:82%; top:66%;">SB/WB</button>
+              <button class="position-label pos-label-mf" type="button" data-position-code="DMF/CMF" style="left:50%; top:51%;">DMF/CMF</button>
+              <button class="position-label pos-label-omf" type="button" data-position-code="OMF/WG" style="left:28%; top:31%;">OMF/WG</button>
+              <button class="position-label pos-label-omf" type="button" data-position-code="OMF/WG" style="left:72%; top:31%;">OMF/WG</button>
+              <button class="position-label pos-label-cf" type="button" data-position-code="CF" style="left:50%; top:12%;">CF</button>
+            </div>
+            <section class="position-detail" aria-live="polite">
+              <h2 id="positionDetailTitle">GK</h2>
+              <dl>
+                <div>
+                  <dt>正式名称</dt>
+                  <dd id="positionDetailName">ゴールキーパー</dd>
+                </div>
+                <div>
+                  <dt>役割</dt>
+                  <dd id="positionDetailRole">ゴールを守る最後の砦。シュートストップだけでなく、後方からのパス出しや守備ラインへの指示も重要。</dd>
+                </div>
+                <div>
+                  <dt>代表選考で見るポイント</dt>
+                  <dd id="positionDetailPoint">安定感、足元、ハイボール対応、国際試合での落ち着き。</dd>
+                </div>
+              </dl>
+              <div class="detail-examples" id="positionDetailExamples"></div>
+            </section>
+          </div>
+          <table class="position-guide-table">
+            <thead>
+              <tr>
+                <th>略称</th>
+                <th>正式名称</th>
+                <th>役割</th>
+                <th>代表選考で見るポイント</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>GK</td><td>ゴールキーパー</td><td>ゴールを守る最後の砦。シュートストップだけでなく、後方からのパス出しや守備ラインへの指示も重要。</td><td>安定感、足元、ハイボール対応、国際試合での落ち着き。</td></tr>
+              <tr><td>CB</td><td>センターバック</td><td>中央で相手FWを止める守備の中心。空中戦、対人守備、カバーリング、ライン統率を担う。</td><td>強豪相手に耐えられる対人能力、スピード対応、ビルドアップ、セットプレー守備。</td></tr>
+              <tr><td>SB</td><td>サイドバック</td><td>左右の守備を担当しながら、攻撃時にはサイドを押し上げる。4バックで使われることが多い。</td><td>上下動の運動量、1対1の守備、クロス、攻守の切り替え。</td></tr>
+              <tr><td>WB</td><td>ウイングバック</td><td>5バックや3バックでサイドを広く担当する選手。守備時は最終ライン、攻撃時はサイドアタッカーに近い役割。</td><td>走力、守備への戻り、攻撃参加、クロス、サイドでの粘り。</td></tr>
+              <tr><td>SB/WB</td><td>サイドバック / ウイングバック</td><td>4バックでも5バックでも使えるサイド要員。試合展開によって守備的にも攻撃的にも動ける。</td><td>複数システム対応、守備強度、運動量、戦術理解。</td></tr>
+              <tr><td>DMF</td><td>守備的ミッドフィルダー</td><td>中盤の底で相手の攻撃を止め、ボールを奪って攻撃につなげる。チームのバランスを取る役割。</td><td>守備範囲、ボール奪取、危機察知、パスの安定感。</td></tr>
+              <tr><td>CMF</td><td>セントラルミッドフィルダー</td><td>中盤の中央で攻守をつなぐ選手。守備、配球、前進、サポートを幅広く担当する。</td><td>運動量、判断力、プレス耐性、攻守のバランス。</td></tr>
+              <tr><td>DMF/CMF</td><td>守備的MF / 中央MF</td><td>守備も組み立ても担当できる中盤要員。強豪相手では特に重要なポジション。</td><td>ボールを失わないこと、守備強度、試合を落ち着かせる力。</td></tr>
+              <tr><td>OMF</td><td>攻撃的ミッドフィルダー</td><td>FWの後ろでチャンスを作る選手。パス、ドリブル、シュートで攻撃に変化をつける。</td><td>創造性、得点関与、狭い場所での技術、守備への切り替え。</td></tr>
+              <tr><td>SH</td><td>サイドハーフ</td><td>中盤のサイドで攻守に関わる選手。守備時には戻り、攻撃時にはサイドから前進する。</td><td>上下動、守備参加、クロス、カウンター対応。</td></tr>
+              <tr><td>WG</td><td>ウイング</td><td>前線のサイドで仕掛ける選手。ドリブル、裏抜け、クロス、カットインで攻撃を作る。</td><td>突破力、スピード、得点力、守備で戻れるか。</td></tr>
+              <tr><td>OMF/WG</td><td>攻撃的MF / ウイング</td><td>2列目やサイドで攻撃を作る選手。日本代表では久保、堂安、三笘、中村のような攻撃の中心が入る枠。</td><td>個の打開力、得点力、守備負担への対応、強豪相手での再現性。</td></tr>
+              <tr><td>WG/FW</td><td>ウイング / フォワード</td><td>サイドでも中央でも使える前線要員。前田大然のように、攻撃だけでなく前線守備で価値を出す選手もいる。</td><td>走力、前線プレス、裏抜け、途中投入で流れを変えられるか。</td></tr>
+              <tr><td>CF</td><td>センターフォワード</td><td>最前線で得点を狙う選手。ポストプレー、裏抜け、空中戦、決定力が求められる。</td><td>得点力、収まり、前線からの守備、強豪相手でも起点になれるか。</td></tr>
+            </tbody>
+          </table>
+        </section>
+      </section>
+
+      <aside class="bench" id="bench" aria-label="選手リスト">
+        <div class="bench-head">
+          <h2 class="bench-title" id="sideTitle">かりんの予想</h2>
+          <div class="bench-sub">選手を各欄へドラッグ</div>
+          <div class="rating-summary" aria-label="招集評価カウント">
+            <div class="rating-total" id="ratingTotal">総人数：0人</div>
+          </div>
+        </div>
+
+        <section class="decision-area" id="confirmedArea" aria-label="招集確定">
+          <div class="decision-head">
+            <div class="decision-title">招集確定</div>
+            <div class="decision-count" id="confirmedCount">0人（500円x0人＝0円）</div>
+          </div>
+          <div class="decision-list" id="confirmedList"></div>
+        </section>
+
+        <section class="decision-area" id="droppedArea" aria-label="招集落ち">
+          <div class="decision-head">
+            <div class="decision-title">招集落ち</div>
+            <div class="decision-count" id="droppedCount">0人（500円x0人＝0円）</div>
+          </div>
+          <div class="decision-list" id="droppedList"></div>
+        </section>
+
+        <section class="bench-pool" id="benchArea" aria-label="ベンチ">
+          <div class="bench-head">
+            <h2 class="bench-title">ベンチ</h2>
+            <div class="bench-sub" id="benchCount">ベンチ: 26人</div>
+          </div>
+          <div class="bench-list" id="benchList"></div>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="editModal" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+    <div class="modal">
+      <h2 id="editModalTitle">選手情報編集</h2>
+      <div class="modal-meta">
+        <div id="editPlayerName"></div>
+        <div id="editPlayerPosition"></div>
+        <div id="editPlayerClub"></div>
+      </div>
+      <label>
+        背番号
+        <input id="editNumberInput" type="text" inputmode="numeric" autocomplete="off" placeholder="例：6">
+      </label>
+      <div class="modal-error" id="editModalError"></div>
+      <div class="modal-actions">
+        <button class="utility-button" type="button" id="cancelEditButton">キャンセル</button>
+        <button class="utility-button primary-button" type="button" id="saveEditButton">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const players = [
+      { id: "p01", name: "鈴木彩艶", position: "GK", status: "確実", number: "", club: "パルマ", imageUrl: "pics/鈴木彩艶.jpg" },
+      { id: "p02", name: "大迫敬介", position: "GK", status: "本命", number: "", club: "サンフレッチェ広島", imageUrl: "pics/大迫敬介.jpg" },
+      { id: "p03", name: "谷晃生", position: "GK", status: "本命", number: "", club: "FC町田ゼルビア", imageUrl: "pics/谷晃生.jpg" },
+      { id: "p04", name: "板倉滉", position: "CB", status: "確実", number: "", club: "ボルシアMG", imageUrl: "pics/板倉滉.jpg" },
+      { id: "p05", name: "伊藤洋輝", position: "CB", status: "確実", number: "", club: "バイエルン", imageUrl: "pics/伊藤洋輝.jpg" },
+      { id: "p06", name: "冨安健洋", position: "CB", status: "本命", number: "", club: "アヤックス", imageUrl: "pics/冨安健洋.jpg" },
+      { id: "p07", name: "谷口彰悟", position: "CB", status: "本命", number: "", club: "シント＝トロイデン", imageUrl: "pics/谷口彰悟.jpg" },
+      { id: "p08", name: "高井幸大", position: "CB", status: "本命", number: "", club: "ボルシアMG", imageUrl: "pics/高井幸大.jpg" },
+      { id: "p09", name: "瀬古歩夢", position: "CB/SB", status: "本命", number: "", club: "ル・アーヴル", imageUrl: "pics/瀬古歩夢.jpg" },
+      { id: "p10", name: "菅原由勢", position: "SB/WB", status: "確実", number: "", club: "サウサンプトン", imageUrl: "pics/菅原由勢.jpg" },
+      { id: "p11", name: "毎熊晟矢", position: "SB/WB", status: "本命", number: "", club: "AZ", imageUrl: "pics/毎熊晟矢.jpg" },
+      { id: "p12", name: "遠藤航", position: "DMF/CMF", status: "確実", number: "", club: "リヴァプール", imageUrl: "pics/遠藤航.jpg" },
+      { id: "p13", name: "守田英正", position: "DMF/CMF", status: "確実", number: "", club: "スポルティング", imageUrl: "pics/守田英正.jpg" },
+      { id: "p14", name: "田中碧", position: "DMF/CMF", status: "確実", number: "", club: "リーズ", imageUrl: "pics/田中碧.jpg" },
+      { id: "p15", name: "佐野海舟", position: "DMF/CMF", status: "本命", number: "", club: "マインツ", imageUrl: "pics/佐野海舟.jpg" },
+      { id: "p16", name: "藤田譲瑠チマ", position: "DMF/CMF", status: "本命", number: "", club: "シント＝トロイデン", imageUrl: "pics/藤田譲瑠チマ.jpg" },
+      { id: "p17", name: "旗手怜央", position: "OMF/CMF/WB", status: "本命", number: "", club: "セルティック", imageUrl: "pics/旗手怜央.jpg" },
+      { id: "p18", name: "久保建英", position: "OMF/SH", status: "確実", number: "", club: "レアル・ソシエダ", imageUrl: "pics/久保建英.jpg" },
+      { id: "p19", name: "堂安律", position: "OMF/SH", status: "確実", number: "", club: "フライブルク", imageUrl: "pics/堂安律.jpg" },
+      { id: "p20", name: "鎌田大地", position: "OMF/SH", status: "確実", number: "", club: "クリスタル・パレス", imageUrl: "pics/鎌田大地.jpg" },
+      { id: "p21", name: "伊東純也", position: "WG", status: "確実", number: "", club: "スタッド・ランス", imageUrl: "pics/伊東純也.jpg" },
+      { id: "p22", name: "三笘薫", position: "WG", status: "本命", number: "", club: "ブライトン", imageUrl: "pics/三笘薫.jpg" },
+      { id: "p23", name: "中村敬斗", position: "WG", status: "本命", number: "", club: "スタッド・ランス", imageUrl: "pics/中村敬斗.jpg" },
+      { id: "p24", name: "前田大然", position: "WG/FW", status: "本命", number: "", club: "セルティック", imageUrl: "pics/前田大然.jpg" },
+      { id: "p25", name: "上田綺世", position: "CF", status: "確実", number: "", club: "フェイエノールト", imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Go%20Ahead%20Eagles%20-%20Feyenoord%20-%2053679351240%20(Ayase%20Ueda).jpg?width=160" },
+      { id: "p26", name: "小川航基", position: "CF", status: "本命", number: "", club: "NEC", imageUrl: "pics/小川航基.jpg" }
+    ];
+
+    const candidatePlayers = [
+      { id: "p27", name: "前川黛也", position: "GK", status: "可能性", number: "", club: "ヴィッセル神戸", imageUrl: "pics/前川黛也.jpg" },
+      { id: "p28", name: "早川友基", position: "GK", status: "可能性", number: "", club: "鹿島アントラーズ", imageUrl: "pics/早川友基.jpg" },
+      { id: "p29", name: "渡辺剛", position: "CB", status: "可能性", number: "", club: "ヘント", imageUrl: "pics/渡辺剛.jpg" },
+      { id: "p30", name: "橋岡大樹", position: "SB/WB", status: "可能性", number: "", club: "スラヴィア・プラハ", imageUrl: "pics/橋岡大樹.jpg" },
+      { id: "p31", name: "中山雄太", position: "SB/CB", status: "可能性", number: "", club: "FC町田ゼルビア", imageUrl: "pics/中山雄太.jpg" },
+      { id: "p32", name: "長友佑都", position: "SB/WB", status: "可能性", number: "", club: "FC東京", imageUrl: "pics/長友佑都.jpg" },
+      { id: "p33", name: "関根大輝", position: "SB/WB", status: "可能性", number: "", club: "スタッド・ランス", imageUrl: "pics/関根大輝.jpg" },
+      { id: "p34", name: "中村帆高", position: "SB/WB", status: "可能性", number: "", club: "FC東京", imageUrl: "pics/中村帆高.jpg" },
+      { id: "p35", name: "佐野航大", position: "DMF/CMF", status: "可能性", number: "", club: "NEC", imageUrl: "pics/佐野航大.jpg" },
+      { id: "p36", name: "川村拓夢", position: "DMF/CMF", status: "可能性", number: "", club: "レッドブル・ザルツブルク", imageUrl: "pics/川村拓夢.jpg" },
+      { id: "p37", name: "南野拓実", position: "OMF/WG", status: "可能性", number: "", club: "モナコ", imageUrl: "pics/南野拓実.jpg" },
+      { id: "p38", name: "鈴木唯人", position: "OMF/SH", status: "可能性", number: "", club: "ブレンビー", imageUrl: "pics/鈴木唯人.jpg" },
+      { id: "p39", name: "相馬勇紀", position: "WG/SH", status: "可能性", number: "", club: "FC町田ゼルビア", imageUrl: "pics/相馬勇紀.jpg" },
+      { id: "p40", name: "古橋亨梧", position: "CF", status: "可能性", number: "", club: "バーミンガム", imageUrl: "pics/古橋亨梧.jpg" },
+      { id: "p41", name: "町野修斗", position: "CF", status: "可能性", number: "", club: "ボルシアMG", imageUrl: "pics/町野修斗.jpg" },
+      { id: "p42", name: "細谷真大", position: "CF", status: "可能性", number: "", club: "柏レイソル", imageUrl: "pics/細谷真大.jpg" },
+      { id: "p43", name: "塩貝健人", position: "CF", group: "CF", status: "可能性", number: "", club: "NEC", imageUrl: "pics/塩貝健人.jpg" },
+      { id: "p44", name: "鈴木淳之介", position: "CB/SB", group: "DF", status: "可能性", number: "", club: "湘南ベルマーレ", imageUrl: "pics/鈴木淳之介.jpg" },
+      { id: "p45", name: "三戸舜介", position: "OMF/WG", group: "OMF/WG", status: "可能性", number: "", club: "スパルタ・ロッテルダム", imageUrl: "pics/三戸舜介.jpg" },
+      { id: "p46", name: "大橋祐紀", position: "CF", group: "CF", status: "可能性", number: "", club: "ブラックバーン", imageUrl: "pics/大橋祐紀.jpg" },
+      { id: "p47", name: "小杉啓太", position: "SB/WB", group: "DF", status: "可能性", number: "", club: "ユールゴーデン", imageUrl: "pics/小杉啓太.jpg" }
+    ];
+
+    const allPlayers = loadPlayerMaster([...players, ...candidatePlayers]);
+    const defaultKarinIds = new Set(players.map((player) => player.id));
+
+    const teamName = "日本代表";
+
+    const owners = {
+      karin: "かりん",
+      ryo: "りょう"
+    };
+
+    const excelColumns = [
+      "id",
+      "名前",
+      "ポジション",
+      "group",
+      "所属クラブ",
+      "国名",
+      "かりん初期選出",
+      "りょう初期選出",
+      "背番号",
+      "画像ファイル名",
+      "国旗ファイル名",
+      "メモ"
+    ];
+
+    const countryFlagFiles = {
+      "イングランド": "イングランド.webp",
+      "スコットランド": "スコットランド.jpeg"
+    };
+
+    const clubCountries = {
+      "パルマ": "イタリア",
+      "サンフレッチェ広島": "日本",
+      "FC町田ゼルビア": "日本",
+      "ボルシアMG": "ドイツ",
+      "バイエルン": "ドイツ",
+      "アヤックス": "オランダ",
+      "シント＝トロイデン": "ベルギー",
+      "ル・アーヴル": "フランス",
+      "サウサンプトン": "イングランド",
+      "AZ": "オランダ",
+      "リヴァプール": "イングランド",
+      "スポルティング": "ポルトガル",
+      "リーズ": "イングランド",
+      "マインツ": "ドイツ",
+      "セルティック": "スコットランド",
+      "レアル・ソシエダ": "スペイン",
+      "フライブルク": "ドイツ",
+      "クリスタル・パレス": "イングランド",
+      "スタッド・ランス": "フランス",
+      "ブライトン": "イングランド",
+      "フェイエノールト": "オランダ",
+      "NEC": "オランダ",
+      "ヴィッセル神戸": "日本",
+      "鹿島アントラーズ": "日本",
+      "ヘント": "ベルギー",
+      "スラヴィア・プラハ": "チェコ",
+      "FC東京": "日本",
+      "レッドブル・ザルツブルク": "オーストリア",
+      "モナコ": "フランス",
+      "ブレンビー": "デンマーク",
+      "バーミンガム": "イングランド",
+      "柏レイソル": "日本",
+      "湘南ベルマーレ": "日本",
+      "スパルタ・ロッテルダム": "オランダ",
+      "ブラックバーン": "イングランド",
+      "ユールゴーデン": "スウェーデン"
+    };
+
+    const ownerPlayers = {
+      karin: allPlayers.filter((player) => defaultKarinIds.has(player.id)),
+      ryo: []
+    };
+
+    const ratingOrder = ["◎", "〇", "△", "×"];
+    const storageKeys = {
+      karin: "formationBoard_karin_japan",
+      ryo: "formationBoard_ryo_japan"
+    };
+    const playerMasterStorageKey = "formationBoard_players_japan";
+    const betStorageKey = "formationBoard_bet_japan";
+    const officialSquadStorageKey = "formationBoard_officialSquad_japan";
+    const currentFormations = {
+      karin: "",
+      ryo: ""
+    };
+    const ownerLocks = {
+      karin: false,
+      ryo: false
+    };
+    const saveLabels = {
+      karin: "",
+      ryo: ""
+    };
+    const betState = loadBetState();
+    let screenshotMode = false;
+    let editingPlayerId = null;
+
+    function currentPlayers() {
+      return ownerPlayers[activeOwner];
+    }
+
+    function playersForOwner(owner) {
+      return ownerPlayers[owner] || [];
+    }
+
+    function allPlayerById(playerId) {
+      return allPlayers.find((player) => player.id === playerId);
+    }
+
+    function sortPlayersByMasterOrder(list) {
+      return [...list].sort((a, b) => playerOriginalIndex(a) - playerOriginalIndex(b));
+    }
+
+    function syncPlayersArrayOrder() {
+      players.length = 0;
+      allPlayers.forEach((player) => players.push(player));
+    }
+
+    function createInitialState(owner) {
+      return new Map(ownerPlayers[owner].map((player) => [
+        player.id,
+        { area: "bench", x: 50, y: 50, rating: initialRating(player.status), number: player.number || "", manual: false }
+      ]));
+    }
+
+    function loadPlayerMaster(defaultPlayers) {
+      try {
+        const raw = localStorage.getItem("formationBoard_players_japan");
+        if (!raw) return defaultPlayers;
+        const saved = JSON.parse(raw);
+        if (!Array.isArray(saved?.players)) return defaultPlayers;
+        const merged = [...defaultPlayers];
+        saved.players.forEach((savedPlayer) => {
+          if (!savedPlayer?.id) return;
+          const index = merged.findIndex((player) => player.id === savedPlayer.id);
+          if (index === -1) {
+            merged.push(savedPlayer);
+          } else {
+            merged[index] = { ...merged[index], ...savedPlayer };
+          }
+        });
+        return merged;
+      } catch (error) {
+        console.warn("選手マスタの復元に失敗しました", error);
+        return defaultPlayers;
+      }
+    }
+
+    function savePlayerMaster() {
+      try {
+        localStorage.setItem(playerMasterStorageKey, JSON.stringify({
+          version: 1,
+          teamName,
+          players: allPlayers
+        }));
+      } catch (error) {
+        console.warn(`${playerMasterStorageKey} の保存に失敗しました`, error);
+      }
+    }
+
+    function normalizeNumber(value) {
+      if (value === undefined || value === null) return "";
+      return String(value).trim().replace(/[０-９]/g, (char) => {
+        return String.fromCharCode(char.charCodeAt(0) - 0xFEE0);
+      });
+    }
+
+    function normalizePlacement(saved, fallback) {
+      const safeArea = ["pitch", "bench", "confirmed", "dropped"].includes(saved?.area) ? saved.area : fallback.area;
+      const safeRating = ratingOrder.includes(saved?.rating) ? saved.rating : fallback.rating;
+      const safeX = Number.isFinite(Number(saved?.x)) ? clamp(Number(saved.x), 0, 100) : fallback.x;
+      const safeY = Number.isFinite(Number(saved?.y)) ? clamp(Number(saved.y), 0, 100) : fallback.y;
+      const normalizedNumber = validateNumber(saved?.number ?? fallback.number);
+      const safeNumber = normalizedNumber === null ? fallback.number : normalizedNumber;
+      return {
+        area: safeArea,
+        x: safeX,
+        y: safeY,
+        rating: safeRating,
+        number: safeNumber,
+        manual: Boolean(saved?.manual)
+      };
+    }
+
+    function loadOwnerState(owner) {
+      const initial = createInitialState(owner);
+      const key = storageKeys[owner];
+      if (!key) return initial;
+
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return initial;
+        const saved = JSON.parse(raw);
+        const savedPlayers = saved?.players || {};
+        if (Array.isArray(saved?.rosterIds)) {
+          ownerPlayers[owner] = sortPlayersByMasterOrder(saved.rosterIds.map(allPlayerById).filter(Boolean));
+        }
+        const initialForRoster = createInitialState(owner);
+        const loaded = Array.isArray(saved?.rosterIds) ? new Map() : initial;
+        currentFormations[owner] = typeof saved?.formation === "string" ? saved.formation : "";
+        ownerLocks[owner] = Boolean(saved?.locked);
+
+        ownerPlayers[owner].forEach((player) => {
+          const fallback = initialForRoster.get(player.id);
+          if (!fallback) return;
+          loaded.set(player.id, normalizePlacement(savedPlayers[player.id], fallback));
+        });
+        return loaded;
+      } catch (error) {
+        console.warn(`${key} の復元に失敗しました`, error);
+      }
+
+      return initial;
+    }
+
+    function saveOwnerState(owner = activeOwner) {
+      const key = storageKeys[owner];
+      if (!key) return;
+
+      const placements = {};
+      states[owner].forEach((placement, playerId) => {
+        placements[playerId] = {
+          area: placement.area,
+          x: placement.x,
+          y: placement.y,
+          rating: placement.rating,
+          number: placement.number || "",
+          manual: placement.manual
+        };
+      });
+
+      try {
+        localStorage.setItem(key, JSON.stringify({
+          version: 1,
+          teamName,
+          owner,
+          rosterIds: ownerPlayers[owner].map((player) => player.id),
+          formation: currentFormations[owner] || "",
+          locked: ownerLocks[owner],
+          players: placements
+        }));
+        updateSaveState(owner);
+      } catch (error) {
+        console.warn(`${key} の保存に失敗しました`, error);
+      }
+    }
+
+    function clearOwnerState(owner = activeOwner) {
+      const key = storageKeys[owner];
+      if (!key) return;
+      try {
+        localStorage.removeItem(key);
+      } catch (error) {
+        console.warn(`${key} の削除に失敗しました`, error);
+      }
+    }
+
+    function loadBetState() {
+      const initial = { amount: "500" };
+      try {
+        const raw = localStorage.getItem(betStorageKey);
+        if (!raw) return initial;
+        const saved = JSON.parse(raw);
+        return {
+          amount: saved?.amount ?? initial.amount
+        };
+      } catch (error) {
+        console.warn(`${betStorageKey} の復元に失敗しました`, error);
+        return initial;
+      }
+    }
+
+    function saveBetState() {
+      try {
+        localStorage.setItem(betStorageKey, JSON.stringify(betState));
+        updateSaveState(activeOwner);
+      } catch (error) {
+        console.warn(`${betStorageKey} の保存に失敗しました`, error);
+      }
+    }
+
+    function loadOfficialSquad() {
+      try {
+        const raw = localStorage.getItem(officialSquadStorageKey);
+        if (!raw) return new Set();
+        const saved = JSON.parse(raw);
+        const ids = Array.isArray(saved) ? saved : saved?.playerIds;
+        return new Set(Array.isArray(ids) ? ids : []);
+      } catch (error) {
+        console.warn(`${officialSquadStorageKey} の復元に失敗しました`, error);
+        return new Set();
+      }
+    }
+
+    function saveOfficialSquad() {
+      try {
+        localStorage.setItem(officialSquadStorageKey, JSON.stringify({
+          version: 1,
+          teamName,
+          playerIds: Array.from(officialSquadIds)
+        }));
+        updateSaveState(activeOwner);
+      } catch (error) {
+        console.warn(`${officialSquadStorageKey} の保存に失敗しました`, error);
+      }
+    }
+
+    const states = {
+      karin: loadOwnerState("karin"),
+      ryo: loadOwnerState("ryo")
+    };
+    const officialSquadIds = loadOfficialSquad();
+
+    const benchSortModes = {
+      karin: "original",
+      ryo: "original"
+    };
+
+    const pitchLimit = 11;
+    const rosterLimit = 26;
+    const candidateLimit = 55;
+    const positionSortOrder = ["GK", "DF", "MF", "OMF/WG", "CF"];
+    const benchGroups = [
+      { key: "GK", label: "GK" },
+      { key: "DF", label: "DF" },
+      { key: "MF", label: "MF" },
+      { key: "OMF/WG", label: "OMF/WG" },
+      { key: "CF", label: "CF" }
+    ];
+
+    const formations = {
+      "3-4-2-1": [
+        slot("GK", 50, 91),
+        slot("DF", 30, 74), slot("DF", 50, 76), slot("DF", 70, 74),
+        slot("MF", 14, 54), slot("MF", 42, 56), slot("MF", 58, 56), slot("MF", 86, 54),
+        slot("OMF/WG", 38, 34), slot("OMF/WG", 62, 34),
+        slot("CF", 50, 13)
+      ],
+      "4-2-3-1": [
+        slot("GK", 50, 91),
+        slot("DF", 18, 73), slot("DF", 39, 74), slot("DF", 61, 74), slot("DF", 82, 73),
+        slot("MF", 42, 55), slot("MF", 58, 55),
+        slot("OMF/WG", 24, 35), slot("OMF/WG", 50, 34), slot("OMF/WG", 76, 35),
+        slot("CF", 50, 13)
+      ],
+      "5-4-1": [
+        slot("GK", 50, 91),
+        slot("DF", 12, 73), slot("DF", 31, 75), slot("DF", 50, 76), slot("DF", 69, 75), slot("DF", 88, 73),
+        slot("MF", 20, 48), slot("MF", 40, 50), slot("MF", 60, 50), slot("MF", 80, 48),
+        slot("CF", 50, 13)
+      ]
+    };
+
+    let activeOwner = "karin";
+    let activeView = "owner";
+    let statusTimer = null;
+    let drag = null;
+
+    const app = document.getElementById("app");
+    const board = document.getElementById("board");
+    const pitch = document.getElementById("pitch");
+    const bench = document.getElementById("bench");
+    const benchArea = document.getElementById("benchArea");
+    const benchList = document.getElementById("benchList");
+    const confirmedArea = document.getElementById("confirmedArea");
+    const confirmedList = document.getElementById("confirmedList");
+    const droppedArea = document.getElementById("droppedArea");
+    const droppedList = document.getElementById("droppedList");
+    const resetButton = document.getElementById("resetButton");
+    const sortByRatingButton = document.getElementById("sortByRatingButton");
+    const lockButton = document.getElementById("lockButton");
+    const exportButton = document.getElementById("exportButton");
+    const importButton = document.getElementById("importButton");
+    const screenshotButton = document.getElementById("screenshotButton");
+    const screenshotReturnButton = document.getElementById("screenshotReturnButton");
+    const saveState = document.getElementById("saveState");
+    const editModal = document.getElementById("editModal");
+    const editPlayerName = document.getElementById("editPlayerName");
+    const editPlayerPosition = document.getElementById("editPlayerPosition");
+    const editPlayerClub = document.getElementById("editPlayerClub");
+    const editNumberInput = document.getElementById("editNumberInput");
+    const editModalError = document.getElementById("editModalError");
+    const saveEditButton = document.getElementById("saveEditButton");
+    const cancelEditButton = document.getElementById("cancelEditButton");
+    const pitchCount = document.getElementById("pitchCount");
+    const benchCount = document.getElementById("benchCount");
+    const confirmedCount = document.getElementById("confirmedCount");
+    const droppedCount = document.getElementById("droppedCount");
+    const ratingTotal = document.getElementById("ratingTotal");
+    const boardTitle = document.getElementById("boardTitle");
+    const sideTitle = document.getElementById("sideTitle");
+    const statusMessage = document.getElementById("statusMessage");
+    const ownerTabs = document.querySelectorAll(".owner-tab");
+    const formationButtons = document.querySelectorAll(".formation-button");
+    const comparisonPanel = document.getElementById("comparisonPanel");
+    const positionPanel = document.getElementById("positionPanel");
+    const karinComparePitch = document.getElementById("karinComparePitch");
+    const ryoComparePitch = document.getElementById("ryoComparePitch");
+    const karinOnlyCount = document.getElementById("karinOnlyCount");
+    const commonCount = document.getElementById("commonCount");
+    const ryoOnlyCount = document.getElementById("ryoOnlyCount");
+    const karinOnlyList = document.getElementById("karinOnlyList");
+    const commonList = document.getElementById("commonList");
+    const ryoOnlyList = document.getElementById("ryoOnlyList");
+    const showBetButton = document.getElementById("showBetButton");
+    const betPanel = document.getElementById("betPanel");
+    const betAmountInput = document.getElementById("betAmountInput");
+    const betError = document.getElementById("betError");
+    const betResultMain = document.getElementById("betResultMain");
+    const officialSquadList = document.getElementById("officialSquadList");
+    const officialSquadCount = document.getElementById("officialSquadCount");
+    const betOfficialCountResult = document.getElementById("betOfficialCountResult");
+    const betKarinResult = document.getElementById("betKarinResult");
+    const betRyoResult = document.getElementById("betRyoResult");
+    const betDiffResult = document.getElementById("betDiffResult");
+    const betPaymentResult = document.getElementById("betPaymentResult");
+    const betWinnerResult = document.getElementById("betWinnerResult");
+    const betDirectionResult = document.getElementById("betDirectionResult");
+    const betKarinHits = document.getElementById("betKarinHits");
+    const betKarinMisses = document.getElementById("betKarinMisses");
+    const betRyoHits = document.getElementById("betRyoHits");
+    const betRyoMisses = document.getElementById("betRyoMisses");
+    const rosterPanel = document.getElementById("rosterPanel");
+    const rosterSearchInput = document.getElementById("rosterSearchInput");
+    const rosterPositionFilter = document.getElementById("rosterPositionFilter");
+    const rosterTotalCount = document.getElementById("rosterTotalCount");
+    const karinRosterCount = document.getElementById("karinRosterCount");
+    const ryoRosterCount = document.getElementById("ryoRosterCount");
+    const rosterList = document.getElementById("rosterList");
+    const playerImportText = document.getElementById("playerImportText");
+    const playerImportButton = document.getElementById("playerImportButton");
+    const playerImportResult = document.getElementById("playerImportResult");
+    const positionLabels = document.querySelectorAll(".position-label");
+    const positionDetailExamples = document.getElementById("positionDetailExamples");
+    const positionDetailTitle = document.getElementById("positionDetailTitle");
+    const positionDetailName = document.getElementById("positionDetailName");
+    const positionDetailRole = document.getElementById("positionDetailRole");
+    const positionDetailPoint = document.getElementById("positionDetailPoint");
+
+    const positionDetails = {
+      "GK": {
+        name: "ゴールキーパー",
+        role: "ゴールを守る最後の砦。シュートストップだけでなく、後方からのパス出しや守備ラインへの指示も重要。",
+        point: "安定感、足元、ハイボール対応、国際試合での落ち着き。"
+      },
+      "CB": {
+        name: "センターバック",
+        role: "中央で相手FWを止める守備の中心。空中戦、対人守備、カバーリング、ライン統率を担う。",
+        point: "強豪相手に耐えられる対人能力、スピード対応、ビルドアップ、セットプレー守備。"
+      },
+      "SB/WB": {
+        name: "サイドバック / ウイングバック",
+        role: "4バックでも5バックでも使えるサイド要員。試合展開によって守備的にも攻撃的にも動ける。",
+        point: "複数システム対応、守備強度、運動量、戦術理解。"
+      },
+      "DMF/CMF": {
+        name: "守備的MF / 中央MF",
+        role: "守備も組み立ても担当できる中盤要員。強豪相手では特に重要なポジション。",
+        point: "ボールを失わないこと、守備強度、試合を落ち着かせる力。"
+      },
+      "DMF": {
+        name: "守備的ミッドフィルダー",
+        role: "中盤の底で相手の攻撃を止め、ボールを奪って攻撃につなげる。チームのバランスを取る役割。",
+        point: "守備範囲、ボール奪取、危機察知、パスの安定感。"
+      },
+      "CMF": {
+        name: "セントラルミッドフィルダー",
+        role: "中盤の中央で攻守をつなぐ選手。守備、配球、前進、サポートを幅広く担当する。",
+        point: "運動量、判断力、プレス耐性、攻守のバランス。"
+      },
+      "OMF": {
+        name: "攻撃的ミッドフィルダー",
+        role: "FWの後ろでチャンスを作る選手。パス、ドリブル、シュートで攻撃に変化をつける。",
+        point: "創造性、得点関与、狭い場所での技術、守備への切り替え。"
+      },
+      "OMF/WG": {
+        name: "攻撃的MF / ウイング",
+        role: "2列目やサイドで攻撃を作る選手。日本代表では久保、堂安、三笘、中村のような攻撃の中心が入る枠。",
+        point: "個の打開力、得点力、守備負担への対応、強豪相手での再現性。"
+      },
+      "WG/SH": {
+        name: "ウイング / サイドハーフ",
+        role: "サイドで仕掛けたり、守備時に戻ってサイドを支える。攻撃と守備の往復が多い。",
+        point: "突破力、スピード、クロス、守備参加、カウンター対応。"
+      },
+      "CF": {
+        name: "センターフォワード",
+        role: "最前線で得点を狙う選手。ポストプレー、裏抜け、空中戦、決定力が求められる。",
+        point: "得点力、収まり、前線からの守備、強豪相手でも起点になれるか。"
+      }
+    };
+
+    const positionExampleGroups = [
+      {
+        code: "GK",
+        japan: [
+          examplePlayer("鈴木彩艶", "パルマ", players[0].imageUrl),
+          examplePlayer("大迫敬介", "サンフレッチェ広島", players[1].imageUrl)
+        ],
+        world: [
+          examplePlayer("マヌエル・ノイアー", "バイエルン", "pics/マヌエル・ノイアー.jpg"),
+          examplePlayer("ティボー・クルトワ", "レアル・マドリード", "pics/ティボー・クルトワ.jpg")
+        ]
+      },
+      {
+        code: "CB",
+        japan: [
+          examplePlayer("板倉滉", "ボルシアMG", players[3].imageUrl),
+          examplePlayer("冨安健洋", "アヤックス", players[5].imageUrl)
+        ],
+        world: [
+          examplePlayer("フィルジル・ファン・ダイク", "リヴァプール", "pics/フィルジル・ファン・ダイク.jpg"),
+          examplePlayer("ルベン・ディアス", "マンチェスター・シティ", "pics/ルベン・ディアス.jpg")
+        ]
+      },
+      {
+        code: "SB/WB",
+        japan: [
+          examplePlayer("菅原由勢", "サウサンプトン", players[9].imageUrl),
+          examplePlayer("毎熊晟矢", "AZ", players[10].imageUrl)
+        ],
+        world: [
+          examplePlayer("アクラフ・ハキミ", "パリ・サンジェルマン", "pics/アクラフ・ハキミ.jpg"),
+          examplePlayer("テオ・エルナンデス", "アル・ヒラル", "pics/テオ・エルナンデス.jpg")
+        ]
+      },
+      {
+        code: "DMF/CMF",
+        japan: [
+          examplePlayer("遠藤航", "リヴァプール", players[11].imageUrl),
+          examplePlayer("守田英正", "スポルティング", players[12].imageUrl)
+        ],
+        world: [
+          examplePlayer("ロドリ", "マンチェスター・シティ", "pics/ロドリ.jpg"),
+          examplePlayer("デクラン・ライス", "アーセナル", "pics/デクラン・ライス.jpg")
+        ]
+      },
+      {
+        code: "OMF/WG",
+        japan: [
+          examplePlayer("久保建英", "レアル・ソシエダ", players[17].imageUrl),
+          examplePlayer("三笘薫", "ブライトン", players[21].imageUrl)
+        ],
+        world: [
+          examplePlayer("リオネル・メッシ", "インテル・マイアミ", "pics/リオネル・メッシ.jpg"),
+          examplePlayer("ヴィニシウス・ジュニオール", "レアル・マドリード", "pics/ヴィニシウス・ジュニオール.jpg")
+        ]
+      },
+      {
+        code: "CF",
+        japan: [
+          examplePlayer("上田綺世", "フェイエノールト", players[24].imageUrl),
+          examplePlayer("小川航基", "NEC", players[25].imageUrl)
+        ],
+        world: [
+          examplePlayer("アーリング・ハーランド", "マンチェスター・シティ", "pics/アーリング・ハーランド.jpg"),
+          examplePlayer("ハリー・ケイン", "バイエルン", "pics/ハリー・ケイン.jpg")
+        ]
+      }
+    ];
+
+    function slot(group, x, y) {
+      return { group, x, y };
+    }
+
+    function examplePlayer(name, club, imageUrl) {
+      return { name, club, imageUrl };
+    }
+
+    function initialOf(name) {
+      return (name || "?").trim().charAt(0).toUpperCase();
+    }
+
+    function initialRating(status) {
+      if (status === "確実") return "◎";
+      if (status === "本命") return "〇";
+      if (status === "可能性") return "△";
+      return "△";
+    }
+
+    function uniqueList(items) {
+      return [...new Set(items.filter(Boolean))];
+    }
+
+    function imagePathFromExcel(value) {
+      const file = String(value || "").trim();
+      if (!file) return "";
+      if (/^https?:\/\//i.test(file) || file.startsWith("pics/")) return file;
+      return `pics/${file}`;
+    }
+
+    function updatePlayerImageSources(player, excelImageFile = "") {
+      const previous = player.imageUrl || "";
+      const sources = uniqueList([
+        `pics/${player.name}.jpg`,
+        `pics/${player.name}.png`,
+        imagePathFromExcel(excelImageFile || player.imageFile),
+        previous
+      ]);
+      player.imageUrl = sources[0] || "";
+      player.imageFallbacks = sources.slice(1);
+      if (excelImageFile) {
+        player.imageFile = excelImageFile;
+      }
+    }
+
+    function applyImageFallback(img, player, fallbackIndex = 0) {
+      const fallbacks = player.imageFallbacks || [];
+      if (fallbackIndex >= fallbacks.length) {
+        return false;
+      }
+      img.dataset.fallbackIndex = String(fallbackIndex + 1);
+      img.src = fallbacks[fallbackIndex];
+      return true;
+    }
+
+    function shortPosition(position) {
+      if (!position) return "";
+      return position.split("/")[0];
+    }
+
+    function currentRating(playerId, owner = activeOwner) {
+      return states[owner]?.get(playerId)?.rating || "△";
+    }
+
+    function currentNumber(playerId, owner = activeOwner) {
+      return states[owner]?.get(playerId)?.number || "";
+    }
+
+    function isInteractionLocked() {
+      return screenshotMode || ownerLocks[activeOwner];
+    }
+
+    function updateSaveState(owner = activeOwner) {
+      if (!saveState) return;
+      const now = new Date();
+      const time = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+      saveLabels[owner] = `保存済み：${time}`;
+      saveState.textContent = owner === activeOwner ? saveLabels[owner] : "自動保存済み";
+    }
+
+    function nextRating(rating) {
+      const index = ratingOrder.indexOf(rating);
+      return ratingOrder[(index + 1) % ratingOrder.length];
+    }
+
+    function ratingRank(player) {
+      const rating = currentRating(player.id);
+      const index = ratingOrder.indexOf(rating);
+      return index === -1 ? ratingOrder.length : index;
+    }
+
+    function originalIndex(player) {
+      return playerOriginalIndex(player);
+    }
+
+    function sortByRatingThenPosition(a, b) {
+      const ratingDiff = ratingRank(a) - ratingRank(b);
+      if (ratingDiff !== 0) return ratingDiff;
+      return originalIndex(a) - originalIndex(b);
+    }
+
+    function sortByOriginalOrder(a, b) {
+      return originalIndex(a) - originalIndex(b);
+    }
+
+    function sortBenchPlayers(players) {
+      const sorted = [...players];
+      if (benchSortModes[activeOwner] === "rating") {
+        return sorted.sort(sortByRatingThenPosition);
+      }
+      return sorted.sort(sortByOriginalOrder);
+    }
+
+    function isAutoSelectable(player) {
+      return currentRating(player.id) !== "×";
+    }
+
+    function playerOriginalIndex(player) {
+      const index = allPlayers.findIndex((item) => item.id === player.id);
+      return index === -1 ? Number.MAX_SAFE_INTEGER : index;
+    }
+
+    function positionSortRank(player) {
+      const group = benchGroupKey(player.position);
+      const index = positionSortOrder.indexOf(group);
+      return index === -1 ? positionSortOrder.length : index;
+    }
+
+    function sortForComparison(a, b) {
+      const groupDiff = positionSortRank(a) - positionSortRank(b);
+      if (groupDiff !== 0) return groupDiff;
+      return playerOriginalIndex(a) - playerOriginalIndex(b);
+    }
+
+    function updatePlacement(playerId, placement) {
+      const current = states[activeOwner].get(playerId) || {};
+      states[activeOwner].set(playerId, {
+        area: placement.area,
+        x: placement.x,
+        y: placement.y,
+        rating: current.rating || "△",
+        number: current.number || "",
+        manual: placement.manual ?? current.manual ?? false
+      });
+    }
+
+    function positionClass(position) {
+      if (position === "GK") return "pos-gk";
+      if (/CB|SB|WB/.test(position)) return /DMF|CMF|OMF|WG|FW|CF|SH/.test(position) ? "pos-mix" : "pos-df";
+      if (/DMF|CMF|OMF|SH/.test(position)) return /WG|FW|CF/.test(position) ? "pos-mix" : "pos-mf";
+      if (/WG|FW|CF/.test(position)) return "pos-fw";
+      return "pos-mix";
+    }
+
+    function benchGroupKey(position) {
+      if (position === "GK") return "GK";
+      if (/CF/.test(position)) return "CF";
+      if (/OMF|WG|SH|FW/.test(position)) return "OMF/WG";
+      if (/DMF|CMF/.test(position)) return "MF";
+      if (/CB|SB|WB/.test(position)) return "DF";
+      return "MF";
+    }
+
+    function playerMatchesGroup(player, group) {
+      const position = player.position;
+      if (group === "GK") return position === "GK";
+      if (group === "DF") return /CB|SB|WB/.test(position);
+      if (group === "MF") return /DMF|CMF|WB/.test(position);
+      if (group === "OMF/WG") return /OMF|WG|SH/.test(position);
+      if (group === "CF") return /CF|FW/.test(position);
+      return false;
+    }
+
+    function createBenchGroups() {
+      const containers = new Map();
+      benchGroups.forEach((group) => {
+        const section = document.createElement("section");
+        section.className = "bench-group";
+        section.dataset.group = group.key;
+
+        const heading = document.createElement("div");
+        heading.className = "bench-group-title";
+        heading.innerHTML = `<span>${group.label}</span><span data-group-count="${group.key}">0人</span>`;
+
+        const list = document.createElement("div");
+        list.className = "bench-group-list";
+
+        section.append(heading, list);
+        benchList.appendChild(section);
+        containers.set(group.key, { section, list, count: heading.querySelector("[data-group-count]") });
+      });
+      return containers;
+    }
+
+    function createPlayerCard(player, onPitch, owner = activeOwner) {
+      const card = document.createElement("article");
+      card.className = `player-card${onPitch ? " on-pitch" : ""}`;
+      card.dataset.playerId = player.id;
+      card.setAttribute("aria-label", `${player.name} ${player.position} ${player.club}`);
+
+      const photo = document.createElement("div");
+      photo.className = "photo";
+
+      if (player.imageUrl) {
+        const img = document.createElement("img");
+        img.src = player.imageUrl;
+        img.alt = player.name;
+        if (player.imageClass) {
+          img.className = player.imageClass;
+        }
+        img.onerror = () => {
+          const nextIndex = Number(img.dataset.fallbackIndex || 0);
+          if (applyImageFallback(img, player, nextIndex)) return;
+          photo.textContent = initialOf(player.name);
+          img.remove();
+        };
+        photo.appendChild(img);
+      } else {
+        photo.textContent = initialOf(player.name);
+      }
+
+      const info = document.createElement("div");
+      info.className = "info";
+
+      const name = document.createElement("div");
+      name.className = "name";
+      name.textContent = player.name;
+
+      const meta = document.createElement("div");
+      meta.className = "meta";
+
+      let rating = null;
+      if (!onPitch) {
+        rating = document.createElement("button");
+        rating.className = "rating-mark clickable";
+        rating.textContent = currentRating(player.id, owner);
+        rating.setAttribute("aria-label", `${player.name} 招集評価 ${rating.textContent}`);
+        rating.type = "button";
+        rating.addEventListener("pointerdown", (event) => {
+          event.stopPropagation();
+        });
+        rating.addEventListener("click", (event) => {
+          event.stopPropagation();
+          cycleRating(player.id);
+        });
+      }
+
+      const position = document.createElement("span");
+      position.className = `position ${positionClass(player.position)}`;
+      position.textContent = onPitch ? shortPosition(player.position) : player.position;
+
+      const number = document.createElement("span");
+      number.className = "number-badge";
+      const displayNumber = currentNumber(player.id, owner);
+      number.textContent = `#${displayNumber}`;
+
+      const club = document.createElement("span");
+      club.className = "club";
+      club.textContent = player.club;
+
+      if (rating) {
+        meta.append(rating);
+      }
+      if (displayNumber) {
+        meta.append(number);
+      }
+      meta.append(position, club);
+      if (!onPitch && activeView === "owner" && !screenshotMode) {
+        const edit = document.createElement("button");
+        edit.className = "edit-player-button";
+        edit.type = "button";
+        edit.textContent = "編集";
+        edit.addEventListener("pointerdown", (event) => {
+          event.stopPropagation();
+        });
+        edit.addEventListener("click", (event) => {
+          event.stopPropagation();
+          openEditModal(player.id);
+        });
+        meta.append(edit);
+      }
+      info.append(name, meta);
+      card.append(photo, info);
+
+      if (isInteractionLocked()) {
+        card.classList.add("locked");
+      }
+
+      if (activeView === "owner" && !isInteractionLocked()) {
+        card.addEventListener("pointerdown", startDrag);
+      }
+      if (!onPitch && activeView === "owner" && !screenshotMode) {
+        card.addEventListener("dblclick", (event) => {
+          event.stopPropagation();
+          openEditModal(player.id);
+        });
+      }
+      return card;
+    }
+
+    function clearPitchCards() {
+      pitch.querySelectorAll(".player-card").forEach((card) => card.remove());
+    }
+
+    function render() {
+      document.body.classList.toggle("screenshot-mode", screenshotMode);
+      screenshotButton.classList.toggle("active", screenshotMode);
+
+      if (activeView === "compare") {
+        renderCompare();
+        return;
+      }
+
+      if (activeView === "positions") {
+        renderPositions();
+        return;
+      }
+
+      if (activeView === "bet") {
+        renderBet();
+        return;
+      }
+
+      if (activeView === "roster") {
+        renderRoster();
+        return;
+      }
+
+      benchList.innerHTML = "";
+      confirmedList.innerHTML = "";
+      droppedList.innerHTML = "";
+      clearPitchCards();
+      resetOwnerViewShell();
+
+      const state = states[activeOwner];
+      const benchContainers = createBenchGroups();
+      let pitchTotal = 0;
+      let benchTotal = 0;
+      let confirmedTotal = 0;
+      let droppedTotal = 0;
+      const benchGroupTotals = Object.fromEntries(benchGroups.map((group) => [group.key, 0]));
+      const benchGroupPlayers = new Map(benchGroups.map((group) => [group.key, []]));
+
+      currentPlayers().forEach((player) => {
+        const placement = state.get(player.id);
+        if (placement.area === "pitch") {
+          pitchTotal += 1;
+          const card = createPlayerCard(player, true);
+          card.style.left = `${placement.x}%`;
+          card.style.top = `${placement.y}%`;
+          pitch.appendChild(card);
+        } else if (placement.area === "confirmed") {
+          confirmedTotal += 1;
+          confirmedList.appendChild(createPlayerCard(player, false));
+        } else if (placement.area === "dropped") {
+          droppedTotal += 1;
+          droppedList.appendChild(createPlayerCard(player, false));
+        } else {
+          benchTotal += 1;
+          const groupKey = benchGroupKey(player.position);
+          benchGroupTotals[groupKey] += 1;
+          benchGroupPlayers.get(groupKey).push(player);
+        }
+      });
+
+      benchGroups.forEach((group) => {
+        const container = benchContainers.get(group.key);
+        const total = benchGroupTotals[group.key];
+        container.count.textContent = `${total}人`;
+        container.section.hidden = total === 0;
+        sortBenchPlayers(benchGroupPlayers.get(group.key)).forEach((player) => {
+          container.list.appendChild(createPlayerCard(player, false));
+        });
+      });
+      benchSortModes[activeOwner] = "original";
+
+      boardTitle.textContent = `${owners[activeOwner]}予想（${teamName}）`;
+      sideTitle.textContent = `${owners[activeOwner]}の予想`;
+      pitchCount.textContent = `ピッチ: ${pitchTotal}人/${pitchLimit}人`;
+      pitchCount.classList.toggle("over-limit", pitchTotal > pitchLimit);
+      benchCount.textContent = `ベンチ: ${benchTotal}人`;
+      confirmedCount.textContent = formatWager(confirmedTotal);
+      droppedCount.textContent = formatWager(droppedTotal);
+      ratingTotal.textContent = `総人数：${currentPlayers().length}人`;
+      saveState.textContent = saveLabels[activeOwner] || "自動保存済み";
+      lockButton.textContent = ownerLocks[activeOwner] ? "ロック解除" : "配置ロック";
+      lockButton.classList.toggle("active", ownerLocks[activeOwner]);
+      formationButtons.forEach((button) => {
+        button.disabled = ownerLocks[activeOwner];
+      });
+      ownerTabs.forEach((tab) => {
+        tab.classList.toggle("active", tab.dataset.view === "owner" && tab.dataset.owner === activeOwner);
+      });
+    }
+
+    function renderCompare() {
+      clearPitchCards();
+      clearComparePitches();
+      benchList.innerHTML = "";
+      confirmedList.innerHTML = "";
+      droppedList.innerHTML = "";
+
+      app.classList.add("single-panel");
+      board.classList.add("compare-only");
+      board.classList.remove("with-panel");
+      board.classList.remove("explain-only");
+      board.classList.remove("bet-only");
+      board.classList.remove("roster-only");
+      comparisonPanel.classList.add("active");
+      positionPanel.classList.remove("active");
+      rosterPanel.classList.remove("active");
+      betPanel.classList.remove("active");
+
+      boardTitle.textContent = `比較コート（${teamName}）`;
+      sideTitle.textContent = "比較";
+      statusMessage.textContent = "";
+      window.clearTimeout(statusTimer);
+      pitchCount.textContent = "ピッチ比較";
+      pitchCount.classList.remove("over-limit");
+      saveState.textContent = "閲覧専用";
+
+      renderOwnerComparePitch("karin", karinComparePitch);
+      renderOwnerComparePitch("ryo", ryoComparePitch);
+      renderDiffPanel();
+      ownerTabs.forEach((tab) => {
+        tab.classList.toggle("active", tab.dataset.view === "compare");
+      });
+    }
+
+    function clearComparePitches() {
+      [karinComparePitch, ryoComparePitch].forEach((target) => {
+        target.querySelectorAll(".player-card, .compare-card").forEach((card) => card.remove());
+      });
+    }
+
+    function renderOwnerComparePitch(owner, target) {
+      const state = states[owner];
+      playersForOwner(owner).forEach((player) => {
+        const placement = state.get(player.id);
+        if (placement?.area !== "pitch") return;
+        const card = createCompareCard(player, owner);
+        card.style.left = `${clamp(placement.x, 10, 90)}%`;
+        card.style.top = `${clamp(placement.y, 8, 92)}%`;
+        target.appendChild(card);
+      });
+    }
+
+    function createCompareCard(player, owner) {
+      const card = createPlayerCard(player, true, owner);
+      card.classList.remove("player-card", "on-pitch");
+      card.classList.add("compare-card");
+      return card;
+    }
+
+    function pitchPlayersForOwner(owner) {
+      const state = states[owner];
+      return playersForOwner(owner)
+        .filter((player) => state.get(player.id)?.area === "pitch")
+        .sort(sortForComparison)
+        .slice(0, pitchLimit);
+    }
+
+    function renderDiffPanel() {
+      const karinPitch = pitchPlayersForOwner("karin");
+      const ryoPitch = pitchPlayersForOwner("ryo");
+      const karinIds = new Set(karinPitch.map((player) => player.id));
+      const ryoIds = new Set(ryoPitch.map((player) => player.id));
+
+      const karinOnly = karinPitch.filter((player) => !ryoIds.has(player.id));
+      const common = karinPitch.filter((player) => ryoIds.has(player.id));
+      const ryoOnly = ryoPitch.filter((player) => !karinIds.has(player.id));
+
+      fillDiffList(karinOnlyList, karinOnly);
+      fillDiffList(commonList, common);
+      fillDiffList(ryoOnlyList, ryoOnly);
+      karinOnlyCount.textContent = `${karinOnly.length}人`;
+      commonCount.textContent = `${common.length}人`;
+      ryoOnlyCount.textContent = `${ryoOnly.length}人`;
+    }
+
+    function fillDiffList(target, players) {
+      target.innerHTML = "";
+      if (players.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "diff-empty";
+        empty.textContent = "なし";
+        target.appendChild(empty);
+        return;
+      }
+
+      players.forEach((player) => {
+        const row = document.createElement("div");
+        row.textContent = `${player.name}（${player.position}）`;
+        target.appendChild(row);
+      });
+    }
+
+    function renderPositions() {
+      clearPitchCards();
+      clearComparePitches();
+      benchList.innerHTML = "";
+      confirmedList.innerHTML = "";
+      droppedList.innerHTML = "";
+
+      app.classList.add("single-panel");
+      board.classList.add("with-panel");
+      board.classList.add("explain-only");
+      board.classList.remove("compare-only");
+      board.classList.remove("bet-only");
+      board.classList.remove("roster-only");
+      comparisonPanel.classList.remove("active");
+      betPanel.classList.remove("active");
+      rosterPanel.classList.remove("active");
+      positionPanel.classList.add("active");
+
+      boardTitle.textContent = "ポジション解説";
+      sideTitle.textContent = "解説";
+      statusMessage.textContent = "";
+      window.clearTimeout(statusTimer);
+      pitchCount.textContent = "ポジション一覧";
+      pitchCount.classList.remove("over-limit");
+      saveState.textContent = "解説";
+
+      ownerTabs.forEach((tab) => {
+        tab.classList.toggle("active", tab.dataset.view === "positions");
+      });
+    }
+
+    function renderBet() {
+      clearPitchCards();
+      clearComparePitches();
+      benchList.innerHTML = "";
+      confirmedList.innerHTML = "";
+      droppedList.innerHTML = "";
+
+      app.classList.add("single-panel");
+      board.classList.add("bet-only");
+      board.classList.remove("with-panel");
+      board.classList.remove("explain-only");
+      board.classList.remove("compare-only");
+      board.classList.remove("roster-only");
+      comparisonPanel.classList.remove("active");
+      positionPanel.classList.remove("active");
+      rosterPanel.classList.remove("active");
+      betPanel.classList.add("active");
+
+      boardTitle.textContent = "賭け結果";
+      sideTitle.textContent = "賭け結果";
+      statusMessage.textContent = "";
+      window.clearTimeout(statusTimer);
+      pitchCount.textContent = "賭け結果";
+      pitchCount.classList.remove("over-limit");
+      saveState.textContent = "自動保存対応";
+
+      betAmountInput.value = betState.amount;
+      renderOfficialSquadList();
+      updateBetResult(false);
+
+      ownerTabs.forEach((tab) => {
+        tab.classList.toggle("active", tab.dataset.view === "bet");
+      });
+    }
+
+    function renderRoster() {
+      clearPitchCards();
+      clearComparePitches();
+      benchList.innerHTML = "";
+      confirmedList.innerHTML = "";
+      droppedList.innerHTML = "";
+
+      app.classList.add("single-panel");
+      board.classList.add("roster-only");
+      board.classList.remove("with-panel");
+      board.classList.remove("explain-only");
+      board.classList.remove("compare-only");
+      board.classList.remove("bet-only");
+      comparisonPanel.classList.remove("active");
+      positionPanel.classList.remove("active");
+      betPanel.classList.remove("active");
+      rosterPanel.classList.add("active");
+
+      boardTitle.textContent = "選手一覧";
+      sideTitle.textContent = "選手一覧";
+      statusMessage.textContent = "";
+      window.clearTimeout(statusTimer);
+      pitchCount.textContent = "選手一覧";
+      pitchCount.classList.remove("over-limit");
+      saveState.textContent = "追加・削除を保存";
+
+      renderRosterList();
+
+      ownerTabs.forEach((tab) => {
+        tab.classList.toggle("active", tab.dataset.view === "roster");
+      });
+    }
+
+    function resetOwnerViewShell() {
+      app.classList.remove("single-panel");
+      board.classList.remove("with-panel");
+      board.classList.remove("explain-only");
+      board.classList.remove("compare-only");
+      board.classList.remove("bet-only");
+      board.classList.remove("roster-only");
+      comparisonPanel.classList.remove("active");
+      positionPanel.classList.remove("active");
+      betPanel.classList.remove("active");
+      rosterPanel.classList.remove("active");
+      clearComparePitches();
+    }
+
+    function selectPositionDetail(code) {
+      const detail = positionDetails[code];
+      if (!detail) return;
+      positionDetailTitle.textContent = code;
+      positionDetailName.textContent = detail.name;
+      positionDetailRole.textContent = detail.role;
+      positionDetailPoint.textContent = detail.point;
+      positionLabels.forEach((label) => {
+        label.classList.toggle("active", label.dataset.positionCode === code);
+      });
+      renderPositionDetailExamples(code);
+    }
+
+    function renderPositionDetailExamples(code) {
+      positionDetailExamples.innerHTML = "";
+      const group = positionExampleGroups.find((item) => item.code === code);
+      if (!group) return;
+
+      const groups = document.createElement("div");
+      groups.className = "detail-example-groups";
+      groups.append(
+        createExampleGroup("日本代表", group.japan),
+        createExampleGroup("世界的に有名な選手", group.world)
+      );
+      positionDetailExamples.appendChild(groups);
+    }
+
+    function createExampleGroup(title, examples) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "detail-example-block";
+      const heading = document.createElement("div");
+      heading.className = "example-group-title";
+      heading.textContent = title;
+
+      const cards = document.createElement("div");
+      cards.className = "example-cards";
+      examples.forEach((player) => {
+        cards.appendChild(createExampleCard(player));
+      });
+
+      wrapper.append(heading, cards);
+      return wrapper;
+    }
+
+    function createExampleCard(player) {
+      const card = document.createElement("article");
+      card.className = "example-card";
+
+      const avatar = document.createElement("div");
+      avatar.className = "example-avatar";
+      if (player.imageUrl) {
+        const img = document.createElement("img");
+        img.src = player.imageUrl;
+        img.alt = player.name;
+        img.onerror = () => {
+          img.remove();
+          avatar.textContent = initialOf(player.name);
+        };
+        avatar.appendChild(img);
+      } else {
+        avatar.textContent = initialOf(player.name);
+      }
+
+      const info = document.createElement("div");
+      const name = document.createElement("div");
+      name.className = "example-name";
+      name.textContent = player.name;
+      const club = document.createElement("div");
+      club.className = "example-club";
+      club.textContent = player.club;
+
+      info.append(name, club);
+      card.append(avatar, info);
+      return card;
+    }
+
+    function startDrag(event) {
+      if (event.button !== 0) return;
+      if (isInteractionLocked()) {
+        showStatus(ownerLocks[activeOwner] ? "配置ロック中です" : "");
+        return;
+      }
+
+      const source = event.currentTarget;
+      const playerId = source.dataset.playerId;
+      const player = currentPlayers().find((item) => item.id === playerId);
+      if (!player) return;
+
+      event.preventDefault();
+      source.classList.add("dragging-source");
+
+      const ghost = createPlayerCard(player, false);
+      ghost.classList.add("drag-ghost");
+      document.body.appendChild(ghost);
+
+      drag = {
+        playerId,
+        source,
+        ghost
+      };
+
+      moveGhost(event.clientX, event.clientY);
+      window.addEventListener("pointermove", onPointerMove);
+      window.addEventListener("pointerup", endDrag, { once: true });
+      window.addEventListener("pointercancel", cancelDrag, { once: true });
+    }
+
+    function moveGhost(clientX, clientY) {
+      if (!drag) return;
+      drag.ghost.style.left = `${clientX}px`;
+      drag.ghost.style.top = `${clientY}px`;
+    }
+
+    function onPointerMove(event) {
+      if (!drag) return;
+      moveGhost(event.clientX, event.clientY);
+      markDropTarget(event.clientX, event.clientY);
+    }
+
+    function endDrag(event) {
+      if (!drag) return;
+
+      const pitchRect = pitch.getBoundingClientRect();
+      const benchRect = benchArea.getBoundingClientRect();
+      const confirmedRect = confirmedArea.getBoundingClientRect();
+      const droppedRect = droppedArea.getBoundingClientRect();
+      const state = states[activeOwner];
+
+      if (inside(event.clientX, event.clientY, pitchRect)) {
+        const x = ((event.clientX - pitchRect.left) / pitchRect.width) * 100;
+        const y = ((event.clientY - pitchRect.top) / pitchRect.height) * 100;
+        updatePlacement(drag.playerId, {
+          area: "pitch",
+          x: clamp(x, 6, 94),
+          y: clamp(y, 7, 93),
+          manual: true
+        });
+      } else if (inside(event.clientX, event.clientY, confirmedRect)) {
+        updatePlacement(drag.playerId, { area: "confirmed", x: 50, y: 50, manual: false });
+      } else if (inside(event.clientX, event.clientY, droppedRect)) {
+        updatePlacement(drag.playerId, { area: "dropped", x: 50, y: 50, manual: false });
+      } else if (inside(event.clientX, event.clientY, benchRect)) {
+        updatePlacement(drag.playerId, { area: "bench", x: 50, y: 50, manual: false });
+      }
+
+      finishDrag();
+      saveOwnerState(activeOwner);
+      render();
+    }
+
+    function cancelDrag() {
+      finishDrag();
+    }
+
+    function finishDrag() {
+      window.removeEventListener("pointermove", onPointerMove);
+      clearDropTargets();
+
+      if (drag) {
+        drag.source.classList.remove("dragging-source");
+        drag.ghost.remove();
+      }
+
+      drag = null;
+    }
+
+    function markDropTarget(clientX, clientY) {
+      const dropTargets = [
+        [pitch, pitch.getBoundingClientRect()],
+        [benchArea, benchArea.getBoundingClientRect()],
+        [confirmedArea, confirmedArea.getBoundingClientRect()],
+        [droppedArea, droppedArea.getBoundingClientRect()]
+      ];
+
+      dropTargets.forEach(([element, rect]) => {
+        element.classList.toggle("drop-active", inside(clientX, clientY, rect));
+      });
+    }
+
+    function clearDropTargets() {
+      [pitch, benchArea, confirmedArea, droppedArea].forEach((element) => {
+        element.classList.remove("drop-active");
+      });
+    }
+
+    function countArea(area) {
+      let total = 0;
+      states[activeOwner].forEach((placement) => {
+        if (placement.area === area) total += 1;
+      });
+      return total;
+    }
+
+    function cycleRating(playerId) {
+      const current = states[activeOwner].get(playerId);
+      if (!current) return;
+      states[activeOwner].set(playerId, {
+        ...current,
+        rating: nextRating(current.rating)
+      });
+      saveOwnerState(activeOwner);
+      render();
+    }
+
+    function applyFormation(name) {
+      const slots = formations[name];
+      const players = currentPlayers();
+      if (!slots || players.length === 0) {
+        showStatus(`${owners[activeOwner]}の選手リストが空です`);
+        return;
+      }
+
+      const state = states[activeOwner];
+      const availablePlayers = players.filter((player) => {
+        const area = state.get(player.id)?.area;
+        return area === "pitch" || area === "bench";
+      });
+
+      if (availablePlayers.length === 0) {
+        showStatus("配置できる選手がベンチにいません");
+        return;
+      }
+
+      const currentPitchIds = availablePlayers
+        .filter((player) => state.get(player.id)?.area === "pitch")
+        .map((player) => player.id);
+      const manualPitchPlayers = availablePlayers
+        .filter((player) => {
+          const placement = state.get(player.id);
+          return placement?.area === "pitch" && placement.manual;
+        })
+        .sort(sortByRatingThenPosition);
+      const autoCandidates = availablePlayers
+        .filter((player) => isAutoSelectable(player))
+        .sort(sortByRatingThenPosition);
+      const selected = [];
+      const used = new Set();
+
+      slots.forEach((formationSlot) => {
+        const manualMatch = manualPitchPlayers.find((player) => {
+          return !used.has(player.id) && playerMatchesGroup(player, formationSlot.group);
+        });
+        const autoMatch = autoCandidates.find((player) => {
+          return !used.has(player.id) && playerMatchesGroup(player, formationSlot.group);
+        });
+        const manualFallback = manualPitchPlayers.find((player) => !used.has(player.id));
+        const currentPitchMatch = currentPitchIds
+          .map((id) => availablePlayers.find((player) => player.id === id))
+          .filter((player) => player && isAutoSelectable(player))
+          .sort(sortByRatingThenPosition)
+          .find((player) => !used.has(player.id) && playerMatchesGroup(player, formationSlot.group));
+        const autoFallback = autoCandidates.find((player) => !used.has(player.id));
+        const player = manualMatch || autoMatch || manualFallback || currentPitchMatch || autoFallback;
+        if (!player) return;
+        const wasManual = state.get(player.id)?.manual || false;
+        used.add(player.id);
+        selected.push({ player, formationSlot, wasManual });
+      });
+
+      availablePlayers.forEach((player) => {
+        updatePlacement(player.id, { area: "bench", x: 50, y: 50, manual: false });
+      });
+
+      selected.forEach(({ player, formationSlot, wasManual }) => {
+        updatePlacement(player.id, {
+          area: "pitch",
+          x: formationSlot.x,
+          y: formationSlot.y,
+          manual: wasManual
+        });
+      });
+
+      currentFormations[activeOwner] = name;
+      saveOwnerState(activeOwner);
+      showStatus(`${name}で初期配置しました`);
+      render();
+    }
+
+    function showStatus(message) {
+      statusMessage.textContent = message;
+      window.clearTimeout(statusTimer);
+      statusTimer = window.setTimeout(() => {
+        statusMessage.textContent = "";
+      }, 2200);
+    }
+
+    function formatWager(total) {
+      return `${total}人（500円x${total}人＝${total * 500}円）`;
+    }
+
+    function formatYen(value) {
+      return `${Number(value).toLocaleString("ja-JP")}円`;
+    }
+
+    function parseWholeNumber(value) {
+      const normalized = normalizeNumber(value);
+      if (normalized === "" || !/^\d+$/.test(normalized)) return null;
+      return Number(normalized);
+    }
+
+    function ownerHasPlayer(owner, playerId) {
+      return ownerPlayers[owner].some((player) => player.id === playerId);
+    }
+
+    function rosterRating(player, owner) {
+      return states[owner]?.get(player.id)?.rating || initialRating(player.status);
+    }
+
+    function rosterNumber(player) {
+      return currentNumber(player.id, "karin") || currentNumber(player.id, "ryo") || player.number || "";
+    }
+
+    function clubCountry(player) {
+      return player.country || clubCountries[player.club] || "";
+    }
+
+    function flagUrl(player) {
+      if (player.flagFile) return `flags/${player.flagFile}`;
+      const country = clubCountry(player);
+      if (!country) return "";
+      return `flags/${countryFlagFiles[country] || `${country}.png`}`;
+    }
+
+    function updateRosterCounts() {
+      const karinTotal = ownerPlayers.karin.length;
+      const ryoTotal = ownerPlayers.ryo.length;
+      rosterTotalCount.textContent = `候補者総数：${allPlayers.length}人${allPlayers.length > candidateLimit ? "（候補者数が55人を超えています）" : ""}`;
+      const karinWarning = karinTotal > rosterLimit ? "（26人超過）" : karinTotal < rosterLimit ? "（26人未満）" : "";
+      const ryoWarning = ryoTotal > rosterLimit ? "（26人超過）" : ryoTotal < rosterLimit ? "（26人未満）" : "";
+      karinRosterCount.textContent = `かりん：${karinTotal}人${karinWarning}`;
+      ryoRosterCount.textContent = `りょう：${ryoTotal}人${ryoWarning}`;
+      rosterTotalCount.classList.toggle("warning", allPlayers.length > candidateLimit);
+      karinRosterCount.classList.toggle("warning", karinTotal !== rosterLimit);
+      ryoRosterCount.classList.toggle("warning", ryoTotal !== rosterLimit);
+    }
+
+    function renderRosterList() {
+      const query = rosterSearchInput.value.trim().toLowerCase();
+      const filter = rosterPositionFilter.value;
+      rosterList.innerHTML = "";
+      updateRosterCounts();
+
+      const groupedPlayers = allPlayers
+        .filter((player) => {
+          const matchesText = !query ||
+            player.name.toLowerCase().includes(query) ||
+            player.club.toLowerCase().includes(query) ||
+            clubCountry(player).toLowerCase().includes(query);
+          const matchesPosition = filter === "all" || (player.group || benchGroupKey(player.position)) === filter;
+          return matchesText && matchesPosition;
+        })
+        .reduce((groups, player) => {
+          const group = player.group || benchGroupKey(player.position);
+          if (!groups.has(group)) groups.set(group, []);
+          groups.get(group).push(player);
+          return groups;
+        }, new Map());
+
+      positionSortOrder.forEach((group) => {
+        const players = groupedPlayers.get(group) || [];
+        if (players.length === 0) return;
+        rosterList.appendChild(createRosterGroup(group, players));
+      });
+    }
+
+    function createRosterGroup(group, players) {
+      const section = document.createElement("section");
+      section.className = "roster-group";
+
+      const title = document.createElement("div");
+      title.className = "roster-group-title";
+      title.innerHTML = `<span>${group}</span><span>${players.length}人</span>`;
+
+      const list = document.createElement("div");
+      list.className = "roster-group-list";
+      players.forEach((player) => {
+        list.appendChild(createRosterCard(player));
+      });
+
+      section.append(title, list);
+      return section;
+    }
+
+    function createRosterCard(player) {
+      const card = document.createElement("article");
+      card.className = "roster-card";
+
+      const photo = document.createElement("div");
+      photo.className = "photo";
+      if (player.imageUrl) {
+        const img = document.createElement("img");
+        img.src = player.imageUrl;
+        img.alt = player.name;
+        if (player.imageClass) img.className = player.imageClass;
+        img.onerror = () => {
+          const nextIndex = Number(img.dataset.fallbackIndex || 0);
+          if (applyImageFallback(img, player, nextIndex)) return;
+          photo.textContent = initialOf(player.name);
+          img.remove();
+        };
+        photo.appendChild(img);
+      } else {
+        photo.textContent = initialOf(player.name);
+      }
+
+      const info = document.createElement("div");
+      info.className = "info";
+      const name = document.createElement("div");
+      name.className = "name";
+      name.textContent = player.name;
+      const meta = document.createElement("div");
+      meta.className = "meta";
+
+      const number = rosterNumber(player);
+      if (number) {
+        const numberBadge = document.createElement("span");
+        numberBadge.className = "number-badge";
+        numberBadge.textContent = `#${number}`;
+        meta.appendChild(numberBadge);
+      }
+      const position = document.createElement("span");
+      position.className = `position ${positionClass(player.position)}`;
+      position.textContent = player.position;
+      const club = document.createElement("span");
+      club.className = "club";
+      club.textContent = player.club;
+      meta.append(position, club);
+
+      const country = clubCountry(player);
+      const countryRow = document.createElement("div");
+      countryRow.className = "roster-country";
+      const flag = flagUrl(player);
+      if (flag) {
+        const flagImg = document.createElement("img");
+        flagImg.className = "flag-img";
+        flagImg.src = flag;
+        flagImg.alt = country;
+        flagImg.onerror = () => flagImg.remove();
+        countryRow.appendChild(flagImg);
+      }
+      countryRow.appendChild(document.createTextNode(country || "所属国未設定"));
+      info.append(name, meta, countryRow);
+
+      const actions = document.createElement("div");
+      actions.className = "roster-card-actions";
+      actions.append(
+        createRosterActionButton(ownerHasPlayer("karin", player.id) ? "かりんから削除" : "かりんに追加", () => toggleRosterPlayer("karin", player.id)),
+        createRosterActionButton(ownerHasPlayer("ryo", player.id) ? "りょうから削除" : "りょうに追加", () => toggleRosterPlayer("ryo", player.id))
+      );
+
+      card.append(photo, info, actions);
+      return card;
+    }
+
+    function createRosterActionButton(label, action) {
+      const button = document.createElement("button");
+      const isRemove = label.includes("削除");
+      button.className = `utility-button ${isRemove ? "roster-action-remove" : "roster-action-add"}`;
+      button.type = "button";
+      button.textContent = label;
+      button.addEventListener("click", action);
+      return button;
+    }
+
+    function toggleRosterPlayer(owner, playerId) {
+      if (ownerHasPlayer(owner, playerId)) {
+        removePlayerFromOwner(owner, playerId);
+      } else {
+        addPlayerToOwner(owner, playerId);
+      }
+      saveOwnerState(owner);
+      renderRosterList();
+      if (activeView === "bet") {
+        updateBetResult(false);
+      }
+    }
+
+    function addPlayerToOwner(owner, playerId) {
+      const player = allPlayerById(playerId);
+      if (!player || ownerHasPlayer(owner, playerId)) return;
+      ownerPlayers[owner] = sortPlayersByMasterOrder([...ownerPlayers[owner], player]);
+      if (!states[owner].has(playerId)) {
+        states[owner].set(playerId, { area: "bench", x: 50, y: 50, rating: initialRating(player.status), number: player.number || "", manual: false });
+      } else {
+        states[owner].set(playerId, { ...states[owner].get(playerId), area: "bench", x: 50, y: 50, manual: false });
+      }
+    }
+
+    function removePlayerFromOwner(owner, playerId) {
+      ownerPlayers[owner] = ownerPlayers[owner].filter((player) => player.id !== playerId);
+      states[owner].delete(playerId);
+    }
+
+    function parseDelimitedText(text) {
+      const delimiter = text.includes("\t") ? "\t" : ",";
+      const rows = [];
+      let row = [];
+      let cell = "";
+      let inQuotes = false;
+
+      for (let i = 0; i < text.length; i += 1) {
+        const char = text[i];
+        const next = text[i + 1];
+        if (char === '"' && inQuotes && next === '"') {
+          cell += '"';
+          i += 1;
+        } else if (char === '"') {
+          inQuotes = !inQuotes;
+        } else if (char === delimiter && !inQuotes) {
+          row.push(cell);
+          cell = "";
+        } else if ((char === "\n" || char === "\r") && !inQuotes) {
+          if (char === "\r" && next === "\n") i += 1;
+          row.push(cell);
+          if (row.some((value) => value.trim() !== "")) rows.push(row);
+          row = [];
+          cell = "";
+        } else {
+          cell += char;
+        }
+      }
+      row.push(cell);
+      if (row.some((value) => value.trim() !== "")) rows.push(row);
+      return rows;
+    }
+
+    function rowValue(row, headers, names) {
+      for (const name of names) {
+        const index = headers.indexOf(name);
+        if (index !== -1) return (row[index] || "").trim();
+      }
+      return "";
+    }
+
+    function truthyExcelValue(value) {
+      return /^(1|true|yes|y|○|〇|◯|選出|追加|する|はい)$/i.test(String(value || "").trim());
+    }
+
+    function generatePlayerId(name, usedIds) {
+      const base = "player";
+      let index = 1;
+      let candidate = `${base}-${index}`;
+      while (usedIds.has(candidate)) {
+        index += 1;
+        candidate = `${base}-${index}`;
+      }
+      usedIds.add(candidate);
+      return candidate;
+    }
+
+    function normalizeImportedPlayer(row, headers, usedIds, lineNumber) {
+      const name = rowValue(row, headers, ["名前", "name"]);
+      if (!name) {
+        return { error: `行${lineNumber}: 名前が空欄です` };
+      }
+      let id = rowValue(row, headers, ["id", "ID"]);
+      if (!id) {
+        id = generatePlayerId(name, usedIds);
+      } else if (usedIds.has(id)) {
+        const existing = allPlayerById(id);
+        if (!existing) {
+          id = generatePlayerId(id, usedIds);
+        }
+      } else {
+        usedIds.add(id);
+      }
+
+      const existing = allPlayerById(id);
+      const position = rowValue(row, headers, ["ポジション", "position"]) || existing?.position || "";
+      if (!position) {
+        return { error: `行${lineNumber}: ポジションが空欄です` };
+      }
+      const club = rowValue(row, headers, ["所属クラブ", "クラブ", "club"]) || existing?.club || "";
+      const country = rowValue(row, headers, ["国名", "country"]) || existing?.country || clubCountries[club] || "";
+      const group = rowValue(row, headers, ["group", "グループ"]) || existing?.group || benchGroupKey(position);
+      const number = normalizeNumber(rowValue(row, headers, ["背番号", "number"]));
+      const imageFile = rowValue(row, headers, ["画像ファイル名", "画像", "imageFile"]);
+      const flagFile = rowValue(row, headers, ["国旗ファイル名", "flagFile"]);
+      const memo = rowValue(row, headers, ["メモ", "memo"]);
+
+      const player = {
+        ...(existing || {}),
+        id,
+        name,
+        position,
+        group,
+        club,
+        country,
+        status: rowValue(row, headers, ["初期評価", "status"]) || existing?.status || "可能性",
+        number: number || existing?.number || "",
+        flagFile: flagFile || existing?.flagFile || "",
+        memo: memo || existing?.memo || "",
+        karinInitial: truthyExcelValue(rowValue(row, headers, ["かりん初期選出"])),
+        ryoInitial: truthyExcelValue(rowValue(row, headers, ["りょう初期選出"]))
+      };
+      updatePlayerImageSources(player, imageFile);
+      return { player, isNew: !existing, excelNumber: number };
+    }
+
+    function applyImportedPlayers(text) {
+      const rows = parseDelimitedText(text);
+      if (rows.length < 2) {
+        return { total: 0, added: 0, updated: 0, errors: ["ヘッダー行とデータ行が必要です"] };
+      }
+      const headers = rows[0].map((header) => header.replace(/^\uFEFF/, "").trim());
+      const usedIds = new Set(allPlayers.map((player) => player.id));
+      const errors = [];
+      let added = 0;
+      let updated = 0;
+
+      rows.slice(1).forEach((row, index) => {
+        const result = normalizeImportedPlayer(row, headers, usedIds, index + 2);
+        if (result.error) {
+          errors.push(result.error);
+          return;
+        }
+        const { player, isNew, excelNumber } = result;
+        const existingIndex = allPlayers.findIndex((item) => item.id === player.id);
+        if (existingIndex === -1) {
+          allPlayers.push(player);
+          syncPlayersArrayOrder();
+          added += 1;
+          if (player.karinInitial) addPlayerToOwner("karin", player.id);
+          if (player.ryoInitial) addPlayerToOwner("ryo", player.id);
+        } else {
+          allPlayers[existingIndex] = player;
+          ["karin", "ryo"].forEach((owner) => {
+            ownerPlayers[owner] = sortPlayersByMasterOrder(ownerPlayers[owner].map((item) => item.id === player.id ? player : item));
+            const placement = states[owner].get(player.id);
+            if (placement && excelNumber) {
+              states[owner].set(player.id, { ...placement, number: excelNumber });
+            }
+          });
+          updated += 1;
+        }
+      });
+
+      savePlayerMaster();
+      syncPlayersArrayOrder();
+      saveOwnerState("karin");
+      saveOwnerState("ryo");
+      return { total: rows.length - 1, added, updated, errors };
+    }
+
+    function importPlayersFromText() {
+      const text = playerImportText.value.trim();
+      if (!text) {
+        playerImportResult.textContent = "TSVを貼り付けてください。";
+        return;
+      }
+      const result = applyImportedPlayers(text);
+      const summary = [
+        `取り込み完了：${result.total}名`,
+        `新規追加：${result.added}名`,
+        `更新：${result.updated}名`,
+        `エラー：${result.errors.length}件`
+      ];
+      if (result.errors.length) {
+        summary.push("", ...result.errors.slice(0, 10));
+      }
+      playerImportResult.textContent = summary.join("\n");
+      saveState.textContent = "選手一覧を保存済み";
+      render();
+    }
+
+    function selectedOwnerIds(owner) {
+      return new Set(ownerPlayers[owner].map((player) => player.id));
+    }
+
+    function playerNamesFromIds(ids) {
+      return ids
+        .map((id) => allPlayers.find((player) => player.id === id)?.name)
+        .filter(Boolean);
+    }
+
+    function renderNameList(names) {
+      return names.length ? names.join("、") : "なし";
+    }
+
+    function renderOfficialSquadList() {
+      officialSquadList.innerHTML = "";
+      positionSortOrder.forEach((group) => {
+        allPlayers
+          .filter((player) => (player.group || benchGroupKey(player.position)) === group)
+          .forEach((player) => {
+            const label = document.createElement("label");
+            label.className = "official-player";
+
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.checked = officialSquadIds.has(player.id);
+            checkbox.addEventListener("change", () => {
+              if (checkbox.checked) {
+                officialSquadIds.add(player.id);
+              } else {
+                officialSquadIds.delete(player.id);
+              }
+              saveOfficialSquad();
+              updateBetResult(true);
+            });
+
+            const meta = document.createElement("span");
+            meta.className = "official-player-meta";
+            const name = document.createElement("span");
+            name.className = "official-player-name";
+            name.textContent = player.name;
+            const sub = document.createElement("span");
+            sub.className = "official-player-sub";
+            sub.textContent = `${player.position} / ${player.club}`;
+            meta.append(name, sub);
+
+            label.append(checkbox, meta);
+            officialSquadList.appendChild(label);
+          });
+      });
+    }
+
+    function updateBetResult(shouldSave = true) {
+      const amount = parseWholeNumber(betAmountInput.value);
+
+      betState.amount = betAmountInput.value;
+
+      const invalidAmount = amount === null || amount <= 0;
+      const officialIds = new Set(Array.from(officialSquadIds).filter((id) => allPlayers.some((player) => player.id === id)));
+      const officialCount = officialIds.size;
+      const officialWarning = officialCount !== rosterLimit;
+
+      officialSquadCount.textContent = `正式招集メンバー選択数：${officialCount}人 / ${rosterLimit}人`;
+      officialSquadCount.classList.toggle("warning", officialWarning);
+      betOfficialCountResult.textContent = `${officialCount}人 / ${rosterLimit}人`;
+
+      if (invalidAmount) {
+        betError.textContent = "金額は1以上の数字で入力してください";
+        betResultMain.textContent = "入力内容を確認してください";
+        betKarinResult.textContent = "-";
+        betRyoResult.textContent = "-";
+        betDiffResult.textContent = "-";
+        betPaymentResult.textContent = "-";
+        betWinnerResult.textContent = "-";
+        betDirectionResult.textContent = "-";
+        betKarinHits.textContent = "なし";
+        betKarinMisses.textContent = "なし";
+        betRyoHits.textContent = "なし";
+        betRyoMisses.textContent = "なし";
+        return;
+      }
+
+      betError.textContent = officialWarning
+        ? `正式招集メンバーは${rosterLimit}人想定です（現在${officialCount}人）。保存はできます。`
+        : "";
+      const karinIds = selectedOwnerIds("karin");
+      const ryoIds = selectedOwnerIds("ryo");
+      const karinHitIds = Array.from(karinIds).filter((id) => officialIds.has(id));
+      const ryoHitIds = Array.from(ryoIds).filter((id) => officialIds.has(id));
+      const karinMissIds = Array.from(karinIds).filter((id) => !officialIds.has(id));
+      const ryoMissIds = Array.from(ryoIds).filter((id) => !officialIds.has(id));
+      const karinCorrect = karinHitIds.length;
+      const ryoCorrect = ryoHitIds.length;
+      const diff = Math.abs(karinCorrect - ryoCorrect);
+      const payment = diff * amount;
+      betKarinResult.textContent = `${karinCorrect}人`;
+      betRyoResult.textContent = `${ryoCorrect}人`;
+      betDiffResult.textContent = `${diff}人`;
+      betPaymentResult.textContent = formatYen(payment);
+      betKarinHits.textContent = renderNameList(playerNamesFromIds(karinHitIds));
+      betKarinMisses.textContent = renderNameList(playerNamesFromIds(karinMissIds));
+      betRyoHits.textContent = renderNameList(playerNamesFromIds(ryoHitIds));
+      betRyoMisses.textContent = renderNameList(playerNamesFromIds(ryoMissIds));
+
+      if (diff === 0) {
+        betResultMain.textContent = "同点のため支払いなし";
+        betWinnerResult.textContent = "引き分け";
+        betDirectionResult.textContent = "なし";
+      } else if (karinCorrect > ryoCorrect) {
+        betResultMain.textContent = `かりんが${diff}人多く的中`;
+        betWinnerResult.textContent = "かりん";
+        betDirectionResult.textContent = "りょう → かりん";
+      } else {
+        betResultMain.textContent = `りょうが${diff}人多く的中`;
+        betWinnerResult.textContent = "りょう";
+        betDirectionResult.textContent = "かりん → りょう";
+      }
+
+      if (shouldSave) {
+        saveBetState();
+      }
+    }
+
+    function inside(clientX, clientY, rect) {
+      return clientX >= rect.left &&
+        clientX <= rect.right &&
+        clientY >= rect.top &&
+        clientY <= rect.bottom;
+    }
+
+    function clamp(value, min, max) {
+      return Math.min(Math.max(value, min), max);
+    }
+
+    function validateNumber(value) {
+      const normalized = normalizeNumber(value);
+      if (normalized === "") return "";
+      if (!/^\d{1,2}$/.test(normalized)) return null;
+      const numeric = Number(normalized);
+      if (numeric < 1 || numeric > 99) return null;
+      return String(numeric);
+    }
+
+    function openEditModal(playerId) {
+      const player = currentPlayers().find((item) => item.id === playerId);
+      if (!player) return;
+      editingPlayerId = playerId;
+      editPlayerName.textContent = player.name;
+      editPlayerPosition.textContent = `ポジション：${player.position}`;
+      editPlayerClub.textContent = `所属：${player.club}`;
+      editNumberInput.value = currentNumber(playerId);
+      editModalError.textContent = "";
+      editModal.classList.add("active");
+      editNumberInput.focus();
+      editNumberInput.select();
+    }
+
+    function closeEditModal() {
+      editModal.classList.remove("active");
+      editingPlayerId = null;
+      editModalError.textContent = "";
+    }
+
+    function savePlayerEdit() {
+      if (!editingPlayerId) return;
+      const normalized = validateNumber(editNumberInput.value);
+      if (normalized === null) {
+        editModalError.textContent = "背番号は1〜99の数字、または空欄で入力してください";
+        return;
+      }
+
+      const current = states[activeOwner].get(editingPlayerId);
+      if (!current) return;
+      states[activeOwner].set(editingPlayerId, {
+        ...current,
+        number: normalized
+      });
+      saveOwnerState(activeOwner);
+      closeEditModal();
+      render();
+    }
+
+    function exportCurrentState() {
+      if (activeView !== "owner") return;
+      const data = buildExportData(activeOwner);
+      const text = JSON.stringify(data, null, 2);
+      const fallback = () => {
+        window.prompt("以下のJSONをコピーしてください", text);
+      };
+
+      if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(text)
+          .then(() => showStatus("エクスポートJSONをコピーしました"))
+          .catch(fallback);
+      } else {
+        fallback();
+      }
+    }
+
+    function buildExportData(owner) {
+      const placements = {};
+      states[owner].forEach((placement, playerId) => {
+        placements[playerId] = {
+          rating: placement.rating,
+          number: placement.number || "",
+          location: placement.area,
+          area: placement.area,
+          x: placement.x,
+          y: placement.y,
+          manual: placement.manual
+        };
+      });
+      return {
+        version: 1,
+        owner,
+        teamName,
+        rosterIds: ownerPlayers[owner].map((player) => player.id),
+        formation: currentFormations[owner] || "",
+        locked: ownerLocks[owner],
+        players: placements
+      };
+    }
+
+    function importCurrentState() {
+      if (activeView !== "owner") return;
+      const text = window.prompt("インポートするJSON文字列を貼り付けてください");
+      if (!text) return;
+
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (error) {
+        window.alert("JSON形式が正しくありません。コピー内容を確認してください。");
+        return;
+      }
+
+      if (!data?.players || typeof data.players !== "object") {
+        window.alert("インポートデータに players 情報がありません。");
+        return;
+      }
+
+      const ok = window.confirm("このタブの現在の予想をインポートデータで上書きします。よろしいですか？");
+      if (!ok) return;
+
+      if (Array.isArray(data.rosterIds)) {
+        ownerPlayers[activeOwner] = sortPlayersByMasterOrder(data.rosterIds.map(allPlayerById).filter(Boolean));
+      }
+      const imported = createInitialState(activeOwner);
+      ownerPlayers[activeOwner].forEach((player) => {
+        const fallback = imported.get(player.id);
+        const saved = data.players[player.id];
+        if (!fallback || !saved) return;
+        imported.set(player.id, normalizePlacement({
+          ...saved,
+          area: saved.area || saved.location
+        }, fallback));
+      });
+
+      states[activeOwner] = imported;
+      currentFormations[activeOwner] = typeof data.formation === "string" ? data.formation : "";
+      ownerLocks[activeOwner] = Boolean(data.locked);
+      saveOwnerState(activeOwner);
+      showStatus("インポートしました");
+      render();
+    }
+
+    resetButton.addEventListener("click", () => {
+      if (ownerLocks[activeOwner]) {
+        showStatus("配置ロック中です。解除してからリセットしてください");
+        return;
+      }
+      const ok = window.confirm("ピッチ上の配置だけをリセットします。評価・背番号は残ります。よろしいですか？");
+      if (!ok) return;
+      states[activeOwner].forEach((placement, playerId) => {
+        if (placement.area !== "pitch") return;
+        states[activeOwner].set(playerId, {
+          ...placement,
+          area: "bench",
+          x: 50,
+          y: 50,
+          manual: false
+        });
+      });
+      currentFormations[activeOwner] = "";
+      benchSortModes[activeOwner] = "original";
+      saveOwnerState(activeOwner);
+      showStatus(`${owners[activeOwner]}のピッチ配置をリセットしました`);
+      render();
+    });
+
+    sortByRatingButton.addEventListener("click", () => {
+      benchSortModes[activeOwner] = "rating";
+      showStatus("ベンチを優先順で並び替えました");
+      render();
+    });
+
+    betAmountInput.addEventListener("input", () => updateBetResult(true));
+
+    showBetButton.addEventListener("click", () => {
+      activeView = "bet";
+      statusMessage.textContent = "";
+      window.clearTimeout(statusTimer);
+      render();
+    });
+
+    [rosterSearchInput, rosterPositionFilter].forEach((control) => {
+      control.addEventListener("input", renderRosterList);
+      control.addEventListener("change", renderRosterList);
+    });
+    playerImportButton.addEventListener("click", importPlayersFromText);
+
+    formationButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        if (ownerLocks[activeOwner]) {
+          showStatus("配置ロック中です");
+          return;
+        }
+        applyFormation(button.dataset.formation);
+      });
+    });
+
+    lockButton.addEventListener("click", () => {
+      ownerLocks[activeOwner] = !ownerLocks[activeOwner];
+      saveOwnerState(activeOwner);
+      showStatus(ownerLocks[activeOwner] ? "配置をロックしました" : "ロックを解除しました");
+      render();
+    });
+
+    exportButton.addEventListener("click", exportCurrentState);
+    importButton.addEventListener("click", importCurrentState);
+
+    screenshotButton.addEventListener("click", () => {
+      screenshotMode = !screenshotMode;
+      render();
+    });
+
+    screenshotReturnButton.addEventListener("click", () => {
+      screenshotMode = false;
+      render();
+    });
+
+    saveEditButton.addEventListener("click", savePlayerEdit);
+    cancelEditButton.addEventListener("click", closeEditModal);
+    editModal.addEventListener("click", (event) => {
+      if (event.target === editModal) {
+        closeEditModal();
+      }
+    });
+    editNumberInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        savePlayerEdit();
+      } else if (event.key === "Escape") {
+        closeEditModal();
+      }
+    });
+
+    ownerTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        activeView = tab.dataset.view;
+        if (tab.dataset.owner) {
+          activeOwner = tab.dataset.owner;
+        }
+        statusMessage.textContent = "";
+        window.clearTimeout(statusTimer);
+        render();
+      });
+    });
+
+    positionLabels.forEach((label) => {
+      label.addEventListener("click", () => {
+        selectPositionDetail(label.dataset.positionCode);
+      });
+    });
+
+    selectPositionDetail("GK");
+
+    ownerTabs.forEach((tab) => {
+      if (tab.dataset.view === "owner") {
+        tab.textContent = `${owners[tab.dataset.owner]}予想（${teamName}）`;
+      } else if (tab.dataset.view === "compare") {
+        tab.textContent = `比較コート（${teamName}）`;
+      }
+    });
+
+    render();
+  </script>
+</body>
+</html>
+
