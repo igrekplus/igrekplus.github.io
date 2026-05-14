@@ -4599,12 +4599,16 @@
     function setSyncToken(v) { try { localStorage.setItem(SYNC_TOKEN_KEY, v); } catch(e) {} }
     function setSyncGistId(v) { try { localStorage.setItem(SYNC_GIST_KEY, v); } catch(e) {} }
 
-    function buildFullSyncPayload() {
-      const payload = { version: 1, teamName, updatedAt: new Date().toISOString() };
-      for (const owner of ["karin", "ryo"]) {
-        payload[owner] = buildExportData(owner);
-      }
-      // 公式メンバー
+    function buildFullSyncPayload(basePayload) {
+      // basePayload がある場合はそちらをベースにして、自分のデータのみ上書き
+      const payload = basePayload
+        ? { ...basePayload, updatedAt: new Date().toISOString() }
+        : { version: 1, teamName, updatedAt: new Date().toISOString() };
+
+      // アクティブなオーナーのデータは必ず最新に更新
+      payload[activeOwner] = buildExportData(activeOwner);
+
+      // 公式メンバーも更新
       payload.officialSquad = Array.from(officialSquadIds);
       return payload;
     }
@@ -4612,11 +4616,28 @@
     async function cloudSave() {
       const token = getSyncToken();
       if (!token) { openSyncModal("トークンが未設定です。⚙️ 設定から入力してください。", "err"); return; }
-      const payload = buildFullSyncPayload();
-      const content = JSON.stringify(payload, null, 2);
       const gistId = getSyncGistId();
       showStatus("☁️ クラウドに保存中...");
       try {
+        let basePayload = null;
+
+        // 既存Gistがある場合は先に取得してマージ（他ユーザーのデータを保護）
+        if (gistId) {
+          try {
+            const getRes = await fetch(`https://api.github.com/gists/${gistId}`, {
+              headers: { "Authorization": `Bearer ${token}` }
+            });
+            if (getRes.ok) {
+              const gistData = await getRes.json();
+              const raw = gistData.files?.["worldcup_betting.json"]?.content;
+              if (raw) basePayload = JSON.parse(raw);
+            }
+          } catch (_) { /* 取得失敗は無視して上書き */ }
+        }
+
+        const payload = buildFullSyncPayload(basePayload);
+        const content = JSON.stringify(payload, null, 2);
+
         let response;
         if (gistId) {
           // PATCH: 既存Gistを更新
@@ -4647,7 +4668,7 @@
           setSyncGistId(data.id);
           showStatus(`☁️ 保存しました（Gist ID: ${data.id}）`);
         } else {
-          showStatus("☁️ クラウドに保存しました");
+          showStatus(`☁️ ${owners[activeOwner]}のデータをクラウドに保存しました`);
         }
       } catch (e) {
         showStatus(`☁️ 通信エラー: ${e.message}`);
@@ -4673,32 +4694,57 @@
         const raw = gistData.files?.["worldcup_betting.json"]?.content;
         if (!raw) { showStatus("☁️ データが見つかりませんでした"); return; }
         const payload = JSON.parse(raw);
-        // 各オーナーのデータを復元
+
+        // 各オーナーのデータを復元（loadOwnerState と同じパターンで）
         for (const owner of ["karin", "ryo"]) {
           const data = payload[owner];
           if (!data?.players) continue;
+
+          // ① roster を先に更新
           if (Array.isArray(data.rosterIds)) {
-            ownerPlayers[owner] = sortPlayersByMasterOrder(data.rosterIds.map(allPlayerById).filter(Boolean));
+            ownerPlayers[owner] = sortPlayersByMasterOrder(
+              data.rosterIds.map(allPlayerById).filter(Boolean)
+            );
           }
-          const imported = createInitialState(owner);
-          ownerPlayers[owner].forEach((player) => {
-            const fallback = imported.get(player.id);
-            const saved = data.players[player.id];
-            if (!fallback || !saved) return;
-            imported.set(player.id, normalizePlacement({ ...saved, area: saved.area || saved.location }, fallback));
-          });
-          states[owner] = imported;
+
+          // ② roster 更新後に initial を再生成（loadOwnerState と同様）
+          const initialForRoster = createInitialState(owner);
+          // rosterIds がある場合は空 Map から構築、ない場合は initial をベースに
+          const loaded = Array.isArray(data.rosterIds) ? new Map() : initialForRoster;
+
           currentFormations[owner] = typeof data.formation === "string" ? data.formation : "";
           ownerLocks[owner] = Boolean(data.locked);
+
+          ownerPlayers[owner].forEach((player) => {
+            const fallback = initialForRoster.get(player.id);
+            if (!fallback) return;
+            const saved = data.players[player.id];
+            loaded.set(
+              player.id,
+              normalizePlacement(
+                saved ? { ...saved, area: saved.area || saved.location } : fallback,
+                fallback
+              )
+            );
+          });
+
+          states[owner] = loaded;
           saveOwnerState(owner);
         }
+
         // 公式メンバー復元
         if (Array.isArray(payload.officialSquad)) {
           officialSquadIds.clear();
           payload.officialSquad.forEach((id) => officialSquadIds.add(id));
           saveOfficialSquad();
         }
+
         showStatus(`☁️ 読み込み完了（${payload.updatedAt ? new Date(payload.updatedAt).toLocaleString("ja-JP") : ""}）`);
+        // activeOwner タブを明示的に再アクティブ化してから再描画
+        activeView = "owner";
+        ownerTabs.forEach((tab) => {
+          tab.classList.toggle("active", tab.dataset.view === "owner" && tab.dataset.owner === activeOwner);
+        });
         render();
       } catch (e) {
         showStatus(`☁️ 通信エラー: ${e.message}`);
