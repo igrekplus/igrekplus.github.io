@@ -1380,26 +1380,42 @@
       line-height: 1.25;
     }
 
-    .position-guide-table {
-      width: 100%;
-      min-width: 760px;
-      border-collapse: collapse;
-      font-size: 13px;
+    .soccer-terms {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
     }
 
-    .position-guide-table th,
-    .position-guide-table td {
+    .soccer-terms h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .term-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .term-card {
       border: 1px solid var(--line);
-      padding: 10px;
-      vertical-align: top;
-      text-align: left;
+      border-radius: 8px;
+      padding: 12px;
+      background: #fff;
+      min-width: 0;
     }
 
-    .position-guide-table th {
-      background: #eef6ff;
+    .term-card h3 {
+      margin: 0 0 7px;
       color: var(--blue);
-      font-weight: 900;
-      white-space: nowrap;
+      font-size: 15px;
+    }
+
+    .term-card p {
+      margin: 0;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.65;
     }
 
     .pitch {
@@ -2063,6 +2079,10 @@
         grid-template-columns: 1fr;
       }
 
+      .term-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
       .board-header {
         align-items: flex-start;
         flex-direction: column;
@@ -2128,6 +2148,10 @@
 
       .position-map {
         min-height: 390px;
+      }
+
+      .term-grid {
+        grid-template-columns: 1fr;
       }
 
       .compare-pitch {
@@ -2449,33 +2473,31 @@
               <div class="detail-examples" id="positionDetailExamples"></div>
             </section>
           </div>
-          <table class="position-guide-table">
-            <thead>
-              <tr>
-                <th>略称</th>
-                <th>正式名称</th>
-                <th>役割</th>
-                <th>代表選考で見るポイント</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>GK</td><td>ゴールキーパー</td><td>ゴールを守る最後の砦。シュートストップだけでなく、後方からのパス出しや守備ラインへの指示も重要。</td><td>安定感、足元、ハイボール対応、国際試合での落ち着き。</td></tr>
-              <tr><td>CB</td><td>センターバック</td><td>中央で相手FWを止める守備の中心。空中戦、対人守備、カバーリング、ライン統率を担う。</td><td>強豪相手に耐えられる対人能力、スピード対応、ビルドアップ、セットプレー守備。</td></tr>
-              <tr><td>SB</td><td>サイドバック</td><td>左右の守備を担当しながら、攻撃時にはサイドを押し上げる。4バックで使われることが多い。</td><td>上下動の運動量、1対1の守備、クロス、攻守の切り替え。</td></tr>
-              <tr><td>WB</td><td>ウイングバック</td><td>5バックや3バックでサイドを広く担当する選手。守備時は最終ライン、攻撃時はサイドアタッカーに近い役割。</td><td>走力、守備への戻り、攻撃参加、クロス、サイドでの粘り。</td></tr>
-              <tr><td>SB/WB</td><td>サイドバック / ウイングバック</td><td>4バックでも5バックでも使えるサイド要員。試合展開によって守備的にも攻撃的にも動ける。</td><td>複数システム対応、守備強度、運動量、戦術理解。</td></tr>
-              <tr><td>DMF</td><td>守備的ミッドフィルダー</td><td>中盤の底で相手の攻撃を止め、ボールを奪って攻撃につなげる。チームのバランスを取る役割。</td><td>守備範囲、ボール奪取、危機察知、パスの安定感。</td></tr>
-              <tr><td>CMF</td><td>セントラルミッドフィルダー</td><td>中盤の中央で攻守をつなぐ選手。守備、配球、前進、サポートを幅広く担当する。</td><td>運動量、判断力、プレス耐性、攻守のバランス。</td></tr>
-              <tr><td>DMF/CMF</td><td>守備的MF / 中央MF</td><td>守備も組み立ても担当できる中盤要員。強豪相手では特に重要なポジション。</td><td>ボールを失わないこと、守備強度、試合を落ち着かせる力。</td></tr>
-              <tr><td>OMF</td><td>攻撃的ミッドフィルダー</td><td>中央寄りでチャンスを作る攻撃的MF。相手の中盤とDFの間で受け、パス、ドリブル、シュートで攻撃を動かす。</td><td>創造性、得点関与、狭い場所での技術、守備への切り替え。</td></tr>
-              <tr><td>SH</td><td>サイドハーフ</td><td>中盤のサイドで攻守に関わる選手。守備時には戻り、攻撃時にはサイドから前進する。</td><td>上下動、守備参加、クロス、カウンター対応。</td></tr>
-              <tr><td>WG</td><td>ウイング</td><td>サイドで幅を取り、ドリブル、裏抜け、クロス、カットインを担う選手。</td><td>突破力、スピード、得点力、守備で戻れるか。</td></tr>
-              <tr><td>OMF/WG</td><td>攻撃的MF / シャドー</td><td>3-4-2-1の「2」はWGではなく、CFの斜め下に入る攻撃的MF。中央寄りやハーフスペースで受ける。</td><td>久保、堂安、鎌田のように、狭い場所で受けて得点機を作れるか。</td></tr>
-              <tr><td>WG/FW</td><td>ウイング / フォワード</td><td>サイドでも中央でも使える前線要員。前田大然のように、攻撃だけでなく前線守備で価値を出す選手もいる。</td><td>走力、前線プレス、裏抜け、途中投入で流れを変えられるか。</td></tr>
-              <tr><td>SH/WM</td><td>サイドハーフ / ワイドMF</td><td>5-4-1の左右中盤。守備時にサイドを埋める役割が強く、攻撃時はカウンターの起点になる。</td><td>戻りの速さ、サイド守備、縦への推進力。</td></tr>
-              <tr><td>CF</td><td>センターフォワード</td><td>最前線で得点を狙う選手。ポストプレー、裏抜け、空中戦、決定力が求められる。</td><td>得点力、収まり、前線からの守備、強豪相手でも起点になれるか。</td></tr>
-            </tbody>
-          </table>
+          <section class="soccer-terms" aria-label="サッカー用語解説">
+            <h2>サッカー用語解説</h2>
+            <div class="term-grid">
+              <article class="term-card"><h3>ビルドアップ</h3><p>自陣の後方からパスや持ち運びで攻撃を組み立てること。GKやDFから始まり、相手のプレスを避けながら前進する。</p></article>
+              <article class="term-card"><h3>ポゼッション</h3><p>ボールを保持して試合を進めること。単に長く持つだけでなく、相手を動かして攻撃の形を作る意味もある。</p></article>
+              <article class="term-card"><h3>プレス</h3><p>相手がボールを持った時に、近くの選手が寄せて自由にプレーさせない守備。相手の選択肢を制限する目的もある。</p></article>
+              <article class="term-card"><h3>前線プレス</h3><p>FWやWGなど前の選手から相手DFやGKにプレッシャーをかける守備。相手のビルドアップを邪魔し、前で奪う狙いがある。</p></article>
+              <article class="term-card"><h3>ハイプレス</h3><p>チーム全体が高い位置から相手に圧力をかける守備。成功すればゴールに近い場所で奪えるが、背後にスペースが空きやすい。</p></article>
+              <article class="term-card"><h3>リトリート</h3><p>無理に前から奪いに行かず、自陣に戻って守備の形を整えること。強い相手に対して、まず失点しないために使われる。</p></article>
+              <article class="term-card"><h3>守備ブロック</h3><p>チーム全体で守備の形を作り、相手が中央を通れないようにすること。横と縦の距離を保って守る。</p></article>
+              <article class="term-card"><h3>トランジション</h3><p>攻撃から守備、守備から攻撃へ切り替わる瞬間のこと。この切り替えの速さが試合の流れを大きく左右する。</p></article>
+              <article class="term-card"><h3>ハーフスペース</h3><p>中央とサイドの間にあるエリア。相手DFが対応しづらく、シャドーや攻撃的MFが受けるとチャンスになりやすい。</p></article>
+              <article class="term-card"><h3>ライン間</h3><p>相手のDFラインとMFラインの間のスペース。ここで前を向けると、ラストパスやシュートにつながりやすい。</p></article>
+              <article class="term-card"><h3>ポストプレー</h3><p>FWが前線でボールを受け、味方に落としたり時間を作ったりするプレー。CFを見る時に重要なポイント。</p></article>
+              <article class="term-card"><h3>カットイン</h3><p>サイドの選手が外側から中央へ入っていく動き。シュートやラストパスにつなげやすく、逆足のウイングでよく見られる。</p></article>
+              <article class="term-card"><h3>セカンドボール</h3><p>こぼれ球や競り合いの後に落ちたボールのこと。ここを拾えるかで、攻撃を続けられるかが変わる。</p></article>
+              <article class="term-card"><h3>カバーリング</h3><p>味方が抜かれた時や空いたスペースを、別の選手が補う守備。CBやボランチの判断力が出やすい。</p></article>
+              <article class="term-card"><h3>可変システム</h3><p>攻撃時と守備時でフォーメーションが変わること。攻撃時は3-4-2-1、守備時は5-4-1のように変化する。</p></article>
+              <article class="term-card"><h3>ウイングバック</h3><p>3バックや5バックでサイドを広く担当する選手。守備時は最終ラインに入り、攻撃時は高い位置まで上がる。</p></article>
+              <article class="term-card"><h3>シャドー</h3><p>CFの近く、少し下がった位置でプレーする攻撃的MF。3-4-2-1の「2」にあたることが多い。</p></article>
+              <article class="term-card"><h3>アンカー</h3><p>中盤の底に1人で立ち、守備とビルドアップの軸になる選手。相手の攻撃を止めつつ、後方からパスを散らす。</p></article>
+              <article class="term-card"><h3>ダブルボランチ</h3><p>中盤の底に2人を置く形。1人が守備を支え、もう1人が前に出るなど、役割分担しながら中央を安定させる。</p></article>
+              <article class="term-card"><h3>ラインコントロール</h3><p>DFラインの高さや横並びを整えること。オフサイドを取ったり、相手に裏を取られないようにするために重要。</p></article>
+            </div>
+          </section>
         </section>
       </section>
 
