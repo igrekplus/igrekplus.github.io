@@ -115,7 +115,15 @@
     }
 
     body.screenshot-mode .screenshot-return {
+      position: fixed;
+      top: 14px;
+      right: 14px;
+      z-index: 200;
       display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.2);
     }
 
     body.screenshot-mode .board-title {
@@ -129,6 +137,10 @@
 
     body.screenshot-mode .pitch {
       min-height: 620px;
+    }
+
+    .app:not(.single-panel) .pitch {
+      min-height: min(680px, calc(100vh - 180px));
     }
 
     .board,
@@ -145,6 +157,13 @@
       grid-template-rows: auto auto;
       overflow: visible;
       min-height: 0;
+    }
+
+    .app:not(.single-panel) .board,
+    .app:not(.single-panel) .bench {
+      position: sticky;
+      top: 12px;
+      max-height: calc(100vh - 24px);
     }
 
     .board.with-panel {
@@ -716,6 +735,14 @@
       padding: 16px;
     }
 
+    .bet-guide {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.6;
+    }
+
     .bet-grid {
       display: grid;
       grid-template-columns: minmax(180px, 240px);
@@ -847,6 +874,19 @@
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
       margin-top: 12px;
+    }
+
+    .bet-owner-column {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+
+    .bet-owner-title {
+      margin: 0;
+      color: var(--blue);
+      font-size: 16px;
+      font-weight: 900;
     }
 
     .bet-hit-box {
@@ -1615,6 +1655,7 @@
 
     .bench-list {
       min-height: 0;
+      max-height: 100%;
       overflow-y: auto;
       overflow-x: hidden;
       padding: 12px;
@@ -1968,6 +2009,12 @@
         overflow: visible;
       }
 
+      .app:not(.single-panel) .board,
+      .app:not(.single-panel) .bench {
+        position: static;
+        max-height: none;
+      }
+
       .compare-courts {
         grid-template-columns: 1fr;
       }
@@ -2036,11 +2083,12 @@
 
       .bench {
         height: auto;
-        min-height: 520px;
+        min-height: 0;
+        max-height: min(620px, 72vh);
       }
 
       .bench-list {
-        max-height: none;
+        max-height: 100%;
       }
     }
 
@@ -2124,6 +2172,13 @@
       .player-card.on-pitch .position,
       .player-card.on-pitch .number-badge {
         font-size: 9px;
+      }
+
+      body.screenshot-mode .screenshot-return {
+        top: 10px;
+        right: 10px;
+        left: auto;
+        max-width: calc(100vw - 20px);
       }
     }
   </style>
@@ -2257,6 +2312,7 @@
         </section>
         <section class="view-panel bet-panel" id="betPanel" aria-label="賭け結果">
           <div class="bet-card">
+            <p class="bet-guide">正式招集メンバーを選択すると、かりん予想・りょう予想の的中人数と支払額を自動計算します。</p>
             <div class="bet-grid">
               <label class="bet-field">
                 1人あたり金額
@@ -2281,35 +2337,41 @@
               <div class="bet-result-row"><span>勝者</span><span id="betWinnerResult">引き分け</span></div>
               <div class="bet-result-row"><span>支払い方向</span><span id="betDirectionResult">なし</span></div>
               <div class="bet-hit-lists">
-                <section class="bet-hit-box">
-                  <h3>かりん的中選手</h3>
-                  <div class="bet-hit-summary" id="betKarinHitSummary">的中：0人</div>
-                  <div class="bet-hit-list" id="betKarinHits">なし</div>
+                <section class="bet-owner-column" aria-label="かりん賭け結果">
+                  <h3 class="bet-owner-title">かりん</h3>
+                  <div class="bet-hit-box">
+                    <h3>的中選手</h3>
+                    <div class="bet-hit-summary" id="betKarinHitSummary">的中：0人</div>
+                    <div class="bet-hit-list" id="betKarinHits">なし</div>
+                  </div>
+                  <div class="bet-hit-box">
+                    <h3>外れ選手</h3>
+                    <div class="bet-hit-summary" id="betKarinMissSummary">外れ：0人</div>
+                    <div class="bet-hit-list" id="betKarinMisses">なし</div>
+                  </div>
+                  <div class="bet-hit-box">
+                    <h3>選んでいなかった正式招集メンバー</h3>
+                    <div class="bet-hit-summary" id="betKarinUnpickedSummary">未選出：0人</div>
+                    <div class="bet-hit-list" id="betKarinUnpicked">なし</div>
+                  </div>
                 </section>
-                <section class="bet-hit-box">
-                  <h3>かりん外れ選手</h3>
-                  <div class="bet-hit-summary" id="betKarinMissSummary">外れ：0人</div>
-                  <div class="bet-hit-list" id="betKarinMisses">なし</div>
-                </section>
-                <section class="bet-hit-box">
-                  <h3>りょう的中選手</h3>
-                  <div class="bet-hit-summary" id="betRyoHitSummary">的中：0人</div>
-                  <div class="bet-hit-list" id="betRyoHits">なし</div>
-                </section>
-                <section class="bet-hit-box">
-                  <h3>りょう外れ選手</h3>
-                  <div class="bet-hit-summary" id="betRyoMissSummary">外れ：0人</div>
-                  <div class="bet-hit-list" id="betRyoMisses">なし</div>
-                </section>
-                <section class="bet-hit-box">
-                  <h3>かりんが選んでいなかった正式招集メンバー</h3>
-                  <div class="bet-hit-summary" id="betKarinUnpickedSummary">未選出：0人</div>
-                  <div class="bet-hit-list" id="betKarinUnpicked">なし</div>
-                </section>
-                <section class="bet-hit-box">
-                  <h3>りょうが選んでいなかった正式招集メンバー</h3>
-                  <div class="bet-hit-summary" id="betRyoUnpickedSummary">未選出：0人</div>
-                  <div class="bet-hit-list" id="betRyoUnpicked">なし</div>
+                <section class="bet-owner-column" aria-label="りょう賭け結果">
+                  <h3 class="bet-owner-title">りょう</h3>
+                  <div class="bet-hit-box">
+                    <h3>的中選手</h3>
+                    <div class="bet-hit-summary" id="betRyoHitSummary">的中：0人</div>
+                    <div class="bet-hit-list" id="betRyoHits">なし</div>
+                  </div>
+                  <div class="bet-hit-box">
+                    <h3>外れ選手</h3>
+                    <div class="bet-hit-summary" id="betRyoMissSummary">外れ：0人</div>
+                    <div class="bet-hit-list" id="betRyoMisses">なし</div>
+                  </div>
+                  <div class="bet-hit-box">
+                    <h3>選んでいなかった正式招集メンバー</h3>
+                    <div class="bet-hit-summary" id="betRyoUnpickedSummary">未選出：0人</div>
+                    <div class="bet-hit-list" id="betRyoUnpicked">なし</div>
+                  </div>
                 </section>
               </div>
             </div>
@@ -2345,10 +2407,10 @@
         </section>
         <section class="view-panel position-guide-panel" id="positionPanel" aria-label="ポジション解説">
           <div class="position-mode-tabs" id="positionModeTabs" aria-label="フォーメーション別ポジション解説">
-            <button class="position-mode-button active" type="button" data-position-mode="3-4-2-1">3-4-2-1</button>
+            <button class="position-mode-button active" type="button" data-position-mode="list">ポジション一覧</button>
+            <button class="position-mode-button" type="button" data-position-mode="3-4-2-1">3-4-2-1</button>
             <button class="position-mode-button" type="button" data-position-mode="4-2-3-1">4-2-3-1</button>
             <button class="position-mode-button" type="button" data-position-mode="5-4-1">5-4-1</button>
-            <button class="position-mode-button" type="button" data-position-mode="list">ポジション一覧</button>
           </div>
           <div class="position-explorer">
             <div class="position-map" id="positionMap" aria-label="ポジション配置図">
@@ -2417,7 +2479,7 @@
       <aside class="bench" id="bench" aria-label="選手リスト">
         <div class="bench-head">
           <h2 class="bench-title" id="sideTitle">かりんの予想</h2>
-          <div class="bench-sub">選手を各欄へドラッグ</div>
+          <div class="bench-sub" id="sideSub"></div>
           <div class="rating-summary" aria-label="招集評価カウント">
             <div class="rating-total" id="ratingTotal">総人数：0人</div>
           </div>
@@ -2894,7 +2956,7 @@
 
     let activeOwner = "karin";
     let activeView = "owner";
-    let positionGuideMode = "3-4-2-1";
+    let positionGuideMode = "list";
     let statusTimer = null;
     let drag = null;
 
@@ -2933,6 +2995,7 @@
     const ratingTotal = document.getElementById("ratingTotal");
     const boardTitle = document.getElementById("boardTitle");
     const sideTitle = document.getElementById("sideTitle");
+    const sideSub = document.getElementById("sideSub");
     const statusMessage = document.getElementById("statusMessage");
     const ownerTabs = document.querySelectorAll(".owner-tab");
     const formationButtons = document.querySelectorAll(".formation-button");
@@ -3009,10 +3072,40 @@
         role: "中央で相手FWを止める守備の中心。空中戦、対人守備、カバーリング、ライン統率を担う。",
         point: "強豪相手に耐えられる対人能力、スピード対応、ビルドアップ、セットプレー守備。"
       },
+      "LCB": {
+        name: "左センターバック",
+        role: "左センターバック。左サイドのカバー、左足でのビルドアップ、左WB/SBとの連携が重要。",
+        point: "3バックでは左CB、4バックでは左CBとして、左側から攻撃を始めるパスやサイドの背後のカバーを見る。"
+      },
+      "RCB": {
+        name: "右センターバック",
+        role: "右センターバック。右サイドのカバー、右足でのビルドアップ、右WB/SBとの連携が重要。",
+        point: "3バックでは右CB、4バックでは右CBとして、右側の対人守備とビルドアップの安定感を見る。"
+      },
       "SB/WB": {
         name: "サイドバック / ウイングバック",
         role: "4バックでも5バックでも使えるサイド要員。試合展開によって守備的にも攻撃的にも動ける。",
         point: "複数システム対応、守備強度、運動量、戦術理解。"
+      },
+      "LWB": {
+        name: "左ウイングバック",
+        role: "左サイドを広く上下動し、守備時は5バック、攻撃時は高い位置を取る。",
+        point: "走力、戻りの速さ、左からのクロス、左CBとの連携。"
+      },
+      "RWB": {
+        name: "右ウイングバック",
+        role: "右サイドを広く上下動し、守備時は5バック、攻撃時は高い位置を取る。",
+        point: "走力、戻りの速さ、右からのクロス、右CBとの連携。"
+      },
+      "LB": {
+        name: "左サイドバック",
+        role: "4バックの左側で守備を担当し、攻撃時は左からサポートする。",
+        point: "左サイドの1対1、背後の管理、攻撃参加のタイミング。"
+      },
+      "RB": {
+        name: "右サイドバック",
+        role: "4バックの右側で守備を担当し、攻撃時は右からサポートする。",
+        point: "右サイドの1対1、背後の管理、攻撃参加のタイミング。"
       },
       "DMF/CMF": {
         name: "守備的MF / 中央MF",
@@ -3032,27 +3125,53 @@
       "OMF": {
         name: "攻撃的ミッドフィルダー",
         role: "中央寄りでチャンスを作る攻撃的MF。相手の中盤とDFの間で受け、パス、ドリブル、シュートで攻撃を動かす。",
-        point: "創造性、得点関与、狭い場所での技術、守備への切り替え。久保、堂安、鎌田のようにハーフスペースで受ける力も重要。"
+        point: "CFの近く、2列目中央、ハーフスペースでプレーする。パス、ターン、ミドルシュート、ラストパスが重要。"
       },
-      "OMF/WG": {
-        name: "攻撃的MF / シャドー",
-        role: "3-4-2-1の「2」はWGではなく、CFの斜め下で受けるシャドー寄りの攻撃的MF。中央寄りやハーフスペースで前を向く。",
-        point: "久保、堂安、鎌田のように、狭い場所で受けてラストパスやシュートに絡めるか。"
+      "L_SHADOW": {
+        title: "Lシャドー / OMF",
+        name: "Lシャドー / OMF",
+        role: "CFの左斜め下でプレーする攻撃的MF。左ハーフスペースで受け、パス、ドリブル、シュートで攻撃に関わる。",
+        point: "WGほど外に張らず、中央寄りに立つ。左側で前を向ける技術と得点関与が重要。"
+      },
+      "R_SHADOW": {
+        title: "Rシャドー / OMF",
+        name: "Rシャドー / OMF",
+        role: "CFの右斜め下でプレーする攻撃的MF。右ハーフスペースで受け、パス、ドリブル、シュートで攻撃に関わる。",
+        point: "WGほど外に張らず、中央寄りに立つ。右側で前を向ける技術と得点関与が重要。"
       },
       "WG": {
         name: "ウイング",
-        role: "サイドで幅を取り、ドリブル、裏抜け、クロス、カットインを担う選手。攻撃時に相手DFを外へ広げる。",
-        point: "突破力、スピード、得点力、クロス精度、守備で戻れるか。"
+        role: "サイドの高い位置で幅を取る前線選手。ドリブル、裏抜け、クロス、カットイン、得点が重要。",
+        point: "守備時には戻るが、基本的には攻撃色が強い。相手SBを押し下げられるかを見る。"
+      },
+      "LW": {
+        title: "LW / WG",
+        name: "LW / 左ウイング",
+        role: "左サイド高い位置で幅を取り、縦突破、カットイン、クロス、シュートを担う。",
+        point: "右利き左WGは中へカットインしやすい。縦にも中にも行けると守りにくい。"
+      },
+      "RW": {
+        title: "RW / WG",
+        name: "RW / 右ウイング",
+        role: "右サイド高い位置で幅を取り、縦突破、カットイン、クロス、シュートを担う。",
+        point: "左利き右WGは中へカットインしやすい。縦突破とカットインの両方があると強い。"
       },
       "SH": {
         name: "サイドハーフ",
-        role: "守備時に中盤まで戻るサイドMF。攻撃ではサイドから前進し、守備では横幅を埋める。",
-        point: "上下動、守備参加、クロス、カウンター対応。"
+        role: "中盤サイドで攻守に関わる選手。守備時に自陣まで戻る役割が強い。",
+        point: "5-4-1や4-4-2の守備時に重要。WGより守備負担が大きい。"
       },
-      "SH/WM": {
-        name: "サイドハーフ / ワイドMF",
-        role: "5-4-1の左右中盤。守備時にサイドを埋める役割が強く、攻撃時はカウンターの起点になる。",
-        point: "戻りの速さ、サイド守備、縦への推進力、少ない人数で攻撃を前進させる力。"
+      "LM_SH": {
+        title: "LM/SH",
+        name: "LM/SH",
+        role: "左サイドハーフ。守備時に左サイドを埋め、攻撃時は左から前進する。",
+        point: "SHはWGより守備負担が大きい。左サイドの守備参加とカウンターの運び役が重要。"
+      },
+      "RM_SH": {
+        title: "RM/SH",
+        name: "RM/SH",
+        role: "右サイドハーフ。守備時に右サイドを埋め、攻撃時は右から前進する。",
+        point: "SHはWGより守備負担が大きい。右サイドの守備参加とカウンターの運び役が重要。"
       },
       "WG/SH": {
         name: "ウイング / サイドハーフ",
@@ -3068,18 +3187,18 @@
 
     const positionGuideModes = {
       "3-4-2-1": {
-        initial: "OMF/WG",
+        initial: "L_SHADOW",
         labels: [
           guideLabel("GK", "pos-label-gk", 50, 90),
-          guideLabel("LCB", "pos-label-df", 30, 74, "CB"),
+          guideLabel("LCB", "pos-label-df", 30, 74, "LCB"),
           guideLabel("CB", "pos-label-df", 50, 76, "CB"),
-          guideLabel("RCB", "pos-label-df", 70, 74, "CB"),
-          guideLabel("LWB", "pos-label-df", 14, 55, "SB/WB"),
-          guideLabel("RWB", "pos-label-df", 86, 55, "SB/WB"),
+          guideLabel("RCB", "pos-label-df", 70, 74, "RCB"),
+          guideLabel("LWB", "pos-label-df", 14, 55, "LWB"),
+          guideLabel("RWB", "pos-label-df", 86, 55, "RWB"),
           guideLabel("DMF", "pos-label-mf", 42, 56, "DMF"),
           guideLabel("CMF", "pos-label-mf", 58, 56, "CMF"),
-          guideLabel("Lシャドー", "pos-label-omf", 38, 34, "OMF/WG"),
-          guideLabel("Rシャドー", "pos-label-omf", 62, 34, "OMF/WG"),
+          guideLabel("Lシャドー/OMF", "pos-label-omf", 38, 34, "L_SHADOW"),
+          guideLabel("Rシャドー/OMF", "pos-label-omf", 62, 34, "R_SHADOW"),
           guideLabel("CF", "pos-label-cf", 50, 13)
         ]
       },
@@ -3087,15 +3206,15 @@
         initial: "OMF",
         labels: [
           guideLabel("GK", "pos-label-gk", 50, 90),
-          guideLabel("LB", "pos-label-df", 18, 73, "SB/WB"),
-          guideLabel("LCB", "pos-label-df", 39, 74, "CB"),
-          guideLabel("RCB", "pos-label-df", 61, 74, "CB"),
-          guideLabel("RB", "pos-label-df", 82, 73, "SB/WB"),
+          guideLabel("LB", "pos-label-df", 18, 73, "LB"),
+          guideLabel("LCB", "pos-label-df", 39, 74, "LCB"),
+          guideLabel("RCB", "pos-label-df", 61, 74, "RCB"),
+          guideLabel("RB", "pos-label-df", 82, 73, "RB"),
           guideLabel("DMF", "pos-label-mf", 42, 55, "DMF"),
           guideLabel("CMF", "pos-label-mf", 58, 55, "CMF"),
-          guideLabel("LW", "pos-label-omf", 24, 35, "WG/SH"),
+          guideLabel("LW/WG", "pos-label-omf", 24, 35, "LW"),
           guideLabel("OMF", "pos-label-omf", 50, 34, "OMF"),
-          guideLabel("RW", "pos-label-omf", 76, 35, "WG/SH"),
+          guideLabel("RW/WG", "pos-label-omf", 76, 35, "RW"),
           guideLabel("CF", "pos-label-cf", 50, 13)
         ]
       },
@@ -3103,15 +3222,15 @@
         initial: "SH/WM",
         labels: [
           guideLabel("GK", "pos-label-gk", 50, 90),
-          guideLabel("LWB", "pos-label-df", 12, 73, "SB/WB"),
-          guideLabel("LCB", "pos-label-df", 31, 75, "CB"),
+          guideLabel("LWB", "pos-label-df", 12, 73, "LWB"),
+          guideLabel("LCB", "pos-label-df", 31, 75, "LCB"),
           guideLabel("CB", "pos-label-df", 50, 76, "CB"),
-          guideLabel("RCB", "pos-label-df", 69, 75, "CB"),
-          guideLabel("RWB", "pos-label-df", 88, 73, "SB/WB"),
-          guideLabel("LM", "pos-label-mf", 20, 48, "SH/WM"),
+          guideLabel("RCB", "pos-label-df", 69, 75, "RCB"),
+          guideLabel("RWB", "pos-label-df", 88, 73, "RWB"),
+          guideLabel("LM/SH", "pos-label-mf", 20, 48, "LM_SH"),
           guideLabel("DMF", "pos-label-mf", 40, 50, "DMF"),
           guideLabel("CMF", "pos-label-mf", 60, 50, "CMF"),
-          guideLabel("RM", "pos-label-mf", 80, 48, "SH/WM"),
+          guideLabel("RM/SH", "pos-label-mf", 80, 48, "RM_SH"),
           guideLabel("CF", "pos-label-cf", 50, 13)
         ]
       },
@@ -3120,85 +3239,40 @@
         labels: [
           guideLabel("GK", "pos-label-gk", 50, 90),
           guideLabel("CB", "pos-label-df", 50, 73, "CB"),
-          guideLabel("SB/WB", "pos-label-df", 18, 66, "SB/WB"),
-          guideLabel("SB/WB", "pos-label-df", 82, 66, "SB/WB"),
+          guideLabel("LB", "pos-label-df", 18, 66, "LB"),
+          guideLabel("RB", "pos-label-df", 82, 66, "RB"),
           guideLabel("DMF", "pos-label-mf", 42, 51, "DMF"),
           guideLabel("CMF", "pos-label-mf", 58, 51, "CMF"),
           guideLabel("OMF", "pos-label-omf", 50, 33, "OMF"),
-          guideLabel("WG", "pos-label-omf", 25, 29, "WG"),
-          guideLabel("WG", "pos-label-omf", 75, 29, "WG"),
+          guideLabel("LW/WG", "pos-label-omf", 25, 29, "LW"),
+          guideLabel("RW/WG", "pos-label-omf", 75, 29, "RW"),
           guideLabel("CF", "pos-label-cf", 50, 12, "CF")
         ]
       }
     };
 
     const positionExampleGroups = [
-      {
-        code: "GK",
-        japan: [
-          examplePlayer("鈴木彩艶", "パルマ", players[0].imageUrl),
-          examplePlayer("大迫敬介", "サンフレッチェ広島", players[1].imageUrl)
-        ],
-        world: [
-          examplePlayer("マヌエル・ノイアー", "バイエルン", "pics/マヌエル・ノイアー.jpg"),
-          examplePlayer("ティボー・クルトワ", "レアル・マドリード", "pics/ティボー・クルトワ.jpg")
-        ]
-      },
-      {
-        code: "CB",
-        japan: [
-          examplePlayer("板倉滉", "ボルシアMG", players[3].imageUrl),
-          examplePlayer("冨安健洋", "アヤックス", players[5].imageUrl)
-        ],
-        world: [
-          examplePlayer("フィルジル・ファン・ダイク", "リヴァプール", "pics/フィルジル・ファン・ダイク.jpg"),
-          examplePlayer("ルベン・ディアス", "マンチェスター・シティ", "pics/ルベン・ディアス.jpg")
-        ]
-      },
-      {
-        code: "SB/WB",
-        japan: [
-          examplePlayer("菅原由勢", "サウサンプトン", players[9].imageUrl),
-          examplePlayer("毎熊晟矢", "AZ", players[10].imageUrl)
-        ],
-        world: [
-          examplePlayer("アクラフ・ハキミ", "パリ・サンジェルマン", "pics/アクラフ・ハキミ.jpg"),
-          examplePlayer("テオ・エルナンデス", "アル・ヒラル", "pics/テオ・エルナンデス.jpg")
-        ]
-      },
-      {
-        code: "DMF/CMF",
-        japan: [
-          examplePlayer("遠藤航", "リヴァプール", players[11].imageUrl),
-          examplePlayer("守田英正", "スポルティング", players[12].imageUrl)
-        ],
-        world: [
-          examplePlayer("ロドリ", "マンチェスター・シティ", "pics/ロドリ.jpg"),
-          examplePlayer("デクラン・ライス", "アーセナル", "pics/デクラン・ライス.jpg")
-        ]
-      },
-      {
-        code: "OMF/WG",
-        japan: [
-          examplePlayer("久保建英", "レアル・ソシエダ", players[17].imageUrl),
-          examplePlayer("三笘薫", "ブライトン", players[21].imageUrl)
-        ],
-        world: [
-          examplePlayer("リオネル・メッシ", "インテル・マイアミ", "pics/リオネル・メッシ.jpg"),
-          examplePlayer("ヴィニシウス・ジュニオール", "レアル・マドリード", "pics/ヴィニシウス・ジュニオール.jpg")
-        ]
-      },
-      {
-        code: "CF",
-        japan: [
-          examplePlayer("上田綺世", "フェイエノールト", players[24].imageUrl),
-          examplePlayer("小川航基", "NEC", players[25].imageUrl)
-        ],
-        world: [
-          examplePlayer("アーリング・ハーランド", "マンチェスター・シティ", "pics/アーリング・ハーランド.jpg"),
-          examplePlayer("ハリー・ケイン", "バイエルン", "pics/ハリー・ケイン.jpg")
-        ]
-      }
+      positionExampleGroup("GK", [["鈴木彩艶", "パルマ"], ["大迫敬介", "サンフレッチェ広島"]], [["マヌエル・ノイアー", "バイエルン"], ["ティボー・クルトワ", "レアル・マドリード"]]),
+      positionExampleGroup("LCB", [["伊藤洋輝", "バイエルン"], ["瀬古歩夢", "ル・アーヴル"]], [["ヨシュコ・グヴァルディオル", "マンチェスター・シティ"], ["アレッサンドロ・バストーニ", "インテル"]]),
+      positionExampleGroup("RCB", [["板倉滉", "ボルシアMG"], ["冨安健洋", "AFCアヤックス"]], [["ルベン・ディアス", "マンチェスター・シティ"], ["ウィリアン・サリバ", "アーセナル"]]),
+      positionExampleGroup("CB", [["谷口彰悟", "シント＝トロイデン"], ["高井幸大", "ボルシアMG"]], [["フィルジル・ファン・ダイク", "リヴァプール"], ["キム・ミンジェ", "バイエルン"]]),
+      positionExampleGroup("LWB", [["伊藤洋輝", "バイエルン"], ["旗手怜央", "セルティック"]], [["テオ・エルナンデス", "アル・ヒラル"], ["アンドリュー・ロバートソン", "リヴァプール"]]),
+      positionExampleGroup("LB", [["伊藤洋輝", "バイエルン"], ["旗手怜央", "セルティック"]], [["テオ・エルナンデス", "アル・ヒラル"], ["アンドリュー・ロバートソン", "リヴァプール"]]),
+      positionExampleGroup("RWB", [["菅原由勢", "ヴェルダー・ブレーメン"], ["毎熊晟矢", "AZ"]], [["アクラフ・ハキミ", "パリ・サンジェルマン"], ["トレント・アレクサンダー＝アーノルド", "レアル・マドリード"]]),
+      positionExampleGroup("RB", [["菅原由勢", "ヴェルダー・ブレーメン"], ["毎熊晟矢", "AZ"]], [["アクラフ・ハキミ", "パリ・サンジェルマン"], ["トレント・アレクサンダー＝アーノルド", "レアル・マドリード"]]),
+      positionExampleGroup("DMF", [["遠藤航", "リヴァプール"], ["守田英正", "スポルティング"]], [["ロドリ", "マンチェスター・シティ"], ["デクラン・ライス", "アーセナル"]]),
+      positionExampleGroup("CMF", [["田中碧", "リーズ"], ["佐野海舟", "マインツ"]], [["フェデリコ・バルベルデ", "レアル・マドリード"], ["ベルナルド・シウバ", "マンチェスター・シティ"]]),
+      positionExampleGroup("OMF", [["久保建英", "レアル・ソシエダ"], ["鎌田大地", "クリスタル・パレス"]], [["ジャマル・ムシアラ", "バイエルン"], ["フリアン・アルバレス", "アトレティコ・マドリード"]]),
+      positionExampleGroup("L_SHADOW", [["久保建英", "レアル・ソシエダ"], ["鎌田大地", "クリスタル・パレス"]], [["ジャマル・ムシアラ", "バイエルン"], ["フリアン・アルバレス", "アトレティコ・マドリード"]]),
+      positionExampleGroup("R_SHADOW", [["堂安律", "フランクフルト"], ["南野拓実", "モナコ"]], [["フィル・フォーデン", "マンチェスター・シティ"], ["ベルナルド・シウバ", "マンチェスター・シティ"]]),
+      positionExampleGroup("WG", [["三笘薫", "ブライトン"], ["伊東純也", "KRCヘンク"]], [["ジェレミー・ドク", "マンチェスター・シティ"], ["ラミン・ヤマル", "バルセロナ"]]),
+      positionExampleGroup("LW", [["三笘薫", "ブライトン"], ["中村敬斗", "スタッド・ランス"]], [["ジェレミー・ドク", "マンチェスター・シティ"], ["ラミン・ヤマル", "バルセロナ"]]),
+      positionExampleGroup("RW", [["伊東純也", "KRCヘンク"], ["堂安律", "フランクフルト"]], [["ブカヨ・サカ", "アーセナル"], ["モハメド・サラー", "リヴァプール"]]),
+      positionExampleGroup("SH", [["前田大然", "セルティック"], ["堂安律", "フランクフルト"]], [["ジャロッド・ボーウェン", "ウェストハム"], ["フェデリコ・バルベルデ", "レアル・マドリード"]]),
+      positionExampleGroup("LM_SH", [["前田大然", "セルティック"], ["旗手怜央", "セルティック"]], [["ガブリエウ・マルティネッリ", "アーセナル"], ["ルイス・ディアス", "バイエルン"]]),
+      positionExampleGroup("RM_SH", [["堂安律", "フランクフルト"], ["伊東純也", "KRCヘンク"]], [["ジャロッド・ボーウェン", "ウェストハム"], ["フェデリコ・バルベルデ", "レアル・マドリード"]]),
+      positionExampleGroup("WG/SH", [["伊東純也", "KRCヘンク"], ["堂安律", "フランクフルト"]], [["ブカヨ・サカ", "アーセナル"], ["モハメド・サラー", "リヴァプール"]]),
+      positionExampleGroup("CF", [["上田綺世", "フェイエノールト"], ["小川航基", "NEC"]], [["アーリング・ハーランド", "マンチェスター・シティ"], ["ハリー・ケイン", "バイエルン"]])
     ];
 
     function slot(group, x, y, label = group) {
@@ -3207,6 +3281,11 @@
 
     function guideLabel(label, className, x, y, code = label) {
       return { label, className, x, y, code };
+    }
+
+    function positionExampleGroup(code, japan, world) {
+      const toExamples = (items) => items.map(([name, club]) => examplePlayer(name, club, `pics/${name}.jpg`));
+      return { code, japan: toExamples(japan), world: toExamples(world) };
     }
 
     function examplePlayer(name, club, imageUrl) {
@@ -3609,6 +3688,7 @@
 
       boardTitle.textContent = `${owners[activeOwner]}予想（${teamName}）`;
       sideTitle.textContent = `${owners[activeOwner]}の予想`;
+      sideSub.textContent = "";
       pitchCount.textContent = `ピッチ: ${pitchTotal}人/${pitchLimit}人`;
       pitchCount.classList.toggle("over-limit", pitchTotal > pitchLimit);
       benchCount.textContent = `ベンチ: ${benchTotal}人`;
@@ -3649,6 +3729,7 @@
 
       boardTitle.textContent = `比較コート（${teamName}）`;
       sideTitle.textContent = "比較";
+      sideSub.textContent = "";
       statusMessage.textContent = "";
       window.clearTimeout(statusTimer);
       pitchCount.textContent = "ピッチ比較";
@@ -3858,6 +3939,7 @@
 
       boardTitle.textContent = "ポジション解説";
       sideTitle.textContent = "解説";
+      sideSub.textContent = "";
       statusMessage.textContent = "";
       window.clearTimeout(statusTimer);
       pitchCount.textContent = "ポジション一覧";
@@ -3890,6 +3972,7 @@
 
       boardTitle.textContent = "賭け結果";
       sideTitle.textContent = "賭け結果";
+      sideSub.textContent = "正式招集メンバーを選択すると、かりん予想・りょう予想の的中人数と支払額を自動計算します。";
       statusMessage.textContent = "";
       window.clearTimeout(statusTimer);
       pitchCount.textContent = "賭け結果";
@@ -3925,6 +4008,7 @@
 
       boardTitle.textContent = "選手一覧";
       sideTitle.textContent = "選手一覧";
+      sideSub.textContent = "";
       statusMessage.textContent = "";
       window.clearTimeout(statusTimer);
       pitchCount.textContent = "選手一覧";
@@ -3955,7 +4039,7 @@
     function selectPositionDetail(code) {
       const detail = positionDetails[code];
       if (!detail) return;
-      positionDetailTitle.textContent = code;
+      positionDetailTitle.textContent = detail.title || code;
       positionDetailName.textContent = detail.name;
       positionDetailRole.textContent = detail.role;
       positionDetailPoint.textContent = detail.point;
