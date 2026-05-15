@@ -28,7 +28,7 @@
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--text);
       background: var(--bg);
-      overflow: hidden;
+      overflow: auto;
     }
 
     button {
@@ -36,10 +36,10 @@
     }
 
     .shell {
-      height: 100vh;
+      min-height: 100vh;
       display: grid;
       grid-template-rows: auto 1fr;
-      overflow: hidden;
+      overflow: visible;
     }
 
     .owner-tabs {
@@ -72,7 +72,8 @@
       grid-template-columns: minmax(560px, 1fr) 430px;
       gap: 18px;
       padding: 0 18px 18px;
-      overflow: hidden;
+      overflow: visible;
+      align-items: start;
     }
 
     .app.single-panel {
@@ -127,7 +128,7 @@
     }
 
     body.screenshot-mode .pitch {
-      min-height: 760px;
+      min-height: 620px;
     }
 
     .board,
@@ -141,8 +142,8 @@
 
     .board {
       display: grid;
-      grid-template-rows: auto 1fr;
-      overflow: hidden;
+      grid-template-rows: auto auto;
+      overflow: visible;
       min-height: 0;
     }
 
@@ -379,6 +380,76 @@
       padding: 16px;
     }
 
+    .screenshot-summary {
+      display: none;
+      border-top: 1px solid var(--line);
+      padding: 14px 16px 16px;
+      background: #f8fafc;
+    }
+
+    body.screenshot-mode .screenshot-summary {
+      display: grid;
+      gap: 10px;
+    }
+
+    .screenshot-summary-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      font-weight: 900;
+    }
+
+    .screenshot-selected-count {
+      color: var(--blue);
+      font-size: 15px;
+    }
+
+    .screenshot-bench-title {
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .screenshot-bench-list,
+    .compare-bench-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 8px;
+    }
+
+    .mini-player {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
+      gap: 7px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 6px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .mini-player .photo {
+      width: 34px;
+      height: 34px;
+      font-size: 13px;
+    }
+
+    .mini-player-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .mini-player-position {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
     .view-panel {
       display: none;
       border-top: 1px solid var(--line);
@@ -546,6 +617,30 @@
 
     .compare-diff {
       padding: 0 14px 14px;
+    }
+
+    .compare-benches {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      padding: 0 16px 14px;
+    }
+
+    .compare-bench {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f8fafc;
+      padding: 12px;
+    }
+
+    .compare-bench-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+      font-size: 14px;
+      font-weight: 900;
     }
 
     .compare-link-actions {
@@ -1310,6 +1405,22 @@
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
     }
 
+    .slot-label {
+      position: absolute;
+      z-index: 2;
+      min-width: 34px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.82);
+      color: #14532d;
+      font-size: 10px;
+      font-weight: 900;
+      text-align: center;
+      transform: translate(-50%, calc(-50% - 42px));
+      pointer-events: none;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.14);
+    }
+
     .guide-gk {
       top: 90%;
     }
@@ -1333,7 +1444,7 @@
     .bench {
       display: grid;
       grid-template-rows: auto auto auto minmax(0, 1fr);
-      height: 100%;
+      height: auto;
       min-height: 0;
       overflow: hidden;
     }
@@ -1815,6 +1926,10 @@
         grid-template-columns: 1fr;
       }
 
+      .compare-benches {
+        grid-template-columns: 1fr;
+      }
+
       .diff-grid {
         grid-template-columns: 1fr;
       }
@@ -1870,7 +1985,7 @@
 
       .pitch {
         min-height: 500px;
-        max-height: 68vh;
+        height: auto;
       }
 
       .bench {
@@ -1879,7 +1994,7 @@
       }
 
       .bench-list {
-        max-height: 560px;
+        max-height: none;
       }
     }
 
@@ -2024,6 +2139,13 @@
             <div class="guide-label guide-cf">CF</div>
           </div>
         </div>
+        <section class="screenshot-summary" id="screenshotSummary" aria-label="スクショ用選出メンバー">
+          <div class="screenshot-summary-head">
+            <div class="screenshot-selected-count" id="screenshotSelectedCount">選出人数：0人</div>
+            <div class="screenshot-bench-title" id="screenshotBenchTitle">ベンチメンバー：0人</div>
+          </div>
+          <div class="screenshot-bench-list" id="screenshotBenchList"></div>
+        </section>
         <section class="view-panel" id="comparisonPanel" aria-label="比較コート">
           <div class="compare-courts">
             <section class="compare-court">
@@ -2053,6 +2175,16 @@
                 <div class="guide-label guide-omf">OMF/WG</div>
                 <div class="guide-label guide-cf">CF</div>
               </div>
+            </section>
+          </div>
+          <div class="compare-benches">
+            <section class="compare-bench">
+              <div class="compare-bench-title"><span>かりんベンチ</span><span id="karinCompareBenchCount">0人</span></div>
+              <div class="compare-bench-list" id="karinCompareBenchList"></div>
+            </section>
+            <section class="compare-bench">
+              <div class="compare-bench-title"><span>りょうベンチ</span><span id="ryoCompareBenchCount">0人</span></div>
+              <div class="compare-bench-list" id="ryoCompareBenchList"></div>
             </section>
           </div>
           <div class="compare-diff">
@@ -2657,21 +2789,21 @@
     const formations = {
       "3-4-2-1": [
         slot("GK", 50, 91),
-        slot("DF", 30, 74), slot("DF", 50, 76), slot("DF", 70, 74),
+        slot("CB", 30, 74, "LCB"), slot("CB", 50, 76, "CB"), slot("CB", 70, 74, "RCB"),
         slot("MF", 14, 54), slot("MF", 42, 56), slot("MF", 58, 56), slot("MF", 86, 54),
         slot("OMF/WG", 38, 34), slot("OMF/WG", 62, 34),
         slot("CF", 50, 13)
       ],
       "4-2-3-1": [
         slot("GK", 50, 91),
-        slot("DF", 18, 73), slot("DF", 39, 74), slot("DF", 61, 74), slot("DF", 82, 73),
+        slot("DF", 18, 73), slot("CB", 39, 74, "LCB"), slot("CB", 61, 74, "RCB"), slot("DF", 82, 73),
         slot("MF", 42, 55), slot("MF", 58, 55),
         slot("OMF/WG", 24, 35), slot("OMF/WG", 50, 34), slot("OMF/WG", 76, 35),
         slot("CF", 50, 13)
       ],
       "5-4-1": [
         slot("GK", 50, 91),
-        slot("DF", 12, 73), slot("DF", 31, 75), slot("DF", 50, 76), slot("DF", 69, 75), slot("DF", 88, 73),
+        slot("DF", 12, 73), slot("CB", 31, 75, "LCB"), slot("CB", 50, 76, "CB"), slot("CB", 69, 75, "RCB"), slot("DF", 88, 73),
         slot("MF", 20, 48), slot("MF", 40, 50), slot("MF", 60, 50), slot("MF", 80, 48),
         slot("CF", 50, 13)
       ]
@@ -2719,9 +2851,16 @@
     const ownerTabs = document.querySelectorAll(".owner-tab");
     const formationButtons = document.querySelectorAll(".formation-button");
     const comparisonPanel = document.getElementById("comparisonPanel");
+    const screenshotSelectedCount = document.getElementById("screenshotSelectedCount");
+    const screenshotBenchTitle = document.getElementById("screenshotBenchTitle");
+    const screenshotBenchList = document.getElementById("screenshotBenchList");
     const positionPanel = document.getElementById("positionPanel");
     const karinComparePitch = document.getElementById("karinComparePitch");
     const ryoComparePitch = document.getElementById("ryoComparePitch");
+    const karinCompareBenchCount = document.getElementById("karinCompareBenchCount");
+    const ryoCompareBenchCount = document.getElementById("ryoCompareBenchCount");
+    const karinCompareBenchList = document.getElementById("karinCompareBenchList");
+    const ryoCompareBenchList = document.getElementById("ryoCompareBenchList");
     const karinOnlyCount = document.getElementById("karinOnlyCount");
     const commonCount = document.getElementById("commonCount");
     const ryoOnlyCount = document.getElementById("ryoOnlyCount");
@@ -2885,8 +3024,8 @@
       }
     ];
 
-    function slot(group, x, y) {
-      return { group, x, y };
+    function slot(group, x, y, label = group) {
+      return { group, x, y, label };
     }
 
     function examplePlayer(name, club, imageUrl) {
@@ -3051,11 +3190,35 @@
     function playerMatchesGroup(player, group) {
       const position = player.position;
       if (group === "GK") return position === "GK";
+      if (group === "CB") return /CB/.test(position);
       if (group === "DF") return /CB|SB|WB/.test(position);
       if (group === "MF") return /DMF|CMF|WB/.test(position);
       if (group === "OMF/WG") return /OMF|WG|SH/.test(position);
       if (group === "CF") return /CF|FW/.test(position);
       return false;
+    }
+
+    function pitchPositionLabel(player, owner = activeOwner) {
+      const placement = states[owner]?.get(player.id);
+      if (!placement || !/CB/.test(player.position)) return shortPosition(player.position);
+      if (placement.x < 45) return "LCB";
+      if (placement.x > 55) return "RCB";
+      return "CB";
+    }
+
+    function renderSlotLabels(target, formationName) {
+      target.querySelectorAll(".slot-label").forEach((label) => label.remove());
+      const slots = formations[formationName] || [];
+      slots
+        .filter((formationSlot) => /CB/.test(formationSlot.label))
+        .forEach((formationSlot) => {
+          const label = document.createElement("div");
+          label.className = "slot-label";
+          label.textContent = formationSlot.label;
+          label.style.left = `${formationSlot.x}%`;
+          label.style.top = `${formationSlot.y}%`;
+          target.appendChild(label);
+        });
     }
 
     function createBenchGroups() {
@@ -3134,7 +3297,7 @@
 
       const position = document.createElement("span");
       position.className = `position ${positionClass(player.position)}`;
-      position.textContent = onPitch ? shortPosition(player.position) : player.position;
+      position.textContent = onPitch ? pitchPositionLabel(player, owner) : player.position;
 
       const number = document.createElement("span");
       number.className = "number-badge";
@@ -3186,7 +3349,7 @@
     }
 
     function clearPitchCards() {
-      pitch.querySelectorAll(".player-card").forEach((card) => card.remove());
+      pitch.querySelectorAll(".player-card, .slot-label").forEach((card) => card.remove());
     }
 
     function render() {
@@ -3227,6 +3390,8 @@
       let droppedTotal = 0;
       const benchGroupTotals = Object.fromEntries(benchGroups.map((group) => [group.key, 0]));
       const benchGroupPlayers = new Map(benchGroups.map((group) => [group.key, []]));
+
+      renderSlotLabels(pitch, currentFormations[activeOwner]);
 
       currentPlayers().forEach((player) => {
         const placement = state.get(player.id);
@@ -3275,6 +3440,7 @@
       formationButtons.forEach((button) => {
         button.disabled = ownerLocks[activeOwner];
       });
+      renderScreenshotSummary(pitchTotal);
       ownerTabs.forEach((tab) => {
         tab.classList.toggle("active", tab.dataset.view === "owner" && tab.dataset.owner === activeOwner);
       });
@@ -3283,6 +3449,7 @@
     function renderCompare() {
       clearPitchCards();
       clearComparePitches();
+      clearCompareBenches();
       benchList.innerHTML = "";
       confirmedList.innerHTML = "";
       droppedList.innerHTML = "";
@@ -3308,6 +3475,8 @@
 
       renderOwnerComparePitch("karin", karinComparePitch);
       renderOwnerComparePitch("ryo", ryoComparePitch);
+      renderCompareBench("karin", karinCompareBenchList, karinCompareBenchCount);
+      renderCompareBench("ryo", ryoCompareBenchList, ryoCompareBenchCount);
       renderDiffPanel();
       ownerTabs.forEach((tab) => {
         tab.classList.toggle("active", tab.dataset.view === "compare");
@@ -3316,12 +3485,19 @@
 
     function clearComparePitches() {
       [karinComparePitch, ryoComparePitch].forEach((target) => {
-        target.querySelectorAll(".player-card, .compare-card").forEach((card) => card.remove());
+        target.querySelectorAll(".player-card, .compare-card, .slot-label").forEach((card) => card.remove());
+      });
+    }
+
+    function clearCompareBenches() {
+      [karinCompareBenchList, ryoCompareBenchList].forEach((target) => {
+        target.innerHTML = "";
       });
     }
 
     function renderOwnerComparePitch(owner, target) {
       const state = states[owner];
+      renderSlotLabels(target, currentFormations[owner]);
       playersForOwner(owner).forEach((player) => {
         const placement = state.get(player.id);
         if (placement?.area !== "pitch") return;
@@ -3339,6 +3515,104 @@
       return card;
     }
 
+    function selectedPlayersForOwner(owner) {
+      const state = states[owner];
+      const selected = [];
+      const used = new Set();
+      playersForOwner(owner)
+        .filter((player) => state.get(player.id)?.area === "pitch")
+        .sort(sortForComparison)
+        .forEach((player) => {
+          selected.push(player);
+          used.add(player.id);
+        });
+      playersForOwner(owner)
+        .filter((player) => !used.has(player.id))
+        .sort((a, b) => {
+          const ratingDiff = ratingOrder.indexOf(currentRating(a.id, owner)) - ratingOrder.indexOf(currentRating(b.id, owner));
+          if (ratingDiff !== 0) return ratingDiff;
+          return playerOriginalIndex(a) - playerOriginalIndex(b);
+        })
+        .slice(0, Math.max(0, rosterLimit - selected.length))
+        .forEach((player) => selected.push(player));
+      return selected.slice(0, rosterLimit);
+    }
+
+    function benchPlayersForOwner(owner) {
+      const state = states[owner];
+      return selectedPlayersForOwner(owner)
+        .filter((player) => state.get(player.id)?.area !== "pitch")
+        .sort(sortForComparison);
+    }
+
+    function createMiniPlayer(player, owner) {
+      const row = document.createElement("div");
+      row.className = "mini-player";
+
+      const photo = document.createElement("div");
+      photo.className = "photo";
+      if (player.imageUrl) {
+        const img = document.createElement("img");
+        img.src = player.imageUrl;
+        img.alt = player.name;
+        if (player.imageClass) img.className = player.imageClass;
+        img.onerror = () => {
+          const nextIndex = Number(img.dataset.fallbackIndex || 0);
+          if (applyImageFallback(img, player, nextIndex)) return;
+          photo.textContent = initialOf(player.name);
+          img.remove();
+        };
+        photo.appendChild(img);
+      } else {
+        photo.textContent = initialOf(player.name);
+      }
+
+      const info = document.createElement("div");
+      const name = document.createElement("div");
+      name.className = "mini-player-name";
+      name.textContent = player.name;
+      const position = document.createElement("div");
+      position.className = "mini-player-position";
+      position.textContent = `${player.position}${currentNumber(player.id, owner) ? ` #${currentNumber(player.id, owner)}` : ""}`;
+      info.append(name, position);
+      row.append(photo, info);
+      return row;
+    }
+
+    function renderScreenshotSummary(pitchTotal) {
+      if (!screenshotBenchList) return;
+      screenshotBenchList.innerHTML = "";
+      const selected = selectedPlayersForOwner(activeOwner);
+      const benchPlayers = benchPlayersForOwner(activeOwner);
+      screenshotSelectedCount.textContent = `選出人数：${selected.length}人`;
+      screenshotBenchTitle.textContent = `ベンチメンバー：${benchPlayers.length}人`;
+      benchPlayers.forEach((player) => {
+        screenshotBenchList.appendChild(createMiniPlayer(player, activeOwner));
+      });
+      if (benchPlayers.length === 0 && pitchTotal > 0) {
+        const empty = document.createElement("div");
+        empty.className = "diff-empty";
+        empty.textContent = "ベンチメンバーなし";
+        screenshotBenchList.appendChild(empty);
+      }
+    }
+
+    function renderCompareBench(owner, target, countTarget) {
+      const players = benchPlayersForOwner(owner);
+      target.innerHTML = "";
+      countTarget.textContent = `${players.length}人`;
+      if (players.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "diff-empty";
+        empty.textContent = "なし";
+        target.appendChild(empty);
+        return;
+      }
+      players.forEach((player) => {
+        target.appendChild(createMiniPlayer(player, owner));
+      });
+    }
+
     function pitchPlayersForOwner(owner) {
       const state = states[owner];
       return playersForOwner(owner)
@@ -3348,14 +3622,14 @@
     }
 
     function renderDiffPanel() {
-      const karinPitch = pitchPlayersForOwner("karin");
-      const ryoPitch = pitchPlayersForOwner("ryo");
-      const karinIds = new Set(karinPitch.map((player) => player.id));
-      const ryoIds = new Set(ryoPitch.map((player) => player.id));
+      const karinSelected = selectedPlayersForOwner("karin");
+      const ryoSelected = selectedPlayersForOwner("ryo");
+      const karinIds = new Set(karinSelected.map((player) => player.id));
+      const ryoIds = new Set(ryoSelected.map((player) => player.id));
 
-      const karinOnly = karinPitch.filter((player) => !ryoIds.has(player.id));
-      const common = karinPitch.filter((player) => ryoIds.has(player.id));
-      const ryoOnly = ryoPitch.filter((player) => !karinIds.has(player.id));
+      const karinOnly = karinSelected.filter((player) => !ryoIds.has(player.id));
+      const common = karinSelected.filter((player) => ryoIds.has(player.id));
+      const ryoOnly = ryoSelected.filter((player) => !karinIds.has(player.id));
 
       fillDiffList(karinOnlyList, karinOnly);
       fillDiffList(commonList, common);
