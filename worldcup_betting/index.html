@@ -1391,6 +1391,66 @@
       font-size: 20px;
     }
 
+    .role-usage {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .role-usage h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .role-usage-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .role-usage-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .role-usage-card summary {
+      cursor: pointer;
+      padding: 12px;
+      color: var(--blue);
+      background: #eef6ff;
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .role-usage-body {
+      display: grid;
+      gap: 12px;
+      padding: 12px;
+    }
+
+    .role-usage-block {
+      display: grid;
+      gap: 6px;
+    }
+
+    .role-usage-block h3 {
+      margin: 0;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .role-usage-block ul {
+      margin: 0;
+      padding-left: 1.2em;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
     .term-category {
       display: grid;
       gap: 10px;
@@ -2095,6 +2155,10 @@
         grid-template-columns: 1fr;
       }
 
+      .role-usage-grid {
+        grid-template-columns: 1fr;
+      }
+
       .term-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
@@ -2489,6 +2553,74 @@
               <div class="detail-examples" id="positionDetailExamples"></div>
             </section>
           </div>
+          <section class="role-usage" aria-label="ポジション別の起用クラブ例と使い分け">
+            <h2>ポジション別：起用クラブ例・強み弱み・日本代表での使い分け</h2>
+            <div class="role-usage-grid">
+              <details class="role-usage-card" open>
+                <summary>OMF：攻撃的MF / トップ下 / シャドー</summary>
+                <div class="role-usage-body">
+                  <div class="role-usage-block"><h3>起用クラブ例</h3><ul><li>バイエルン</li><li>マンチェスター・シティ</li><li>レアル・ソシエダ</li><li>クリスタル・パレス</li></ul></div>
+                  <div class="role-usage-block"><h3>ポジションとしての強み</h3><ul><li>中央やハーフスペースでボールを受け、チャンスを作りやすい</li><li>CFとの距離が近く、ラストパスやミドルシュートに関わりやすい</li><li>相手のDFラインとMFラインの間で受けられると、攻撃の起点になりやすい</li></ul></div>
+                  <div class="role-usage-block"><h3>ポジションとしての弱み</h3><ul><li>中央で相手のプレスを受けやすく、ボールロストが失点につながりやすい</li><li>守備時にどこまで戻るかが曖昧になると、中盤が空きやすい</li><li>サイドの幅を取りにくいため、WGやWBとの連携が必要</li></ul></div>
+                  <div class="role-usage-block"><h3>日本代表での使い分け</h3><ul><li>日本がボールを持てる相手には、久保建英、鎌田大地、堂安律のような選手を中央寄りで使い、攻撃を作る形が有効</li><li>強豪相手には、OMFを置きすぎると守備の枚数が足りなくなるため、3-4-2-1のシャドーとして守備タスクを持たせる可能性がある</li><li>相手が中央を固めてくる場合は、OMFだけで崩すより、WGやWBで幅を使う形に変える可能性がある</li></ul></div>
+                </div>
+              </details>
+              <details class="role-usage-card">
+                <summary>WG：ウイング</summary>
+                <div class="role-usage-body">
+                  <div class="role-usage-block"><h3>起用クラブ例</h3><ul><li>ブライトン</li><li>バルセロナ</li><li>レアル・マドリード</li><li>マンチェスター・シティ</li><li>リヴァプール</li></ul></div>
+                  <div class="role-usage-block"><h3>ポジションとしての強み</h3><ul><li>サイドで1対1を作り、ドリブルやカットインで相手を崩せる</li><li>ピッチの幅を使えるため、相手守備を横に広げられる</li><li>カウンター時にスピードを生かして一気に前進できる</li></ul></div>
+                  <div class="role-usage-block"><h3>ポジションとしての弱み</h3><ul><li>守備に戻らないとSB/WBが孤立しやすい</li><li>相手にサイドを消されると、ボールに関われない時間が増えやすい</li><li>中央の人数が少なくなり、CFが孤立することがある</li></ul></div>
+                  <div class="role-usage-block"><h3>日本代表での使い分け</h3><ul><li>相手のSB裏を狙える場合は、三笘薫、伊東純也、中村敬斗のようなWGを使う価値が高い</li><li>日本が押し込める相手には、WGで幅を取り、サイドから崩す形が有効</li><li>オランダやドイツ級の強豪相手では、WGにも守備の戻りが求められるため、前田大然のような守備強度のある選手を選ぶ可能性がある</li><li>相手が5バックでサイドを固める場合は、WGだけでなく、WBやOMFとの連携が重要になる</li></ul></div>
+                </div>
+              </details>
+              <details class="role-usage-card">
+                <summary>SH：サイドハーフ / 守備時のサイドMF</summary>
+                <div class="role-usage-body">
+                  <div class="role-usage-block"><h3>起用クラブ例</h3><ul><li>アーセナル</li><li>マンチェスター・シティ</li><li>ウェストハム</li><li>セルティック</li><li>フランクフルト</li></ul></div>
+                  <div class="role-usage-block"><h3>ポジションとしての強み</h3><ul><li>守備時に中盤のサイドを埋められるため、相手のサイド攻撃を止めやすい</li><li>攻撃時にはカウンターの出口になり、サイドから前進できる</li><li>WGより守備タスクが明確で、強豪相手の守備設計に使いやすい</li></ul></div>
+                  <div class="role-usage-block"><h3>ポジションとしての弱み</h3><ul><li>守備負担が大きく、攻撃時に前線まで出る体力が必要</li><li>WGほど高い位置に残れないため、攻撃の迫力が落ちることがある</li><li>下がりすぎると、CFとの距離が遠くなりカウンターが単発になりやすい</li></ul></div>
+                  <div class="role-usage-block"><h3>日本代表での使い分け</h3><ul><li>強豪相手に5-4-1や4-4-2気味で守る場合、SHはかなり重要</li><li>前田大然、堂安律、伊東純也のように、攻撃だけでなく守備にも戻れる選手が選ばれやすい</li><li>相手のSB/WBが強い場合は、WGよりSH的に使える選手を置き、サイドの守備を安定させる可能性がある</li><li>リードしている展開では、WGよりSH寄りの選手を入れて逃げ切る可能性がある</li></ul></div>
+                </div>
+              </details>
+              <details class="role-usage-card">
+                <summary>Lシャドー / Rシャドー</summary>
+                <div class="role-usage-body">
+                  <div class="role-usage-block"><h3>起用クラブ例</h3><ul><li>レバークーゼン</li><li>アタランタ</li><li>フランクフルト</li><li>日本代表の3-4-2-1</li></ul></div>
+                  <div class="role-usage-block"><h3>ポジションとしての強み</h3><ul><li>CFの近くでプレーできるため、中央で攻撃に関わりやすい</li><li>OMFよりも前線に近く、FWとの連携やセカンドボール回収に関わりやすい</li><li>守備時には中盤に戻りやすく、3-4-2-1から5-4-1へ変化しやすい</li></ul></div>
+                  <div class="role-usage-block"><h3>ポジションとしての弱み</h3><ul><li>外に張るWGではないため、サイドの幅はWBに依存しやすい</li><li>守備時に戻りが遅いと、WBの背後や中盤脇が空きやすい</li><li>中央に人が集まりすぎると、相手に詰まらされやすい</li></ul></div>
+                  <div class="role-usage-block"><h3>日本代表での使い分け</h3><ul><li>3-4-2-1を使う場合、久保建英、堂安律、鎌田大地、南野拓実のような選手がシャドー候補になる</li><li>強豪相手には、シャドーにも守備タスクが求められ、前田大然のような走れる選手を置く可能性もある</li><li>相手の中央守備が強い場合は、シャドーだけで崩すより、WBの幅を使う形に変える可能性がある</li></ul></div>
+                </div>
+              </details>
+              <details class="role-usage-card">
+                <summary>LWB / RWB：ウイングバック</summary>
+                <div class="role-usage-body">
+                  <div class="role-usage-block"><h3>起用クラブ例</h3><ul><li>インテル</li><li>レバークーゼン</li><li>アタランタ</li><li>チェルシー</li></ul></div>
+                  <div class="role-usage-block"><h3>ポジションとしての強み</h3><ul><li>サイドを1人で広く担当でき、攻撃時は高い位置で幅を取れる</li><li>守備時は最終ラインに入り、5バックを作れる</li><li>3バックと相性が良く、攻守の可変に使いやすい</li></ul></div>
+                  <div class="role-usage-block"><h3>ポジションとしての弱み</h3><ul><li>上下動が多く、運動量の負担が非常に大きい</li><li>攻撃に出た背後を狙われやすい</li><li>1対1の守備と攻撃参加の両方が求められるため、適任者が限られる</li></ul></div>
+                  <div class="role-usage-block"><h3>日本代表での使い分け</h3><ul><li>3-4-2-1や5-4-1を使う場合、WBの出来がかなり重要</li><li>強豪相手には守備重視のWB、格下相手には攻撃参加できるWBを使う可能性がある</li><li>右は菅原由勢、毎熊晟矢、左は伊藤洋輝や旗手怜央など、相手に応じて守備型/攻撃型を変える可能性がある</li><li>相手のサイド攻撃が強い場合は、WBを低めに置いて5バック気味にする可能性がある</li></ul></div>
+                </div>
+              </details>
+              <details class="role-usage-card">
+                <summary>LB / RB：サイドバック</summary>
+                <div class="role-usage-body">
+                  <div class="role-usage-block"><h3>起用クラブ例</h3><ul><li>アーセナル</li><li>リヴァプール</li><li>レアル・マドリード</li><li>バイエルン</li></ul></div>
+                  <div class="role-usage-block"><h3>ポジションとしての強み</h3><ul><li>4バックでサイド守備を安定させやすい</li><li>攻撃時に外側からサポートし、クロスやビルドアップに関われる</li><li>左右のバランスを取りながら、チーム全体の安定感を作れる</li></ul></div>
+                  <div class="role-usage-block"><h3>ポジションとしての弱み</h3><ul><li>相手WGとの1対1に負けると、失点リスクが高い</li><li>攻撃参加と守備の戻りの判断が難しい</li><li>片側のSBが上がりすぎると、カウンターを受けやすい</li></ul></div>
+                  <div class="role-usage-block"><h3>日本代表での使い分け</h3><ul><li>4-2-3-1を使う場合、SBの守備力と攻撃参加のバランスが重要</li><li>強豪相手には、SBを無理に上げず守備重視にする可能性がある</li><li>攻撃的に行きたい試合では、菅原由勢や毎熊晟矢のような攻撃参加できる選手を使う可能性がある</li><li>左SBは人選が難しいため、伊藤洋輝を左SB/左CB兼任で使う可能性がある</li></ul></div>
+                </div>
+              </details>
+              <details class="role-usage-card">
+                <summary>LCB / CB / RCB：センターバック</summary>
+                <div class="role-usage-body">
+                  <div class="role-usage-block"><h3>起用クラブ例</h3><ul><li>マンチェスター・シティ</li><li>リヴァプール</li><li>インテル</li><li>バイエルン</li></ul></div>
+                  <div class="role-usage-block"><h3>ポジションとしての強み</h3><ul><li>守備の中心として、空中戦・対人・カバーリングを担える</li><li>3バックでは左右CBがサイドのカバーに出やすい</li><li>中央CBはライン統率やゴール前の守備で重要</li></ul></div>
+                  <div class="role-usage-block"><h3>ポジションとしての弱み</h3><ul><li>スピードのある相手FWに背後を取られるリスクがある</li><li>ビルドアップでミスすると、即ピンチになりやすい</li><li>3バックではCB同士の距離感やスライドが難しい</li></ul></div>
+                  <div class="role-usage-block"><h3>日本代表での使い分け</h3><ul><li>強豪相手には、板倉滉、伊藤洋輝、谷口彰悟、高井幸大、冨安健洋の組み合わせで守備を固める可能性がある</li><li>冨安健洋は能力面では大きいが、稼働率や試合勘を見て使い方を調整する必要がある</li><li>左CBには伊藤洋輝や瀬古歩夢、右CBには板倉滉や冨安健洋、中央CBには谷口彰悟や高井幸大のような使い分けが考えられる</li><li>相手が高さやフィジカルで強い場合は、高井幸大や谷口彰悟のような高さ・安定感のある選手を使う可能性がある</li></ul></div>
+                </div>
+              </details>
+            </div>
+          </section>
           <section class="soccer-terms" aria-label="サッカー用語解説">
             <h2>サッカー用語解説</h2>
             <section class="term-category">
@@ -3191,58 +3323,58 @@
       "OMF": {
         name: "攻撃的ミッドフィルダー",
         role: "CFの近く、または2列目中央・ハーフスペースで受けてチャンスを作る選手。中央MFと前線の間、いわゆるライン間で受けることが多い。",
-        point: "バイエルンのムシアラ、マンチェスター・シティのフォーデン、レアル・ソシエダの久保建英のように、中央やハーフスペースで受けて攻撃を作る役割。"
+        point: "パス、ターン、ミドルシュート、ラストパスが重要。中央で前を向けると攻撃の起点になりやすい。"
       },
       "L_SHADOW": {
         title: "Lシャドー / OMF",
         name: "Lシャドー / OMF",
         role: "CFの左斜め下でプレーする攻撃的MF。左ハーフスペースやライン間で受け、パス、ドリブル、シュートで攻撃に関わる。",
-        point: "バイエルンのムシアラ、レアル・ソシエダの久保建英、クリスタル・パレスの鎌田大地のように、WGほど外に張らず中央寄りで攻撃を作る。"
+        point: "WGほど外に張らず、中央寄りに立つ。左側で前を向ける技術と得点関与が重要。"
       },
       "R_SHADOW": {
         title: "Rシャドー / OMF",
         name: "Rシャドー / OMF",
         role: "CFの右斜め下でプレーする攻撃的MF。右ハーフスペースやライン間で受け、パス、ドリブル、シュートで攻撃に関わる。",
-        point: "マンチェスター・シティのフォーデンやベルナルド・シウバ、フランクフルトの堂安律のように、中央寄りで受けて攻撃を作る。"
+        point: "WGほど外に張らず、中央寄りに立つ。右側で前を向ける技術と得点関与が重要。"
       },
       "WG": {
         name: "ウイング",
         role: "サイドの高い位置で幅を取り、ドリブル、裏への走り、カットイン、クロス、シュートで攻撃を作る選手。",
-        point: "ブライトンの三笘薫、バルセロナのラミン・ヤマル、レアル・マドリードのヴィニシウス、マンチェスター・シティのドク、リヴァプールのサラーのように、サイドで相手を崩す役割。"
+        point: "守備時には戻るが、基本的には攻撃色が強い。相手SBを押し下げられるかを見る。"
       },
       "LW": {
         title: "LW / WG",
         name: "LW / 左ウイング",
         role: "左サイド高い位置で幅を取り、縦突破、カットイン、クロス、シュートを担う。",
-        point: "ブライトンの三笘薫、レアル・マドリードのヴィニシウス、マンチェスター・シティのドクのように、左サイドで相手を崩す。"
+        point: "右利き左WGは中へカットインしやすい。縦にも中にも行けると守りにくい。"
       },
       "RW": {
         title: "RW / WG",
         name: "RW / 右ウイング",
         role: "右サイド高い位置で幅を取り、縦突破、カットイン、クロス、シュートを担う。",
-        point: "バルセロナのラミン・ヤマル、リヴァプールのサラー、フランクフルトの堂安律のように、右サイドで幅と得点力を出す。"
+        point: "左利き右WGは中へカットインしやすい。縦突破とカットインの両方があると強い。"
       },
       "SH": {
         name: "サイドハーフ",
-        role: "中盤のサイドで、攻撃だけでなく守備にも強く関わる選手。4-4-2や5-4-1の守備時にサイドを埋め、相手SB/WBの攻撃参加に対応する。",
-        point: "アーセナルのサカ、マンチェスター・シティのベルナルド・シウバ、ウェストハムのボーウェン、セルティックの前田大然、フランクフルトの堂安律のように、サイドで攻守両方に関わる役割。"
+        role: "中盤のサイドで、攻撃だけでなく守備にも強く関わる選手。4-4-2や5-4-1の守備時にサイドを埋める。",
+        point: "相手SB/WBの攻撃参加に対応する。WGより守備タスクが明確で、守備負担が大きい。"
       },
       "LM_SH": {
         title: "LM/SH",
         name: "LM/SH",
         role: "左サイドハーフ。守備時に左サイドを埋め、攻撃時は左から前進する。",
-        point: "セルティックの前田大然や旗手怜央のように、左サイドで戻りの速さ、守備参加、カウンターの運び役が重要。"
+        point: "SHはWGより守備負担が大きい。左サイドの守備参加とカウンターの運び役が重要。"
       },
       "RM_SH": {
         title: "RM/SH",
         name: "RM/SH",
         role: "右サイドハーフ。守備時に右サイドを埋め、攻撃時は右から前進する。",
-        point: "アーセナルのサカ、ウェストハムのボーウェン、フランクフルトの堂安律のように、右サイドで攻守両方に関わる。"
+        point: "SHはWGより守備負担が大きい。右サイドの守備参加とカウンターの運び役が重要。"
       },
       "WG/SH": {
         name: "ウイング / サイドハーフ",
         role: "4-2-3-1の左右2列目。攻撃時はWGのように幅を取り、守備時はSHとして中盤まで戻ることがある。",
-        point: "バルセロナのラミン・ヤマルのように高い位置で崩すWGと、ウェストハムのボーウェンのように守備にも戻るSHの違いを見る。"
+        point: "突破力、スピード、クロス、守備参加、カウンター対応。"
       },
       "CF": {
         name: "センターフォワード",
