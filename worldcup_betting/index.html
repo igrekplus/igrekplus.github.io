@@ -306,6 +306,13 @@
       color: var(--blue);
     }
 
+    .formation-button.active {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(0, 91, 172, 0.24);
+    }
+
     .utility-button,
     .reset {
       flex: 0 0 auto;
@@ -333,6 +340,11 @@
     .reset:disabled {
       opacity: 0.52;
       cursor: not-allowed;
+    }
+
+    .formation-button.active:disabled {
+      opacity: 0.82;
+      color: #fff;
     }
 
     .utility-button.active {
@@ -851,11 +863,20 @@
       font-size: 14px;
     }
 
-    .bet-hit-box div {
+    .bet-hit-list {
+      display: grid;
+      gap: 6px;
       color: var(--muted);
       font-size: 13px;
       font-weight: 800;
       line-height: 1.6;
+    }
+
+    .bet-hit-summary {
+      margin-bottom: 8px;
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 900;
     }
 
     .roster-panel {
@@ -1055,6 +1076,31 @@
       gap: 14px;
       margin-bottom: 16px;
       min-width: 0;
+    }
+
+    .position-mode-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .position-mode-button {
+      min-height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+      color: var(--text);
+      padding: 0 12px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .position-mode-button.active {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: #fff;
     }
 
     .position-map {
@@ -2119,6 +2165,8 @@
               <span class="action-label">共有：</span>
               <button class="utility-button" type="button" id="exportButton">エクスポート</button>
               <button class="utility-button" type="button" id="importButton">インポート</button>
+              <button class="utility-button" type="button" id="gistExportButton">Gist用にエクスポート</button>
+              <button class="utility-button" type="button" id="gistImportButton">Gist Raw URLから読み込み</button>
             </div>
             <div class="action-group owner-only-action" aria-label="ピッチ配置リセット">
               <button class="reset" type="button" id="resetButton">ピッチ配置をリセット</button>
@@ -2235,19 +2283,33 @@
               <div class="bet-hit-lists">
                 <section class="bet-hit-box">
                   <h3>かりん的中選手</h3>
-                  <div id="betKarinHits">なし</div>
+                  <div class="bet-hit-summary" id="betKarinHitSummary">的中：0人</div>
+                  <div class="bet-hit-list" id="betKarinHits">なし</div>
                 </section>
                 <section class="bet-hit-box">
                   <h3>かりん外れ選手</h3>
-                  <div id="betKarinMisses">なし</div>
+                  <div class="bet-hit-summary" id="betKarinMissSummary">外れ：0人</div>
+                  <div class="bet-hit-list" id="betKarinMisses">なし</div>
                 </section>
                 <section class="bet-hit-box">
                   <h3>りょう的中選手</h3>
-                  <div id="betRyoHits">なし</div>
+                  <div class="bet-hit-summary" id="betRyoHitSummary">的中：0人</div>
+                  <div class="bet-hit-list" id="betRyoHits">なし</div>
                 </section>
                 <section class="bet-hit-box">
                   <h3>りょう外れ選手</h3>
-                  <div id="betRyoMisses">なし</div>
+                  <div class="bet-hit-summary" id="betRyoMissSummary">外れ：0人</div>
+                  <div class="bet-hit-list" id="betRyoMisses">なし</div>
+                </section>
+                <section class="bet-hit-box">
+                  <h3>かりんが選んでいなかった正式招集メンバー</h3>
+                  <div class="bet-hit-summary" id="betKarinUnpickedSummary">未選出：0人</div>
+                  <div class="bet-hit-list" id="betKarinUnpicked">なし</div>
+                </section>
+                <section class="bet-hit-box">
+                  <h3>りょうが選んでいなかった正式招集メンバー</h3>
+                  <div class="bet-hit-summary" id="betRyoUnpickedSummary">未選出：0人</div>
+                  <div class="bet-hit-list" id="betRyoUnpicked">なし</div>
                 </section>
               </div>
             </div>
@@ -2282,8 +2344,14 @@
           <div class="roster-grid" id="rosterList"></div>
         </section>
         <section class="view-panel position-guide-panel" id="positionPanel" aria-label="ポジション解説">
+          <div class="position-mode-tabs" id="positionModeTabs" aria-label="フォーメーション別ポジション解説">
+            <button class="position-mode-button active" type="button" data-position-mode="3-4-2-1">3-4-2-1</button>
+            <button class="position-mode-button" type="button" data-position-mode="4-2-3-1">4-2-3-1</button>
+            <button class="position-mode-button" type="button" data-position-mode="5-4-1">5-4-1</button>
+            <button class="position-mode-button" type="button" data-position-mode="list">ポジション一覧</button>
+          </div>
           <div class="position-explorer">
-            <div class="position-map" aria-label="ポジション配置図">
+            <div class="position-map" id="positionMap" aria-label="ポジション配置図">
               <div class="area goal"></div>
               <div class="area penalty"></div>
               <div class="area goal-area"></div>
@@ -2334,11 +2402,12 @@
               <tr><td>DMF</td><td>守備的ミッドフィルダー</td><td>中盤の底で相手の攻撃を止め、ボールを奪って攻撃につなげる。チームのバランスを取る役割。</td><td>守備範囲、ボール奪取、危機察知、パスの安定感。</td></tr>
               <tr><td>CMF</td><td>セントラルミッドフィルダー</td><td>中盤の中央で攻守をつなぐ選手。守備、配球、前進、サポートを幅広く担当する。</td><td>運動量、判断力、プレス耐性、攻守のバランス。</td></tr>
               <tr><td>DMF/CMF</td><td>守備的MF / 中央MF</td><td>守備も組み立ても担当できる中盤要員。強豪相手では特に重要なポジション。</td><td>ボールを失わないこと、守備強度、試合を落ち着かせる力。</td></tr>
-              <tr><td>OMF</td><td>攻撃的ミッドフィルダー</td><td>FWの後ろでチャンスを作る選手。パス、ドリブル、シュートで攻撃に変化をつける。</td><td>創造性、得点関与、狭い場所での技術、守備への切り替え。</td></tr>
+              <tr><td>OMF</td><td>攻撃的ミッドフィルダー</td><td>中央寄りでチャンスを作る攻撃的MF。相手の中盤とDFの間で受け、パス、ドリブル、シュートで攻撃を動かす。</td><td>創造性、得点関与、狭い場所での技術、守備への切り替え。</td></tr>
               <tr><td>SH</td><td>サイドハーフ</td><td>中盤のサイドで攻守に関わる選手。守備時には戻り、攻撃時にはサイドから前進する。</td><td>上下動、守備参加、クロス、カウンター対応。</td></tr>
-              <tr><td>WG</td><td>ウイング</td><td>前線のサイドで仕掛ける選手。ドリブル、裏抜け、クロス、カットインで攻撃を作る。</td><td>突破力、スピード、得点力、守備で戻れるか。</td></tr>
-              <tr><td>OMF/WG</td><td>攻撃的MF / ウイング</td><td>2列目やサイドで攻撃を作る選手。日本代表では久保、堂安、三笘、中村のような攻撃の中心が入る枠。</td><td>個の打開力、得点力、守備負担への対応、強豪相手での再現性。</td></tr>
+              <tr><td>WG</td><td>ウイング</td><td>サイドで幅を取り、ドリブル、裏抜け、クロス、カットインを担う選手。</td><td>突破力、スピード、得点力、守備で戻れるか。</td></tr>
+              <tr><td>OMF/WG</td><td>攻撃的MF / シャドー</td><td>3-4-2-1の「2」はWGではなく、CFの斜め下に入る攻撃的MF。中央寄りやハーフスペースで受ける。</td><td>久保、堂安、鎌田のように、狭い場所で受けて得点機を作れるか。</td></tr>
               <tr><td>WG/FW</td><td>ウイング / フォワード</td><td>サイドでも中央でも使える前線要員。前田大然のように、攻撃だけでなく前線守備で価値を出す選手もいる。</td><td>走力、前線プレス、裏抜け、途中投入で流れを変えられるか。</td></tr>
+              <tr><td>SH/WM</td><td>サイドハーフ / ワイドMF</td><td>5-4-1の左右中盤。守備時にサイドを埋める役割が強く、攻撃時はカウンターの起点になる。</td><td>戻りの速さ、サイド守備、縦への推進力。</td></tr>
               <tr><td>CF</td><td>センターフォワード</td><td>最前線で得点を狙う選手。ポストプレー、裏抜け、空中戦、決定力が求められる。</td><td>得点力、収まり、前線からの守備、強豪相手でも起点になれるか。</td></tr>
             </tbody>
           </table>
@@ -2421,7 +2490,7 @@
       { id: "p16", name: "藤田譲瑠チマ", position: "DMF/CMF", status: "本命", number: "", club: "シント＝トロイデン", imageUrl: "pics/藤田譲瑠チマ.jpg" },
       { id: "p17", name: "旗手怜央", position: "OMF/CMF/WB", status: "本命", number: "", club: "セルティック", imageUrl: "pics/旗手怜央.jpg" },
       { id: "p18", name: "久保建英", position: "OMF/SH", status: "確実", number: "", club: "レアル・ソシエダ", imageUrl: "pics/久保建英.jpg" },
-      { id: "p19", name: "堂安律", position: "OMF/SH", status: "確実", number: "", club: "フライブルク", imageUrl: "pics/堂安律.jpg" },
+      { id: "p19", name: "堂安律", position: "OMF/SH", status: "確実", number: "", club: "フランクフルト", imageUrl: "pics/堂安律.jpg" },
       { id: "p20", name: "鎌田大地", position: "OMF/SH", status: "確実", number: "", club: "クリスタル・パレス", imageUrl: "pics/鎌田大地.jpg" },
       { id: "p21", name: "伊東純也", position: "WG", status: "確実", number: "", club: "スタッド・ランス", imageUrl: "pics/伊東純也.jpg" },
       { id: "p22", name: "三笘薫", position: "WG", status: "本命", number: "", club: "ブライトン", imageUrl: "pics/三笘薫.jpg" },
@@ -2443,7 +2512,7 @@
       { id: "p35", name: "佐野航大", position: "DMF/CMF", status: "可能性", number: "", club: "NEC", imageUrl: "pics/佐野航大.jpg" },
       { id: "p36", name: "川村拓夢", position: "DMF/CMF", status: "可能性", number: "", club: "レッドブル・ザルツブルク", imageUrl: "pics/川村拓夢.jpg" },
       { id: "p37", name: "南野拓実", position: "OMF/WG", status: "可能性", number: "", club: "モナコ", imageUrl: "pics/南野拓実.jpg" },
-      { id: "p38", name: "鈴木唯人", position: "OMF/SH", status: "可能性", number: "", club: "ブレンビー", imageUrl: "pics/鈴木唯人.jpg" },
+      { id: "p38", name: "鈴木唯人", position: "OMF/SH", status: "可能性", number: "", club: "フライブルク", imageUrl: "pics/鈴木唯人.jpg" },
       { id: "p39", name: "相馬勇紀", position: "WG/SH", status: "可能性", number: "", club: "FC町田ゼルビア", imageUrl: "pics/相馬勇紀.jpg" },
       { id: "p40", name: "古橋亨梧", position: "CF", status: "可能性", number: "", club: "バーミンガム", imageUrl: "pics/古橋亨梧.jpg" },
       { id: "p41", name: "町野修斗", position: "CF", status: "可能性", number: "", club: "ボルシアMG", imageUrl: "pics/町野修斗.jpg" },
@@ -2455,7 +2524,12 @@
       { id: "p47", name: "小杉啓太", position: "SB/WB", group: "DF", status: "可能性", number: "", club: "ユールゴーデン", imageUrl: "pics/小杉啓太.jpg" }
     ];
 
-    const allPlayers = loadPlayerMaster([...players, ...candidatePlayers]);
+    const clubOverrides = {
+      "鈴木唯人": "フライブルク",
+      "堂安律": "フランクフルト"
+    };
+
+    const allPlayers = applyClubOverrides(loadPlayerMaster([...players, ...candidatePlayers]));
     const defaultKarinIds = new Set(players.map((player) => player.id));
 
     const teamName = "日本代表";
@@ -2500,6 +2574,8 @@
       "スポルティング": "ポルトガル",
       "リーズ": "イングランド",
       "マインツ": "ドイツ",
+      "フライブルク": "ドイツ",
+      "フランクフルト": "ドイツ",
       "セルティック": "スコットランド",
       "レアル・ソシエダ": "スペイン",
       "フライブルク": "ドイツ",
@@ -2579,6 +2655,13 @@
         player.id,
         { area: "bench", x: 50, y: 50, rating: initialRating(player.status), number: player.number || "", manual: false }
       ]));
+    }
+
+    function applyClubOverrides(list) {
+      return list.map((player) => {
+        const club = clubOverrides[player.name];
+        return club ? { ...player, club } : player;
+      });
     }
 
     function loadPlayerMaster(defaultPlayers) {
@@ -2811,6 +2894,7 @@
 
     let activeOwner = "karin";
     let activeView = "owner";
+    let positionGuideMode = "3-4-2-1";
     let statusTimer = null;
     let drag = null;
 
@@ -2829,6 +2913,8 @@
     const lockButton = document.getElementById("lockButton");
     const exportButton = document.getElementById("exportButton");
     const importButton = document.getElementById("importButton");
+    const gistExportButton = document.getElementById("gistExportButton");
+    const gistImportButton = document.getElementById("gistImportButton");
     const screenshotButton = document.getElementById("screenshotButton");
     const screenshotReturnButton = document.getElementById("screenshotReturnButton");
     const saveState = document.getElementById("saveState");
@@ -2885,6 +2971,14 @@
     const betKarinMisses = document.getElementById("betKarinMisses");
     const betRyoHits = document.getElementById("betRyoHits");
     const betRyoMisses = document.getElementById("betRyoMisses");
+    const betKarinHitSummary = document.getElementById("betKarinHitSummary");
+    const betKarinMissSummary = document.getElementById("betKarinMissSummary");
+    const betRyoHitSummary = document.getElementById("betRyoHitSummary");
+    const betRyoMissSummary = document.getElementById("betRyoMissSummary");
+    const betKarinUnpickedSummary = document.getElementById("betKarinUnpickedSummary");
+    const betRyoUnpickedSummary = document.getElementById("betRyoUnpickedSummary");
+    const betKarinUnpicked = document.getElementById("betKarinUnpicked");
+    const betRyoUnpicked = document.getElementById("betRyoUnpicked");
     const rosterPanel = document.getElementById("rosterPanel");
     const rosterSearchInput = document.getElementById("rosterSearchInput");
     const rosterPositionFilter = document.getElementById("rosterPositionFilter");
@@ -2895,7 +2989,9 @@
     const playerImportText = document.getElementById("playerImportText");
     const playerImportButton = document.getElementById("playerImportButton");
     const playerImportResult = document.getElementById("playerImportResult");
-    const positionLabels = document.querySelectorAll(".position-label");
+    const positionMap = document.getElementById("positionMap");
+    const positionModeTabs = document.getElementById("positionModeTabs");
+    const positionModeButtons = document.querySelectorAll(".position-mode-button");
     const positionDetailExamples = document.getElementById("positionDetailExamples");
     const positionDetailTitle = document.getElementById("positionDetailTitle");
     const positionDetailName = document.getElementById("positionDetailName");
@@ -2935,23 +3031,104 @@
       },
       "OMF": {
         name: "攻撃的ミッドフィルダー",
-        role: "FWの後ろでチャンスを作る選手。パス、ドリブル、シュートで攻撃に変化をつける。",
-        point: "創造性、得点関与、狭い場所での技術、守備への切り替え。"
+        role: "中央寄りでチャンスを作る攻撃的MF。相手の中盤とDFの間で受け、パス、ドリブル、シュートで攻撃を動かす。",
+        point: "創造性、得点関与、狭い場所での技術、守備への切り替え。久保、堂安、鎌田のようにハーフスペースで受ける力も重要。"
       },
       "OMF/WG": {
-        name: "攻撃的MF / ウイング",
-        role: "2列目やサイドで攻撃を作る選手。日本代表では久保、堂安、三笘、中村のような攻撃の中心が入る枠。",
-        point: "個の打開力、得点力、守備負担への対応、強豪相手での再現性。"
+        name: "攻撃的MF / シャドー",
+        role: "3-4-2-1の「2」はWGではなく、CFの斜め下で受けるシャドー寄りの攻撃的MF。中央寄りやハーフスペースで前を向く。",
+        point: "久保、堂安、鎌田のように、狭い場所で受けてラストパスやシュートに絡めるか。"
+      },
+      "WG": {
+        name: "ウイング",
+        role: "サイドで幅を取り、ドリブル、裏抜け、クロス、カットインを担う選手。攻撃時に相手DFを外へ広げる。",
+        point: "突破力、スピード、得点力、クロス精度、守備で戻れるか。"
+      },
+      "SH": {
+        name: "サイドハーフ",
+        role: "守備時に中盤まで戻るサイドMF。攻撃ではサイドから前進し、守備では横幅を埋める。",
+        point: "上下動、守備参加、クロス、カウンター対応。"
+      },
+      "SH/WM": {
+        name: "サイドハーフ / ワイドMF",
+        role: "5-4-1の左右中盤。守備時にサイドを埋める役割が強く、攻撃時はカウンターの起点になる。",
+        point: "戻りの速さ、サイド守備、縦への推進力、少ない人数で攻撃を前進させる力。"
       },
       "WG/SH": {
         name: "ウイング / サイドハーフ",
-        role: "サイドで仕掛けたり、守備時に戻ってサイドを支える。攻撃と守備の往復が多い。",
+        role: "4-2-3-1の左右2列目。攻撃時はWGのように幅を取り、守備時はSHとして中盤まで戻ることがある。",
         point: "突破力、スピード、クロス、守備参加、カウンター対応。"
       },
       "CF": {
         name: "センターフォワード",
         role: "最前線で得点を狙う選手。ポストプレー、裏抜け、空中戦、決定力が求められる。",
         point: "得点力、収まり、前線からの守備、強豪相手でも起点になれるか。"
+      }
+    };
+
+    const positionGuideModes = {
+      "3-4-2-1": {
+        initial: "OMF/WG",
+        labels: [
+          guideLabel("GK", "pos-label-gk", 50, 90),
+          guideLabel("LCB", "pos-label-df", 30, 74, "CB"),
+          guideLabel("CB", "pos-label-df", 50, 76, "CB"),
+          guideLabel("RCB", "pos-label-df", 70, 74, "CB"),
+          guideLabel("LWB", "pos-label-df", 14, 55, "SB/WB"),
+          guideLabel("RWB", "pos-label-df", 86, 55, "SB/WB"),
+          guideLabel("DMF", "pos-label-mf", 42, 56, "DMF"),
+          guideLabel("CMF", "pos-label-mf", 58, 56, "CMF"),
+          guideLabel("Lシャドー", "pos-label-omf", 38, 34, "OMF/WG"),
+          guideLabel("Rシャドー", "pos-label-omf", 62, 34, "OMF/WG"),
+          guideLabel("CF", "pos-label-cf", 50, 13)
+        ]
+      },
+      "4-2-3-1": {
+        initial: "OMF",
+        labels: [
+          guideLabel("GK", "pos-label-gk", 50, 90),
+          guideLabel("LB", "pos-label-df", 18, 73, "SB/WB"),
+          guideLabel("LCB", "pos-label-df", 39, 74, "CB"),
+          guideLabel("RCB", "pos-label-df", 61, 74, "CB"),
+          guideLabel("RB", "pos-label-df", 82, 73, "SB/WB"),
+          guideLabel("DMF", "pos-label-mf", 42, 55, "DMF"),
+          guideLabel("CMF", "pos-label-mf", 58, 55, "CMF"),
+          guideLabel("LW", "pos-label-omf", 24, 35, "WG/SH"),
+          guideLabel("OMF", "pos-label-omf", 50, 34, "OMF"),
+          guideLabel("RW", "pos-label-omf", 76, 35, "WG/SH"),
+          guideLabel("CF", "pos-label-cf", 50, 13)
+        ]
+      },
+      "5-4-1": {
+        initial: "SH/WM",
+        labels: [
+          guideLabel("GK", "pos-label-gk", 50, 90),
+          guideLabel("LWB", "pos-label-df", 12, 73, "SB/WB"),
+          guideLabel("LCB", "pos-label-df", 31, 75, "CB"),
+          guideLabel("CB", "pos-label-df", 50, 76, "CB"),
+          guideLabel("RCB", "pos-label-df", 69, 75, "CB"),
+          guideLabel("RWB", "pos-label-df", 88, 73, "SB/WB"),
+          guideLabel("LM", "pos-label-mf", 20, 48, "SH/WM"),
+          guideLabel("DMF", "pos-label-mf", 40, 50, "DMF"),
+          guideLabel("CMF", "pos-label-mf", 60, 50, "CMF"),
+          guideLabel("RM", "pos-label-mf", 80, 48, "SH/WM"),
+          guideLabel("CF", "pos-label-cf", 50, 13)
+        ]
+      },
+      list: {
+        initial: "GK",
+        labels: [
+          guideLabel("GK", "pos-label-gk", 50, 90),
+          guideLabel("CB", "pos-label-df", 50, 73, "CB"),
+          guideLabel("SB/WB", "pos-label-df", 18, 66, "SB/WB"),
+          guideLabel("SB/WB", "pos-label-df", 82, 66, "SB/WB"),
+          guideLabel("DMF", "pos-label-mf", 42, 51, "DMF"),
+          guideLabel("CMF", "pos-label-mf", 58, 51, "CMF"),
+          guideLabel("OMF", "pos-label-omf", 50, 33, "OMF"),
+          guideLabel("WG", "pos-label-omf", 25, 29, "WG"),
+          guideLabel("WG", "pos-label-omf", 75, 29, "WG"),
+          guideLabel("CF", "pos-label-cf", 50, 12, "CF")
+        ]
       }
     };
 
@@ -3026,6 +3203,10 @@
 
     function slot(group, x, y, label = group) {
       return { group, x, y, label };
+    }
+
+    function guideLabel(label, className, x, y, code = label) {
+      return { label, className, x, y, code };
     }
 
     function examplePlayer(name, club, imageUrl) {
@@ -3439,6 +3620,7 @@
       lockButton.classList.toggle("active", ownerLocks[activeOwner]);
       formationButtons.forEach((button) => {
         button.disabled = ownerLocks[activeOwner];
+        button.classList.toggle("active", button.dataset.formation === currentFormations[activeOwner]);
       });
       renderScreenshotSummary(pitchTotal);
       ownerTabs.forEach((tab) => {
@@ -3681,6 +3863,7 @@
       pitchCount.textContent = "ポジション一覧";
       pitchCount.classList.remove("over-limit");
       saveState.textContent = "解説";
+      renderPositionGuideMode(positionGuideMode);
 
       ownerTabs.forEach((tab) => {
         tab.classList.toggle("active", tab.dataset.view === "positions");
@@ -3776,10 +3959,31 @@
       positionDetailName.textContent = detail.name;
       positionDetailRole.textContent = detail.role;
       positionDetailPoint.textContent = detail.point;
-      positionLabels.forEach((label) => {
+      document.querySelectorAll(".position-label").forEach((label) => {
         label.classList.toggle("active", label.dataset.positionCode === code);
       });
       renderPositionDetailExamples(code);
+    }
+
+    function renderPositionGuideMode(mode) {
+      const config = positionGuideModes[mode] || positionGuideModes.list;
+      positionGuideMode = mode;
+      positionModeButtons.forEach((button) => {
+        button.classList.toggle("active", button.dataset.positionMode === mode);
+      });
+      positionMap.querySelectorAll(".position-label").forEach((label) => label.remove());
+      config.labels.forEach((item) => {
+        const button = document.createElement("button");
+        button.className = `position-label ${item.className}`;
+        button.type = "button";
+        button.dataset.positionCode = item.code;
+        button.style.left = `${item.x}%`;
+        button.style.top = `${item.y}%`;
+        button.textContent = item.label;
+        button.addEventListener("click", () => selectPositionDetail(item.code));
+        positionMap.appendChild(button);
+      });
+      selectPositionDetail(config.initial);
     }
 
     function renderPositionDetailExamples(code) {
@@ -4341,7 +4545,7 @@
       if (!position) {
         return { error: `行${lineNumber}: ポジションが空欄です` };
       }
-      const club = rowValue(row, headers, ["所属クラブ", "クラブ", "club"]) || existing?.club || "";
+      const club = rowValue(row, headers, ["所属クラブ", "クラブ", "club"]) || clubOverrides[name] || existing?.club || "";
       const country = rowValue(row, headers, ["国名", "country"]) || existing?.country || clubCountries[club] || "";
       const group = rowValue(row, headers, ["group", "グループ"]) || existing?.group || benchGroupKey(position);
       const number = normalizeNumber(rowValue(row, headers, ["背番号", "number"]));
@@ -4435,7 +4639,7 @@
     }
 
     function selectedOwnerIds(owner) {
-      return new Set(ownerPlayers[owner].map((player) => player.id));
+      return new Set(selectedPlayersForOwner(owner).map((player) => player.id));
     }
 
     function playerNamesFromIds(ids) {
@@ -4446,6 +4650,18 @@
 
     function renderNameList(names) {
       return names.length ? names.join("、") : "なし";
+    }
+
+    function renderBetPlayerList(target, ids, owner) {
+      target.innerHTML = "";
+      const players = ids.map(allPlayerById).filter(Boolean).sort(sortForComparison);
+      if (players.length === 0) {
+        target.textContent = "なし";
+        return;
+      }
+      players.forEach((player) => {
+        target.appendChild(createMiniPlayer(player, owner));
+      });
     }
 
     function renderOfficialSquadList() {
@@ -4509,10 +4725,15 @@
         betPaymentResult.textContent = "-";
         betWinnerResult.textContent = "-";
         betDirectionResult.textContent = "-";
-        betKarinHits.textContent = "なし";
-        betKarinMisses.textContent = "なし";
-        betRyoHits.textContent = "なし";
-        betRyoMisses.textContent = "なし";
+        [betKarinHits, betKarinMisses, betRyoHits, betRyoMisses, betKarinUnpicked, betRyoUnpicked].forEach((target) => {
+          target.textContent = "なし";
+        });
+        betKarinHitSummary.textContent = "的中：0人";
+        betKarinMissSummary.textContent = "外れ：0人";
+        betRyoHitSummary.textContent = "的中：0人";
+        betRyoMissSummary.textContent = "外れ：0人";
+        betKarinUnpickedSummary.textContent = "未選出：0人";
+        betRyoUnpickedSummary.textContent = "未選出：0人";
         return;
       }
 
@@ -4525,6 +4746,8 @@
       const ryoHitIds = Array.from(ryoIds).filter((id) => officialIds.has(id));
       const karinMissIds = Array.from(karinIds).filter((id) => !officialIds.has(id));
       const ryoMissIds = Array.from(ryoIds).filter((id) => !officialIds.has(id));
+      const karinUnpickedIds = Array.from(officialIds).filter((id) => !karinIds.has(id));
+      const ryoUnpickedIds = Array.from(officialIds).filter((id) => !ryoIds.has(id));
       const karinCorrect = karinHitIds.length;
       const ryoCorrect = ryoHitIds.length;
       const diff = Math.abs(karinCorrect - ryoCorrect);
@@ -4533,10 +4756,18 @@
       betRyoResult.textContent = `${ryoCorrect}人`;
       betDiffResult.textContent = `${diff}人`;
       betPaymentResult.textContent = formatYen(payment);
-      betKarinHits.textContent = renderNameList(playerNamesFromIds(karinHitIds));
-      betKarinMisses.textContent = renderNameList(playerNamesFromIds(karinMissIds));
-      betRyoHits.textContent = renderNameList(playerNamesFromIds(ryoHitIds));
-      betRyoMisses.textContent = renderNameList(playerNamesFromIds(ryoMissIds));
+      betKarinHitSummary.textContent = `的中：${karinHitIds.length}人`;
+      betKarinMissSummary.textContent = `外れ：${karinMissIds.length}人`;
+      betRyoHitSummary.textContent = `的中：${ryoHitIds.length}人`;
+      betRyoMissSummary.textContent = `外れ：${ryoMissIds.length}人`;
+      betKarinUnpickedSummary.textContent = `未選出：${karinUnpickedIds.length}人`;
+      betRyoUnpickedSummary.textContent = `未選出：${ryoUnpickedIds.length}人`;
+      renderBetPlayerList(betKarinHits, karinHitIds, "karin");
+      renderBetPlayerList(betKarinMisses, karinMissIds, "karin");
+      renderBetPlayerList(betRyoHits, ryoHitIds, "ryo");
+      renderBetPlayerList(betRyoMisses, ryoMissIds, "ryo");
+      renderBetPlayerList(betKarinUnpicked, karinUnpickedIds, "karin");
+      renderBetPlayerList(betRyoUnpicked, ryoUnpickedIds, "ryo");
 
       if (diff === 0) {
         betResultMain.textContent = "同点のため支払いなし";
@@ -4657,6 +4888,96 @@
       };
     }
 
+    function buildGistExportData() {
+      return {
+        version: 2,
+        exportedAt: new Date().toISOString(),
+        teamName,
+        playerIds: allPlayers.map((player) => player.id),
+        owners: {
+          karin: buildExportData("karin"),
+          ryo: buildExportData("ryo")
+        },
+        officialSquad: Array.from(officialSquadIds),
+        bet: { amount: betState.amount }
+      };
+    }
+
+    function copyJsonToClipboard(data, successMessage) {
+      const text = JSON.stringify(data, null, 2);
+      const fallback = () => {
+        window.prompt("以下のJSONをコピーしてください", text);
+      };
+      if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(text)
+          .then(() => showStatus(successMessage))
+          .catch(fallback);
+      } else {
+        fallback();
+      }
+    }
+
+    function applyOwnerImportData(owner, data) {
+      if (!data?.players || typeof data.players !== "object") {
+        throw new Error(`${owners[owner]}の players 情報がありません`);
+      }
+      if (Array.isArray(data.rosterIds)) {
+        ownerPlayers[owner] = sortPlayersByMasterOrder(data.rosterIds.map(allPlayerById).filter(Boolean));
+      }
+      const imported = createInitialState(owner);
+      ownerPlayers[owner].forEach((player) => {
+        const fallback = imported.get(player.id);
+        const saved = data.players[player.id];
+        if (!fallback || !saved) return;
+        imported.set(player.id, normalizePlacement({
+          ...saved,
+          area: saved.area || saved.location
+        }, fallback));
+      });
+      states[owner] = imported;
+      currentFormations[owner] = typeof data.formation === "string" ? data.formation : "";
+      ownerLocks[owner] = Boolean(data.locked);
+      saveOwnerState(owner);
+    }
+
+    function exportGistState() {
+      copyJsonToClipboard(buildGistExportData(), "Gist用JSONをコピーしました");
+    }
+
+    async function importGistStateFromRawUrl() {
+      const url = window.prompt("GistのRaw URLを貼り付けてください");
+      if (!url) return;
+      const ok = window.confirm("Gistの内容で現在の予想を上書きします。よろしいですか？");
+      if (!ok) return;
+      showStatus("Gist Raw URLから読み込み中...");
+      try {
+        const response = await fetch(url, { cache: "no-store" });
+        if (!response.ok) {
+          throw new Error(`通信エラー: ${response.status}`);
+        }
+        const payload = await response.json();
+        const ownersPayload = payload.owners || payload;
+        applyOwnerImportData("karin", ownersPayload.karin || payload.karin);
+        applyOwnerImportData("ryo", ownersPayload.ryo || payload.ryo);
+        if (Array.isArray(payload.officialSquad)) {
+          officialSquadIds.clear();
+          payload.officialSquad.forEach((id) => {
+            if (allPlayerById(id)) officialSquadIds.add(id);
+          });
+          saveOfficialSquad();
+        }
+        if (payload.bet?.amount !== undefined) {
+          betState.amount = String(payload.bet.amount);
+          saveBetState();
+        }
+        showStatus("Gistの内容を読み込みました");
+        render();
+      } catch (error) {
+        window.alert(`Gist Raw URLから読み込めませんでした。\n${error.message || error}`);
+        showStatus("Gist読み込みに失敗しました");
+      }
+    }
+
     function importCurrentState() {
       if (activeView !== "owner") return;
       const text = window.prompt("インポートするJSON文字列を貼り付けてください");
@@ -4678,24 +4999,7 @@
       const ok = window.confirm("このタブの現在の予想をインポートデータで上書きします。よろしいですか？");
       if (!ok) return;
 
-      if (Array.isArray(data.rosterIds)) {
-        ownerPlayers[activeOwner] = sortPlayersByMasterOrder(data.rosterIds.map(allPlayerById).filter(Boolean));
-      }
-      const imported = createInitialState(activeOwner);
-      ownerPlayers[activeOwner].forEach((player) => {
-        const fallback = imported.get(player.id);
-        const saved = data.players[player.id];
-        if (!fallback || !saved) return;
-        imported.set(player.id, normalizePlacement({
-          ...saved,
-          area: saved.area || saved.location
-        }, fallback));
-      });
-
-      states[activeOwner] = imported;
-      currentFormations[activeOwner] = typeof data.formation === "string" ? data.formation : "";
-      ownerLocks[activeOwner] = Boolean(data.locked);
-      saveOwnerState(activeOwner);
+      applyOwnerImportData(activeOwner, data);
       showStatus("インポートしました");
       render();
     }
@@ -4745,6 +5049,10 @@
     });
     playerImportButton.addEventListener("click", importPlayersFromText);
 
+    positionModeButtons.forEach((button) => {
+      button.addEventListener("click", () => renderPositionGuideMode(button.dataset.positionMode));
+    });
+
     formationButtons.forEach((button) => {
       button.addEventListener("click", () => {
         if (ownerLocks[activeOwner]) {
@@ -4764,6 +5072,8 @@
 
     exportButton.addEventListener("click", exportCurrentState);
     importButton.addEventListener("click", importCurrentState);
+    gistExportButton.addEventListener("click", exportGistState);
+    gistImportButton.addEventListener("click", importGistStateFromRawUrl);
 
     screenshotButton.addEventListener("click", () => {
       screenshotMode = !screenshotMode;
@@ -4802,13 +5112,7 @@
       });
     });
 
-    positionLabels.forEach((label) => {
-      label.addEventListener("click", () => {
-        selectPositionDetail(label.dataset.positionCode);
-      });
-    });
-
-    selectPositionDetail("GK");
+    renderPositionGuideMode(positionGuideMode);
 
     ownerTabs.forEach((tab) => {
       if (tab.dataset.view === "owner") {
