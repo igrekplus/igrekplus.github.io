@@ -1391,6 +1391,22 @@
       font-size: 20px;
     }
 
+    .term-category {
+      display: grid;
+      gap: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: #f8fafc;
+    }
+
+    .term-category h3 {
+      margin: 0;
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 900;
+    }
+
     .term-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1405,7 +1421,7 @@
       min-width: 0;
     }
 
-    .term-card h3 {
+    .term-card h4 {
       margin: 0 0 7px;
       color: var(--blue);
       font-size: 15px;
@@ -2475,28 +2491,46 @@
           </div>
           <section class="soccer-terms" aria-label="サッカー用語解説">
             <h2>サッカー用語解説</h2>
-            <div class="term-grid">
-              <article class="term-card"><h3>ビルドアップ</h3><p>自陣の後方からパスや持ち運びで攻撃を組み立てること。GKやDFから始まり、相手のプレスを避けながら前進する。</p></article>
-              <article class="term-card"><h3>ポゼッション</h3><p>ボールを保持して試合を進めること。単に長く持つだけでなく、相手を動かして攻撃の形を作る意味もある。</p></article>
-              <article class="term-card"><h3>プレス</h3><p>相手がボールを持った時に、近くの選手が寄せて自由にプレーさせない守備。相手の選択肢を制限する目的もある。</p></article>
-              <article class="term-card"><h3>前線プレス</h3><p>FWやWGなど前の選手から相手DFやGKにプレッシャーをかける守備。相手のビルドアップを邪魔し、前で奪う狙いがある。</p></article>
-              <article class="term-card"><h3>ハイプレス</h3><p>チーム全体が高い位置から相手に圧力をかける守備。成功すればゴールに近い場所で奪えるが、背後にスペースが空きやすい。</p></article>
-              <article class="term-card"><h3>リトリート</h3><p>無理に前から奪いに行かず、自陣に戻って守備の形を整えること。強い相手に対して、まず失点しないために使われる。</p></article>
-              <article class="term-card"><h3>守備ブロック</h3><p>チーム全体で守備の形を作り、相手が中央を通れないようにすること。横と縦の距離を保って守る。</p></article>
-              <article class="term-card"><h3>トランジション</h3><p>攻撃から守備、守備から攻撃へ切り替わる瞬間のこと。この切り替えの速さが試合の流れを大きく左右する。</p></article>
-              <article class="term-card"><h3>ハーフスペース</h3><p>中央とサイドの間にあるエリア。相手DFが対応しづらく、シャドーや攻撃的MFが受けるとチャンスになりやすい。</p></article>
-              <article class="term-card"><h3>ライン間</h3><p>相手のDFラインとMFラインの間のスペース。ここで前を向けると、ラストパスやシュートにつながりやすい。</p></article>
-              <article class="term-card"><h3>ポストプレー</h3><p>FWが前線でボールを受け、味方に落としたり時間を作ったりするプレー。CFを見る時に重要なポイント。</p></article>
-              <article class="term-card"><h3>カットイン</h3><p>サイドの選手が外側から中央へ入っていく動き。シュートやラストパスにつなげやすく、逆足のウイングでよく見られる。</p></article>
-              <article class="term-card"><h3>セカンドボール</h3><p>こぼれ球や競り合いの後に落ちたボールのこと。ここを拾えるかで、攻撃を続けられるかが変わる。</p></article>
-              <article class="term-card"><h3>カバーリング</h3><p>味方が抜かれた時や空いたスペースを、別の選手が補う守備。CBやボランチの判断力が出やすい。</p></article>
-              <article class="term-card"><h3>可変システム</h3><p>攻撃時と守備時でフォーメーションが変わること。攻撃時は3-4-2-1、守備時は5-4-1のように変化する。</p></article>
-              <article class="term-card"><h3>ウイングバック</h3><p>3バックや5バックでサイドを広く担当する選手。守備時は最終ラインに入り、攻撃時は高い位置まで上がる。</p></article>
-              <article class="term-card"><h3>シャドー</h3><p>CFの近く、少し下がった位置でプレーする攻撃的MF。3-4-2-1の「2」にあたることが多い。</p></article>
-              <article class="term-card"><h3>アンカー</h3><p>中盤の底に1人で立ち、守備とビルドアップの軸になる選手。相手の攻撃を止めつつ、後方からパスを散らす。</p></article>
-              <article class="term-card"><h3>ダブルボランチ</h3><p>中盤の底に2人を置く形。1人が守備を支え、もう1人が前に出るなど、役割分担しながら中央を安定させる。</p></article>
-              <article class="term-card"><h3>ラインコントロール</h3><p>DFラインの高さや横並びを整えること。オフサイドを取ったり、相手に裏を取られないようにするために重要。</p></article>
-            </div>
+            <section class="term-category">
+              <h3>攻撃・ボール保持</h3>
+              <div class="term-grid">
+                <article class="term-card"><h4>カットイン</h4><p>サイドの選手が外側から中央へ入っていく動き。シュートやラストパスにつなげやすく、逆足のウイングでよく見られる。</p></article>
+                <article class="term-card"><h4>セカンドボール</h4><p>こぼれ球や競り合いの後に落ちたボールのこと。ここを拾えるかどうかで、攻撃を続けられるか、相手に流れを渡すかが変わる。</p></article>
+                <article class="term-card"><h4>ビルドアップ</h4><p>自陣の後方からパスや持ち運びで攻撃を組み立てること。GKやDFから始まり、相手のプレスを避けながら前進する。</p></article>
+                <article class="term-card"><h4>ポストプレー</h4><p>FWが前線でボールを受け、味方に落としたり時間を作ったりするプレー。上田綺世や小川航基のようなCFを見る時に重要。</p></article>
+                <article class="term-card"><h4>ポゼッション</h4><p>ボールを保持して試合を進めること。単に長く持つだけでなく、相手を動かして攻撃の形を作る意味もある。</p></article>
+                <article class="term-card"><h4>ライン間</h4><p>相手のDFラインとMFラインの間のスペース。ここで前を向けると、ラストパスやシュートにつながりやすい。</p></article>
+              </div>
+            </section>
+            <section class="term-category">
+              <h3>守備・プレス</h3>
+              <div class="term-grid">
+                <article class="term-card"><h4>カバーリング</h4><p>味方が抜かれた時や空いたスペースを、別の選手が補う守備。CBやボランチの判断力が出やすいプレー。</p></article>
+                <article class="term-card"><h4>守備ブロック</h4><p>チーム全体で守備の形を作り、相手が中央を通れないようにすること。5-4-1や4-4-2のように、横と縦の距離を保って守る。</p></article>
+                <article class="term-card"><h4>ハイプレス</h4><p>チーム全体が高い位置から相手に圧力をかける守備。成功すればゴールに近い場所で奪えるが、背後にスペースが空きやすい。</p></article>
+                <article class="term-card"><h4>プレス</h4><p>相手がボールを持った時に、近くの選手が寄せて自由にプレーさせない守備。奪うだけでなく、相手の選択肢を制限する目的もある。</p></article>
+                <article class="term-card"><h4>前線プレス</h4><p>FWやWGなど前の選手から相手DFやGKにプレッシャーをかける守備。相手のビルドアップを邪魔し、前でボールを奪う狙いがある。</p></article>
+                <article class="term-card"><h4>リトリート</h4><p>無理に前から奪いに行かず、自陣に戻って守備の形を整えること。強い相手に対して、まず失点しないために使われる。</p></article>
+                <article class="term-card"><h4>ラインコントロール</h4><p>DFラインの高さや横並びを整えること。オフサイドを取ったり、相手に裏を取られないようにするために重要。</p></article>
+              </div>
+            </section>
+            <section class="term-category">
+              <h3>配置・ポジション</h3>
+              <div class="term-grid">
+                <article class="term-card"><h4>アンカー</h4><p>中盤の底に1人で立ち、守備とビルドアップの軸になる選手。相手の攻撃を止めつつ、後方からパスを散らす役割がある。</p></article>
+                <article class="term-card"><h4>ウイングバック</h4><p>3バックや5バックでサイドを広く担当する選手。守備時は最終ラインに入り、攻撃時は高い位置まで上がる。</p></article>
+                <article class="term-card"><h4>可変システム</h4><p>攻撃時と守備時でフォーメーションが変わること。たとえば攻撃時は3-4-2-1、守備時は5-4-1のように変化する。</p></article>
+                <article class="term-card"><h4>シャドー</h4><p>CFの近く、少し下がった位置でプレーする攻撃的MF。3-4-2-1の「2」にあたることが多く、中央寄りで攻撃に関わる。</p></article>
+                <article class="term-card"><h4>ダブルボランチ</h4><p>中盤の底に2人を置く形。1人が守備を支え、もう1人が前に出るなど、役割分担しながら中央を安定させる。</p></article>
+                <article class="term-card"><h4>ハーフスペース</h4><p>中央とサイドの間にあるエリア。相手DFが対応しづらく、シャドーや攻撃的MFがボールを受けるとチャンスになりやすい。</p></article>
+              </div>
+            </section>
+            <section class="term-category">
+              <h3>試合展開・切り替え</h3>
+              <div class="term-grid">
+                <article class="term-card"><h4>トランジション</h4><p>攻撃から守備、守備から攻撃へ切り替わる瞬間のこと。サッカーではこの切り替えの速さが試合の流れを大きく左右する。</p></article>
+              </div>
+            </section>
           </section>
         </section>
       </section>
