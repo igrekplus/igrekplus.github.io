@@ -43,10 +43,14 @@
     }
 
     .owner-tabs {
+      position: sticky;
+      top: 0;
+      z-index: 150;
       display: flex;
       align-items: center;
       gap: 8px;
       padding: 12px 18px 0;
+      background: var(--bg);
     }
 
     .owner-tab {
@@ -880,6 +884,10 @@
       display: grid;
       gap: 10px;
       align-content: start;
+    }
+
+    .bet-shared-column {
+      grid-column: 1 / -1;
     }
 
     .bet-owner-title {
@@ -2349,11 +2357,6 @@
                     <div class="bet-hit-summary" id="betKarinMissSummary">外れ：0人</div>
                     <div class="bet-hit-list" id="betKarinMisses">なし</div>
                   </div>
-                  <div class="bet-hit-box">
-                    <h3>選んでいなかった正式招集メンバー</h3>
-                    <div class="bet-hit-summary" id="betKarinUnpickedSummary">未選出：0人</div>
-                    <div class="bet-hit-list" id="betKarinUnpicked">なし</div>
-                  </div>
                 </section>
                 <section class="bet-owner-column" aria-label="りょう賭け結果">
                   <h3 class="bet-owner-title">りょう</h3>
@@ -2367,11 +2370,11 @@
                     <div class="bet-hit-summary" id="betRyoMissSummary">外れ：0人</div>
                     <div class="bet-hit-list" id="betRyoMisses">なし</div>
                   </div>
-                  <div class="bet-hit-box">
-                    <h3>選んでいなかった正式招集メンバー</h3>
-                    <div class="bet-hit-summary" id="betRyoUnpickedSummary">未選出：0人</div>
-                    <div class="bet-hit-list" id="betRyoUnpicked">なし</div>
-                  </div>
+                </section>
+                <section class="bet-hit-box bet-shared-column" aria-label="選んでいなかった正式招集メンバー">
+                  <h3>選んでいなかった正式招集メンバー</h3>
+                  <div class="bet-hit-summary" id="betUnpickedSummary">未選出：0人</div>
+                  <div class="bet-hit-list" id="betUnpickedList">なし</div>
                 </section>
               </div>
             </div>
@@ -2593,6 +2596,15 @@
 
     const allPlayers = applyClubOverrides(loadPlayerMaster([...players, ...candidatePlayers]));
     const defaultKarinIds = new Set(players.map((player) => player.id));
+    const defaultRyoNames = [
+      "鈴木彩艶", "谷晃生", "早川友基",
+      "伊藤洋輝", "板倉滉", "渡辺剛", "谷口彰悟", "瀬古歩夢", "鈴木淳之介", "冨安健洋",
+      "遠藤航", "守田英正", "佐野海舟", "田中碧",
+      "三笘薫", "中村敬斗", "堂安律", "伊東純也", "菅原由勢",
+      "鎌田大地", "久保建英", "町野修斗", "前田大然",
+      "上田綺世", "小川航基", "塩貝健人"
+    ];
+    const defaultRyoIds = new Set(defaultRyoNames.map((name) => allPlayers.find((player) => player.name === name)?.id).filter(Boolean));
 
     const teamName = "日本代表";
 
@@ -2664,7 +2676,7 @@
 
     const ownerPlayers = {
       karin: allPlayers.filter((player) => defaultKarinIds.has(player.id)),
-      ryo: []
+      ryo: allPlayers.filter((player) => defaultRyoIds.has(player.id))
     };
 
     const ratingOrder = ["◎", "〇", "△", "×"];
@@ -3038,10 +3050,8 @@
     const betKarinMissSummary = document.getElementById("betKarinMissSummary");
     const betRyoHitSummary = document.getElementById("betRyoHitSummary");
     const betRyoMissSummary = document.getElementById("betRyoMissSummary");
-    const betKarinUnpickedSummary = document.getElementById("betKarinUnpickedSummary");
-    const betRyoUnpickedSummary = document.getElementById("betRyoUnpickedSummary");
-    const betKarinUnpicked = document.getElementById("betKarinUnpicked");
-    const betRyoUnpicked = document.getElementById("betRyoUnpicked");
+    const betUnpickedSummary = document.getElementById("betUnpickedSummary");
+    const betUnpickedList = document.getElementById("betUnpickedList");
     const rosterPanel = document.getElementById("rosterPanel");
     const rosterSearchInput = document.getElementById("rosterSearchInput");
     const rosterPositionFilter = document.getElementById("rosterPositionFilter");
@@ -3318,6 +3328,9 @@
       const previous = player.imageUrl || "";
       const sources = uniqueList([
         `pics/${player.name}.jpg`,
+        `pics/${player.name}.webp`,
+        `pics/${player.name}.jpeg`,
+        `pics/${player.name}.jfif`,
         `pics/${player.name}.png`,
         imagePathFromExcel(excelImageFile || player.imageFile),
         previous
@@ -4809,15 +4822,14 @@
         betPaymentResult.textContent = "-";
         betWinnerResult.textContent = "-";
         betDirectionResult.textContent = "-";
-        [betKarinHits, betKarinMisses, betRyoHits, betRyoMisses, betKarinUnpicked, betRyoUnpicked].forEach((target) => {
+        [betKarinHits, betKarinMisses, betRyoHits, betRyoMisses, betUnpickedList].forEach((target) => {
           target.textContent = "なし";
         });
         betKarinHitSummary.textContent = "的中：0人";
         betKarinMissSummary.textContent = "外れ：0人";
         betRyoHitSummary.textContent = "的中：0人";
         betRyoMissSummary.textContent = "外れ：0人";
-        betKarinUnpickedSummary.textContent = "未選出：0人";
-        betRyoUnpickedSummary.textContent = "未選出：0人";
+        betUnpickedSummary.textContent = "未選出：0人";
         return;
       }
 
@@ -4832,6 +4844,7 @@
       const ryoMissIds = Array.from(ryoIds).filter((id) => !officialIds.has(id));
       const karinUnpickedIds = Array.from(officialIds).filter((id) => !karinIds.has(id));
       const ryoUnpickedIds = Array.from(officialIds).filter((id) => !ryoIds.has(id));
+      const unpickedIds = Array.from(new Set([...karinUnpickedIds, ...ryoUnpickedIds]));
       const karinCorrect = karinHitIds.length;
       const ryoCorrect = ryoHitIds.length;
       const diff = Math.abs(karinCorrect - ryoCorrect);
@@ -4844,14 +4857,12 @@
       betKarinMissSummary.textContent = `外れ：${karinMissIds.length}人`;
       betRyoHitSummary.textContent = `的中：${ryoHitIds.length}人`;
       betRyoMissSummary.textContent = `外れ：${ryoMissIds.length}人`;
-      betKarinUnpickedSummary.textContent = `未選出：${karinUnpickedIds.length}人`;
-      betRyoUnpickedSummary.textContent = `未選出：${ryoUnpickedIds.length}人`;
+      betUnpickedSummary.textContent = `未選出：${unpickedIds.length}人`;
       renderBetPlayerList(betKarinHits, karinHitIds, "karin");
       renderBetPlayerList(betKarinMisses, karinMissIds, "karin");
       renderBetPlayerList(betRyoHits, ryoHitIds, "ryo");
       renderBetPlayerList(betRyoMisses, ryoMissIds, "ryo");
-      renderBetPlayerList(betKarinUnpicked, karinUnpickedIds, "karin");
-      renderBetPlayerList(betRyoUnpicked, ryoUnpickedIds, "ryo");
+      renderBetPlayerList(betUnpickedList, unpickedIds, "karin");
 
       if (diff === 0) {
         betResultMain.textContent = "同点のため支払いなし";
