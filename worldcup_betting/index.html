@@ -925,6 +925,10 @@
       color: var(--muted);
     }
 
+    .owner-view-only {
+      display: none;
+    }
+
     .bet-hit-lists {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2701,17 +2705,17 @@
           </div>
         </div>
 
-        <section class="decision-area" id="confirmedArea" aria-label="招集確定">
+        <section class="decision-area owner-view-only" id="confirmedArea" aria-label="非表示メモ1">
           <div class="decision-head">
-            <div class="decision-title">招集確定</div>
+            <div class="decision-title">非表示メモ1</div>
             <div class="decision-count" id="confirmedCount">0人（500円x0人＝0円）</div>
           </div>
           <div class="decision-list" id="confirmedList"></div>
         </section>
 
-        <section class="decision-area" id="droppedArea" aria-label="招集落ち">
+        <section class="decision-area owner-view-only" id="droppedArea" aria-label="非表示メモ2">
           <div class="decision-head">
-            <div class="decision-title">招集落ち</div>
+            <div class="decision-title">非表示メモ2</div>
             <div class="decision-count" id="droppedCount">0人（500円x0人＝0円）</div>
           </div>
           <div class="decision-list" id="droppedList"></div>
@@ -2799,7 +2803,8 @@
       { id: "p44", name: "鈴木淳之介", position: "CB/SB", group: "DF", status: "可能性", number: "", club: "湘南ベルマーレ", imageUrl: "pics/鈴木淳之介.jpg" },
       { id: "p45", name: "三戸舜介", position: "OMF/WG", group: "OMF/WG", status: "可能性", number: "", club: "スパルタ・ロッテルダム", imageUrl: "pics/三戸舜介.jpg" },
       { id: "p46", name: "大橋祐紀", position: "CF", group: "CF", status: "可能性", number: "", club: "ブラックバーン", imageUrl: "pics/大橋祐紀.jpg" },
-      { id: "p47", name: "小杉啓太", position: "SB/WB", group: "DF", status: "可能性", number: "", club: "ユールゴーデン", imageUrl: "pics/小杉啓太.jpg" }
+      { id: "p47", name: "小杉啓太", position: "SB/WB", group: "DF", status: "可能性", number: "", club: "ユールゴーデン", imageUrl: "pics/小杉啓太.jpg" },
+      { id: "goto_keisuke", name: "後藤啓介", position: "CF", group: "CF", status: "可能性", number: "", club: "", imageUrl: "pics/後藤啓介.jpg" }
     ];
 
     const clubOverrides = {
@@ -2906,6 +2911,9 @@
       pending: "未確定",
       selected: "招集",
       not_selected: "落選"
+    };
+    const requiredBetResultDefaults = {
+      goto_keisuke: "selected"
     };
     const currentFormations = {
       karin: "",
@@ -3148,10 +3156,15 @@
     function normalizeBetResults(raw = {}) {
       const source = raw?.results && typeof raw.results === "object" ? raw.results : raw;
       const normalized = {};
-      if (!source || typeof source !== "object") return normalized;
-      Object.entries(source).forEach(([playerId, value]) => {
+      if (source && typeof source === "object") {
+        Object.entries(source).forEach(([playerId, value]) => {
+          if (!allPlayerById(playerId)) return;
+          normalized[playerId] = normalizeBetResultValue(value);
+        });
+      }
+      Object.entries(requiredBetResultDefaults).forEach(([playerId, value]) => {
         if (!allPlayerById(playerId)) return;
-        normalized[playerId] = normalizeBetResultValue(value);
+        if (normalized[playerId] === undefined) normalized[playerId] = normalizeBetResultValue(value);
       });
       return normalized;
     }
@@ -3905,7 +3918,7 @@
         meta.append(edit);
       }
       info.append(name, meta);
-      if ((activeView === "owner" || activeView === "compare") && !screenshotMode) {
+      if (activeView === "compare" && !screenshotMode) {
         info.appendChild(createResultBadges(player, owner));
       }
       card.append(photo, info);
@@ -3998,13 +4011,9 @@
           card.style.left = `${placement.x}%`;
           card.style.top = `${placement.y}%`;
           pitch.appendChild(card);
-        } else if (placement.area === "confirmed") {
-          confirmedTotal += 1;
-          confirmedList.appendChild(createPlayerCard(player, false));
-        } else if (placement.area === "dropped") {
-          droppedTotal += 1;
-          droppedList.appendChild(createPlayerCard(player, false));
         } else {
+          if (placement.area === "confirmed") confirmedTotal += 1;
+          if (placement.area === "dropped") droppedTotal += 1;
           benchTotal += 1;
           const groupKey = benchGroupKey(player.position);
           benchGroupTotals[groupKey] += 1;
@@ -4529,9 +4538,6 @@
 
       const pitchRect = pitch.getBoundingClientRect();
       const benchRect = benchArea.getBoundingClientRect();
-      const confirmedRect = confirmedArea.getBoundingClientRect();
-      const droppedRect = droppedArea.getBoundingClientRect();
-      const state = states[activeOwner];
 
       if (inside(event.clientX, event.clientY, pitchRect)) {
         const x = ((event.clientX - pitchRect.left) / pitchRect.width) * 100;
@@ -4542,10 +4548,6 @@
           y: clamp(y, 7, 93),
           manual: true
         });
-      } else if (inside(event.clientX, event.clientY, confirmedRect)) {
-        updatePlacement(drag.playerId, { area: "confirmed", x: 50, y: 50, manual: false });
-      } else if (inside(event.clientX, event.clientY, droppedRect)) {
-        updatePlacement(drag.playerId, { area: "dropped", x: 50, y: 50, manual: false });
       } else if (inside(event.clientX, event.clientY, benchRect)) {
         updatePlacement(drag.playerId, { area: "bench", x: 50, y: 50, manual: false });
       }
@@ -4574,9 +4576,7 @@
     function markDropTarget(clientX, clientY) {
       const dropTargets = [
         [pitch, pitch.getBoundingClientRect()],
-        [benchArea, benchArea.getBoundingClientRect()],
-        [confirmedArea, confirmedArea.getBoundingClientRect()],
-        [droppedArea, droppedArea.getBoundingClientRect()]
+        [benchArea, benchArea.getBoundingClientRect()]
       ];
 
       dropTargets.forEach(([element, rect]) => {
