@@ -1813,6 +1813,10 @@
       color: var(--red);
     }
 
+    .player-card.pending-result {
+      border-style: dashed;
+    }
+
     .decision-count {
       color: var(--muted);
       font-size: 12px;
@@ -3945,6 +3949,10 @@
       card.className = `player-card${onPitch ? " on-pitch" : ""}`;
       card.dataset.playerId = player.id;
       card.setAttribute("aria-label", `${player.name} ${player.position} ${player.club}`);
+      if (activeView === "owner" && betResultForPlayer(player.id) === "pending") {
+        card.classList.add("pending-result");
+        card.title = "正式結果は未確定です";
+      }
 
       const photo = document.createElement("div");
       photo.className = "photo";
@@ -4057,6 +4065,12 @@
       return area === "dropped" ? "dropped" : "selected";
     }
 
+    function shouldShowAsOwnerSelected(player, placement) {
+      if (!player || !placement) return false;
+      if (placement.area === "dropped") return false;
+      return betResultForPlayer(player.id) !== "not_selected";
+    }
+
     function createPredictionBadge(playerId, owner = activeOwner) {
       const badge = document.createElement("span");
       const prediction = predictionStateForPlayer(playerId, owner);
@@ -4131,19 +4145,23 @@
 
       currentPlayers().forEach((player) => {
         const placement = state.get(player.id);
+        const showAsSelected = shouldShowAsOwnerSelected(player, placement);
         if (placement.area === "pitch") {
+          if (!showAsSelected) return;
           pitchTotal += 1;
           const card = createPlayerCard(player, true);
           card.style.left = `${placement.x}%`;
           card.style.top = `${placement.y}%`;
           pitch.appendChild(card);
         } else if (placement.area === "confirmed") {
+          if (!showAsSelected) return;
           confirmedTotal += 1;
           confirmedList.appendChild(createPlayerCard(player, false));
         } else if (placement.area === "dropped") {
           droppedTotal += 1;
           droppedList.appendChild(createPlayerCard(player, false));
         } else {
+          if (!showAsSelected) return;
           benchTotal += 1;
           const groupKey = benchGroupKey(player.position);
           benchGroupTotals[groupKey] += 1;
@@ -4284,6 +4302,18 @@
         .sort(sortForComparison);
     }
 
+    function visibleSelectedPlayersForOwner(owner) {
+      return selectedPlayersForOwner(owner)
+        .filter((player) => betResultForPlayer(player.id) !== "not_selected");
+    }
+
+    function visibleBenchPlayersForOwner(owner) {
+      const state = states[owner];
+      return visibleSelectedPlayersForOwner(owner)
+        .filter((player) => state.get(player.id)?.area !== "pitch")
+        .sort(sortForComparison);
+    }
+
     function createMiniPlayer(player, owner) {
       const row = document.createElement("div");
       row.className = "mini-player";
@@ -4324,8 +4354,8 @@
     function renderScreenshotSummary(pitchTotal) {
       if (!screenshotBenchList) return;
       screenshotBenchList.innerHTML = "";
-      const selected = selectedPlayersForOwner(activeOwner);
-      const benchPlayers = benchPlayersForOwner(activeOwner);
+      const selected = visibleSelectedPlayersForOwner(activeOwner);
+      const benchPlayers = visibleBenchPlayersForOwner(activeOwner);
       screenshotSelectedCount.textContent = `選出人数：${selected.length}人`;
       screenshotBenchTitle.textContent = `ベンチメンバー：${benchPlayers.length}人`;
       benchPlayers.forEach((player) => {
