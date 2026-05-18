@@ -812,11 +812,19 @@
     .official-squad-head {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       flex-wrap: wrap;
       gap: 8px;
       color: var(--text);
       font-size: 14px;
       font-weight: 900;
+    }
+
+    .official-squad-actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
     .official-squad-count.warning {
@@ -836,7 +844,8 @@
     }
 
     .official-player {
-      display: flex;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 96px;
       align-items: center;
       gap: 8px;
       border: 1px solid var(--line);
@@ -846,13 +855,15 @@
       color: var(--text);
       font-size: 13px;
       font-weight: 800;
-      cursor: pointer;
     }
 
-    .official-player input {
-      width: 18px;
-      height: 18px;
-      accent-color: var(--blue);
+    .official-player select {
+      min-height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+      font: inherit;
+      font-size: 12px;
     }
 
     .official-player-meta {
@@ -871,6 +882,47 @@
     .official-player-sub {
       color: var(--muted);
       font-size: 11px;
+    }
+
+    .result-save-state {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .result-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .result-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 20px;
+      border-radius: 999px;
+      padding: 1px 7px;
+      background: #eef6ff;
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .result-badge.hit {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .result-badge.miss {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .result-badge.pending {
+      background: #f1f5f9;
+      color: var(--muted);
     }
 
     .bet-hit-lists {
@@ -2428,7 +2480,7 @@
         </section>
         <section class="view-panel bet-panel" id="betPanel" aria-label="賭け結果">
           <div class="bet-card">
-            <p class="bet-guide">正式招集メンバーを選択すると、かりん予想・りょう予想の的中人数と支払額を自動計算します。</p>
+            <p class="bet-guide">選手ごとの正式結果を保存すると、かりん予想・りょう予想の的中人数と支払額を自動計算します。</p>
             <div class="bet-grid">
               <label class="bet-field">
                 1人あたり金額
@@ -2437,17 +2489,22 @@
             </div>
             <div class="official-squad">
               <div class="official-squad-head">
-                <span>正式招集メンバー</span>
-                <span class="official-squad-count" id="officialSquadCount">正式招集メンバー選択数：0人 / 26人</span>
+                <span>正式結果マスタ</span>
+                <div class="official-squad-actions">
+                  <span class="official-squad-count" id="officialSquadCount">招集：0人 / 落選：0人 / 未確定：0人</span>
+                  <button class="utility-button primary-button" type="button" id="betResultsSaveButton">正式結果を保存</button>
+                  <span class="result-save-state" id="betResultsSaveState">未保存</span>
+                </div>
               </div>
               <div class="official-squad-list" id="officialSquadList"></div>
             </div>
             <div class="bet-error" id="betError"></div>
             <div class="bet-result" id="betResult">
               <div class="bet-result-main" id="betResultMain">同点のため支払いなし</div>
-              <div class="bet-result-row"><span>正式招集メンバー選択数</span><span id="betOfficialCountResult">0人 / 26人</span></div>
+              <div class="bet-result-row"><span>正式結果</span><span id="betOfficialCountResult">招集 0人 / 落選 0人</span></div>
               <div class="bet-result-row"><span>かりん選出メンバーの的中人数</span><span id="betKarinResult">0人</span></div>
               <div class="bet-result-row"><span>りょう選出メンバーの的中人数</span><span id="betRyoResult">0人</span></div>
+              <div class="bet-result-row"><span>未判定数</span><span id="betPendingResult">0人</span></div>
               <div class="bet-result-row"><span>差分人数</span><span id="betDiffResult">0人</span></div>
               <div class="bet-result-row"><span>支払額</span><span id="betPaymentResult">0円</span></div>
               <div class="bet-result-row"><span>勝者</span><span id="betWinnerResult">引き分け</span></div>
@@ -2842,7 +2899,14 @@
     };
     const playerMasterStorageKey = "formationBoard_players_japan";
     const betStorageKey = "formationBoard_bet_japan";
+    const betResultsStorageKey = "worldCupBetResults";
     const officialSquadStorageKey = "formationBoard_officialSquad_japan";
+    const betResultValues = ["pending", "selected", "not_selected"];
+    const betResultLabels = {
+      pending: "未確定",
+      selected: "招集",
+      not_selected: "落選"
+    };
     const currentFormations = {
       karin: "",
       ryo: ""
@@ -2855,6 +2919,7 @@
       karin: "",
       ryo: ""
     };
+    let betResultsLoadedFromStorage = false;
     const betState = loadBetState();
     let screenshotMode = false;
     let editingPlayerId = null;
@@ -3076,11 +3141,79 @@
       }
     }
 
+    function normalizeBetResultValue(value) {
+      return betResultValues.includes(value) ? value : "pending";
+    }
+
+    function normalizeBetResults(raw = {}) {
+      const source = raw?.results && typeof raw.results === "object" ? raw.results : raw;
+      const normalized = {};
+      if (!source || typeof source !== "object") return normalized;
+      Object.entries(source).forEach(([playerId, value]) => {
+        if (!allPlayerById(playerId)) return;
+        normalized[playerId] = normalizeBetResultValue(value);
+      });
+      return normalized;
+    }
+
+    function loadBetResults() {
+      try {
+        const raw = localStorage.getItem(betResultsStorageKey);
+        if (!raw) {
+          const migrated = {};
+          loadOfficialSquad().forEach((playerId) => {
+            if (allPlayerById(playerId)) migrated[playerId] = "selected";
+          });
+          return migrated;
+        }
+        betResultsLoadedFromStorage = true;
+        return normalizeBetResults(JSON.parse(raw));
+      } catch (error) {
+        console.warn(`${betResultsStorageKey} の復元に失敗しました`, error);
+        return {};
+      }
+    }
+
+    function saveBetResults() {
+      try {
+        localStorage.setItem(betResultsStorageKey, JSON.stringify(betResults));
+        betResultsLoadedFromStorage = true;
+        if (betResultsSaveState) {
+          betResultsSaveState.textContent = `保存済み：${new Date().toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" })}`;
+        }
+      } catch (error) {
+        console.warn(`${betResultsStorageKey} の保存に失敗しました`, error);
+        if (betResultsSaveState) betResultsSaveState.textContent = "保存失敗";
+      }
+    }
+
+    function betResultForPlayer(playerId) {
+      return normalizeBetResultValue(betResults[playerId]);
+    }
+
+    function ownerPredictionForPlayer(owner, playerId) {
+      return playersForOwner(owner).some((player) => player.id === playerId) ? "selected" : "not_selected";
+    }
+
+    function judgementForPlayer(owner, playerId) {
+      const result = betResultForPlayer(playerId);
+      if (result === "pending") return "未判定";
+      return ownerPredictionForPlayer(owner, playerId) === result ? "的中" : "外れ";
+    }
+
+    function judgementClass(label) {
+      if (label === "的中") return "hit";
+      if (label === "外れ") return "miss";
+      return "pending";
+    }
+
     const states = {
       karin: loadOwnerState("karin"),
       ryo: loadOwnerState("ryo")
     };
     const officialSquadIds = loadOfficialSquad();
+    let betResults = loadBetResults();
+    let betResultDraft = { ...betResults };
 
     const benchSortModes = {
       karin: "original",
@@ -3191,9 +3324,12 @@
     const betResultMain = document.getElementById("betResultMain");
     const officialSquadList = document.getElementById("officialSquadList");
     const officialSquadCount = document.getElementById("officialSquadCount");
+    const betResultsSaveButton = document.getElementById("betResultsSaveButton");
+    const betResultsSaveState = document.getElementById("betResultsSaveState");
     const betOfficialCountResult = document.getElementById("betOfficialCountResult");
     const betKarinResult = document.getElementById("betKarinResult");
     const betRyoResult = document.getElementById("betRyoResult");
+    const betPendingResult = document.getElementById("betPendingResult");
     const betDiffResult = document.getElementById("betDiffResult");
     const betPaymentResult = document.getElementById("betPaymentResult");
     const betWinnerResult = document.getElementById("betWinnerResult");
@@ -3769,6 +3905,9 @@
         meta.append(edit);
       }
       info.append(name, meta);
+      if ((activeView === "owner" || activeView === "compare") && !screenshotMode) {
+        info.appendChild(createResultBadges(player, owner));
+      }
       card.append(photo, info);
 
       if (isInteractionLocked()) {
@@ -3785,6 +3924,25 @@
         });
       }
       return card;
+    }
+
+    function createResultBadge(text, className) {
+      const badge = document.createElement("span");
+      badge.className = `result-badge ${className || ""}`.trim();
+      badge.textContent = text;
+      return badge;
+    }
+
+    function createResultBadges(player, owner) {
+      const wrap = document.createElement("div");
+      wrap.className = "result-badges";
+      const formalResult = betResultForPlayer(player.id);
+      const judgement = judgementForPlayer(owner, player.id);
+      wrap.append(
+        createResultBadge(`正式結果：${betResultLabels[formalResult]}`, formalResult === "pending" ? "pending" : ""),
+        createResultBadge(`判定：${judgement}`, judgementClass(judgement))
+      );
+      return wrap;
     }
 
     function clearPitchCards() {
@@ -4017,6 +4175,9 @@
       position.className = "mini-player-position";
       position.textContent = `${player.position}${currentNumber(player.id, owner) ? ` #${currentNumber(player.id, owner)}` : ""}`;
       info.append(name, position);
+      if (owner && (activeView === "compare" || activeView === "bet")) {
+        info.appendChild(createResultBadges(player, owner));
+      }
       row.append(photo, info);
       return row;
     }
@@ -4151,7 +4312,7 @@
 
       boardTitle.textContent = "賭け結果";
       sideTitle.textContent = "賭け結果";
-      sideSub.textContent = "正式招集メンバーを選択すると、かりん予想・りょう予想の的中人数と支払額を自動計算します。";
+      sideSub.textContent = "選手ごとの正式結果を保存すると、かりん予想・りょう予想の的中人数と支払額を自動計算します。";
       statusMessage.textContent = "";
       window.clearTimeout(statusTimer);
       pitchCount.textContent = "賭け結果";
@@ -4160,6 +4321,9 @@
 
       betAmountInput.value = betState.amount;
       renderOfficialSquadList();
+      if (betResultsSaveState?.textContent === "未保存") {
+        betResultsSaveState.textContent = betResultsLoadedFromStorage ? "保存済み" : "未保存";
+      }
       updateBetResult(false);
 
       ownerTabs.forEach((tab) => {
@@ -4934,25 +5098,13 @@
 
     function renderOfficialSquadList() {
       officialSquadList.innerHTML = "";
+      betResultDraft = { ...betResults };
       positionSortOrder.forEach((group) => {
         allPlayers
           .filter((player) => (player.group || benchGroupKey(player.position)) === group)
           .forEach((player) => {
             const label = document.createElement("label");
             label.className = "official-player";
-
-            const checkbox = document.createElement("input");
-            checkbox.type = "checkbox";
-            checkbox.checked = officialSquadIds.has(player.id);
-            checkbox.addEventListener("change", () => {
-              if (checkbox.checked) {
-                officialSquadIds.add(player.id);
-              } else {
-                officialSquadIds.delete(player.id);
-              }
-              saveOfficialSquad();
-              updateBetResult(true);
-            });
 
             const meta = document.createElement("span");
             meta.className = "official-player-meta";
@@ -4964,7 +5116,21 @@
             sub.textContent = `${player.position} / ${player.club}`;
             meta.append(name, sub);
 
-            label.append(checkbox, meta);
+            const select = document.createElement("select");
+            select.setAttribute("aria-label", `${player.name} 正式結果`);
+            betResultValues.forEach((value) => {
+              const option = document.createElement("option");
+              option.value = value;
+              option.textContent = betResultLabels[value];
+              select.appendChild(option);
+            });
+            select.value = betResultForPlayer(player.id);
+            select.addEventListener("change", () => {
+              betResultDraft[player.id] = normalizeBetResultValue(select.value);
+              if (betResultsSaveState) betResultsSaveState.textContent = "未保存の変更あり";
+            });
+
+            label.append(meta, select);
             officialSquadList.appendChild(label);
           });
       });
@@ -4976,19 +5142,26 @@
       betState.amount = betAmountInput.value;
 
       const invalidAmount = amount === null || amount <= 0;
-      const officialIds = new Set(Array.from(officialSquadIds).filter((id) => allPlayers.some((player) => player.id === id)));
-      const officialCount = officialIds.size;
+      const officialSelectedIds = allPlayers.filter((player) => betResultForPlayer(player.id) === "selected").map((player) => player.id);
+      const officialNotSelectedIds = allPlayers.filter((player) => betResultForPlayer(player.id) === "not_selected").map((player) => player.id);
+      const officialPendingIds = allPlayers.filter((player) => betResultForPlayer(player.id) === "pending").map((player) => player.id);
+      const officialIds = new Set(officialSelectedIds);
+      const officialCount = officialSelectedIds.length;
+      const officialDroppedCount = officialNotSelectedIds.length;
+      const pendingCount = officialPendingIds.length;
       const officialWarning = officialCount !== rosterLimit;
 
-      officialSquadCount.textContent = `正式招集メンバー選択数：${officialCount}人 / ${rosterLimit}人`;
+      officialSquadCount.textContent = `招集：${officialCount}人 / 落選：${officialDroppedCount}人 / 未確定：${pendingCount}人`;
       officialSquadCount.classList.toggle("warning", officialWarning);
-      betOfficialCountResult.textContent = `${officialCount}人 / ${rosterLimit}人`;
+      betOfficialCountResult.textContent = `招集 ${officialCount}人 / 落選 ${officialDroppedCount}人`;
+      betPendingResult.textContent = `${pendingCount}人`;
 
       if (invalidAmount) {
         betError.textContent = "金額は1以上の数字で入力してください";
         betResultMain.textContent = "入力内容を確認してください";
         betKarinResult.textContent = "-";
         betRyoResult.textContent = "-";
+        betPendingResult.textContent = "-";
         betDiffResult.textContent = "-";
         betPaymentResult.textContent = "-";
         betWinnerResult.textContent = "-";
@@ -5011,15 +5184,17 @@
       const ryoIds = selectedOwnerIds("ryo");
       const karinHitIds = Array.from(karinIds).filter((id) => officialIds.has(id));
       const ryoHitIds = Array.from(ryoIds).filter((id) => officialIds.has(id));
-      const karinMissIds = Array.from(karinIds).filter((id) => !officialIds.has(id));
-      const ryoMissIds = Array.from(ryoIds).filter((id) => !officialIds.has(id));
-      const karinUnpickedIds = Array.from(officialIds).filter((id) => !karinIds.has(id));
-      const ryoUnpickedIds = Array.from(officialIds).filter((id) => !ryoIds.has(id));
+      const officialDroppedIds = new Set(officialNotSelectedIds);
+      const karinMissIds = Array.from(karinIds).filter((id) => officialDroppedIds.has(id));
+      const ryoMissIds = Array.from(ryoIds).filter((id) => officialDroppedIds.has(id));
+      const karinUnpickedIds = officialSelectedIds.filter((id) => !karinIds.has(id));
+      const ryoUnpickedIds = officialSelectedIds.filter((id) => !ryoIds.has(id));
       const unpickedIds = Array.from(new Set([...karinUnpickedIds, ...ryoUnpickedIds]));
       const karinCorrect = karinHitIds.length;
       const ryoCorrect = ryoHitIds.length;
       const diff = Math.abs(karinCorrect - ryoCorrect);
       const payment = diff * amount;
+      const resultPrefix = pendingCount > 0 ? "暫定結果：" : "";
       betKarinResult.textContent = `${karinCorrect}人`;
       betRyoResult.textContent = `${ryoCorrect}人`;
       betDiffResult.textContent = `${diff}人`;
@@ -5033,18 +5208,18 @@
       renderBetPlayerList(betKarinMisses, karinMissIds, "karin");
       renderBetPlayerList(betRyoHits, ryoHitIds, "ryo");
       renderBetPlayerList(betRyoMisses, ryoMissIds, "ryo");
-      renderBetPlayerList(betUnpickedList, unpickedIds, "karin");
+      renderBetPlayerList(betUnpickedList, unpickedIds);
 
       if (diff === 0) {
-        betResultMain.textContent = "同点のため支払いなし";
-        betWinnerResult.textContent = "引き分け";
+        betResultMain.textContent = `${resultPrefix}同点のため支払いなし`;
+        betWinnerResult.textContent = "同点";
         betDirectionResult.textContent = "なし";
       } else if (karinCorrect > ryoCorrect) {
-        betResultMain.textContent = `かりんが${diff}人多く的中`;
+        betResultMain.textContent = `${resultPrefix}かりんが${diff}人多く的中`;
         betWinnerResult.textContent = "かりん";
         betDirectionResult.textContent = "りょう → かりん";
       } else {
-        betResultMain.textContent = `りょうが${diff}人多く的中`;
+        betResultMain.textContent = `${resultPrefix}りょうが${diff}人多く的中`;
         betWinnerResult.textContent = "りょう";
         betDirectionResult.textContent = "かりん → りょう";
       }
@@ -5164,7 +5339,8 @@
           karin: buildExportData("karin"),
           ryo: buildExportData("ryo")
         },
-        officialSquad: Array.from(officialSquadIds),
+        officialSquad: allPlayers.filter((player) => betResultForPlayer(player.id) === "selected").map((player) => player.id),
+        betResults: { ...betResults },
         bet: { amount: betState.amount }
       };
     }
@@ -5225,12 +5401,18 @@
         const ownersPayload = payload.owners || payload;
         applyOwnerImportData("karin", ownersPayload.karin || payload.karin);
         applyOwnerImportData("ryo", ownersPayload.ryo || payload.ryo);
-        if (Array.isArray(payload.officialSquad)) {
-          officialSquadIds.clear();
+        if (payload.betResults && typeof payload.betResults === "object") {
+          betResults = normalizeBetResults(payload.betResults);
+          betResultDraft = { ...betResults };
+          saveBetResults();
+        } else if (Array.isArray(payload.officialSquad)) {
+          const importedResults = {};
           payload.officialSquad.forEach((id) => {
-            if (allPlayerById(id)) officialSquadIds.add(id);
+            if (allPlayerById(id)) importedResults[id] = "selected";
           });
-          saveOfficialSquad();
+          betResults = normalizeBetResults(importedResults);
+          betResultDraft = { ...betResults };
+          saveBetResults();
         }
         if (payload.bet?.amount !== undefined) {
           betState.amount = String(payload.bet.amount);
@@ -5301,6 +5483,12 @@
     });
 
     betAmountInput.addEventListener("input", () => updateBetResult(true));
+    betResultsSaveButton.addEventListener("click", () => {
+      betResults = normalizeBetResults(betResultDraft);
+      saveBetResults();
+      showStatus("正式結果マスタを保存しました");
+      render();
+    });
 
     showBetButton.addEventListener("click", () => {
       activeView = "bet";
