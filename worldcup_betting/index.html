@@ -925,10 +925,6 @@
       color: var(--muted);
     }
 
-    .owner-view-only {
-      display: none;
-    }
-
     .bet-hit-lists {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1796,6 +1792,27 @@
       font-weight: 800;
     }
 
+    .prediction-badge {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      border: 1px solid rgba(0, 91, 172, 0.22);
+      border-radius: 999px;
+      padding: 1px 8px;
+      background: #eef6ff;
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .prediction-badge.out {
+      border-color: rgba(215, 25, 32, 0.25);
+      background: #fff5f5;
+      color: var(--red);
+    }
+
     .decision-count {
       color: var(--muted);
       font-size: 12px;
@@ -1881,32 +1898,32 @@
     .player-card.on-pitch {
       position: absolute;
       z-index: 3;
-      width: 166px;
-      min-height: 70px;
-      grid-template-columns: 54px minmax(0, 1fr);
-      gap: 8px;
-      padding: 7px;
+      width: 148px;
+      min-height: 60px;
+      grid-template-columns: 46px minmax(0, 1fr);
+      gap: 6px;
+      padding: 6px;
       transform: translate(-50%, -50%);
       box-shadow: var(--shadow);
     }
 
     .player-card.on-pitch .photo {
-      width: 54px;
-      height: 54px;
-      font-size: 20px;
+      width: 46px;
+      height: 46px;
+      font-size: 17px;
     }
 
     .player-card.on-pitch .name {
-      font-size: 12px;
+      font-size: 11px;
     }
 
     .player-card.on-pitch .position {
-      min-width: 32px;
-      max-width: 42px;
-      padding: 2px 5px;
+      min-width: 28px;
+      max-width: 38px;
+      padding: 1px 4px;
       overflow: hidden;
       text-overflow: ellipsis;
-      font-size: 10px;
+      font-size: 9px;
     }
 
     .photo {
@@ -1989,9 +2006,15 @@
     }
 
     .player-card.on-pitch .number-badge {
-      min-width: 27px;
-      padding: 2px 5px;
-      font-size: 10px;
+      min-width: 24px;
+      padding: 1px 4px;
+      font-size: 9px;
+    }
+
+    .player-card.on-pitch .prediction-badge {
+      min-height: 18px;
+      padding: 0 5px;
+      font-size: 8px;
     }
 
     .edit-player-button {
@@ -2249,6 +2272,28 @@
         height: auto;
       }
 
+      .player-card.on-pitch {
+        width: 132px;
+        min-height: 54px;
+        grid-template-columns: 38px minmax(0, 1fr);
+        gap: 5px;
+        padding: 5px;
+      }
+
+      .player-card.on-pitch .photo {
+        width: 38px;
+        height: 38px;
+        font-size: 14px;
+      }
+
+      .player-card.on-pitch .name {
+        font-size: 10px;
+      }
+
+      .player-card.on-pitch .club {
+        display: none;
+      }
+
       .bench {
         height: auto;
         min-height: 0;
@@ -2326,24 +2371,51 @@
       }
 
       .player-card.on-pitch {
-        width: 146px;
-        grid-template-columns: 46px minmax(0, 1fr);
-        gap: 6px;
-        padding: 6px;
+        width: 116px;
+        min-height: 48px;
+        grid-template-columns: 32px minmax(0, 1fr);
+        gap: 4px;
+        padding: 4px;
       }
 
       .player-card.on-pitch .photo {
-        width: 46px;
-        height: 46px;
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
       }
 
       .player-card.on-pitch .name {
-        font-size: 11px;
+        font-size: 9px;
+      }
+
+      .player-card.on-pitch .meta {
+        margin-top: 2px;
+        gap: 3px;
       }
 
       .player-card.on-pitch .position,
+      .player-card.on-pitch .number-badge,
+      .player-card.on-pitch .prediction-badge {
+        font-size: 8px;
+      }
+
+      .player-card.on-pitch .prediction-badge {
+        max-width: 46px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
       .player-card.on-pitch .number-badge {
-        font-size: 9px;
+        display: none;
+      }
+
+      .player-card.on-pitch .rating-mark {
+        display: none;
+      }
+
+      .player-card.on-pitch .position {
+        min-width: 24px;
+        max-width: 34px;
       }
 
       body.screenshot-mode .screenshot-return {
@@ -2351,6 +2423,27 @@
         right: 10px;
         left: auto;
         max-width: calc(100vw - 20px);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .pitch {
+        min-height: 400px;
+      }
+
+      .player-card.on-pitch {
+        width: 104px;
+        grid-template-columns: 28px minmax(0, 1fr);
+      }
+
+      .player-card.on-pitch .photo {
+        width: 28px;
+        height: 28px;
+        font-size: 11px;
+      }
+
+      .player-card.on-pitch .name {
+        font-size: 8.5px;
       }
     }
   </style>
@@ -2705,25 +2798,25 @@
           </div>
         </div>
 
-        <section class="decision-area owner-view-only" id="confirmedArea" aria-label="非表示メモ1">
+        <section class="decision-area" id="confirmedArea" aria-label="招集予想">
           <div class="decision-head">
-            <div class="decision-title">非表示メモ1</div>
-            <div class="decision-count" id="confirmedCount">0人（500円x0人＝0円）</div>
+            <div class="decision-title">招集予想</div>
+            <div class="decision-count" id="confirmedCount">0人</div>
           </div>
           <div class="decision-list" id="confirmedList"></div>
         </section>
 
-        <section class="decision-area owner-view-only" id="droppedArea" aria-label="非表示メモ2">
+        <section class="decision-area" id="droppedArea" aria-label="落選予想">
           <div class="decision-head">
-            <div class="decision-title">非表示メモ2</div>
-            <div class="decision-count" id="droppedCount">0人（500円x0人＝0円）</div>
+            <div class="decision-title">落選予想</div>
+            <div class="decision-count" id="droppedCount">0人</div>
           </div>
           <div class="decision-list" id="droppedList"></div>
         </section>
 
         <section class="bench-pool" id="benchArea" aria-label="ベンチ">
           <div class="bench-head">
-            <h2 class="bench-title">ベンチ</h2>
+            <h2 class="bench-title">ベンチ（招集予想）</h2>
             <div class="bench-sub" id="benchCount">ベンチ: 26人</div>
           </div>
           <div class="bench-list" id="benchList"></div>
@@ -2823,6 +2916,10 @@
       "上田綺世", "小川航基", "塩貝健人"
     ];
     const defaultRyoIds = new Set(defaultRyoNames.map((name) => allPlayers.find((player) => player.name === name)?.id).filter(Boolean));
+    const requiredOwnerPlayerIds = {
+      karin: ["goto_keisuke"],
+      ryo: ["goto_keisuke"]
+    };
 
     const teamName = "日本代表";
 
@@ -2893,8 +2990,8 @@
     };
 
     const ownerPlayers = {
-      karin: allPlayers.filter((player) => defaultKarinIds.has(player.id)),
-      ryo: allPlayers.filter((player) => defaultRyoIds.has(player.id))
+      karin: allPlayers.filter((player) => defaultKarinIds.has(player.id) || requiredOwnerPlayerIds.karin.includes(player.id)),
+      ryo: allPlayers.filter((player) => defaultRyoIds.has(player.id) || requiredOwnerPlayerIds.ryo.includes(player.id))
     };
 
     const ratingOrder = ["◎", "〇", "△", "×"];
@@ -2946,6 +3043,18 @@
 
     function sortPlayersByMasterOrder(list) {
       return [...list].sort((a, b) => playerOriginalIndex(a) - playerOriginalIndex(b));
+    }
+
+    function ensureRequiredOwnerPlayers(owner) {
+      const requiredIds = requiredOwnerPlayerIds[owner] || [];
+      requiredIds.forEach((playerId) => {
+        const player = allPlayerById(playerId);
+        if (!player) return;
+        if (!ownerPlayers[owner].some((item) => item.id === playerId)) {
+          ownerPlayers[owner].push(player);
+        }
+      });
+      ownerPlayers[owner] = sortPlayersByMasterOrder(ownerPlayers[owner]);
     }
 
     function syncPlayersArrayOrder() {
@@ -3039,6 +3148,7 @@
         if (Array.isArray(saved?.rosterIds)) {
           ownerPlayers[owner] = sortPlayersByMasterOrder(saved.rosterIds.map(allPlayerById).filter(Boolean));
         }
+        ensureRequiredOwnerPlayers(owner);
         const initialForRoster = createInitialState(owner);
         const loaded = Array.isArray(saved?.rosterIds) ? new Map() : initial;
         currentFormations[owner] = typeof saved?.formation === "string" ? saved.formation : "";
@@ -3205,7 +3315,7 @@
     }
 
     function ownerPredictionForPlayer(owner, playerId) {
-      return playersForOwner(owner).some((player) => player.id === playerId) ? "selected" : "not_selected";
+      return selectedOwnerIds(owner).has(playerId) ? "selected" : "not_selected";
     }
 
     function judgementForPlayer(owner, playerId) {
@@ -3903,6 +4013,9 @@
         meta.append(number);
       }
       meta.append(position, club);
+      if (activeView === "owner" && !screenshotMode) {
+        meta.appendChild(createPredictionBadge(player.id, owner));
+      }
       if (!onPitch && activeView === "owner" && !screenshotMode) {
         const edit = document.createElement("button");
         edit.className = "edit-player-button";
@@ -3937,6 +4050,19 @@
         });
       }
       return card;
+    }
+
+    function predictionStateForPlayer(playerId, owner = activeOwner) {
+      const area = states[owner]?.get(playerId)?.area || "bench";
+      return area === "dropped" ? "dropped" : "selected";
+    }
+
+    function createPredictionBadge(playerId, owner = activeOwner) {
+      const badge = document.createElement("span");
+      const prediction = predictionStateForPlayer(playerId, owner);
+      badge.className = `prediction-badge${prediction === "dropped" ? " out" : ""}`;
+      badge.textContent = prediction === "dropped" ? "落選予想" : "招集予想";
+      return badge;
     }
 
     function createResultBadge(text, className) {
@@ -4011,9 +4137,13 @@
           card.style.left = `${placement.x}%`;
           card.style.top = `${placement.y}%`;
           pitch.appendChild(card);
+        } else if (placement.area === "confirmed") {
+          confirmedTotal += 1;
+          confirmedList.appendChild(createPlayerCard(player, false));
+        } else if (placement.area === "dropped") {
+          droppedTotal += 1;
+          droppedList.appendChild(createPlayerCard(player, false));
         } else {
-          if (placement.area === "confirmed") confirmedTotal += 1;
-          if (placement.area === "dropped") droppedTotal += 1;
           benchTotal += 1;
           const groupKey = benchGroupKey(player.position);
           benchGroupTotals[groupKey] += 1;
@@ -4038,8 +4168,8 @@
       pitchCount.textContent = `ピッチ: ${pitchTotal}人/${pitchLimit}人`;
       pitchCount.classList.toggle("over-limit", pitchTotal > pitchLimit);
       benchCount.textContent = `ベンチ: ${benchTotal}人`;
-      confirmedCount.textContent = formatWager(confirmedTotal);
-      droppedCount.textContent = formatWager(droppedTotal);
+      confirmedCount.textContent = `${confirmedTotal}人`;
+      droppedCount.textContent = `${droppedTotal}人`;
       ratingTotal.textContent = `総人数：${currentPlayers().length}人`;
       saveState.textContent = saveLabels[activeOwner] || "自動保存済み";
       lockButton.textContent = ownerLocks[activeOwner] ? "ロック解除" : "配置ロック";
@@ -4136,7 +4266,7 @@
           used.add(player.id);
         });
       playersForOwner(owner)
-        .filter((player) => !used.has(player.id))
+        .filter((player) => !used.has(player.id) && state.get(player.id)?.area !== "dropped")
         .sort((a, b) => {
           const ratingDiff = ratingOrder.indexOf(currentRating(a.id, owner)) - ratingOrder.indexOf(currentRating(b.id, owner));
           if (ratingDiff !== 0) return ratingDiff;
@@ -4538,6 +4668,8 @@
 
       const pitchRect = pitch.getBoundingClientRect();
       const benchRect = benchArea.getBoundingClientRect();
+      const confirmedRect = confirmedArea.getBoundingClientRect();
+      const droppedRect = droppedArea.getBoundingClientRect();
 
       if (inside(event.clientX, event.clientY, pitchRect)) {
         const x = ((event.clientX - pitchRect.left) / pitchRect.width) * 100;
@@ -4548,6 +4680,10 @@
           y: clamp(y, 7, 93),
           manual: true
         });
+      } else if (inside(event.clientX, event.clientY, confirmedRect)) {
+        updatePlacement(drag.playerId, { area: "confirmed", x: 50, y: 50, manual: false });
+      } else if (inside(event.clientX, event.clientY, droppedRect)) {
+        updatePlacement(drag.playerId, { area: "dropped", x: 50, y: 50, manual: false });
       } else if (inside(event.clientX, event.clientY, benchRect)) {
         updatePlacement(drag.playerId, { area: "bench", x: 50, y: 50, manual: false });
       }
@@ -4576,7 +4712,9 @@
     function markDropTarget(clientX, clientY) {
       const dropTargets = [
         [pitch, pitch.getBoundingClientRect()],
-        [benchArea, benchArea.getBoundingClientRect()]
+        [benchArea, benchArea.getBoundingClientRect()],
+        [confirmedArea, confirmedArea.getBoundingClientRect()],
+        [droppedArea, droppedArea.getBoundingClientRect()]
       ];
 
       dropTargets.forEach(([element, rect]) => {
@@ -4620,7 +4758,7 @@
       const state = states[activeOwner];
       const availablePlayers = players.filter((player) => {
         const area = state.get(player.id)?.area;
-        return area === "pitch" || area === "bench";
+        return area === "pitch" || area === "bench" || area === "confirmed";
       });
 
       if (availablePlayers.length === 0) {
