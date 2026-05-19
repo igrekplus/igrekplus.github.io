@@ -803,6 +803,15 @@
       padding-top: 8px;
     }
 
+    .bet-debug {
+      border-top: 1px solid rgba(0, 91, 172, 0.14);
+      padding-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.6;
+    }
+
     .official-squad {
       display: grid;
       gap: 12px;
@@ -2610,6 +2619,7 @@
               <div class="bet-result-row"><span>支払額</span><span id="betPaymentResult">0円</span></div>
               <div class="bet-result-row"><span>勝者</span><span id="betWinnerResult">引き分け</span></div>
               <div class="bet-result-row"><span>支払い方向</span><span id="betDirectionResult">なし</span></div>
+              <div class="bet-debug" id="betDebugResult">保存済み件数：0件 / 招集：0件 / 落選：0件 / 未確定：0件</div>
               <div class="bet-hit-lists">
                 <section class="bet-owner-column" aria-label="かりん賭け結果">
                   <h3 class="bet-owner-title">かりん</h3>
@@ -3270,15 +3280,20 @@
     function normalizeBetResults(raw = {}) {
       const source = raw?.results && typeof raw.results === "object" ? raw.results : raw;
       const normalized = {};
+      const suppliedIds = new Set();
       if (source && typeof source === "object") {
         Object.entries(source).forEach(([playerId, value]) => {
           if (!allPlayerById(playerId)) return;
           normalized[playerId] = normalizeBetResultValue(value);
+          suppliedIds.add(playerId);
         });
       }
+      allPlayers.forEach((player) => {
+        if (normalized[player.id] === undefined) normalized[player.id] = "pending";
+      });
       Object.entries(requiredBetResultDefaults).forEach(([playerId, value]) => {
         if (!allPlayerById(playerId)) return;
-        if (normalized[playerId] === undefined) normalized[playerId] = normalizeBetResultValue(value);
+        if (!suppliedIds.has(playerId)) normalized[playerId] = normalizeBetResultValue(value);
       });
       return normalized;
     }
@@ -3303,8 +3318,11 @@
 
     function saveBetResults() {
       try {
+        betResults = normalizeBetResults(betResults);
         localStorage.setItem(betResultsStorageKey, JSON.stringify(betResults));
         betResultsLoadedFromStorage = true;
+        console.log(betResultsStorageKey, betResults);
+        updateBetDebug();
         if (betResultsSaveState) {
           betResultsSaveState.textContent = `保存済み：${new Date().toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" })}`;
         }
@@ -3316,6 +3334,20 @@
 
     function betResultForPlayer(playerId) {
       return normalizeBetResultValue(betResults[playerId]);
+    }
+
+    function betResultCounts() {
+      return allPlayers.reduce((counts, player) => {
+        const value = betResultForPlayer(player.id);
+        counts[value] += 1;
+        return counts;
+      }, { selected: 0, not_selected: 0, pending: 0 });
+    }
+
+    function updateBetDebug() {
+      if (!betDebugResult) return;
+      const counts = betResultCounts();
+      betDebugResult.textContent = `保存済み件数：${Object.keys(betResults).length}件 / 招集：${counts.selected}件 / 落選：${counts.not_selected}件 / 未確定：${counts.pending}件`;
     }
 
     function ownerPredictionForPlayer(owner, playerId) {
@@ -3461,6 +3493,7 @@
     const betPaymentResult = document.getElementById("betPaymentResult");
     const betWinnerResult = document.getElementById("betWinnerResult");
     const betDirectionResult = document.getElementById("betDirectionResult");
+    const betDebugResult = document.getElementById("betDebugResult");
     const betKarinHits = document.getElementById("betKarinHits");
     const betKarinMisses = document.getElementById("betKarinMisses");
     const betRyoHits = document.getElementById("betRyoHits");
@@ -4068,7 +4101,7 @@
     function shouldShowAsOwnerSelected(player, placement) {
       if (!player || !placement) return false;
       if (placement.area === "dropped") return false;
-      return betResultForPlayer(player.id) !== "not_selected";
+      return betResultForPlayer(player.id) === "selected";
     }
 
     function createPredictionBadge(playerId, owner = activeOwner) {
@@ -4304,7 +4337,7 @@
 
     function visibleSelectedPlayersForOwner(owner) {
       return selectedPlayersForOwner(owner)
-        .filter((player) => betResultForPlayer(player.id) !== "not_selected");
+        .filter((player) => betResultForPlayer(player.id) === "selected");
     }
 
     function visibleBenchPlayersForOwner(owner) {
@@ -4493,6 +4526,7 @@
       if (betResultsSaveState?.textContent === "未保存") {
         betResultsSaveState.textContent = betResultsLoadedFromStorage ? "保存済み" : "未保存";
       }
+      updateBetDebug();
       updateBetResult(false);
 
       ownerTabs.forEach((tab) => {
@@ -5294,8 +5328,10 @@
             });
             select.value = betResultForPlayer(player.id);
             select.addEventListener("change", () => {
-              betResultDraft[player.id] = normalizeBetResultValue(select.value);
-              if (betResultsSaveState) betResultsSaveState.textContent = "未保存の変更あり";
+              betResults[player.id] = normalizeBetResultValue(select.value);
+              betResultDraft = { ...betResults };
+              saveBetResults();
+              updateBetResult(false);
             });
 
             label.append(meta, select);
@@ -5652,7 +5688,8 @@
 
     betAmountInput.addEventListener("input", () => updateBetResult(true));
     betResultsSaveButton.addEventListener("click", () => {
-      betResults = normalizeBetResults(betResultDraft);
+      betResults = normalizeBetResults(betResults);
+      betResultDraft = { ...betResults };
       saveBetResults();
       showStatus("正式結果マスタを保存しました");
       render();
