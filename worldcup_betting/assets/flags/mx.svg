@@ -1,6 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16" role="img" aria-label="MX flag">
-  <rect width="24" height="16" fill="#006847"/>
-  <rect y="5.333" width="24" height="5.334" fill="#ffffff"/>
-  <rect y="10.667" width="24" height="5.333" fill="#ce1126"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16" role="img" aria-label="Mexico flag">
+  <rect width="8" height="16" fill="#006847"/>
+  <rect x="8" width="8" height="16" fill="#fff"/>
+  <rect x="16" width="8" height="16" fill="#ce1126"/>
+  <circle cx="12" cy="8" r="1.7" fill="#8c6b2f"/>
+  <path d="M10.8 8.8c.8.7 1.7.7 2.4 0" fill="none" stroke="#006847" stroke-width=".45"/>
   <rect x=".5" y=".5" width="23" height="15" fill="none" stroke="rgba(0,0,0,.18)"/>
 </svg>

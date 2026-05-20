@@ -394,7 +394,10 @@ def match_as_site_dict(match: Match, teams: dict[str, dict[str, str]]) -> dict[s
 
 
 def team_as_site_dict(team_id: str, team: dict[str, str]) -> dict[str, str]:
-    flag_code = FLAG_CODE_BY_TEAM_ID.get(team_id, team_id.lower())
+    try:
+        flag_code = FLAG_CODE_BY_TEAM_ID[team_id]
+    except KeyError as exc:
+        raise ValueError(f"Missing explicit flag_code mapping for {team_id}") from exc
     return {
         "team_id": team_id,
         "name_ja": team["team_name_ja"],

@@ -1,6 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16" role="img" aria-label="KR flag">
-  <rect width="24" height="16" fill="#f8fafc"/>
-  <rect y="5.333" width="24" height="5.334" fill="#dbeafe"/>
-  <rect y="10.667" width="24" height="5.333" fill="#2563eb"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16" role="img" aria-label="South Korea flag">
+  <rect width="24" height="16" fill="#fff"/>
+  <path d="M12 4.6a3.4 3.4 0 1 1 0 6.8 1.7 1.7 0 1 0 0-3.4 1.7 1.7 0 1 1 0-3.4z" fill="#c60c30"/>
+  <path d="M12 11.4a3.4 3.4 0 0 1 0-6.8 1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 1 0 3.4z" fill="#003478"/>
+  <g stroke="#000" stroke-width=".55">
+    <path d="m4.4 3 3 1.7M4 3.7 7 5.4M3.6 4.4l3 1.7M16.6 10.1l3 1.7M16.2 10.8l3 1.7M15.8 11.5l3 1.7"/>
+    <path d="m17.3 4.7 3-1.7M16.9 5.4l3-1.7M16.5 6.1l3-1.7M4.4 11.8l3-1.7M4 12.5l3-1.7M3.6 13.2l3-1.7"/>
+  </g>
   <rect x=".5" y=".5" width="23" height="15" fill="none" stroke="rgba(0,0,0,.18)"/>
 </svg>

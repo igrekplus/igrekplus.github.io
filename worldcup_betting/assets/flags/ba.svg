@@ -1,6 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16" role="img" aria-label="BA flag">
-  <rect width="24" height="16" fill="#f8fafc"/>
-  <rect y="5.333" width="24" height="5.334" fill="#dbeafe"/>
-  <rect y="10.667" width="24" height="5.333" fill="#2563eb"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16" role="img" aria-label="Bosnia and Herzegovina flag">
+  <rect width="24" height="16" fill="#002f6c"/>
+  <path d="M8 0h12L8 16z" fill="#f7d116"/>
+  <g fill="#fff">
+    <path d="m6.2.5.4.8.9.1-.7.5.2.9-.8-.4-.8.4.2-.9-.7-.5.9-.1z"/>
+    <path d="m8.1 2.5.4.8.9.1-.7.5.2.9-.8-.4-.8.4.2-.9-.7-.5.9-.1z"/>
+    <path d="m10 4.5.4.8.9.1-.7.5.2.9-.8-.4-.8.4.2-.9-.7-.5.9-.1z"/>
+    <path d="m11.9 6.5.4.8.9.1-.7.5.2.9-.8-.4-.8.4.2-.9-.7-.5.9-.1z"/>
+    <path d="m13.8 8.5.4.8.9.1-.7.5.2.9-.8-.4-.8.4.2-.9-.7-.5.9-.1z"/>
+    <path d="m15.7 10.5.4.8.9.1-.7.5.2.9-.8-.4-.8.4.2-.9-.7-.5.9-.1z"/>
+  </g>
   <rect x=".5" y=".5" width="23" height="15" fill="none" stroke="rgba(0,0,0,.18)"/>
 </svg>

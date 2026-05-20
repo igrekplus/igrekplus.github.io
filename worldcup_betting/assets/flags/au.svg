@@ -1,6 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16" role="img" aria-label="AU flag">
-  <rect width="24" height="16" fill="#f8fafc"/>
-  <rect y="5.333" width="24" height="5.334" fill="#dbeafe"/>
-  <rect y="10.667" width="24" height="5.333" fill="#2563eb"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16" role="img" aria-label="Australia flag">
+  <rect width="24" height="16" fill="#00008b"/>
+  <rect width="11" height="7.5" fill="#012169"/>
+  <path d="M0 0 11 7.5M11 0 0 7.5" stroke="#fff" stroke-width="1.4"/>
+  <path d="M0 0 11 7.5M11 0 0 7.5" stroke="#c8102e" stroke-width=".7"/>
+  <path d="M5.5 0v7.5M0 3.75h11" stroke="#fff" stroke-width="2"/>
+  <path d="M5.5 0v7.5M0 3.75h11" stroke="#c8102e" stroke-width="1"/>
+  <g fill="#fff">
+    <path d="m17 3 .5 1.4 1.5.1-1.2.9.4 1.4-1.2-.8-1.2.8.4-1.4-1.2-.9 1.5-.1z"/>
+    <path d="m19.5 9 .4 1.1 1.1.1-.9.7.3 1.1-.9-.6-.9.6.3-1.1-.9-.7 1.1-.1z"/>
+    <path d="m14.2 11 .4 1.1 1.1.1-.9.7.3 1.1-.9-.6-.9.6.3-1.1-.9-.7 1.1-.1z"/>
+    <path d="m20.7 13 .3.8.9.1-.7.5.2.8-.7-.5-.7.5.2-.8-.7-.5.9-.1z"/>
+  </g>
   <rect x=".5" y=".5" width="23" height="15" fill="none" stroke="rgba(0,0,0,.18)"/>
 </svg>
