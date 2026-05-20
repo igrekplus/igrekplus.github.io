@@ -2,6 +2,8 @@
   const STORAGE_KEY = "worldcup2026_tournament_state";
   const DATA_URL = "data/worldcup2026_matches.json";
   const JAPAN_TEAM_ID = "JPN";
+  const JST_TIME_ZONE = "Asia/Tokyo";
+  const DAY_MS = 24 * 60 * 60 * 1000;
 
   const stageLabels = {
     group: "グループステージ",
@@ -22,6 +24,8 @@
     "final"
   ];
 
+  const weekdayLabels = ["日", "月", "火", "水", "木", "金", "土"];
+
   const state = {
     initialized: false,
     loaded: false,
@@ -30,6 +34,8 @@
     matches: [],
     teams: {},
     groupFilter: "all",
+    calendarMode: "month",
+    calendarDate: null,
     saved: loadSavedState(),
     elements: {}
   };
@@ -76,6 +82,7 @@
       const payload = await response.json();
       state.matches = Array.isArray(payload.matches) ? payload.matches : [];
       state.teams = buildTeamMap(payload.teams, state.matches);
+      state.calendarDate = firstMatchDate() || new Date("2026-06-12T00:00:00+09:00");
       state.loaded = true;
       state.loadError = "";
     } catch (error) {
@@ -93,10 +100,21 @@
     }
     matches.forEach((match) => {
       if (match.stage !== "group") return;
-      teams[match.home] ||= { team_id: match.home, name_ja: match.home_name_ja || match.home, fifa_code: match.home, flag_code: match.home.toLowerCase(), flag_url: "", group: match.group };
-      teams[match.away] ||= { team_id: match.away, name_ja: match.away_name_ja || match.away, fifa_code: match.away, flag_code: match.away.toLowerCase(), flag_url: "", group: match.group };
+      teams[match.home] ||= fallbackTeam(match.home, match.home_name_ja, match.group);
+      teams[match.away] ||= fallbackTeam(match.away, match.away_name_ja, match.group);
     });
     return teams;
+  }
+
+  function fallbackTeam(teamId, name, group) {
+    return {
+      team_id: teamId,
+      name_ja: name || teamId,
+      fifa_code: teamId,
+      flag_code: teamId.toLowerCase(),
+      flag_url: "",
+      group
+    };
   }
 
   function loadSavedState() {
@@ -144,7 +162,7 @@
 
     const scoreCount = Object.keys(state.saved.scores).filter((matchId) => hasAnyScore(state.saved.scores[matchId])).length;
     if (summary) {
-      const updated = state.saved.lastUpdatedAt ? ` / 最終更新 ${formatDateTime(state.saved.lastUpdatedAt)}` : "";
+      const updated = state.saved.lastUpdatedAt ? ` / 最終更新 ${formatSavedDateTime(state.saved.lastUpdatedAt)}` : "";
       summary.textContent = `本大会のみ / 全${state.matches.length}試合 / スコア保存 ${scoreCount}試合${updated}`;
     }
 
@@ -152,6 +170,8 @@
       content.appendChild(renderMatchList(state.matches.filter(isJapanMatch)));
     } else if (state.view === "schedule") {
       content.appendChild(renderMatchList(filterByGroup(state.matches)));
+    } else if (state.view === "calendar") {
+      content.appendChild(renderCalendarView());
     } else if (state.view === "groups") {
       content.appendChild(renderStandingsSnapshot());
     } else if (state.view === "thirds") {
@@ -195,9 +215,7 @@
   function createMatchCard(match) {
     const card = document.createElement("details");
     card.className = "match-card";
-    if (match.home === JAPAN_TEAM_ID || match.away === JAPAN_TEAM_ID) {
-      card.classList.add("japan-highlight");
-    }
+    if (isJapanMatch(match)) card.classList.add("japan-highlight");
     card.open = true;
 
     const summary = document.createElement("summary");
@@ -217,8 +235,8 @@
     meta.append(
       textDiv(stageLabels[match.stage] || match.stage),
       textDiv(match.group ? `Group ${match.group}` : ""),
-      textDiv(match.kickoff_jst || "JST未入力"),
-      textDiv(match.venue || "")
+      textDiv(formatJstDateTime(match.kickoff_jst), "match-jst"),
+      textDiv(match.venue || "会場未入力")
     );
 
     const teams = document.createElement("div");
@@ -244,7 +262,7 @@
   function statusBadge(matchId) {
     const status = matchStatus(matchId);
     const badge = document.createElement("div");
-    badge.className = `match-status ${status.className}`;
+    badge.className = `match-status ${status.className}`.trim();
     badge.textContent = status.label;
     return badge;
   }
@@ -345,6 +363,295 @@
       text += ` PK ${score.penalty_home}-${score.penalty_away}`;
     }
     return text;
+  }
+
+  function renderCalendarView() {
+    const wrapper = document.createElement("div");
+    wrapper.className = "calendar-view";
+    wrapper.append(createCalendarToolbar());
+    if (state.calendarMode === "month") {
+      wrapper.append(renderMonthCalendar());
+    } else if (state.calendarMode === "week") {
+      wrapper.append(renderWeekCalendar());
+    } else {
+      wrapper.append(renderDayCalendar());
+    }
+    return wrapper;
+  }
+
+  function createCalendarToolbar() {
+    const toolbar = document.createElement("div");
+    toolbar.className = "calendar-toolbar";
+
+    const nav = document.createElement("div");
+    nav.className = "calendar-nav";
+    const previous = calendarButton("前へ", () => moveCalendar(-1));
+    const today = calendarButton("今日", () => {
+      state.calendarDate = firstMatchDate() || new Date();
+      renderContent();
+    });
+    const next = calendarButton("次へ", () => moveCalendar(1));
+    nav.append(previous, today, next);
+
+    const title = document.createElement("div");
+    title.className = "calendar-title";
+    title.textContent = calendarTitle();
+
+    const modes = document.createElement("div");
+    modes.className = "calendar-mode-tabs";
+    [
+      ["month", "月別"],
+      ["week", "週別"],
+      ["day", "日別"]
+    ].forEach(([mode, label]) => {
+      const button = calendarButton(label, () => {
+        state.calendarMode = mode;
+        renderContent();
+      });
+      button.classList.toggle("active", state.calendarMode === mode);
+      modes.appendChild(button);
+    });
+
+    toolbar.append(nav, title, modes);
+    return toolbar;
+  }
+
+  function calendarButton(label, onClick) {
+    const button = document.createElement("button");
+    button.className = "utility-button calendar-button";
+    button.type = "button";
+    button.textContent = label;
+    button.addEventListener("click", onClick);
+    return button;
+  }
+
+  function calendarTitle() {
+    const date = calendarDate();
+    if (state.calendarMode === "month") return `${date.getFullYear()}年${date.getMonth() + 1}月`;
+    if (state.calendarMode === "week") {
+      const start = startOfWeek(date);
+      const end = addDays(start, 6);
+      return `${formatMonthDay(start)} - ${formatMonthDay(end)}`;
+    }
+    return formatJstDate(date);
+  }
+
+  function moveCalendar(direction) {
+    const date = calendarDate();
+    if (state.calendarMode === "month") {
+      state.calendarDate = new Date(date.getFullYear(), date.getMonth() + direction, 1);
+    } else if (state.calendarMode === "week") {
+      state.calendarDate = addDays(date, direction * 7);
+    } else {
+      state.calendarDate = addDays(date, direction);
+    }
+    renderContent();
+  }
+
+  function renderMonthCalendar() {
+    const date = calendarDate();
+    const first = new Date(date.getFullYear(), date.getMonth(), 1);
+    const start = startOfWeek(first);
+    const grid = document.createElement("div");
+    grid.className = "calendar-month";
+    weekdayLabels.forEach((label) => {
+      const head = document.createElement("div");
+      head.className = "calendar-weekday";
+      head.textContent = label;
+      grid.appendChild(head);
+    });
+    for (let i = 0; i < 42; i += 1) {
+      const day = addDays(start, i);
+      const matches = matchesOnDay(day);
+      const cell = document.createElement("div");
+      cell.className = "calendar-day-cell";
+      if (day.getMonth() !== date.getMonth()) cell.classList.add("outside");
+      const dayHead = document.createElement("button");
+      dayHead.type = "button";
+      dayHead.className = "calendar-day-number";
+      dayHead.textContent = String(day.getDate());
+      dayHead.addEventListener("click", () => {
+        state.calendarDate = day;
+        state.calendarMode = "day";
+        renderContent();
+      });
+      cell.appendChild(dayHead);
+      matches.slice(0, 3).forEach((match) => cell.appendChild(createCalendarMiniMatch(match)));
+      if (matches.length > 3) {
+        const more = document.createElement("button");
+        more.type = "button";
+        more.className = "calendar-more";
+        more.textContent = `他${matches.length - 3}試合`;
+        more.addEventListener("click", () => {
+          state.calendarDate = day;
+          state.calendarMode = "day";
+          renderContent();
+        });
+        cell.appendChild(more);
+      }
+      grid.appendChild(cell);
+    }
+    return grid;
+  }
+
+  function renderWeekCalendar() {
+    const start = startOfWeek(calendarDate());
+    const grid = document.createElement("div");
+    grid.className = "calendar-week";
+    for (let i = 0; i < 7; i += 1) {
+      const day = addDays(start, i);
+      const column = document.createElement("section");
+      column.className = "calendar-week-day";
+      const heading = document.createElement("button");
+      heading.type = "button";
+      heading.className = "calendar-week-heading";
+      heading.textContent = formatJstDate(day);
+      heading.addEventListener("click", () => {
+        state.calendarDate = day;
+        state.calendarMode = "day";
+        renderContent();
+      });
+      column.appendChild(heading);
+      const matches = matchesOnDay(day);
+      if (matches.length === 0) {
+        column.appendChild(message("試合なし", "calendar-empty"));
+      } else {
+        matches.forEach((match) => column.appendChild(createCalendarMatchCard(match, false)));
+      }
+      grid.appendChild(column);
+    }
+    return grid;
+  }
+
+  function renderDayCalendar() {
+    const matches = matchesOnDay(calendarDate());
+    const list = document.createElement("div");
+    list.className = "calendar-day-list";
+    if (matches.length === 0) {
+      list.appendChild(message("この日の試合はありません", "calendar-empty"));
+      return list;
+    }
+    matches.forEach((match) => list.appendChild(createCalendarMatchCard(match, true)));
+    return list;
+  }
+
+  function createCalendarMiniMatch(match) {
+    const row = document.createElement("button");
+    row.type = "button";
+    row.className = "calendar-mini-match";
+    if (isJapanMatch(match)) row.classList.add("japan-highlight");
+    row.addEventListener("click", () => {
+      state.calendarDate = jstDate(match.kickoff_jst);
+      state.calendarMode = "day";
+      renderContent();
+    });
+    row.append(
+      textSpan(formatJstTime(match.kickoff_jst), "calendar-mini-time"),
+      teamLabel(match.home, match.home_name_ja),
+      textSpan("vs", "calendar-vs"),
+      teamLabel(match.away, match.away_name_ja),
+      textSpan(scoreText(match.match_id), "calendar-mini-score")
+    );
+    return row;
+  }
+
+  function createCalendarMatchCard(match, includeEditor) {
+    const card = document.createElement("div");
+    card.className = "calendar-match-card";
+    if (isJapanMatch(match)) card.classList.add("japan-highlight");
+
+    const main = document.createElement("div");
+    main.className = "calendar-match-main";
+    main.append(
+      textDiv(formatJstTime(match.kickoff_jst), "calendar-match-time"),
+      teamLabel(match.home, match.home_name_ja),
+      textDiv(scoreText(match.match_id), "match-score-display"),
+      teamLabel(match.away, match.away_name_ja)
+    );
+
+    const meta = document.createElement("div");
+    meta.className = "calendar-match-meta";
+    meta.append(
+      textSpan(match.match_id),
+      textSpan(stageLabels[match.stage] || match.stage),
+      textSpan(match.group ? `Group ${match.group}` : ""),
+      textSpan(match.venue || "会場未入力")
+    );
+
+    card.append(main, meta);
+    if (includeEditor) card.appendChild(createScoreEditor(match.match_id));
+    return card;
+  }
+
+  function matchesOnDay(day) {
+    const key = dateKey(day);
+    return sortedMatches(filterByGroup(state.matches)).filter((match) => dateKey(jstDate(match.kickoff_jst)) === key);
+  }
+
+  function firstMatchDate() {
+    const first = sortedMatches(state.matches).find((match) => match.kickoff_jst);
+    return first ? jstDate(first.kickoff_jst) : null;
+  }
+
+  function calendarDate() {
+    return state.calendarDate ? new Date(state.calendarDate) : firstMatchDate() || new Date();
+  }
+
+  function jstDate(value) {
+    if (!value) return new Date(NaN);
+    return new Date(value);
+  }
+
+  function startOfWeek(date) {
+    const start = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    start.setDate(start.getDate() - start.getDay());
+    return start;
+  }
+
+  function addDays(date, days) {
+    return new Date(date.getTime() + days * DAY_MS);
+  }
+
+  function dateKey(date) {
+    if (Number.isNaN(date.getTime())) return "";
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+  }
+
+  function formatJstDateTime(value) {
+    const date = jstDate(value);
+    if (Number.isNaN(date.getTime())) return "JST未入力";
+    return `${date.getFullYear()}/${pad(date.getMonth() + 1)}/${pad(date.getDate())}（${weekdayLabels[date.getDay()]}）${pad(date.getHours())}:${pad(date.getMinutes())} JST`;
+  }
+
+  function formatSavedDateTime(value) {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return value || "";
+    return date.toLocaleString("ja-JP", {
+      timeZone: JST_TIME_ZONE,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  }
+
+  function formatJstDate(date) {
+    return `${date.getFullYear()}/${pad(date.getMonth() + 1)}/${pad(date.getDate())}（${weekdayLabels[date.getDay()]}）`;
+  }
+
+  function formatMonthDay(date) {
+    return `${date.getMonth() + 1}/${date.getDate()}（${weekdayLabels[date.getDay()]}）`;
+  }
+
+  function formatJstTime(value) {
+    const date = jstDate(value);
+    if (Number.isNaN(date.getTime())) return "--:--";
+    return `${pad(date.getHours())}:${pad(date.getMinutes())} JST`;
+  }
+
+  function pad(value) {
+    return String(value).padStart(2, "0");
   }
 
   function updateStandings() {
@@ -672,6 +979,7 @@
   }
 
   function displayTeam(teamId, fallback = "") {
+    if (teamId === "TBD") return "未確定";
     return state.teams[teamId]?.name_ja || fallback || teamId;
   }
 
@@ -681,11 +989,6 @@
 
   function teamFlagUrl(teamId) {
     return state.teams[teamId]?.flag_url || "";
-  }
-
-  function teamText(teamId, fallback = "") {
-    if (teamId === "TBD") return "未確定";
-    return displayTeam(teamId, fallback || teamId);
   }
 
   function teamLabel(teamId, fallback = "", className = "") {
@@ -700,6 +1003,7 @@
     if (flagCode || flagUrl) {
       const flagSpan = document.createElement("span");
       flagSpan.className = "team-flag";
+      flagSpan.setAttribute("aria-hidden", "true");
       if (flagUrl) {
         const img = document.createElement("img");
         img.className = "team-flag-img";
@@ -723,18 +1027,25 @@
     return wrapper;
   }
 
-  function appendCell(row, value) {
-    const cell = document.createElement("td");
-    cell.textContent = value ?? "";
-    row.appendChild(cell);
-    return cell;
-  }
-
   function textDiv(text, className = "") {
     const div = document.createElement("div");
     if (className) div.className = className;
     div.textContent = text || "";
     return div;
+  }
+
+  function textSpan(text, className = "") {
+    const span = document.createElement("span");
+    if (className) span.className = className;
+    span.textContent = text || "";
+    return span;
+  }
+
+  function appendCell(row, value) {
+    const cell = document.createElement("td");
+    cell.textContent = value ?? "";
+    row.appendChild(cell);
+    return cell;
   }
 
   function message(text, className = "tournament-empty") {
@@ -750,18 +1061,6 @@
 
   function setSummary(text) {
     if (state.elements.summary) state.elements.summary.textContent = text;
-  }
-
-  function formatDateTime(value) {
-    const date = new Date(value);
-    if (Number.isNaN(date.getTime())) return value;
-    return date.toLocaleString("ja-JP", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit"
-    });
   }
 
   window.WorldCupTournament = {
