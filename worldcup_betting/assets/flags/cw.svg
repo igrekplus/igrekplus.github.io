@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16" role="img" aria-label="CW flag">
-  <rect width="24" height="16" fill="#f8fafc"/>
-  <rect y="5.333" width="24" height="5.334" fill="#dbeafe"/>
-  <rect y="10.667" width="24" height="5.333" fill="#2563eb"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16" role="img" aria-label="Curacao flag">
+  <rect width="24" height="16" fill="#002b7f"/>
+  <rect y="10.3" width="24" height="1.9" fill="#f9e814"/>
+  <path d="m5 3 .5 1.2 1.3.1-1 .8.3 1.3L5 5.7l-1.1.7.3-1.3-1-.8 1.3-.1zM8.2 5.2l.35.8.85.1-.65.5.2.85-.75-.45-.75.45.2-.85-.65-.5.85-.1z" fill="#fff"/>
   <rect x=".5" y=".5" width="23" height="15" fill="none" stroke="rgba(0,0,0,.18)"/>
 </svg>

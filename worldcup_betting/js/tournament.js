@@ -76,8 +76,9 @@
       const response = await fetch(DATA_URL, { cache: "no-store" });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const payload = await response.json();
-      state.matches = Array.isArray(payload.matches) ? payload.matches : [];
+      state.matches = Array.isArray(payload.matches) ? payload.matches.map(normalizeMatch) : [];
       state.teams = buildTeamMap(payload.teams, state.matches);
+      logFlagMapping();
       state.calendarDate = firstMatchDate() || new Date("2026-06-12T00:00:00+09:00");
       state.loaded = true;
       state.loadError = "";
@@ -96,10 +97,20 @@
     }
     matches.forEach((match) => {
       if (match.stage !== "group") return;
-      teams[match.home] ||= fallbackTeam(match.home, match.home_name_ja, match.group);
-      teams[match.away] ||= fallbackTeam(match.away, match.away_name_ja, match.group);
+      const homeId = matchHomeId(match);
+      const awayId = matchAwayId(match);
+      teams[homeId] ||= fallbackTeam(homeId, match.home_name_ja, match.group);
+      teams[awayId] ||= fallbackTeam(awayId, match.away_name_ja, match.group);
     });
     return teams;
+  }
+
+  function normalizeMatch(match) {
+    return {
+      ...match,
+      home_team_id: match.home_team_id || match.home || "",
+      away_team_id: match.away_team_id || match.away || ""
+    };
   }
 
   function fallbackTeam(teamId, name, group) {
@@ -107,7 +118,7 @@
       team_id: teamId,
       name_ja: name || teamId,
       fifa_code: teamId,
-      flag_code: teamId.toLowerCase(),
+      flag_code: "",
       group
     };
   }
@@ -177,7 +188,7 @@
   }
 
   function isJapanMatch(match) {
-    return match.home === JAPAN_TEAM_ID || match.away === JAPAN_TEAM_ID;
+    return matchHomeId(match) === JAPAN_TEAM_ID || matchAwayId(match) === JAPAN_TEAM_ID;
   }
 
   function sortedMatches(matches) {
@@ -237,9 +248,9 @@
     const teams = document.createElement("div");
     teams.className = "match-teams";
     teams.append(
-      teamLabel(match.home, match.home_name_ja, "match-team"),
+      teamLabel(matchHomeId(match), match.home_name_ja, "match-team"),
       textDiv(scoreText(match.match_id), "match-score-display"),
-      teamLabel(match.away, match.away_name_ja, "match-team away")
+      teamLabel(matchAwayId(match), match.away_name_ja, "match-team away")
     );
 
     body.append(meta, teams, createScoreEditor(match.match_id));
@@ -250,7 +261,7 @@
   function matchTitle(match) {
     const wrapper = document.createElement("div");
     wrapper.className = "match-title";
-    wrapper.append(teamLabel(match.home, match.home_name_ja), textDiv("vs"), teamLabel(match.away, match.away_name_ja));
+    wrapper.append(teamLabel(matchHomeId(match), match.home_name_ja), textDiv("vs"), teamLabel(matchAwayId(match), match.away_name_ja));
     return wrapper;
   }
 
@@ -542,9 +553,9 @@
     });
     row.append(
       textSpan(formatJstTime(match.kickoff_jst), "calendar-mini-time"),
-      teamLabel(match.home, match.home_name_ja),
+      teamLabel(matchHomeId(match), match.home_name_ja),
       textSpan("vs", "calendar-vs"),
-      teamLabel(match.away, match.away_name_ja),
+      teamLabel(matchAwayId(match), match.away_name_ja),
       textSpan(scoreText(match.match_id), "calendar-mini-score")
     );
     return row;
@@ -567,9 +578,9 @@
     main.className = "calendar-match-main";
     main.append(
       textDiv(formatJstTime(match.kickoff_jst), "calendar-match-time"),
-      teamLabel(match.home, match.home_name_ja),
+      teamLabel(matchHomeId(match), match.home_name_ja),
       textDiv(scoreText(match.match_id), "match-score-display"),
-      teamLabel(match.away, match.away_name_ja)
+      teamLabel(matchAwayId(match), match.away_name_ja)
     );
 
     const meta = document.createElement("div");
@@ -689,7 +700,9 @@
   function calculateGroupTables() {
     const tables = {};
     state.matches.filter((match) => match.stage === "group").forEach((match) => {
-      [match.home, match.away].forEach((teamId) => {
+      const homeId = matchHomeId(match);
+      const awayId = matchAwayId(match);
+      [homeId, awayId].forEach((teamId) => {
         tables[match.group] ||= {};
         tables[match.group][teamId] ||= createTeamStats(teamId, match.group);
       });
@@ -697,8 +710,8 @@
       if (!hasMainScore(score)) return;
       const homeScore = scoreNumber(score, "score_home");
       const awayScore = scoreNumber(score, "score_away");
-      const home = tables[match.group][match.home];
-      const away = tables[match.group][match.away];
+      const home = tables[match.group][homeId];
+      const away = tables[match.group][awayId];
       home.played += 1;
       away.played += 1;
       home.gf += homeScore;
@@ -828,8 +841,8 @@
     knockoutStageOrder.forEach((stage) => {
       rounds[stage] = [];
       sortedMatches(state.matches.filter((match) => match.stage === stage)).forEach((match) => {
-        const home = resolveRef(match.home, resolved);
-        const away = resolveRef(match.away, resolved);
+        const home = resolveRef(matchHomeId(match), resolved);
+        const away = resolveRef(matchAwayId(match), resolved);
         const winnerName = winner(match.match_id, home, away);
         if (winnerName) {
           resolved[`W-${match.match_id}`] = winnerName;
@@ -971,6 +984,18 @@
     return state.teams[teamId]?.name_ja || fallback || teamId;
   }
 
+  function matchHomeId(match) {
+    return match?.home_team_id || match?.home || "";
+  }
+
+  function matchAwayId(match) {
+    return match?.away_team_id || match?.away || "";
+  }
+
+  function teamFifaCode(teamId) {
+    return state.teams[teamId]?.fifa_code || teamId || "";
+  }
+
   function teamFlag(teamId) {
     return state.teams[teamId]?.flag_code || "";
   }
@@ -989,6 +1014,7 @@
     }
     const flagCode = teamFlag(teamId);
     const flagUrl = teamFlagUrl(teamId);
+    const fallbackCode = teamFifaCode(teamId);
     if (flagCode || flagUrl) {
       const flagSpan = document.createElement("span");
       flagSpan.className = "team-flag";
@@ -1002,11 +1028,11 @@
         img.decoding = "async";
         img.onerror = () => {
           img.remove();
-          flagSpan.textContent = flagCode;
+          flagSpan.textContent = fallbackCode;
         };
         flagSpan.appendChild(img);
       } else {
-        flagSpan.textContent = flagCode;
+        flagSpan.textContent = fallbackCode;
       }
       wrapper.appendChild(flagSpan);
     }
@@ -1014,6 +1040,20 @@
     name.textContent = displayTeam(teamId, fallback || teamId);
     wrapper.appendChild(name);
     return wrapper;
+  }
+
+  function logFlagMapping() {
+    if (!window.console?.table) return;
+    const rows = Object.values(state.teams)
+      .sort((a, b) => String(a.team_id).localeCompare(String(b.team_id)))
+      .map((team) => ({
+        name: team.name_ja,
+        team_id: team.team_id,
+        fifa_code: team.fifa_code,
+        flag_code: team.flag_code,
+        flagPath: team.flag_code ? `assets/flags/${team.flag_code}.svg` : ""
+      }));
+    console.table(rows);
   }
 
   function textDiv(text, className = "") {
