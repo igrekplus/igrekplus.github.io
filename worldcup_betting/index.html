@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>2026W杯_フォーメーションボード_選手予想</title>
+  <title>W杯2026</title>
   <style>
     :root {
       --bg: #f4f6f8;
@@ -1560,9 +1560,31 @@
     }
 
     .japan-highlight {
+      border-color: #005bac;
       background: #eaf3ff;
       box-shadow: inset 4px 0 0 #005bac;
       color: #0f243d;
+    }
+
+    .calendar-mini-match.japan-highlight,
+    .calendar-match-card.japan-highlight {
+      border: 2px solid #005bac;
+      background: #dcecff;
+      box-shadow: inset 4px 0 0 #005bac, 0 6px 16px rgba(0, 91, 172, 0.16);
+    }
+
+    .calendar-mini-match.japan-highlight::before,
+    .calendar-match-card.japan-highlight::before {
+      content: "日本戦";
+      grid-column: 1 / -1;
+      width: fit-content;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #005bac;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 900;
+      line-height: 1.2;
     }
 
     .match-status {
@@ -1876,6 +1898,7 @@
     .calendar-match-card-week {
       width: 100%;
       cursor: pointer;
+      overflow: hidden;
     }
 
     .calendar-match-card-week .calendar-match-main {
@@ -1899,6 +1922,14 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    .calendar-match-card-week .calendar-match-meta {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3px;
+      font-size: 10px;
       overflow-wrap: anywhere;
     }
 
@@ -3076,7 +3107,7 @@
 <body>
   <div class="shell">
     <nav class="owner-tabs" aria-label="予想者">
-      <button class="owner-tab active" type="button" data-view="tournament">本大会管理</button>
+      <button class="owner-tab active" type="button" data-view="tournament">スコア/日程</button>
       <button class="owner-tab" type="button" data-view="compare">比較コート（日本代表）</button>
       <button class="owner-tab" type="button" data-view="owner" data-owner="karin">かりん予想（日本代表）</button>
       <button class="owner-tab" type="button" data-view="owner" data-owner="ryo">りょう予想（日本代表）</button>
@@ -3414,21 +3445,19 @@
             </section>
           </section>
         </section>
-        <section class="view-panel tournament-panel" id="tournamentPanel" aria-label="本大会管理">
+        <section class="view-panel tournament-panel" id="tournamentPanel" aria-label="スコア/日程">
           <div class="tournament-shell">
             <div class="tournament-toolbar">
-              <div class="tournament-tabs" id="tournamentTabs" aria-label="本大会管理メニュー">
+              <div class="tournament-tabs" id="tournamentTabs" aria-label="スコア/日程メニュー">
                 <button class="tournament-tab active" type="button" data-tournament-view="japan">日本戦</button>
                 <button class="tournament-tab" type="button" data-tournament-view="schedule">全日程</button>
-                <button class="tournament-tab" type="button" data-tournament-view="calendar">カレンダー</button>
                 <button class="tournament-tab" type="button" data-tournament-view="groups">グループ順位</button>
                 <button class="tournament-tab" type="button" data-tournament-view="thirds">3位ランキング</button>
                 <button class="tournament-tab" type="button" data-tournament-view="knockout">決勝トーナメント</button>
+                <button class="tournament-tab" type="button" data-tournament-view="calendar">カレンダー</button>
               </div>
-              <div class="tournament-actions" aria-label="本大会管理更新">
-                <button class="utility-button" type="button" id="standingsUpdateButton">順位を更新</button>
-                <button class="utility-button" type="button" id="thirdRankingUpdateButton">3位ランキングを更新</button>
-                <button class="utility-button" type="button" id="knockoutUpdateButton">トーナメントを更新</button>
+              <div class="tournament-actions" aria-label="スコア/日程更新">
+                <button class="utility-button primary-button" type="button" id="tournamentUpdateButton">更新</button>
               </div>
               <label class="tournament-filter">
                 <select id="tournamentGroupFilter" aria-label="グループで絞り込み">
@@ -3447,7 +3476,7 @@
                   <option value="L">Group L</option>
                 </select>
               </label>
-              <div class="tournament-json-actions" aria-label="本大会管理データ">
+              <div class="tournament-json-actions" aria-label="スコア/日程データ">
                 <button class="utility-button" type="button" id="tournamentExportButton">JSONエクスポート</button>
                 <button class="utility-button" type="button" id="tournamentImportButton">JSONインポート</button>
               </div>
@@ -5142,8 +5171,8 @@
       positionPanel.classList.remove("active");
       tournamentPanel.classList.add("active");
 
-      boardTitle.textContent = "本大会管理";
-      sideTitle.textContent = "本大会管理";
+      boardTitle.textContent = "W杯2026";
+      sideTitle.textContent = "スコア/日程";
       sideSub.textContent = "スコアはこの端末のlocalStorageに自動保存されます。";
       statusMessage.textContent = "";
       window.clearTimeout(statusTimer);

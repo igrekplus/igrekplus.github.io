@@ -46,9 +46,7 @@
       tabs: Array.from(document.querySelectorAll(".tournament-tab")),
       content: document.getElementById("tournamentContent"),
       summary: document.getElementById("tournamentSummary"),
-      updateStandingsButton: document.getElementById("standingsUpdateButton"),
-      updateThirdsButton: document.getElementById("thirdRankingUpdateButton"),
-      updateKnockoutButton: document.getElementById("knockoutUpdateButton"),
+      updateButton: document.getElementById("tournamentUpdateButton"),
       groupFilter: document.getElementById("tournamentGroupFilter"),
       exportButton: document.getElementById("tournamentExportButton"),
       importButton: document.getElementById("tournamentImportButton"),
@@ -61,9 +59,7 @@
         renderContent();
       });
     });
-    state.elements.updateStandingsButton?.addEventListener("click", updateStandings);
-    state.elements.updateThirdsButton?.addEventListener("click", updateThirdRanking);
-    state.elements.updateKnockoutButton?.addEventListener("click", updateKnockout);
+    state.elements.updateButton?.addEventListener("click", updateTournamentSnapshots);
     state.elements.groupFilter?.addEventListener("change", () => {
       state.groupFilter = state.elements.groupFilter.value;
       renderContent();
@@ -162,7 +158,7 @@
     const scoreCount = Object.keys(state.saved.scores).filter((matchId) => hasAnyScore(state.saved.scores[matchId])).length;
     if (summary) {
       const updated = state.saved.lastUpdatedAt ? ` / 最終更新 ${formatSavedDateTime(state.saved.lastUpdatedAt)}` : "";
-      summary.textContent = `本大会のみ / 全${state.matches.length}試合 / スコア保存 ${scoreCount}試合${updated}`;
+      summary.textContent = `スコア/日程 / 全${state.matches.length}試合 / スコア保存 ${scoreCount}試合${updated}`;
     }
 
     if (state.view === "japan") {
@@ -661,19 +657,9 @@
     return String(value).padStart(2, "0");
   }
 
-  function updateStandings() {
-    state.saved.standings = {
-      updatedAt: new Date().toISOString(),
-      groups: calculateGroupTables()
-    };
-    persist();
-    state.view = "groups";
-    renderContent();
-    setSavedLabel("順位を更新しました");
-  }
-
-  function updateThirdRanking() {
-    const standings = state.saved.standings?.groups || calculateGroupTables();
+  function updateTournamentSnapshots() {
+    const updatedAt = new Date().toISOString();
+    const standings = calculateGroupTables();
     const thirds = Object.values(standings)
       .map((table) => table[2])
       .filter(Boolean)
@@ -683,26 +669,21 @@
         reviewNeeded: team.reviewNeeded || tiedWithAny(team, list),
         advances: index < 8
       }));
+    state.saved.standings = {
+      updatedAt,
+      groups: standings
+    };
     state.saved.thirdRanking = {
-      updatedAt: new Date().toISOString(),
+      updatedAt,
       teams: thirds
     };
-    persist();
-    state.view = "thirds";
-    renderContent();
-    setSavedLabel("3位ランキングを更新しました");
-  }
-
-  function updateKnockout() {
-    const standings = state.saved.standings?.groups || calculateGroupTables();
     state.saved.knockout = {
-      updatedAt: new Date().toISOString(),
+      updatedAt,
       rounds: calculateKnockoutCards(standings)
     };
     persist();
-    state.view = "knockout";
     renderContent();
-    setSavedLabel("トーナメントを更新しました");
+    setSavedLabel("順位・3位ランキング・トーナメントを更新しました");
   }
 
   function calculateGroupTables() {
@@ -778,7 +759,7 @@
 
   function renderStandingsSnapshot() {
     if (!state.saved.standings?.groups) {
-      return message("まだ順位を更新していません。「順位を更新」ボタンで再計算してください。");
+      return message("まだ順位を更新していません。「更新」ボタンで再計算してください。");
     }
     const wrapper = document.createElement("div");
     wrapper.className = "group-standings-grid";
@@ -796,7 +777,7 @@
 
   function renderThirdRankingSnapshot() {
     if (!state.saved.thirdRanking?.teams) {
-      return message("まだ3位ランキングを更新していません。「3位ランキングを更新」ボタンで再計算してください。");
+      return message("まだ3位ランキングを更新していません。「更新」ボタンで再計算してください。");
     }
     const card = document.createElement("details");
     card.className = "standing-card";
@@ -906,7 +887,7 @@
 
   function renderKnockoutSnapshot() {
     if (!state.saved.knockout?.rounds) {
-      return message("まだトーナメントを更新していません。「トーナメントを更新」ボタンで再計算してください。");
+      return message("まだトーナメントを更新していません。「更新」ボタンで再計算してください。");
     }
     const wrapper = document.createElement("div");
     wrapper.className = "knockout-list";
@@ -946,24 +927,24 @@
 
   function exportToClipboard() {
     const text = JSON.stringify(exportState(), null, 2);
-    const fallback = () => window.prompt("本大会管理JSON", text);
+    const fallback = () => window.prompt("スコア/日程JSON", text);
     if (!navigator.clipboard?.writeText) {
       fallback();
       return;
     }
     navigator.clipboard.writeText(text).then(
-      () => setSummary("本大会管理JSONをコピーしました"),
+      () => setSummary("スコア/日程JSONをコピーしました"),
       fallback
     );
   }
 
   function importFromPrompt() {
-    const text = window.prompt("インポートする本大会管理JSONを貼り付けてください");
+    const text = window.prompt("インポートするスコア/日程JSONを貼り付けてください");
     if (!text) return;
     try {
       const payload = JSON.parse(text);
       if (!importState(payload)) throw new Error("scores が見つかりません");
-      setSavedLabel("本大会管理JSONをインポートしました");
+      setSavedLabel("スコア/日程JSONをインポートしました");
     } catch (error) {
       window.alert(`JSONをインポートできませんでした。\n${error.message || error}`);
     }
@@ -991,7 +972,7 @@
   }
 
   function teamFlag(teamId) {
-    return state.teams[teamId]?.flag_code || state.teams[teamId]?.fifa_code || "";
+    return state.teams[teamId]?.flag_code || "";
   }
 
   function teamFlagUrl(teamId) {
@@ -1082,9 +1063,7 @@
   window.WorldCupTournament = {
     init,
     renderContent,
-    updateStandings,
-    updateThirdRanking,
-    updateKnockout,
+    updateTournamentSnapshots,
     exportState,
     importState
   };
