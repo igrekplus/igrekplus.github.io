@@ -1,0 +1,49 @@
+team_id,team_name_ja,team_name_en,group,slot
+MEX,メキシコ,Mexico,A,A1
+RSA,南アフリカ,South Africa,A,A2
+KOR,韓国,South Korea,A,A3
+CZE,チェコ,Czechia,A,A4
+CAN,カナダ,Canada,B,B1
+SUI,スイス,Switzerland,B,B2
+QAT,カタール,Qatar,B,B3
+BIH,ボスニア・ヘルツェゴビナ,Bosnia and Herzegovina,B,B4
+BRA,ブラジル,Brazil,C,C1
+MAR,モロッコ,Morocco,C,C2
+HAI,ハイチ,Haiti,C,C3
+SCO,スコットランド,Scotland,C,C4
+USA,アメリカ,United States,D,D1
+PAR,パラグアイ,Paraguay,D,D2
+AUS,オーストラリア,Australia,D,D3
+TUR,トルコ,Turkiye,D,D4
+GER,ドイツ,Germany,E,E1
+CUW,キュラソー,Curacao,E,E2
+CIV,コートジボワール,Ivory Coast,E,E3
+ECU,エクアドル,Ecuador,E,E4
+NED,オランダ,Netherlands,F,F1
+JPN,日本,Japan,F,F2
+TUN,チュニジア,Tunisia,F,F3
+SWE,スウェーデン,Sweden,F,F4
+BEL,ベルギー,Belgium,G,G1
+EGY,エジプト,Egypt,G,G2
+IRN,イラン,Iran,G,G3
+NZL,ニュージーランド,New Zealand,G,G4
+ESP,スペイン,Spain,H,H1
+CPV,カーボベルデ,Cape Verde,H,H2
+KSA,サウジアラビア,Saudi Arabia,H,H3
+URU,ウルグアイ,Uruguay,H,H4
+FRA,フランス,France,I,I1
+SEN,セネガル,Senegal,I,I2
+NOR,ノルウェー,Norway,I,I3
+IRQ,イラク,Iraq,I,I4
+ARG,アルゼンチン,Argentina,J,J1
+ALG,アルジェリア,Algeria,J,J2
+AUT,オーストリア,Austria,J,J3
+JOR,ヨルダン,Jordan,J,J4
+POR,ポルトガル,Portugal,K,K1
+UZB,ウズベキスタン,Uzbekistan,K,K2
+COL,コロンビア,Colombia,K,K3
+COD,コンゴ民主共和国,DR Congo,K,K4
+ENG,イングランド,England,L,L1
+CRO,クロアチア,Croatia,L,L2
+GHA,ガーナ,Ghana,L,L3
+PAN,パナマ,Panama,L,L4

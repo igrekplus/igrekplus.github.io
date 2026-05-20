@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16" role="img" aria-label="SE flag">
+  <rect width="24" height="16" fill="#006aa7"/>
+  <rect x="6" width="3" height="16" fill="#fecc00"/>
+  <rect y="6.5" width="24" height="3" fill="#fecc00"/>
+  <rect x=".5" y=".5" width="23" height="15" fill="none" stroke="rgba(0,0,0,.18)"/>
+</svg>

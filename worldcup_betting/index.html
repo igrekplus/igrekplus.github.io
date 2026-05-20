@@ -228,6 +228,18 @@
       padding-top: 18px;
     }
 
+    .board.tournament-only {
+      grid-template-rows: auto 1fr;
+    }
+
+    .board.tournament-only .pitch-wrap {
+      display: none;
+    }
+
+    .board.tournament-only .view-panel {
+      border-top: 0;
+    }
+
     .app.single-panel .player-card.on-pitch {
       cursor: default;
     }
@@ -1372,6 +1384,330 @@
       font-size: 15px;
     }
 
+    .tournament-panel {
+      display: none;
+      padding: 18px;
+    }
+
+    .tournament-panel.active {
+      display: block;
+    }
+
+    .tournament-shell,
+    .match-list,
+    .group-standings-grid,
+    .third-ranking-list,
+    .knockout-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .tournament-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .tournament-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tournament-tab {
+      min-height: 34px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #edf2f7;
+      color: var(--text);
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .tournament-tab.active {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+    }
+
+    .tournament-actions,
+    .tournament-json-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tournament-filter select {
+      min-height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0 10px;
+      background: #fff;
+      font: inherit;
+      font-weight: 800;
+    }
+
+    .tournament-summary {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .match-card,
+    .standing-card,
+    .knockout-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .match-card-body {
+      display: grid;
+      grid-template-columns: minmax(180px, 0.8fr) minmax(240px, 1fr) minmax(210px, 0.8fr);
+    }
+
+    .match-summary,
+    .standing-card > summary,
+    .knockout-card > summary {
+      display: grid;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      cursor: pointer;
+      font-weight: 900;
+      list-style: none;
+    }
+
+    .match-summary {
+      grid-template-columns: 82px minmax(0, 1fr) auto auto;
+    }
+
+    .match-summary::-webkit-details-marker,
+    .standing-card > summary::-webkit-details-marker,
+    .knockout-card > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .match-meta {
+      display: grid;
+      gap: 4px;
+      padding: 12px;
+      border-right: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .match-teams {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      font-weight: 900;
+    }
+
+    .match-team.away {
+      text-align: right;
+    }
+
+    .match-score-display {
+      min-width: 70px;
+      text-align: center;
+      color: var(--blue);
+    }
+
+    .team-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .team-flag {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      min-width: 24px;
+      height: 16px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      background: #fff;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 900;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .team-flag-img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .japan-highlight {
+      background: #eaf3ff;
+      box-shadow: inset 4px 0 0 #005bac;
+      color: #0f243d;
+    }
+
+    .match-status {
+      justify-self: start;
+      width: fit-content;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #edf2f7;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .match-status.entered {
+      background: #e6f4ea;
+      color: #137333;
+    }
+
+    .match-status.pk {
+      background: #e8f0fe;
+      color: var(--blue);
+    }
+
+    .match-status.review {
+      background: #fff3cd;
+      color: #8a6100;
+    }
+
+    .score-editor {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(44px, 1fr));
+      gap: 6px;
+      align-content: center;
+      padding: 10px;
+      border-left: 1px solid var(--line);
+      background: #f8fafc;
+    }
+
+    .score-editor label {
+      display: grid;
+      gap: 3px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .score-editor input {
+      width: 100%;
+      min-height: 30px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      text-align: center;
+      font: inherit;
+      font-weight: 800;
+    }
+
+    .standing-card > summary,
+    .knockout-card > summary {
+      color: var(--blue);
+      font-size: 15px;
+    }
+
+    .standing-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .standing-table th,
+    .standing-table td {
+      padding: 8px;
+      border-bottom: 1px solid var(--line);
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .standing-table tr.cutline td {
+      border-top: 3px solid var(--blue);
+    }
+
+    .standing-table th:nth-child(2),
+    .standing-table td:nth-child(2) {
+      min-width: 120px;
+      text-align: left;
+      white-space: normal;
+    }
+
+    .knockout-round {
+      display: grid;
+      gap: 8px;
+      padding: 10px 12px;
+    }
+
+    .knockout-match {
+      display: grid;
+      grid-template-columns: 82px minmax(0, 1fr) auto minmax(0, 1fr);
+      gap: 8px;
+      align-items: center;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f8fafc;
+      font-weight: 800;
+    }
+
+    .tournament-empty,
+    .tournament-error {
+      padding: 16px;
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .tournament-error {
+      color: #b42318;
+      border-color: #fda29b;
+      background: #fff5f5;
+    }
+
+    .tournament-updated {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    @media (max-width: 760px) {
+      .match-card-body {
+        grid-template-columns: 1fr;
+      }
+
+      .match-meta,
+      .score-editor {
+        border-right: 0;
+        border-left: 0;
+      }
+
+      .score-editor {
+        grid-template-columns: repeat(2, minmax(42px, 1fr));
+      }
+
+      .knockout-match {
+        grid-template-columns: 72px minmax(0, 1fr);
+      }
+    }
+
     .example-groups {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2464,12 +2800,13 @@
 <body>
   <div class="shell">
     <nav class="owner-tabs" aria-label="予想者">
-      <button class="owner-tab active" type="button" data-view="owner" data-owner="karin">かりん予想（日本代表）</button>
-      <button class="owner-tab" type="button" data-view="owner" data-owner="ryo">りょう予想（日本代表）</button>
+      <button class="owner-tab active" type="button" data-view="tournament">本大会管理</button>
       <button class="owner-tab" type="button" data-view="compare">比較コート（日本代表）</button>
-      <button class="owner-tab" type="button" data-view="bet">賭け結果</button>
+      <button class="owner-tab" type="button" data-view="owner" data-owner="karin">かりん予想（日本代表）</button>
+      <button class="owner-tab" type="button" data-view="owner" data-owner="ryo">りょう予想（日本代表）</button>
       <button class="owner-tab" type="button" data-view="roster">選手一覧</button>
       <button class="owner-tab" type="button" data-view="positions">ポジション解説</button>
+      <button class="owner-tab" type="button" data-view="bet">賭け結果</button>
     </nav>
 
     <main class="app" id="app">
@@ -2801,6 +3138,47 @@
             </section>
           </section>
         </section>
+        <section class="view-panel tournament-panel" id="tournamentPanel" aria-label="本大会管理">
+          <div class="tournament-shell">
+            <div class="tournament-toolbar">
+              <div class="tournament-tabs" id="tournamentTabs" aria-label="本大会管理メニュー">
+                <button class="tournament-tab active" type="button" data-tournament-view="japan">日本戦</button>
+                <button class="tournament-tab" type="button" data-tournament-view="schedule">全日程</button>
+                <button class="tournament-tab" type="button" data-tournament-view="groups">グループ順位</button>
+                <button class="tournament-tab" type="button" data-tournament-view="thirds">3位ランキング</button>
+                <button class="tournament-tab" type="button" data-tournament-view="knockout">決勝トーナメント</button>
+              </div>
+              <div class="tournament-actions" aria-label="本大会管理更新">
+                <button class="utility-button" type="button" id="standingsUpdateButton">順位を更新</button>
+                <button class="utility-button" type="button" id="thirdRankingUpdateButton">3位ランキングを更新</button>
+                <button class="utility-button" type="button" id="knockoutUpdateButton">トーナメントを更新</button>
+              </div>
+              <label class="tournament-filter">
+                <select id="tournamentGroupFilter" aria-label="グループで絞り込み">
+                  <option value="all">全グループ</option>
+                  <option value="A">Group A</option>
+                  <option value="B">Group B</option>
+                  <option value="C">Group C</option>
+                  <option value="D">Group D</option>
+                  <option value="E">Group E</option>
+                  <option value="F">Group F</option>
+                  <option value="G">Group G</option>
+                  <option value="H">Group H</option>
+                  <option value="I">Group I</option>
+                  <option value="J">Group J</option>
+                  <option value="K">Group K</option>
+                  <option value="L">Group L</option>
+                </select>
+              </label>
+              <div class="tournament-json-actions" aria-label="本大会管理データ">
+                <button class="utility-button" type="button" id="tournamentExportButton">JSONエクスポート</button>
+                <button class="utility-button" type="button" id="tournamentImportButton">JSONインポート</button>
+              </div>
+            </div>
+            <div class="tournament-summary" id="tournamentSummary">data/worldcup2026_matches.json を読み込み中...</div>
+            <div id="tournamentContent"></div>
+          </div>
+        </section>
       </section>
 
       <aside class="bench" id="bench" aria-label="選手リスト">
@@ -2859,6 +3237,7 @@
     </div>
   </div>
 
+  <script src="js/tournament.js"></script>
   <script>
     const players = [
       { id: "p01", name: "鈴木彩艶", position: "GK", status: "確実", number: "", club: "パルマ", imageUrl: "pics/鈴木彩艶.jpg" },
@@ -3415,7 +3794,7 @@
     };
 
     let activeOwner = "karin";
-    let activeView = "owner";
+    let activeView = "tournament";
     let positionGuideMode = "list";
     let statusTimer = null;
     let drag = null;
@@ -3504,6 +3883,7 @@
     const betRyoMissSummary = document.getElementById("betRyoMissSummary");
     const betUnpickedSummary = document.getElementById("betUnpickedSummary");
     const betUnpickedList = document.getElementById("betUnpickedList");
+    const tournamentPanel = document.getElementById("tournamentPanel");
     const rosterPanel = document.getElementById("rosterPanel");
     const rosterSearchInput = document.getElementById("rosterSearchInput");
     const rosterPositionFilter = document.getElementById("rosterPositionFilter");
@@ -4072,9 +4452,6 @@
         meta.append(edit);
       }
       info.append(name, meta);
-      if (activeView === "compare" && !screenshotMode) {
-        info.appendChild(createResultBadges(player, owner));
-      }
       card.append(photo, info);
 
       if (isInteractionLocked()) {
@@ -4101,7 +4478,7 @@
     function shouldShowAsOwnerSelected(player, placement) {
       if (!player || !placement) return false;
       if (placement.area === "dropped") return false;
-      return betResultForPlayer(player.id) === "selected";
+      return true;
     }
 
     function createPredictionBadge(playerId, owner = activeOwner) {
@@ -4156,6 +4533,11 @@
 
       if (activeView === "roster") {
         renderRoster();
+        return;
+      }
+
+      if (activeView === "tournament") {
+        renderTournament();
         return;
       }
 
@@ -4249,10 +4631,12 @@
       board.classList.remove("explain-only");
       board.classList.remove("bet-only");
       board.classList.remove("roster-only");
+      board.classList.remove("tournament-only");
       comparisonPanel.classList.add("active");
       positionPanel.classList.remove("active");
       rosterPanel.classList.remove("active");
       betPanel.classList.remove("active");
+      tournamentPanel.classList.remove("active");
 
       boardTitle.textContent = `比較コート（${teamName}）`;
       sideTitle.textContent = "比較";
@@ -4377,7 +4761,7 @@
       position.className = "mini-player-position";
       position.textContent = `${player.position}${currentNumber(player.id, owner) ? ` #${currentNumber(player.id, owner)}` : ""}`;
       info.append(name, position);
-      if (owner && (activeView === "compare" || activeView === "bet")) {
+      if (owner && activeView === "bet") {
         info.appendChild(createResultBadges(player, owner));
       }
       row.append(photo, info);
@@ -4461,6 +4845,42 @@
       });
     }
 
+    function renderTournament() {
+      clearPitchCards();
+      clearComparePitches();
+      benchList.innerHTML = "";
+      confirmedList.innerHTML = "";
+      droppedList.innerHTML = "";
+
+      app.classList.add("single-panel");
+      board.classList.add("with-panel");
+      board.classList.add("tournament-only");
+      board.classList.remove("compare-only");
+      board.classList.remove("bet-only");
+      board.classList.remove("roster-only");
+      board.classList.remove("explain-only");
+      comparisonPanel.classList.remove("active");
+      betPanel.classList.remove("active");
+      rosterPanel.classList.remove("active");
+      positionPanel.classList.remove("active");
+      tournamentPanel.classList.add("active");
+
+      boardTitle.textContent = "本大会管理";
+      sideTitle.textContent = "本大会管理";
+      sideSub.textContent = "スコアはこの端末のlocalStorageに自動保存されます。";
+      statusMessage.textContent = "";
+      window.clearTimeout(statusTimer);
+      pitchCount.textContent = "2026本大会";
+      pitchCount.classList.remove("over-limit");
+      saveState.textContent = "スコア自動保存";
+      window.WorldCupTournament?.init();
+      window.WorldCupTournament?.renderContent();
+
+      ownerTabs.forEach((tab) => {
+        tab.classList.toggle("active", tab.dataset.view === "tournament");
+      });
+    }
+
     function renderPositions() {
       clearPitchCards();
       clearComparePitches();
@@ -4474,9 +4894,11 @@
       board.classList.remove("compare-only");
       board.classList.remove("bet-only");
       board.classList.remove("roster-only");
+      board.classList.remove("tournament-only");
       comparisonPanel.classList.remove("active");
       betPanel.classList.remove("active");
       rosterPanel.classList.remove("active");
+      tournamentPanel.classList.remove("active");
       positionPanel.classList.add("active");
 
       boardTitle.textContent = "ポジション解説";
@@ -4507,9 +4929,11 @@
       board.classList.remove("explain-only");
       board.classList.remove("compare-only");
       board.classList.remove("roster-only");
+      board.classList.remove("tournament-only");
       comparisonPanel.classList.remove("active");
       positionPanel.classList.remove("active");
       rosterPanel.classList.remove("active");
+      tournamentPanel.classList.remove("active");
       betPanel.classList.add("active");
 
       boardTitle.textContent = "賭け結果";
@@ -4547,9 +4971,11 @@
       board.classList.remove("explain-only");
       board.classList.remove("compare-only");
       board.classList.remove("bet-only");
+      board.classList.remove("tournament-only");
       comparisonPanel.classList.remove("active");
       positionPanel.classList.remove("active");
       betPanel.classList.remove("active");
+      tournamentPanel.classList.remove("active");
       rosterPanel.classList.add("active");
 
       boardTitle.textContent = "選手一覧";
@@ -4575,10 +5001,12 @@
       board.classList.remove("compare-only");
       board.classList.remove("bet-only");
       board.classList.remove("roster-only");
+      board.classList.remove("tournament-only");
       comparisonPanel.classList.remove("active");
       positionPanel.classList.remove("active");
       betPanel.classList.remove("active");
       rosterPanel.classList.remove("active");
+      tournamentPanel.classList.remove("active");
       clearComparePitches();
     }
 
@@ -5272,7 +5700,49 @@
       render();
     }
 
+    function selectedOwnerIdsFromSaved(owner) {
+      const key = storageKeys[owner];
+      if (!key) return null;
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return null;
+        const saved = JSON.parse(raw);
+        if (!Array.isArray(saved?.rosterIds)) return null;
+        const savedPlayers = saved?.players && typeof saved.players === "object" ? saved.players : {};
+        const rosterPlayers = sortPlayersByMasterOrder(saved.rosterIds.map(allPlayerById).filter(Boolean));
+        const selected = [];
+        const used = new Set();
+
+        rosterPlayers
+          .filter((player) => savedPlayers[player.id]?.area === "pitch")
+          .sort(sortForComparison)
+          .forEach((player) => {
+            selected.push(player);
+            used.add(player.id);
+          });
+
+        rosterPlayers
+          .filter((player) => !used.has(player.id) && savedPlayers[player.id]?.area !== "dropped")
+          .sort((a, b) => {
+            const aRating = savedPlayers[a.id]?.rating || "A";
+            const bRating = savedPlayers[b.id]?.rating || "A";
+            const ratingDiff = ratingOrder.indexOf(aRating) - ratingOrder.indexOf(bRating);
+            if (ratingDiff !== 0) return ratingDiff;
+            return playerOriginalIndex(a) - playerOriginalIndex(b);
+          })
+          .slice(0, Math.max(0, rosterLimit - selected.length))
+          .forEach((player) => selected.push(player));
+
+        return new Set(selected.slice(0, rosterLimit).map((player) => player.id));
+      } catch (error) {
+        console.warn(`${key} の賭け結果参照に失敗しました`, error);
+        return null;
+      }
+    }
+
     function selectedOwnerIds(owner) {
+      const savedIds = selectedOwnerIdsFromSaved(owner);
+      if (savedIds) return savedIds;
       return new Set(selectedPlayersForOwner(owner).map((player) => player.id));
     }
 
@@ -5772,6 +6242,7 @@
     });
 
     renderPositionGuideMode(positionGuideMode);
+    window.WorldCupTournament?.init();
 
     ownerTabs.forEach((tab) => {
       if (tab.dataset.view === "owner") {

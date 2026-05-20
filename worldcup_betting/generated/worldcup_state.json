@@ -1,0 +1,1036 @@
+{
+  "standings": {
+    "A": [
+      {
+        "team_id": "MEX",
+        "name": "メキシコ",
+        "group": "A",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "RSA",
+        "name": "南アフリカ",
+        "group": "A",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "KOR",
+        "name": "韓国",
+        "group": "A",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "CZE",
+        "name": "チェコ",
+        "group": "A",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      }
+    ],
+    "B": [
+      {
+        "team_id": "CAN",
+        "name": "カナダ",
+        "group": "B",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "SUI",
+        "name": "スイス",
+        "group": "B",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "QAT",
+        "name": "カタール",
+        "group": "B",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "BIH",
+        "name": "ボスニア・ヘルツェゴビナ",
+        "group": "B",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      }
+    ],
+    "C": [
+      {
+        "team_id": "BRA",
+        "name": "ブラジル",
+        "group": "C",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "MAR",
+        "name": "モロッコ",
+        "group": "C",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "HAI",
+        "name": "ハイチ",
+        "group": "C",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "SCO",
+        "name": "スコットランド",
+        "group": "C",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      }
+    ],
+    "D": [
+      {
+        "team_id": "USA",
+        "name": "アメリカ",
+        "group": "D",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "PAR",
+        "name": "パラグアイ",
+        "group": "D",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "AUS",
+        "name": "オーストラリア",
+        "group": "D",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "TUR",
+        "name": "トルコ",
+        "group": "D",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      }
+    ],
+    "E": [
+      {
+        "team_id": "GER",
+        "name": "ドイツ",
+        "group": "E",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "CUW",
+        "name": "キュラソー",
+        "group": "E",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "CIV",
+        "name": "コートジボワール",
+        "group": "E",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "ECU",
+        "name": "エクアドル",
+        "group": "E",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      }
+    ],
+    "F": [
+      {
+        "team_id": "NED",
+        "name": "オランダ",
+        "group": "F",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "JPN",
+        "name": "日本",
+        "group": "F",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "TUN",
+        "name": "チュニジア",
+        "group": "F",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "SWE",
+        "name": "スウェーデン",
+        "group": "F",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      }
+    ],
+    "G": [
+      {
+        "team_id": "BEL",
+        "name": "ベルギー",
+        "group": "G",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "EGY",
+        "name": "エジプト",
+        "group": "G",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "IRN",
+        "name": "イラン",
+        "group": "G",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "NZL",
+        "name": "ニュージーランド",
+        "group": "G",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      }
+    ],
+    "H": [
+      {
+        "team_id": "ESP",
+        "name": "スペイン",
+        "group": "H",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "CPV",
+        "name": "カーボベルデ",
+        "group": "H",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "KSA",
+        "name": "サウジアラビア",
+        "group": "H",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "URU",
+        "name": "ウルグアイ",
+        "group": "H",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      }
+    ],
+    "I": [
+      {
+        "team_id": "FRA",
+        "name": "フランス",
+        "group": "I",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "SEN",
+        "name": "セネガル",
+        "group": "I",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "NOR",
+        "name": "ノルウェー",
+        "group": "I",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "IRQ",
+        "name": "イラク",
+        "group": "I",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      }
+    ],
+    "J": [
+      {
+        "team_id": "ARG",
+        "name": "アルゼンチン",
+        "group": "J",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "ALG",
+        "name": "アルジェリア",
+        "group": "J",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "AUT",
+        "name": "オーストリア",
+        "group": "J",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "JOR",
+        "name": "ヨルダン",
+        "group": "J",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      }
+    ],
+    "K": [
+      {
+        "team_id": "POR",
+        "name": "ポルトガル",
+        "group": "K",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "UZB",
+        "name": "ウズベキスタン",
+        "group": "K",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "COL",
+        "name": "コロンビア",
+        "group": "K",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "COD",
+        "name": "コンゴ民主共和国",
+        "group": "K",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      }
+    ],
+    "L": [
+      {
+        "team_id": "ENG",
+        "name": "イングランド",
+        "group": "L",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "CRO",
+        "name": "クロアチア",
+        "group": "L",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "GHA",
+        "name": "ガーナ",
+        "group": "L",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      },
+      {
+        "team_id": "PAN",
+        "name": "パナマ",
+        "group": "L",
+        "played": 0,
+        "wins": 0,
+        "draws": 0,
+        "losses": 0,
+        "goals_for": 0,
+        "goals_against": 0,
+        "goal_diff": 0,
+        "points": 0
+      }
+    ]
+  },
+  "third_place_ranking": [
+    {
+      "team_id": "KOR",
+      "name": "韓国",
+      "group": "A",
+      "played": 0,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "goals_for": 0,
+      "goals_against": 0,
+      "goal_diff": 0,
+      "points": 0
+    },
+    {
+      "team_id": "QAT",
+      "name": "カタール",
+      "group": "B",
+      "played": 0,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "goals_for": 0,
+      "goals_against": 0,
+      "goal_diff": 0,
+      "points": 0
+    },
+    {
+      "team_id": "HAI",
+      "name": "ハイチ",
+      "group": "C",
+      "played": 0,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "goals_for": 0,
+      "goals_against": 0,
+      "goal_diff": 0,
+      "points": 0
+    },
+    {
+      "team_id": "AUS",
+      "name": "オーストラリア",
+      "group": "D",
+      "played": 0,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "goals_for": 0,
+      "goals_against": 0,
+      "goal_diff": 0,
+      "points": 0
+    },
+    {
+      "team_id": "CIV",
+      "name": "コートジボワール",
+      "group": "E",
+      "played": 0,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "goals_for": 0,
+      "goals_against": 0,
+      "goal_diff": 0,
+      "points": 0
+    },
+    {
+      "team_id": "TUN",
+      "name": "チュニジア",
+      "group": "F",
+      "played": 0,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "goals_for": 0,
+      "goals_against": 0,
+      "goal_diff": 0,
+      "points": 0
+    },
+    {
+      "team_id": "IRN",
+      "name": "イラン",
+      "group": "G",
+      "played": 0,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "goals_for": 0,
+      "goals_against": 0,
+      "goal_diff": 0,
+      "points": 0
+    },
+    {
+      "team_id": "KSA",
+      "name": "サウジアラビア",
+      "group": "H",
+      "played": 0,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "goals_for": 0,
+      "goals_against": 0,
+      "goal_diff": 0,
+      "points": 0
+    },
+    {
+      "team_id": "NOR",
+      "name": "ノルウェー",
+      "group": "I",
+      "played": 0,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "goals_for": 0,
+      "goals_against": 0,
+      "goal_diff": 0,
+      "points": 0
+    },
+    {
+      "team_id": "AUT",
+      "name": "オーストリア",
+      "group": "J",
+      "played": 0,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "goals_for": 0,
+      "goals_against": 0,
+      "goal_diff": 0,
+      "points": 0
+    },
+    {
+      "team_id": "COL",
+      "name": "コロンビア",
+      "group": "K",
+      "played": 0,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "goals_for": 0,
+      "goals_against": 0,
+      "goal_diff": 0,
+      "points": 0
+    },
+    {
+      "team_id": "GHA",
+      "name": "ガーナ",
+      "group": "L",
+      "played": 0,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "goals_for": 0,
+      "goals_against": 0,
+      "goal_diff": 0,
+      "points": 0
+    }
+  ],
+  "knockout": {
+    "R32-01": {
+      "stage": "round_of_32",
+      "home": "2A",
+      "away": "2B",
+      "winner": "",
+      "loser": ""
+    },
+    "R32-02": {
+      "stage": "round_of_32",
+      "home": "1E",
+      "away": "3D/3I/3J/3K/3L",
+      "winner": "",
+      "loser": ""
+    },
+    "R32-03": {
+      "stage": "round_of_32",
+      "home": "1F",
+      "away": "3C/3E/3H/3I/3J",
+      "winner": "",
+      "loser": ""
+    },
+    "R32-04": {
+      "stage": "round_of_32",
+      "home": "1C",
+      "away": "3F/3G/3H/3I/3J",
+      "winner": "",
+      "loser": ""
+    },
+    "R32-05": {
+      "stage": "round_of_32",
+      "home": "1I",
+      "away": "3C/3D/3F/3G/3H",
+      "winner": "",
+      "loser": ""
+    },
+    "R32-06": {
+      "stage": "round_of_32",
+      "home": "1E",
+      "away": "2I",
+      "winner": "",
+      "loser": ""
+    },
+    "R32-07": {
+      "stage": "round_of_32",
+      "home": "1A",
+      "away": "3C/3E/3F/3H/3I",
+      "winner": "",
+      "loser": ""
+    },
+    "R32-08": {
+      "stage": "round_of_32",
+      "home": "1L",
+      "away": "3E/3H/3I/3J/3K",
+      "winner": "",
+      "loser": ""
+    },
+    "R32-09": {
+      "stage": "round_of_32",
+      "home": "1D",
+      "away": "3B/3E/3F/3I/3J",
+      "winner": "",
+      "loser": ""
+    },
+    "R32-10": {
+      "stage": "round_of_32",
+      "home": "1G",
+      "away": "3A/3E/3H/3I/3J",
+      "winner": "",
+      "loser": ""
+    },
+    "R32-11": {
+      "stage": "round_of_32",
+      "home": "2K",
+      "away": "2L",
+      "winner": "",
+      "loser": ""
+    },
+    "R32-12": {
+      "stage": "round_of_32",
+      "home": "1H",
+      "away": "2J",
+      "winner": "",
+      "loser": ""
+    },
+    "R32-13": {
+      "stage": "round_of_32",
+      "home": "1B",
+      "away": "3E/3F/3G/3I/3J",
+      "winner": "",
+      "loser": ""
+    },
+    "R32-14": {
+      "stage": "round_of_32",
+      "home": "1J",
+      "away": "2H",
+      "winner": "",
+      "loser": ""
+    },
+    "R32-15": {
+      "stage": "round_of_32",
+      "home": "1K",
+      "away": "3A/3B/3D/3E/3F",
+      "winner": "",
+      "loser": ""
+    },
+    "R32-16": {
+      "stage": "round_of_32",
+      "home": "1A",
+      "away": "2C",
+      "winner": "",
+      "loser": ""
+    },
+    "R16-01": {
+      "stage": "round_of_16",
+      "home": "W-R32-01",
+      "away": "W-R32-02",
+      "winner": "",
+      "loser": ""
+    },
+    "R16-02": {
+      "stage": "round_of_16",
+      "home": "W-R32-03",
+      "away": "W-R32-04",
+      "winner": "",
+      "loser": ""
+    },
+    "R16-03": {
+      "stage": "round_of_16",
+      "home": "W-R32-05",
+      "away": "W-R32-06",
+      "winner": "",
+      "loser": ""
+    },
+    "R16-04": {
+      "stage": "round_of_16",
+      "home": "W-R32-07",
+      "away": "W-R32-08",
+      "winner": "",
+      "loser": ""
+    },
+    "R16-05": {
+      "stage": "round_of_16",
+      "home": "W-R32-09",
+      "away": "W-R32-10",
+      "winner": "",
+      "loser": ""
+    },
+    "R16-06": {
+      "stage": "round_of_16",
+      "home": "W-R32-11",
+      "away": "W-R32-12",
+      "winner": "",
+      "loser": ""
+    },
+    "R16-07": {
+      "stage": "round_of_16",
+      "home": "W-R32-13",
+      "away": "W-R32-14",
+      "winner": "",
+      "loser": ""
+    },
+    "R16-08": {
+      "stage": "round_of_16",
+      "home": "W-R32-15",
+      "away": "W-R32-16",
+      "winner": "",
+      "loser": ""
+    },
+    "QF-01": {
+      "stage": "quarter_final",
+      "home": "W-R16-01",
+      "away": "W-R16-02",
+      "winner": "",
+      "loser": ""
+    },
+    "QF-02": {
+      "stage": "quarter_final",
+      "home": "W-R16-03",
+      "away": "W-R16-04",
+      "winner": "",
+      "loser": ""
+    },
+    "QF-03": {
+      "stage": "quarter_final",
+      "home": "W-R16-05",
+      "away": "W-R16-06",
+      "winner": "",
+      "loser": ""
+    },
+    "QF-04": {
+      "stage": "quarter_final",
+      "home": "W-R16-07",
+      "away": "W-R16-08",
+      "winner": "",
+      "loser": ""
+    },
+    "SF-01": {
+      "stage": "semi_final",
+      "home": "W-QF-01",
+      "away": "W-QF-02",
+      "winner": "",
+      "loser": ""
+    },
+    "SF-02": {
+      "stage": "semi_final",
+      "home": "W-QF-03",
+      "away": "W-QF-04",
+      "winner": "",
+      "loser": ""
+    },
+    "P3-01": {
+      "stage": "third_place",
+      "home": "L-SF-01",
+      "away": "L-SF-02",
+      "winner": "",
+      "loser": ""
+    },
+    "F-01": {
+      "stage": "final",
+      "home": "W-SF-01",
+      "away": "W-SF-02",
+      "winner": "",
+      "loser": ""
+    }
+  }
+}
