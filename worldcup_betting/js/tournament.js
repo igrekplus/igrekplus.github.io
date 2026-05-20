@@ -112,7 +112,6 @@
       name_ja: name || teamId,
       fifa_code: teamId,
       flag_code: teamId.toLowerCase(),
-      flag_url: "",
       group
     };
   }
@@ -236,7 +235,7 @@
       textDiv(stageLabels[match.stage] || match.stage),
       textDiv(match.group ? `Group ${match.group}` : ""),
       textDiv(formatJstDateTime(match.kickoff_jst), "match-jst"),
-      textDiv(match.venue || "会場未入力")
+      textDiv(venueText(match))
     );
 
     const teams = document.createElement("div");
@@ -516,7 +515,7 @@
       if (matches.length === 0) {
         column.appendChild(message("試合なし", "calendar-empty"));
       } else {
-        matches.forEach((match) => column.appendChild(createCalendarMatchCard(match, false)));
+        matches.forEach((match) => column.appendChild(createCalendarMatchCard(match, false, "week")));
       }
       grid.appendChild(column);
     }
@@ -531,7 +530,7 @@
       list.appendChild(message("この日の試合はありません", "calendar-empty"));
       return list;
     }
-    matches.forEach((match) => list.appendChild(createCalendarMatchCard(match, true)));
+    matches.forEach((match) => list.appendChild(createCalendarMatchCard(match, true, "day")));
     return list;
   }
 
@@ -555,9 +554,17 @@
     return row;
   }
 
-  function createCalendarMatchCard(match, includeEditor) {
-    const card = document.createElement("div");
-    card.className = "calendar-match-card";
+  function createCalendarMatchCard(match, includeEditor, layout = "day") {
+    const card = document.createElement(layout === "week" ? "button" : "div");
+    card.className = `calendar-match-card calendar-match-card-${layout}`;
+    if (layout === "week") {
+      card.type = "button";
+      card.addEventListener("click", () => {
+        state.calendarDate = jstDate(match.kickoff_jst);
+        state.calendarMode = "day";
+        renderContent();
+      });
+    }
     if (isJapanMatch(match)) card.classList.add("japan-highlight");
 
     const main = document.createElement("div");
@@ -575,7 +582,7 @@
       textSpan(match.match_id),
       textSpan(stageLabels[match.stage] || match.stage),
       textSpan(match.group ? `Group ${match.group}` : ""),
-      textSpan(match.venue || "会場未入力")
+      textSpan(venueText(match))
     );
 
     card.append(main, meta);
@@ -988,7 +995,8 @@
   }
 
   function teamFlagUrl(teamId) {
-    return state.teams[teamId]?.flag_url || "";
+    const code = teamFlag(teamId);
+    return code ? `assets/flags/${code}.svg` : "";
   }
 
   function teamLabel(teamId, fallback = "", className = "") {
@@ -1039,6 +1047,14 @@
     if (className) span.className = className;
     span.textContent = text || "";
     return span;
+  }
+
+  function venueText(match) {
+    const venue = (match.venue || "").trim();
+    const city = (match.city || "").trim();
+    if (venue && city) return `${venue}（${city}）`;
+    if (venue) return venue;
+    return "会場未定";
   }
 
   function appendCell(row, value) {

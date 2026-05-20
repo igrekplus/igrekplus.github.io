@@ -401,7 +401,6 @@ def team_as_site_dict(team_id: str, team: dict[str, str]) -> dict[str, str]:
         "name_en": team["team_name_en"],
         "fifa_code": team_id,
         "flag_code": flag_code,
-        "flag_url": f"assets/flags/{flag_code}.svg",
         "group": team["group"],
     }
 

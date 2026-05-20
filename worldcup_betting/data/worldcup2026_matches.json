@@ -8,7 +8,6 @@
       "name_en": "Mexico",
       "fifa_code": "MEX",
       "flag_code": "mx",
-      "flag_url": "assets/flags/mx.svg",
       "group": "A"
     },
     {
@@ -17,7 +16,6 @@
       "name_en": "South Africa",
       "fifa_code": "RSA",
       "flag_code": "za",
-      "flag_url": "assets/flags/za.svg",
       "group": "A"
     },
     {
@@ -26,7 +24,6 @@
       "name_en": "South Korea",
       "fifa_code": "KOR",
       "flag_code": "kr",
-      "flag_url": "assets/flags/kr.svg",
       "group": "A"
     },
     {
@@ -35,7 +32,6 @@
       "name_en": "Czechia",
       "fifa_code": "CZE",
       "flag_code": "cz",
-      "flag_url": "assets/flags/cz.svg",
       "group": "A"
     },
     {
@@ -44,7 +40,6 @@
       "name_en": "Canada",
       "fifa_code": "CAN",
       "flag_code": "ca",
-      "flag_url": "assets/flags/ca.svg",
       "group": "B"
     },
     {
@@ -53,7 +48,6 @@
       "name_en": "Switzerland",
       "fifa_code": "SUI",
       "flag_code": "ch",
-      "flag_url": "assets/flags/ch.svg",
       "group": "B"
     },
     {
@@ -62,7 +56,6 @@
       "name_en": "Qatar",
       "fifa_code": "QAT",
       "flag_code": "qa",
-      "flag_url": "assets/flags/qa.svg",
       "group": "B"
     },
     {
@@ -71,7 +64,6 @@
       "name_en": "Bosnia and Herzegovina",
       "fifa_code": "BIH",
       "flag_code": "ba",
-      "flag_url": "assets/flags/ba.svg",
       "group": "B"
     },
     {
@@ -80,7 +72,6 @@
       "name_en": "Brazil",
       "fifa_code": "BRA",
       "flag_code": "br",
-      "flag_url": "assets/flags/br.svg",
       "group": "C"
     },
     {
@@ -89,7 +80,6 @@
       "name_en": "Morocco",
       "fifa_code": "MAR",
       "flag_code": "ma",
-      "flag_url": "assets/flags/ma.svg",
       "group": "C"
     },
     {
@@ -98,7 +88,6 @@
       "name_en": "Haiti",
       "fifa_code": "HAI",
       "flag_code": "ht",
-      "flag_url": "assets/flags/ht.svg",
       "group": "C"
     },
     {
@@ -107,7 +96,6 @@
       "name_en": "Scotland",
       "fifa_code": "SCO",
       "flag_code": "sct",
-      "flag_url": "assets/flags/sct.svg",
       "group": "C"
     },
     {
@@ -116,7 +104,6 @@
       "name_en": "United States",
       "fifa_code": "USA",
       "flag_code": "us",
-      "flag_url": "assets/flags/us.svg",
       "group": "D"
     },
     {
@@ -125,7 +112,6 @@
       "name_en": "Paraguay",
       "fifa_code": "PAR",
       "flag_code": "py",
-      "flag_url": "assets/flags/py.svg",
       "group": "D"
     },
     {
@@ -134,7 +120,6 @@
       "name_en": "Australia",
       "fifa_code": "AUS",
       "flag_code": "au",
-      "flag_url": "assets/flags/au.svg",
       "group": "D"
     },
     {
@@ -143,7 +128,6 @@
       "name_en": "Turkiye",
       "fifa_code": "TUR",
       "flag_code": "tr",
-      "flag_url": "assets/flags/tr.svg",
       "group": "D"
     },
     {
@@ -152,7 +136,6 @@
       "name_en": "Germany",
       "fifa_code": "GER",
       "flag_code": "de",
-      "flag_url": "assets/flags/de.svg",
       "group": "E"
     },
     {
@@ -161,7 +144,6 @@
       "name_en": "Curacao",
       "fifa_code": "CUW",
       "flag_code": "cw",
-      "flag_url": "assets/flags/cw.svg",
       "group": "E"
     },
     {
@@ -170,7 +152,6 @@
       "name_en": "Ivory Coast",
       "fifa_code": "CIV",
       "flag_code": "ci",
-      "flag_url": "assets/flags/ci.svg",
       "group": "E"
     },
     {
@@ -179,7 +160,6 @@
       "name_en": "Ecuador",
       "fifa_code": "ECU",
       "flag_code": "ec",
-      "flag_url": "assets/flags/ec.svg",
       "group": "E"
     },
     {
@@ -188,7 +168,6 @@
       "name_en": "Netherlands",
       "fifa_code": "NED",
       "flag_code": "nl",
-      "flag_url": "assets/flags/nl.svg",
       "group": "F"
     },
     {
@@ -197,7 +176,6 @@
       "name_en": "Japan",
       "fifa_code": "JPN",
       "flag_code": "jp",
-      "flag_url": "assets/flags/jp.svg",
       "group": "F"
     },
     {
@@ -206,7 +184,6 @@
       "name_en": "Tunisia",
       "fifa_code": "TUN",
       "flag_code": "tn",
-      "flag_url": "assets/flags/tn.svg",
       "group": "F"
     },
     {
@@ -215,7 +192,6 @@
       "name_en": "Sweden",
       "fifa_code": "SWE",
       "flag_code": "se",
-      "flag_url": "assets/flags/se.svg",
       "group": "F"
     },
     {
@@ -224,7 +200,6 @@
       "name_en": "Belgium",
       "fifa_code": "BEL",
       "flag_code": "be",
-      "flag_url": "assets/flags/be.svg",
       "group": "G"
     },
     {
@@ -233,7 +208,6 @@
       "name_en": "Egypt",
       "fifa_code": "EGY",
       "flag_code": "eg",
-      "flag_url": "assets/flags/eg.svg",
       "group": "G"
     },
     {
@@ -242,7 +216,6 @@
       "name_en": "Iran",
       "fifa_code": "IRN",
       "flag_code": "ir",
-      "flag_url": "assets/flags/ir.svg",
       "group": "G"
     },
     {
@@ -251,7 +224,6 @@
       "name_en": "New Zealand",
       "fifa_code": "NZL",
       "flag_code": "nz",
-      "flag_url": "assets/flags/nz.svg",
       "group": "G"
     },
     {
@@ -260,7 +232,6 @@
       "name_en": "Spain",
       "fifa_code": "ESP",
       "flag_code": "es",
-      "flag_url": "assets/flags/es.svg",
       "group": "H"
     },
     {
@@ -269,7 +240,6 @@
       "name_en": "Cape Verde",
       "fifa_code": "CPV",
       "flag_code": "cv",
-      "flag_url": "assets/flags/cv.svg",
       "group": "H"
     },
     {
@@ -278,7 +248,6 @@
       "name_en": "Saudi Arabia",
       "fifa_code": "KSA",
       "flag_code": "sa",
-      "flag_url": "assets/flags/sa.svg",
       "group": "H"
     },
     {
@@ -287,7 +256,6 @@
       "name_en": "Uruguay",
       "fifa_code": "URU",
       "flag_code": "uy",
-      "flag_url": "assets/flags/uy.svg",
       "group": "H"
     },
     {
@@ -296,7 +264,6 @@
       "name_en": "France",
       "fifa_code": "FRA",
       "flag_code": "fr",
-      "flag_url": "assets/flags/fr.svg",
       "group": "I"
     },
     {
@@ -305,7 +272,6 @@
       "name_en": "Senegal",
       "fifa_code": "SEN",
       "flag_code": "sn",
-      "flag_url": "assets/flags/sn.svg",
       "group": "I"
     },
     {
@@ -314,7 +280,6 @@
       "name_en": "Norway",
       "fifa_code": "NOR",
       "flag_code": "no",
-      "flag_url": "assets/flags/no.svg",
       "group": "I"
     },
     {
@@ -323,7 +288,6 @@
       "name_en": "Iraq",
       "fifa_code": "IRQ",
       "flag_code": "iq",
-      "flag_url": "assets/flags/iq.svg",
       "group": "I"
     },
     {
@@ -332,7 +296,6 @@
       "name_en": "Argentina",
       "fifa_code": "ARG",
       "flag_code": "ar",
-      "flag_url": "assets/flags/ar.svg",
       "group": "J"
     },
     {
@@ -341,7 +304,6 @@
       "name_en": "Algeria",
       "fifa_code": "ALG",
       "flag_code": "dz",
-      "flag_url": "assets/flags/dz.svg",
       "group": "J"
     },
     {
@@ -350,7 +312,6 @@
       "name_en": "Austria",
       "fifa_code": "AUT",
       "flag_code": "at",
-      "flag_url": "assets/flags/at.svg",
       "group": "J"
     },
     {
@@ -359,7 +320,6 @@
       "name_en": "Jordan",
       "fifa_code": "JOR",
       "flag_code": "jo",
-      "flag_url": "assets/flags/jo.svg",
       "group": "J"
     },
     {
@@ -368,7 +328,6 @@
       "name_en": "Portugal",
       "fifa_code": "POR",
       "flag_code": "pt",
-      "flag_url": "assets/flags/pt.svg",
       "group": "K"
     },
     {
@@ -377,7 +336,6 @@
       "name_en": "Uzbekistan",
       "fifa_code": "UZB",
       "flag_code": "uz",
-      "flag_url": "assets/flags/uz.svg",
       "group": "K"
     },
     {
@@ -386,7 +344,6 @@
       "name_en": "Colombia",
       "fifa_code": "COL",
       "flag_code": "co",
-      "flag_url": "assets/flags/co.svg",
       "group": "K"
     },
     {
@@ -395,7 +352,6 @@
       "name_en": "DR Congo",
       "fifa_code": "COD",
       "flag_code": "cd",
-      "flag_url": "assets/flags/cd.svg",
       "group": "K"
     },
     {
@@ -404,7 +360,6 @@
       "name_en": "England",
       "fifa_code": "ENG",
       "flag_code": "eng",
-      "flag_url": "assets/flags/eng.svg",
       "group": "L"
     },
     {
@@ -413,7 +368,6 @@
       "name_en": "Croatia",
       "fifa_code": "CRO",
       "flag_code": "hr",
-      "flag_url": "assets/flags/hr.svg",
       "group": "L"
     },
     {
@@ -422,7 +376,6 @@
       "name_en": "Ghana",
       "fifa_code": "GHA",
       "flag_code": "gh",
-      "flag_url": "assets/flags/gh.svg",
       "group": "L"
     },
     {
@@ -431,7 +384,6 @@
       "name_en": "Panama",
       "fifa_code": "PAN",
       "flag_code": "pa",
-      "flag_url": "assets/flags/pa.svg",
       "group": "L"
     }
   ],

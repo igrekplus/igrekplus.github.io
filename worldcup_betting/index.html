@@ -1845,6 +1845,9 @@
       background: #fff;
       padding: 10px;
       min-width: 0;
+      color: var(--text);
+      font: inherit;
+      text-align: left;
     }
 
     .calendar-match-main {
@@ -1868,6 +1871,47 @@
       color: var(--blue);
       font-size: 12px;
       font-weight: 900;
+    }
+
+    .calendar-match-card-week {
+      width: 100%;
+      cursor: pointer;
+    }
+
+    .calendar-match-card-week .calendar-match-main {
+      grid-template-columns: 1fr;
+      gap: 6px;
+    }
+
+    .calendar-match-card-week .team-label {
+      width: 100%;
+      align-items: flex-start;
+      gap: 4px;
+      flex-direction: column;
+      min-width: 0;
+      font-size: 11px;
+      line-height: 1.25;
+      overflow: hidden;
+    }
+
+    .calendar-match-card-week .team-label span:last-child {
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    .calendar-match-card-week .match-score-display {
+      min-width: 0;
+      text-align: left;
+      font-size: 12px;
+    }
+
+    .calendar-match-card-week .team-flag {
+      width: 22px;
+      min-width: 22px;
+      height: 15px;
     }
 
     .calendar-empty {
