@@ -1402,6 +1402,8 @@
 
     .tournament-shell,
     .match-list,
+    .schedule-view,
+    .schedule-phase-list,
     .group-standings-grid,
     .third-ranking-list,
     .knockout-list,
@@ -1516,13 +1518,90 @@
       font-weight: 700;
     }
 
+    .schedule-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f8fafc;
+    }
+
+    .schedule-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .schedule-control select {
+      min-height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0 10px;
+      background: #fff;
+      color: var(--text);
+      font: inherit;
+      font-weight: 800;
+    }
+
     .match-card,
+    .schedule-phase,
     .standing-card,
     .knockout-card {
       border: 1px solid var(--line);
       border-radius: 8px;
       background: #fff;
       overflow: hidden;
+    }
+
+    .schedule-phase > summary {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--line);
+      cursor: pointer;
+      list-style: none;
+      font-weight: 900;
+    }
+
+    .schedule-phase:not([open]) > summary {
+      border-bottom: 0;
+    }
+
+    .schedule-phase > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .schedule-phase-title {
+      color: var(--text);
+      font-size: 15px;
+    }
+
+    .schedule-phase-arrow {
+      width: 18px;
+      color: var(--blue);
+      font-size: 13px;
+    }
+
+    .schedule-phase-count {
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #edf2f7;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .schedule-phase-matches {
+      padding: 10px;
+      background: #f8fafc;
     }
 
     .match-card-body {

@@ -25,6 +25,7 @@
     "final"
   ];
 
+  const scheduleStageOrder = ["group", ...knockoutStageOrder];
   const weekdayLabels = ["日", "月", "火", "水", "木", "金", "土"];
 
   const state = {
@@ -36,6 +37,9 @@
     teams: {},
     knockoutMapping: {},
     groupFilter: "all",
+    scheduleStatusFilter: "all",
+    scheduleSort: "date",
+    scheduleOpenStages: { group: true },
     calendarMode: "month",
     calendarDate: null,
     saved: loadSavedState(),
@@ -205,7 +209,7 @@
     if (state.view === "japan") {
       content.appendChild(renderMatchList(computedSchedule().filter(isJapanMatch)));
     } else if (state.view === "schedule") {
-      content.appendChild(renderMatchList(filterByGroup(computedSchedule())));
+      content.appendChild(renderScheduleView(filterByGroup(computedSchedule())));
     } else if (state.view === "calendar") {
       content.appendChild(renderCalendarView());
     } else if (state.view === "groups") {
@@ -246,6 +250,121 @@
     }
     sortedMatches(matches).forEach((match) => list.appendChild(createMatchCard(match)));
     return list;
+  }
+
+  function renderScheduleView(matches) {
+    const wrapper = document.createElement("div");
+    wrapper.className = "schedule-view";
+    wrapper.appendChild(createScheduleControls());
+
+    const filtered = matches.filter((match) => {
+      if (state.scheduleStatusFilter === "all") return true;
+      return matchStatusKey(match.match_id) === state.scheduleStatusFilter;
+    });
+
+    const grouped = groupMatchesByStage(sortScheduleMatches(filtered));
+    const list = document.createElement("div");
+    list.className = "schedule-phase-list";
+    scheduleStageOrder.forEach((stage) => {
+      const stageMatches = grouped[stage] || [];
+      if (stageMatches.length === 0 && state.scheduleStatusFilter !== "all") return;
+      const details = document.createElement("details");
+      details.className = "schedule-phase";
+      details.open = state.scheduleOpenStages[stage] ?? stage === "group";
+      details.addEventListener("toggle", () => {
+        state.scheduleOpenStages[stage] = details.open;
+        updateScheduleSummaryArrow(details);
+      });
+
+      const summary = document.createElement("summary");
+      summary.className = "schedule-phase-summary";
+      const enteredCount = stageMatches.filter((match) => ["entered", "pk"].includes(matchStatusKey(match.match_id))).length;
+      summary.append(
+        textSpan(details.open ? "▼" : "▶", "schedule-phase-arrow"),
+        textSpan(stageLabels[stage] || stage, "schedule-phase-title"),
+        textSpan(`${stageMatches.length}試合`, "schedule-phase-count"),
+        textSpan(`入力済み${enteredCount}試合`, "schedule-phase-count")
+      );
+
+      const phaseList = document.createElement("div");
+      phaseList.className = "match-list schedule-phase-matches";
+      if (stageMatches.length === 0) {
+        phaseList.appendChild(message("表示できる試合がありません"));
+      } else {
+        stageMatches.forEach((match) => phaseList.appendChild(createMatchCard(match)));
+      }
+      details.append(summary, phaseList);
+      list.appendChild(details);
+    });
+
+    if (!list.children.length) list.appendChild(message("条件に一致する試合がありません"));
+    wrapper.appendChild(list);
+    return wrapper;
+  }
+
+  function createScheduleControls() {
+    const controls = document.createElement("div");
+    controls.className = "schedule-controls";
+    controls.append(
+      createSelectControl("表示", state.scheduleStatusFilter, [
+        ["all", "全て"],
+        ["unentered", "未入力"],
+        ["entered", "入力済み"],
+        ["pk", "PKあり"],
+        ["review", "要確認"]
+      ], (value) => {
+        state.scheduleStatusFilter = value;
+        renderContent();
+      }),
+      createSelectControl("並び順", state.scheduleSort, [
+        ["date", "日時順"],
+        ["unentered_first", "未入力を上"],
+        ["entered_first", "入力済みを上"]
+      ], (value) => {
+        state.scheduleSort = value;
+        renderContent();
+      })
+    );
+    return controls;
+  }
+
+  function createSelectControl(labelText, value, options, onChange) {
+    const label = document.createElement("label");
+    label.className = "schedule-control";
+    label.appendChild(textSpan(labelText));
+    const select = document.createElement("select");
+    options.forEach(([optionValue, text]) => {
+      const option = document.createElement("option");
+      option.value = optionValue;
+      option.textContent = text;
+      select.appendChild(option);
+    });
+    select.value = value;
+    select.addEventListener("change", () => onChange(select.value));
+    label.appendChild(select);
+    return label;
+  }
+
+  function updateScheduleSummaryArrow(details) {
+    const arrow = details.querySelector(".schedule-phase-arrow");
+    if (arrow) arrow.textContent = details.open ? "▼" : "▶";
+  }
+
+  function groupMatchesByStage(matches) {
+    return matches.reduce((groups, match) => {
+      groups[match.stage] ||= [];
+      groups[match.stage].push(match);
+      return groups;
+    }, {});
+  }
+
+  function sortScheduleMatches(matches) {
+    const sorted = sortedMatches(matches);
+    if (state.scheduleSort === "date") return sorted;
+    const priority = state.scheduleSort === "unentered_first"
+      ? { unentered: 0, review: 1, entered: 2, pk: 3 }
+      : { entered: 0, pk: 1, review: 2, unentered: 3 };
+    return sorted.sort((a, b) => (priority[matchStatusKey(a.match_id)] ?? 9) - (priority[matchStatusKey(b.match_id)] ?? 9));
   }
 
   function createMatchCard(match) {
@@ -292,15 +411,28 @@
   }
 
   function matchStatus(matchId) {
-    const score = normalizedScore(matchId);
-    const hasHome = score.score_home !== "";
-    const hasAway = score.score_away !== "";
-    const hasPenaltyHome = score.penalty_home !== "";
-    const hasPenaltyAway = score.penalty_away !== "";
-    if (hasHome !== hasAway || hasPenaltyHome !== hasPenaltyAway) return { label: "要確認", className: "review" };
-    if (!hasHome && !hasAway && !hasPenaltyHome && !hasPenaltyAway) return { label: "未入力", className: "" };
-    if (hasPenaltyHome && hasPenaltyAway) return { label: "PKあり", className: "pk" };
+    const statusKey = matchStatusKey(matchId);
+    if (statusKey === "review") return { label: "要確認", className: "review" };
+    if (statusKey === "unentered") return { label: "未入力", className: "" };
+    if (statusKey === "pk") return { label: "PKあり", className: "pk" };
     return { label: "入力済み", className: "entered" };
+  }
+
+  function matchStatusKey(matchId) {
+    const score = normalizedScore(matchId);
+    const main = [score.score_home, score.score_away];
+    const penalties = [score.penalty_home, score.penalty_away];
+    const hasMain = main.map((value) => value !== "");
+    const hasPenalty = penalties.map((value) => value !== "");
+    const allEmpty = [...main, ...penalties].every((value) => value === "");
+    if (allEmpty) return "unentered";
+    if ([...main, ...penalties].some((value) => value !== "" && !isNumericScore(value))) return "review";
+    if (hasMain[0] !== hasMain[1]) return "review";
+    if (!hasMain[0] && (hasPenalty[0] || hasPenalty[1])) return "review";
+    if (hasPenalty[0] !== hasPenalty[1]) return "review";
+    if (hasMain[0] && hasPenalty[0]) return "pk";
+    if (hasMain[0]) return "entered";
+    return "review";
   }
 
   function createScoreEditor(matchId) {
@@ -446,11 +578,18 @@
 
   function scoreNumber(score, key) {
     const value = score[key];
-    return value === "" ? null : Number(value);
+    if (value === "") return null;
+    if (!isNumericScore(value)) return null;
+    const number = Number(value);
+    return Number.isFinite(number) ? number : null;
   }
 
   function hasMainScore(score) {
-    return scoreNumber(score, "score_home") !== null && scoreNumber(score, "score_away") !== null;
+    return isNumericScore(score.score_home) && isNumericScore(score.score_away);
+  }
+
+  function isNumericScore(value) {
+    return /^\d+$/.test(String(value));
   }
 
   function hasAnyScore(score) {
@@ -459,6 +598,8 @@
 
   function scoreText(matchId) {
     const score = normalizedScore(matchId);
+    const statusKey = matchStatusKey(matchId);
+    if (statusKey === "review") return "要確認";
     if (!hasMainScore(score)) return "未入力";
     let text = `${score.score_home}-${score.score_away}`;
     if (score.penalty_home !== "" && score.penalty_away !== "") {
@@ -1045,7 +1186,7 @@
       return resolved[`2${slot.group}`] || `Group ${slot.group} 2位`;
     }
     if (slot.type === "best_third") {
-      return `3位上位（${slot.groups.join("/")}）`;
+      return "3位上位枠（未確定）";
     }
     if (slot.type === "match_winner") {
       return resolved[`W-${slot.match_id}`] || "未確定";
