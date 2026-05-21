@@ -203,9 +203,9 @@
     updateSharedScoreStatus();
 
     if (state.view === "japan") {
-      content.appendChild(renderMatchList(computedMatches().filter(isJapanMatch)));
+      content.appendChild(renderMatchList(computedSchedule().filter(isJapanMatch)));
     } else if (state.view === "schedule") {
-      content.appendChild(renderMatchList(filterByGroup(computedMatches())));
+      content.appendChild(renderMatchList(filterByGroup(computedSchedule())));
     } else if (state.view === "calendar") {
       content.appendChild(renderCalendarView());
     } else if (state.view === "groups") {
@@ -269,9 +269,9 @@
     const teams = document.createElement("div");
     teams.className = "match-teams";
     teams.append(
-      teamLabel(matchHomeId(match), match.home_name_ja, "match-team"),
+      participantLabel(matchHomeId(match), match.home_name_ja, "match-team"),
       textDiv(scoreText(match.match_id), "match-score-display"),
-      teamLabel(matchAwayId(match), match.away_name_ja, "match-team away")
+      participantLabel(matchAwayId(match), match.away_name_ja, "match-team away")
     );
 
     const play = document.createElement("div");
@@ -378,6 +378,42 @@
         penalty_away: scoreNumber(score, "penalty_away")
       };
     });
+  }
+
+  function computedSchedule() {
+    const knockoutByMatch = currentKnockoutByMatch();
+    return computedMatches().map((match) => {
+      const knockoutMatch = knockoutByMatch[match.match_id];
+      if (!knockoutMatch) return match;
+      const home = normalizeScheduleParticipant(knockoutMatch.home);
+      const away = normalizeScheduleParticipant(knockoutMatch.away);
+      return {
+        ...match,
+        home_team_id: home.teamId,
+        away_team_id: away.teamId,
+        home: home.teamId,
+        away: away.teamId,
+        home_name_ja: home.label,
+        away_name_ja: away.label
+      };
+    });
+  }
+
+  function currentKnockoutByMatch() {
+    if (!state.saved.knockout?.rounds || state.saved.knockout.scoreSignature !== scoreSignature()) return {};
+    const map = {};
+    Object.values(state.saved.knockout.rounds).forEach((matches) => {
+      (matches || []).forEach((match) => {
+        map[match.matchId] = match;
+      });
+    });
+    return map;
+  }
+
+  function normalizeScheduleParticipant(value) {
+    if (isResolvedTeam(value)) return { teamId: value, label: displayTeam(value) };
+    const label = value && value !== "TBD" ? value : "未確定";
+    return { teamId: "TBD", label };
   }
 
   function savedScoreCount() {
@@ -625,9 +661,9 @@
     });
     row.append(
       textSpan(formatJstTime(match.kickoff_jst), "calendar-mini-time"),
-      teamLabel(matchHomeId(match), match.home_name_ja),
+      participantLabel(matchHomeId(match), match.home_name_ja),
       textSpan("vs", "calendar-vs"),
-      teamLabel(matchAwayId(match), match.away_name_ja),
+      participantLabel(matchAwayId(match), match.away_name_ja),
       textSpan(scoreText(match.match_id), "calendar-mini-score")
     );
     return row;
@@ -650,9 +686,9 @@
     main.className = "calendar-match-main";
     if (layout === "day") {
       main.append(
-        teamLabel(matchHomeId(match), match.home_name_ja),
+        participantLabel(matchHomeId(match), match.home_name_ja),
         textDiv(scoreText(match.match_id), "match-score-display"),
-        teamLabel(matchAwayId(match), match.away_name_ja)
+        participantLabel(matchAwayId(match), match.away_name_ja)
       );
 
       const info = document.createElement("div");
@@ -678,9 +714,9 @@
 
     main.append(
       textDiv(formatJstTime(match.kickoff_jst), "calendar-match-time"),
-      teamLabel(matchHomeId(match), match.home_name_ja),
+      participantLabel(matchHomeId(match), match.home_name_ja),
       textDiv(scoreText(match.match_id), "match-score-display"),
-      teamLabel(matchAwayId(match), match.away_name_ja)
+      participantLabel(matchAwayId(match), match.away_name_ja)
     );
 
     const meta = document.createElement("div");
@@ -699,7 +735,7 @@
 
   function matchesOnDay(day) {
     const key = dateKey(day);
-    return sortedMatches(filterByGroup(computedMatches())).filter((match) => dateKey(jstDate(match.kickoff_jst)) === key);
+    return sortedMatches(filterByGroup(computedSchedule())).filter((match) => dateKey(jstDate(match.kickoff_jst)) === key);
   }
 
   function firstMatchDate() {
@@ -1094,6 +1130,12 @@
   function knockoutParticipantLabel(value) {
     if (isResolvedTeam(value) || value === "TBD") return teamLabel(value);
     return textSpan(value || "未確定", "team-label knockout-placeholder");
+  }
+
+  function participantLabel(teamId, fallback = "", className = "", options = {}) {
+    if (isResolvedTeam(teamId)) return teamLabel(teamId, fallback, className, options);
+    const label = fallback || (teamId && teamId !== "TBD" ? teamId : "未確定");
+    return textSpan(label, `team-label ${className} knockout-placeholder`.trim());
   }
 
   function exportState() {
