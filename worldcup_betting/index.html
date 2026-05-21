@@ -3950,15 +3950,22 @@
       { id: "p45", name: "三戸舜介", position: "OMF/WG", group: "OMF/WG", status: "可能性", number: "", club: "スパルタ・ロッテルダム", imageUrl: "pics/三戸舜介.jpg" },
       { id: "p46", name: "大橋祐紀", position: "CF", group: "CF", status: "可能性", number: "", club: "ブラックバーン", imageUrl: "pics/大橋祐紀.jpg" },
       { id: "p47", name: "小杉啓太", position: "SB/WB", group: "DF", status: "可能性", number: "", club: "ユールゴーデン", imageUrl: "pics/小杉啓太.jpg" },
-      { id: "goto_keisuke", name: "後藤啓介", position: "CF", group: "CF", status: "可能性", number: "", club: "", imageUrl: "pics/後藤啓介.jpg" }
+      { id: "goto_keisuke", name: "後藤啓介", position: "MF/FW", group: "OMF/WG", status: "可能性", number: "", club: "シントトロイデンVV", country: "ベルギー", imageUrl: "pics/後藤啓介.jpg" }
     ];
 
-    const clubOverrides = {
-      "鈴木唯人": "フライブルク",
-      "堂安律": "フランクフルト"
+    const playerOverrides = {
+      "鈴木唯人": { club: "フライブルク" },
+      "堂安律": { club: "フランクフルト" },
+      "後藤啓介": {
+        position: "MF/FW",
+        group: "OMF/WG",
+        club: "シントトロイデンVV",
+        country: "ベルギー",
+        imageUrl: "pics/後藤啓介.jpg"
+      }
     };
 
-    const allPlayers = applyClubOverrides(loadPlayerMaster([...players, ...candidatePlayers]));
+    const allPlayers = applyPlayerOverrides(loadPlayerMaster([...players, ...candidatePlayers]));
     const officialSquadNames = [
       "早川友基", "大迫敬介", "鈴木彩艶",
       "長友佑都", "谷口彰悟", "板倉滉", "渡辺剛", "冨安健洋", "伊藤洋輝", "瀬古歩夢", "菅原由勢", "鈴木淳之介",
@@ -4011,6 +4018,7 @@
       "バイエルン": "ドイツ",
       "アヤックス": "オランダ",
       "シント＝トロイデン": "ベルギー",
+      "シントトロイデンVV": "ベルギー",
       "ル・アーヴル": "フランス",
       "サウサンプトン": "イングランド",
       "AZ": "オランダ",
@@ -4133,10 +4141,10 @@
       ]));
     }
 
-    function applyClubOverrides(list) {
+    function applyPlayerOverrides(list) {
       return list.map((player) => {
-        const club = clubOverrides[player.name];
-        return club ? { ...player, club } : player;
+        const override = playerOverrides[player.name];
+        return override ? { ...player, ...override } : player;
       });
     }
 
