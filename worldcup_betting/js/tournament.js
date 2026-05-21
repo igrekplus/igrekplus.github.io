@@ -239,9 +239,9 @@
     meta.append(
       textDiv(match.match_id, "match-id"),
       textDiv(stageLabels[match.stage] || match.stage),
-      textDiv(match.group ? `Group ${match.group}` : ""),
+      textDiv(match.group ? `Group ${match.group}` : "", "match-group"),
       textDiv(formatJstDateTime(match.kickoff_jst), "match-jst"),
-      textDiv(venueText(match))
+      textDiv(venueText(match), "match-venue")
     );
 
     const teams = document.createElement("div");
