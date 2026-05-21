@@ -96,7 +96,14 @@
       display: none;
     }
 
-    .app.single-panel .owner-only-action {
+    .app.single-panel .owner-only-action:not(.shared-prediction-action) {
+      display: none;
+    }
+
+    .board.tournament-only .shared-prediction-action,
+    .board.roster-only .shared-prediction-action,
+    .board.bet-only .shared-prediction-action,
+    .board.explain-only .shared-prediction-action {
       display: none;
     }
 
@@ -3472,12 +3479,12 @@
               <button class="utility-button" type="button" id="lockButton">配置ロック</button>
               <button class="utility-button" type="button" id="screenshotButton">スクショ用</button>
             </div>
-            <div class="action-group owner-only-action" aria-label="共有">
+            <div class="action-group owner-only-action shared-prediction-action" aria-label="共有">
               <span class="action-label">共有：</span>
-              <button class="utility-button" type="button" id="exportButton">エクスポート</button>
-              <button class="utility-button" type="button" id="importButton">インポート</button>
-              <button class="utility-button" type="button" id="gistExportButton">Gist用にエクスポート</button>
-              <button class="utility-button" type="button" id="gistImportButton">Gist Raw URLから読み込み</button>
+              <button class="utility-button" type="button" id="exportButton">このシートJSON出力</button>
+              <button class="utility-button" type="button" id="importButton">このシートJSON読込</button>
+              <button class="utility-button" type="button" id="gistExportButton">共有JSON出力</button>
+              <button class="utility-button" type="button" id="gistImportButton">共有JSON URL読込</button>
             </div>
             <div class="action-group owner-only-action" aria-label="ピッチ配置リセット">
               <button class="reset" type="button" id="resetButton">ピッチ配置をリセット</button>
@@ -3843,17 +3850,17 @@
           </div>
         </div>
 
-        <section class="decision-area" id="confirmedArea" aria-label="招集予想">
+        <section class="decision-area" id="confirmedArea" aria-label="" hidden>
           <div class="decision-head">
-            <div class="decision-title">招集予想</div>
+            <div class="decision-title"></div>
             <div class="decision-count" id="confirmedCount">0人</div>
           </div>
           <div class="decision-list" id="confirmedList"></div>
         </section>
 
-        <section class="decision-area" id="droppedArea" aria-label="落選予想">
+        <section class="decision-area" id="droppedArea" aria-label="" hidden>
           <div class="decision-head">
-            <div class="decision-title">落選予想</div>
+            <div class="decision-title"></div>
             <div class="decision-count" id="droppedCount">0人</div>
           </div>
           <div class="decision-list" id="droppedList"></div>
@@ -3861,7 +3868,7 @@
 
         <section class="bench-pool" id="benchArea" aria-label="ベンチ">
           <div class="bench-head">
-            <h2 class="bench-title">ベンチ（招集予想）</h2>
+            <h2 class="bench-title">ベンチ</h2>
             <div class="bench-sub" id="benchCount">ベンチ: 26人</div>
           </div>
           <div class="bench-list" id="benchList"></div>
@@ -3952,14 +3959,16 @@
     };
 
     const allPlayers = applyClubOverrides(loadPlayerMaster([...players, ...candidatePlayers]));
-    const defaultKarinIds = new Set(players.map((player) => player.id));
+    const officialSquadNames = [
+      "早川友基", "大迫敬介", "鈴木彩艶",
+      "長友佑都", "谷口彰悟", "板倉滉", "渡辺剛", "冨安健洋", "伊藤洋輝", "瀬古歩夢", "菅原由勢", "鈴木淳之介",
+      "遠藤航", "伊東純也", "鎌田大地", "小川航基", "前田大然", "堂安律", "上田綺世", "田中碧", "中村敬斗", "佐野海舟", "久保建英", "鈴木唯人", "塩貝健人", "後藤啓介"
+    ];
+    const officialSquadSourceUrl = "https://www.jfa.jp/samuraiblue/worldcup_2026/member.html";
+    const officialSquadDefaultIds = new Set(officialSquadNames.map((name) => allPlayers.find((player) => player.name === name)?.id).filter(Boolean));
+    const defaultKarinIds = new Set(officialSquadDefaultIds);
     const defaultRyoNames = [
-      "鈴木彩艶", "谷晃生", "早川友基",
-      "伊藤洋輝", "板倉滉", "渡辺剛", "谷口彰悟", "瀬古歩夢", "鈴木淳之介", "冨安健洋",
-      "遠藤航", "守田英正", "佐野海舟", "田中碧",
-      "三笘薫", "中村敬斗", "堂安律", "伊東純也", "菅原由勢",
-      "鎌田大地", "久保建英", "町野修斗", "前田大然",
-      "上田綺世", "小川航基", "塩貝健人"
+      ...officialSquadNames
     ];
     const defaultRyoIds = new Set(defaultRyoNames.map((name) => allPlayers.find((player) => player.name === name)?.id).filter(Boolean));
     const requiredOwnerPlayerIds = {
@@ -4087,12 +4096,21 @@
       return allPlayers.find((player) => player.id === playerId);
     }
 
+    function isOfficialSquadPlayer(playerId) {
+      return officialSquadDefaultIds.has(playerId);
+    }
+
+    function officialSquadPlayers() {
+      return officialSquadNames.map((name) => allPlayers.find((player) => player.name === name)).filter(Boolean);
+    }
+
     function sortPlayersByMasterOrder(list) {
       return [...list].sort((a, b) => playerOriginalIndex(a) - playerOriginalIndex(b));
     }
 
     function ensureRequiredOwnerPlayers(owner) {
-      const requiredIds = requiredOwnerPlayerIds[owner] || [];
+      const requiredIds = Array.from(new Set([...officialSquadDefaultIds, ...(requiredOwnerPlayerIds[owner] || [])]));
+      ownerPlayers[owner] = sortPlayersByMasterOrder(ownerPlayers[owner].filter((player) => isOfficialSquadPlayer(player.id)));
       requiredIds.forEach((playerId) => {
         const player = allPlayerById(playerId);
         if (!player) return;
@@ -4100,7 +4118,7 @@
           ownerPlayers[owner].push(player);
         }
       });
-      ownerPlayers[owner] = sortPlayersByMasterOrder(ownerPlayers[owner]);
+      ownerPlayers[owner] = officialSquadPlayers().filter((player) => ownerPlayers[owner].some((item) => item.id === player.id));
     }
 
     function syncPlayersArrayOrder() {
@@ -4165,7 +4183,7 @@
     }
 
     function normalizePlacement(saved, fallback) {
-      const safeArea = ["pitch", "bench", "confirmed", "dropped"].includes(saved?.area) ? saved.area : fallback.area;
+      const safeArea = saved?.area === "pitch" ? "pitch" : "bench";
       const safeRating = ratingOrder.includes(saved?.rating) ? saved.rating : fallback.rating;
       const safeX = Number.isFinite(Number(saved?.x)) ? clamp(Number(saved.x), 0, 100) : fallback.x;
       const safeY = Number.isFinite(Number(saved?.y)) ? clamp(Number(saved.y), 0, 100) : fallback.y;
@@ -4192,7 +4210,7 @@
         const saved = JSON.parse(raw);
         const savedPlayers = saved?.players || {};
         if (Array.isArray(saved?.rosterIds)) {
-          ownerPlayers[owner] = sortPlayersByMasterOrder(saved.rosterIds.map(allPlayerById).filter(Boolean));
+          ownerPlayers[owner] = sortPlayersByMasterOrder(saved.rosterIds.map(allPlayerById).filter((player) => player && isOfficialSquadPlayer(player.id)));
         }
         ensureRequiredOwnerPlayers(owner);
         const initialForRoster = createInitialState(owner);
@@ -4280,16 +4298,7 @@
     }
 
     function loadOfficialSquad() {
-      try {
-        const raw = localStorage.getItem(officialSquadStorageKey);
-        if (!raw) return new Set();
-        const saved = JSON.parse(raw);
-        const ids = Array.isArray(saved) ? saved : saved?.playerIds;
-        return new Set(Array.isArray(ids) ? ids : []);
-      } catch (error) {
-        console.warn(`${officialSquadStorageKey} の復元に失敗しました`, error);
-        return new Set();
-      }
+      return new Set(officialSquadDefaultIds);
     }
 
     function saveOfficialSquad() {
@@ -4297,6 +4306,7 @@
         localStorage.setItem(officialSquadStorageKey, JSON.stringify({
           version: 1,
           teamName,
+          source: officialSquadSourceUrl,
           playerIds: Array.from(officialSquadIds)
         }));
         updateSaveState(activeOwner);
@@ -4321,7 +4331,7 @@
         });
       }
       allPlayers.forEach((player) => {
-        if (normalized[player.id] === undefined) normalized[player.id] = "pending";
+        normalized[player.id] = isOfficialSquadPlayer(player.id) ? "selected" : "not_selected";
       });
       Object.entries(requiredBetResultDefaults).forEach(([playerId, value]) => {
         if (!allPlayerById(playerId)) return;
@@ -4338,7 +4348,7 @@
           loadOfficialSquad().forEach((playerId) => {
             if (allPlayerById(playerId)) migrated[playerId] = "selected";
           });
-          return migrated;
+          return normalizeBetResults(migrated);
         }
         betResultsLoadedFromStorage = true;
         return normalizeBetResults(JSON.parse(raw));
@@ -4928,8 +4938,9 @@
 
     function updatePlacement(playerId, placement) {
       const current = states[activeOwner].get(playerId) || {};
+      const area = placement.area === "pitch" ? "pitch" : "bench";
       states[activeOwner].set(playerId, {
-        area: placement.area,
+        area,
         x: placement.x,
         y: placement.y,
         rating: current.rating || "△",
@@ -5015,11 +5026,6 @@
       card.className = `player-card${onPitch ? " on-pitch" : ""}`;
       card.dataset.playerId = player.id;
       card.setAttribute("aria-label", `${player.name} ${player.position} ${player.club}`);
-      if (activeView === "owner" && betResultForPlayer(player.id) === "pending") {
-        card.classList.add("pending-result");
-        card.title = "正式結果は未確定です";
-      }
-
       const photo = document.createElement("div");
       photo.className = "photo";
 
@@ -5056,7 +5062,7 @@
         rating = document.createElement("button");
         rating.className = "rating-mark clickable";
         rating.textContent = currentRating(player.id, owner);
-        rating.setAttribute("aria-label", `${player.name} 招集評価 ${rating.textContent}`);
+        rating.setAttribute("aria-label", `${player.name} 評価 ${rating.textContent}`);
         rating.type = "button";
         rating.addEventListener("pointerdown", (event) => {
           event.stopPropagation();
@@ -5087,9 +5093,6 @@
         meta.append(number);
       }
       meta.append(position, club);
-      if (activeView === "owner" && !screenshotMode) {
-        meta.appendChild(createPredictionBadge(player.id, owner));
-      }
       if (!onPitch && activeView === "owner" && !screenshotMode) {
         const edit = document.createElement("button");
         edit.className = "edit-player-button";
@@ -5130,15 +5133,14 @@
 
     function shouldShowAsOwnerSelected(player, placement) {
       if (!player || !placement) return false;
-      if (placement.area === "dropped") return false;
-      return true;
+      return isOfficialSquadPlayer(player.id);
     }
 
     function createPredictionBadge(playerId, owner = activeOwner) {
       const badge = document.createElement("span");
       const prediction = predictionStateForPlayer(playerId, owner);
       badge.className = `prediction-badge${prediction === "dropped" ? " out" : ""}`;
-      badge.textContent = prediction === "dropped" ? "落選予想" : "招集予想";
+      badge.textContent = "";
       return badge;
     }
 
@@ -5250,14 +5252,14 @@
 
       boardTitle.textContent = `${owners[activeOwner]}予想（${teamName}）`;
       sideTitle.textContent = `${owners[activeOwner]}の予想`;
-      sideSub.textContent = "";
+      sideSub.textContent = "端末内保存に加えて、共有JSON出力/URL読込で別端末にも反映できます。";
       pitchCount.textContent = `ピッチ: ${pitchTotal}人/${pitchLimit}人`;
       pitchCount.classList.toggle("over-limit", pitchTotal > pitchLimit);
       benchCount.textContent = `ベンチ: ${benchTotal}人`;
       confirmedCount.textContent = `${confirmedTotal}人`;
       droppedCount.textContent = `${droppedTotal}人`;
       ratingTotal.textContent = `総人数：${currentPlayers().length}人`;
-      saveState.textContent = saveLabels[activeOwner] || "自動保存済み";
+      saveState.textContent = saveLabels[activeOwner] || "端末内保存 / JSON共有可";
       lockButton.textContent = ownerLocks[activeOwner] ? "ロック解除" : "配置ロック";
       lockButton.classList.toggle("active", ownerLocks[activeOwner]);
       formationButtons.forEach((button) => {
@@ -5346,15 +5348,15 @@
       const state = states[owner];
       const selected = [];
       const used = new Set();
-      playersForOwner(owner)
+      officialSquadPlayers()
         .filter((player) => state.get(player.id)?.area === "pitch")
         .sort(sortForComparison)
         .forEach((player) => {
           selected.push(player);
           used.add(player.id);
         });
-      playersForOwner(owner)
-        .filter((player) => !used.has(player.id) && state.get(player.id)?.area !== "dropped")
+      officialSquadPlayers()
+        .filter((player) => !used.has(player.id))
         .sort((a, b) => {
           const ratingDiff = ratingOrder.indexOf(currentRating(a.id, owner)) - ratingOrder.indexOf(currentRating(b.id, owner));
           if (ratingDiff !== 0) return ratingDiff;
@@ -5367,7 +5369,7 @@
 
     function benchPlayersForOwner(owner) {
       const state = states[owner];
-      return selectedPlayersForOwner(owner)
+      return officialSquadPlayers()
         .filter((player) => state.get(player.id)?.area !== "pitch")
         .sort(sortForComparison);
     }
@@ -6171,6 +6173,10 @@
     function addPlayerToOwner(owner, playerId) {
       const player = allPlayerById(playerId);
       if (!player || ownerHasPlayer(owner, playerId)) return;
+      if (!isOfficialSquadPlayer(playerId)) {
+        showStatus("正式招集26名以外は予想シートには追加されません");
+        return;
+      }
       ownerPlayers[owner] = sortPlayersByMasterOrder([...ownerPlayers[owner], player]);
       if (!states[owner].has(playerId)) {
         states[owner].set(playerId, { area: "bench", x: 50, y: 50, rating: initialRating(player.status), number: player.number || "", manual: false });
@@ -6619,6 +6625,10 @@
     }
 
     function exportCurrentState() {
+      if (activeView === "compare") {
+        copyJsonToClipboard(buildGistExportData(), "共有JSONをコピーしました");
+        return;
+      }
       if (activeView !== "owner") return;
       const data = buildExportData(activeOwner);
       const text = JSON.stringify(data, null, 2);
@@ -6650,8 +6660,11 @@
       });
       return {
         version: 1,
+        type: "worldcup2026_japan_prediction",
         owner,
         teamName,
+        officialSquadSource: officialSquadSourceUrl,
+        officialSquad: Array.from(officialSquadDefaultIds),
         rosterIds: ownerPlayers[owner].map((player) => player.id),
         formation: currentFormations[owner] || "",
         locked: ownerLocks[owner],
@@ -6660,16 +6673,22 @@
     }
 
     function buildGistExportData() {
+      const karinPrediction = buildExportData("karin");
+      const ryoPrediction = buildExportData("ryo");
       return {
         version: 2,
+        type: "worldcup2026_japan_predictions",
         exportedAt: new Date().toISOString(),
         teamName,
+        officialSquadSource: officialSquadSourceUrl,
+        officialSquad: Array.from(officialSquadDefaultIds),
         playerIds: allPlayers.map((player) => player.id),
         owners: {
-          karin: buildExportData("karin"),
-          ryo: buildExportData("ryo")
+          karin: karinPrediction,
+          ryo: ryoPrediction
         },
-        officialSquad: allPlayers.filter((player) => betResultForPlayer(player.id) === "selected").map((player) => player.id),
+        karinPrediction,
+        ryoPrediction,
         betResults: { ...betResults },
         bet: { amount: betState.amount }
       };
@@ -6694,8 +6713,9 @@
         throw new Error(`${owners[owner]}の players 情報がありません`);
       }
       if (Array.isArray(data.rosterIds)) {
-        ownerPlayers[owner] = sortPlayersByMasterOrder(data.rosterIds.map(allPlayerById).filter(Boolean));
+        ownerPlayers[owner] = sortPlayersByMasterOrder(data.rosterIds.map(allPlayerById).filter((player) => player && isOfficialSquadPlayer(player.id)));
       }
+      ensureRequiredOwnerPlayers(owner);
       const imported = createInitialState(owner);
       ownerPlayers[owner].forEach((player) => {
         const fallback = imported.get(player.id);
@@ -6729,8 +6749,8 @@
         }
         const payload = await response.json();
         const ownersPayload = payload.owners || payload;
-        applyOwnerImportData("karin", ownersPayload.karin || payload.karin);
-        applyOwnerImportData("ryo", ownersPayload.ryo || payload.ryo);
+        applyOwnerImportData("karin", payload.karinPrediction || ownersPayload.karin || payload.karin);
+        applyOwnerImportData("ryo", payload.ryoPrediction || ownersPayload.ryo || payload.ryo);
         if (payload.betResults && typeof payload.betResults === "object") {
           betResults = normalizeBetResults(payload.betResults);
           betResultDraft = { ...betResults };
@@ -6757,7 +6777,7 @@
     }
 
     function importCurrentState() {
-      if (activeView !== "owner") return;
+      if (!["owner", "compare"].includes(activeView)) return;
       const text = window.prompt("インポートするJSON文字列を貼り付けてください");
       if (!text) return;
 
@@ -6769,7 +6789,23 @@
         return;
       }
 
-      if (!data?.players || typeof data.players !== "object") {
+      if (activeView === "compare") {
+        const ownersPayload = data.owners || data;
+        if (!data.karinPrediction && !data.ryoPrediction && (!ownersPayload.karin || !ownersPayload.ryo)) {
+          window.alert("共有JSONには karinPrediction / ryoPrediction、または owners.karin / owners.ryo が必要です。");
+          return;
+        }
+        const ok = window.confirm("共有JSONで、かりん・りょう両方の予想を上書きします。よろしいですか？");
+        if (!ok) return;
+        applyOwnerImportData("karin", data.karinPrediction || ownersPayload.karin);
+        applyOwnerImportData("ryo", data.ryoPrediction || ownersPayload.ryo);
+        showStatus("共有JSONを読み込みました");
+        render();
+        return;
+      }
+
+      const ownerData = data.karinPrediction || data.ryoPrediction || data.owners?.[activeOwner] || data;
+      if (!ownerData?.players || typeof ownerData.players !== "object") {
         window.alert("インポートデータに players 情報がありません。");
         return;
       }
@@ -6777,7 +6813,7 @@
       const ok = window.confirm("このタブの現在の予想をインポートデータで上書きします。よろしいですか？");
       if (!ok) return;
 
-      applyOwnerImportData(activeOwner, data);
+      applyOwnerImportData(activeOwner, ownerData);
       showStatus("インポートしました");
       render();
     }
