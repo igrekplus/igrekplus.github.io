@@ -3621,12 +3621,12 @@
                 <button class="utility-button" type="button" id="tournamentImportButton">JSONインポート</button>
               </div>
               <div class="tournament-shared-score" aria-label="共有スコアJSON">
-                <input id="sharedScoreUrlInput" type="url" inputmode="url" placeholder="共有スコアJSON URL">
-                <button class="utility-button" type="button" id="sharedScoreUrlButton">共有JSON読込</button>
-                <div class="shared-score-status" id="sharedScoreStatus">共有JSON未読込</div>
+                <input id="sharedScoreUrlInput" type="url" inputmode="url" placeholder="スマホ/PC共有用スコアJSON URL">
+                <button class="utility-button" type="button" id="sharedScoreUrlButton">共有スコアを読み込む</button>
+                <div class="shared-score-status" id="sharedScoreStatus">端末内保存のみ。スマホとPCは自動同期されません。</div>
               </div>
             </div>
-            <div class="tournament-summary" id="tournamentSummary">data/worldcup2026_matches.json を読み込み中...</div>
+            <div class="tournament-summary" id="tournamentSummary"></div>
             <div id="tournamentContent"></div>
           </div>
         </section>
@@ -5315,15 +5315,18 @@
       rosterPanel.classList.remove("active");
       positionPanel.classList.remove("active");
       tournamentPanel.classList.add("active");
+      [comparisonPanel, betPanel, rosterPanel, positionPanel].forEach((panel) => panel.classList.remove("active"));
+      clearPitchCards();
+      clearComparePitches();
 
       boardTitle.textContent = "W杯2026";
       sideTitle.textContent = "スコア/日程";
-      sideSub.textContent = "スコアはこの端末のlocalStorageに自動保存されます。";
+      sideSub.textContent = "スコアは端末内に保存されます。スマホとPCで共有するには共有スコアJSONを読み込んでください。";
       statusMessage.textContent = "";
       window.clearTimeout(statusTimer);
       pitchCount.textContent = "2026本大会";
       pitchCount.classList.remove("over-limit");
-      saveState.textContent = "スコア自動保存";
+      saveState.textContent = "端末内保存";
       window.WorldCupTournament?.init();
       window.WorldCupTournament?.renderContent();
 

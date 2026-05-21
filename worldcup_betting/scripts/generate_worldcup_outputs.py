@@ -10,6 +10,12 @@ ROOT = Path(__file__).resolve().parents[1]
 MANUAL_DIR = ROOT / "data" / "manual"
 GENERATED_DIR = ROOT / "generated"
 GROUPS = list("ABCDEFGHIJKL")
+
+COUNTRY_JA_BY_EN = {
+    "Canada": "カナダ",
+    "Mexico": "メキシコ",
+    "United States": "アメリカ",
+}
 FLAG_CODE_BY_TEAM_ID = {
     "MEX": "mx",
     "RSA": "za",
@@ -162,6 +168,7 @@ class Match:
     venue: str
     city: str
     country: str
+    country_ja: str
     home_score: int | None
     away_score: int | None
     home_et_score: int | None
@@ -210,6 +217,7 @@ def load_matches() -> list[Match]:
                 venue=blank_to_none(row["venue"]) or "",
                 city=blank_to_none(row.get("city")) or "",
                 country=blank_to_none(row.get("country")) or "",
+                country_ja=COUNTRY_JA_BY_EN.get(blank_to_none(row.get("country")) or "", ""),
                 home_score=to_int(row["home_score"]),
                 away_score=to_int(row["away_score"]),
                 home_et_score=to_int(row["home_et_score"]),
@@ -447,6 +455,7 @@ def match_as_site_dict(match: Match, teams: dict[str, dict[str, str]]) -> dict[s
         "venue": match.venue,
         "city": match.city,
         "country": match.country,
+        "country_ja": match.country_ja,
         "score_home": match.home_score,
         "score_away": match.away_score,
         "penalty_home": match.home_pk_score,

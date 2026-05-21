@@ -1,4 +1,4 @@
-(function () {
+﻿(function () {
   const STORAGE_KEY = "worldcup2026_tournament_state";
   const DATA_URL = "data/worldcup2026_matches.json";
   const JAPAN_TEAM_ID = "JPN";
@@ -179,11 +179,12 @@
 
     if (state.loadError) {
       content.appendChild(message(state.loadError, "tournament-error"));
-      if (summary) summary.textContent = "読み込みエラー";
+      if (summary) summary.textContent = `読み込み失敗: ${state.loadError}`;
       return;
     }
     if (!state.loaded) {
       content.appendChild(message(`${DATA_URL} を読み込み中...`));
+      if (summary) summary.textContent = "スコア/日程データを読み込み中...";
       return;
     }
 
@@ -1070,10 +1071,10 @@
     const input = state.elements.sharedUrlInput;
     const url = (input?.value || "").trim();
     if (!url) {
-      setSharedScoreStatus("共有JSON URLを入力してください");
+      setSharedScoreStatus("スマホ/PC共有用のスコアJSON URLを入力してください");
       return;
     }
-    setSharedScoreStatus("共有JSONを読み込み中...");
+    setSharedScoreStatus("共有スコアJSONを読み込み中...");
     try {
       const response = await fetch(url, { cache: "no-store" });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -1086,10 +1087,10 @@
       state.saved.lastUpdatedAt = state.saved.sharedScoreLoadedAt;
       persist();
       renderContent();
-      setSharedScoreStatus(`共有JSON読込済み: ${formatSavedDateTime(state.saved.sharedScoreLoadedAt)}`);
-      setSavedLabel("共有スコアJSONを保存済み");
+      setSharedScoreStatus(`共有スコア読込済み: ${formatSavedDateTime(state.saved.sharedScoreLoadedAt)}（端末内にも保存）`);
+      setSavedLabel("共有スコアを端末内に保存済み");
     } catch (error) {
-      setSharedScoreStatus(`共有JSONを読み込めませんでした: ${error.message || error}`);
+      setSharedScoreStatus(`共有スコアJSONを読み込めませんでした: ${error.message || error}`);
     }
   }
 
@@ -1102,9 +1103,9 @@
   function updateSharedScoreStatus() {
     if (!state.elements.sharedStatus) return;
     if (state.saved.sharedScoreLoadedAt) {
-      state.elements.sharedStatus.textContent = `共有JSON: ${formatSavedDateTime(state.saved.sharedScoreLoadedAt)}`;
+      state.elements.sharedStatus.textContent = `共有スコア読込済み: ${formatSavedDateTime(state.saved.sharedScoreLoadedAt)}（端末内にも保存）`;
     } else {
-      state.elements.sharedStatus.textContent = "共有JSON未読込";
+      state.elements.sharedStatus.textContent = "端末内保存のみ。スマホとPCは自動同期されません。";
     }
   }
 
@@ -1206,6 +1207,8 @@
   function venueText(match) {
     const venue = (match.venue || "").trim();
     const city = (match.city || "").trim();
+    const countryJa = (match.country_ja || "").trim();
+    if (venue && city && countryJa) return `${venue}（${city}・${countryJa}）`;
     if (venue && city) return `${venue}（${city}）`;
     if (venue) return venue;
     return "会場未定";
