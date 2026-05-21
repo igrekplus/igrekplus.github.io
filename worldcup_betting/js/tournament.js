@@ -1,6 +1,7 @@
 ﻿(function () {
   const STORAGE_KEY = "worldcup2026_tournament_state";
   const DATA_URL = "data/worldcup2026_matches.json";
+  const KNOCKOUT_MAPPING_URL = "data/knockout_mapping.json";
   const JAPAN_TEAM_ID = "JPN";
   const JST_TIME_ZONE = "Asia/Tokyo";
   const DAY_MS = 24 * 60 * 60 * 1000;
@@ -33,6 +34,7 @@
     view: "japan",
     matches: [],
     teams: {},
+    knockoutMapping: {},
     groupFilter: "all",
     calendarMode: "month",
     calendarDate: null,
@@ -88,6 +90,7 @@
       const payload = await response.json();
       state.matches = Array.isArray(payload.matches) ? payload.matches.map(normalizeMatch) : [];
       state.teams = buildTeamMap(payload.teams, state.matches);
+      state.knockoutMapping = await loadKnockoutMapping();
       logFlagMapping();
       state.calendarDate = firstMatchDate() || new Date("2026-06-12T00:00:00+09:00");
       state.loaded = true;
@@ -956,8 +959,8 @@
     knockoutStageOrder.forEach((stage) => {
       rounds[stage] = [];
       sortedMatches(computedMatches().filter((match) => match.stage === stage)).forEach((match) => {
-        const home = resolveRef(matchHomeId(match), resolved);
-        const away = resolveRef(matchAwayId(match), resolved);
+        const home = resolveSlot(slotFor(match.match_id, "home", matchHomeId(match)), resolved);
+        const away = resolveSlot(slotFor(match.match_id, "away", matchAwayId(match)), resolved);
         const winnerName = winner(match.match_id, home, away);
         if (winnerName) {
           resolved[`W-${match.match_id}`] = winnerName;
@@ -989,17 +992,60 @@
 
   function resolveRef(value, resolved) {
     if (!value) return "TBD";
-    if (resolved[value]) return resolved[value];
-    if (value.includes("/")) {
-      const resolvedOptions = value.split("/").map((part) => resolved[part]).filter(Boolean);
-      return resolvedOptions.length === 1 ? resolvedOptions[0] : "TBD";
+    return resolveSlot(parseKnockoutSlot(value), resolved);
+  }
+
+  function slotFor(matchId, side, fallback) {
+    return state.knockoutMapping?.matches?.[matchId]?.[side] || parseKnockoutSlot(fallback);
+  }
+
+  function resolveSlot(slot, resolved) {
+    if (!slot) return "TBD";
+    if (typeof slot === "string") return resolveRef(slot, resolved);
+    if (slot.type === "group_winner") {
+      return resolved[`1${slot.group}`] || `Group ${slot.group} 1位`;
     }
-    if (/^[123][A-L]$/.test(value) || /^[WL]-/.test(value)) return "TBD";
-    return value;
+    if (slot.type === "group_runner_up") {
+      return resolved[`2${slot.group}`] || `Group ${slot.group} 2位`;
+    }
+    if (slot.type === "best_third") {
+      return `3位上位（${slot.groups.join("/")}）`;
+    }
+    if (slot.type === "match_winner") {
+      return resolved[`W-${slot.match_id}`] || "未確定";
+    }
+    if (slot.type === "match_loser") {
+      return resolved[`L-${slot.match_id}`] || "未確定";
+    }
+    const teamId = slot.team_id || slot.value;
+    if (teamId && resolved[teamId]) return resolved[teamId];
+    return teamId || "TBD";
+  }
+
+  function parseKnockoutSlot(value) {
+    const text = String(value || "");
+    const groupWinner = text.match(/^1([A-L])$/);
+    if (groupWinner) return { type: "group_winner", group: groupWinner[1] };
+    const groupRunnerUp = text.match(/^2([A-L])$/);
+    if (groupRunnerUp) return { type: "group_runner_up", group: groupRunnerUp[1] };
+    if (/^3[A-L](\/3[A-L])*$/.test(text)) {
+      return {
+        type: "best_third",
+        groups: text.split("/").map((part) => part.slice(1))
+      };
+    }
+    const matchResult = text.match(/^([WL])-(.+)$/);
+    if (matchResult) {
+      return {
+        type: matchResult[1] === "W" ? "match_winner" : "match_loser",
+        match_id: matchResult[2]
+      };
+    }
+    return { type: "team", value: text };
   }
 
   function winner(matchId, homeName, awayName) {
-    if (homeName === "TBD" || awayName === "TBD") return "";
+    if (!isResolvedTeam(homeName) || !isResolvedTeam(awayName)) return "";
     const score = normalizedScore(matchId);
     if (!hasMainScore(score)) return "";
     const homePenalty = scoreNumber(score, "penalty_home");
@@ -1011,6 +1057,10 @@
     const awayScore = scoreNumber(score, "score_away");
     if (homeScore === awayScore) return "";
     return homeScore > awayScore ? homeName : awayName;
+  }
+
+  function isResolvedTeam(value) {
+    return Boolean(value && state.teams[value]);
   }
 
   function renderKnockoutSnapshot() {
@@ -1032,13 +1082,18 @@
         const row = document.createElement("div");
         row.className = "knockout-match";
         if (match.home === JAPAN_TEAM_ID || match.away === JAPAN_TEAM_ID) row.classList.add("japan-highlight");
-        row.append(textDiv(match.matchId), teamLabel(match.home), textDiv(match.score), teamLabel(match.away));
+        row.append(textDiv(match.matchId), knockoutParticipantLabel(match.home), textDiv(match.score), knockoutParticipantLabel(match.away));
         list.appendChild(row);
       });
       card.append(heading, list);
       wrapper.appendChild(card);
     });
     return wrapper;
+  }
+
+  function knockoutParticipantLabel(value) {
+    if (isResolvedTeam(value) || value === "TBD") return teamLabel(value);
+    return textSpan(value || "未確定", "team-label knockout-placeholder");
   }
 
   function exportState() {
@@ -1174,6 +1229,16 @@
     };
     persist();
     renderContent();
+  }
+
+  async function loadKnockoutMapping() {
+    try {
+      const response = await fetch(KNOCKOUT_MAPPING_URL, { cache: "no-store" });
+      if (!response.ok) return {};
+      return await response.json();
+    } catch (error) {
+      return {};
+    }
   }
 
   function applySharedScorePayload(payload, options = {}) {
