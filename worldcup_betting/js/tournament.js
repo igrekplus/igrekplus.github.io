@@ -227,14 +227,9 @@
   }
 
   function createMatchCard(match) {
-    const card = document.createElement("details");
+    const card = document.createElement("article");
     card.className = "match-card";
     if (isJapanMatch(match)) card.classList.add("japan-highlight");
-    card.open = true;
-
-    const summary = document.createElement("summary");
-    summary.className = "match-summary";
-    summary.append(textDiv("試合情報", "match-summary-label"));
 
     const body = document.createElement("div");
     body.className = "match-card-body";
@@ -262,7 +257,7 @@
     play.append(teams, statusBadge(match.match_id), createScoreEditor(match.match_id));
 
     body.append(meta, play);
-    card.append(summary, body);
+    card.append(body);
     return card;
   }
 
