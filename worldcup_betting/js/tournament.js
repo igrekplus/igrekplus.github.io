@@ -234,12 +234,7 @@
 
     const summary = document.createElement("summary");
     summary.className = "match-summary";
-    summary.append(
-      textDiv(match.match_id, "match-id"),
-      matchTitle(match),
-      textDiv(scoreText(match.match_id), "match-score-display"),
-      statusBadge(match.match_id)
-    );
+    summary.append(textDiv("試合情報", "match-summary-label"));
 
     const body = document.createElement("div");
     body.className = "match-card-body";
@@ -247,6 +242,7 @@
     const meta = document.createElement("div");
     meta.className = "match-meta";
     meta.append(
+      textDiv(match.match_id, "match-id"),
       textDiv(stageLabels[match.stage] || match.stage),
       textDiv(match.group ? `Group ${match.group}` : ""),
       textDiv(formatJstDateTime(match.kickoff_jst), "match-jst"),
@@ -256,21 +252,18 @@
     const teams = document.createElement("div");
     teams.className = "match-teams";
     teams.append(
-      teamLabel(matchHomeId(match), match.home_name_ja, "match-team", { showRank: false }),
+      teamLabel(matchHomeId(match), match.home_name_ja, "match-team"),
       textDiv(scoreText(match.match_id), "match-score-display"),
-      teamLabel(matchAwayId(match), match.away_name_ja, "match-team away", { showRank: false })
+      teamLabel(matchAwayId(match), match.away_name_ja, "match-team away")
     );
 
-    body.append(meta, teams, createScoreEditor(match.match_id));
+    const play = document.createElement("div");
+    play.className = "match-play";
+    play.append(teams, statusBadge(match.match_id), createScoreEditor(match.match_id));
+
+    body.append(meta, play);
     card.append(summary, body);
     return card;
-  }
-
-  function matchTitle(match) {
-    const wrapper = document.createElement("div");
-    wrapper.className = "match-title";
-    wrapper.append(teamLabel(matchHomeId(match), match.home_name_ja), textDiv("vs"), teamLabel(matchAwayId(match), match.away_name_ja));
-    return wrapper;
   }
 
   function statusBadge(matchId) {

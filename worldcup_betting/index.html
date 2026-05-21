@@ -1475,7 +1475,7 @@
 
     .match-card-body {
       display: grid;
-      grid-template-columns: minmax(180px, 0.8fr) minmax(240px, 1fr) minmax(210px, 0.8fr);
+      grid-template-columns: minmax(190px, 0.8fr) minmax(320px, 1.4fr);
     }
 
     .match-summary,
@@ -1492,7 +1492,7 @@
     }
 
     .match-summary {
-      grid-template-columns: 82px minmax(0, 1fr) auto auto;
+      grid-template-columns: 1fr;
     }
 
     .match-summary::-webkit-details-marker,
@@ -1509,6 +1509,13 @@
       color: var(--muted);
       font-size: 12px;
       font-weight: 700;
+    }
+
+    .match-play {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(210px, 0.78fr);
+      align-items: stretch;
+      min-width: 0;
     }
 
     .match-teams {
@@ -1593,7 +1600,10 @@
 
     .match-status {
       justify-self: start;
+      align-self: start;
+      grid-column: 1;
       width: fit-content;
+      margin: 0 12px 12px;
       padding: 2px 8px;
       border-radius: 999px;
       background: #edf2f7;
@@ -1625,6 +1635,8 @@
       padding: 10px;
       border-left: 1px solid var(--line);
       background: #f8fafc;
+      grid-column: 2;
+      grid-row: 1 / span 2;
     }
 
     .score-editor label {
@@ -2033,6 +2045,10 @@
         grid-template-columns: 1fr;
       }
 
+      .match-play {
+        grid-template-columns: 1fr;
+      }
+
       .match-meta,
       .score-editor {
         border-right: 0;
@@ -2041,6 +2057,9 @@
 
       .score-editor {
         grid-template-columns: repeat(2, minmax(42px, 1fr));
+        grid-column: auto;
+        grid-row: auto;
+        border-top: 1px solid var(--line);
       }
 
       .knockout-match {
