@@ -1011,14 +1011,10 @@
   function exportState() {
     return {
       version: 1,
+      type: "worldcup2026_score_overrides",
       source: DATA_URL,
       scoreOverrides: effectiveScoreOverrides(),
-      sharedScoreUrl: state.saved.sharedScoreUrl || "",
-      sharedScoreLoadedAt: state.saved.sharedScoreLoadedAt || "",
-      lastUpdatedAt: state.saved.lastUpdatedAt,
-      standings: state.saved.standings,
-      thirdRanking: state.saved.thirdRanking,
-      knockout: state.saved.knockout
+      lastUpdatedAt: state.saved.lastUpdatedAt || new Date().toISOString()
     };
   }
 
