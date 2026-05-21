@@ -515,14 +515,18 @@
     const date = calendarDate();
     const first = new Date(date.getFullYear(), date.getMonth(), 1);
     const start = startOfWeek(first);
-    const grid = document.createElement("div");
-    grid.className = "calendar-month";
+    const wrapper = document.createElement("div");
+    wrapper.className = "calendar-month-wrap";
+    const weekdays = document.createElement("div");
+    weekdays.className = "calendar-weekdays";
     weekdayLabels.forEach((label) => {
       const head = document.createElement("div");
       head.className = "calendar-weekday";
       head.textContent = label;
-      grid.appendChild(head);
+      weekdays.appendChild(head);
     });
+    const grid = document.createElement("div");
+    grid.className = "calendar-month";
     for (let i = 0; i < 42; i += 1) {
       const day = addDays(start, i);
       const matches = matchesOnDay(day);
@@ -561,7 +565,8 @@
       }
       grid.appendChild(cell);
     }
-    return grid;
+    wrapper.append(weekdays, grid);
+    return wrapper;
   }
 
   function renderWeekCalendar() {
@@ -640,6 +645,34 @@
 
     const main = document.createElement("div");
     main.className = "calendar-match-main";
+    if (layout === "day") {
+      main.append(
+        teamLabel(matchHomeId(match), match.home_name_ja),
+        textDiv(scoreText(match.match_id), "match-score-display"),
+        teamLabel(matchAwayId(match), match.away_name_ja)
+      );
+
+      const info = document.createElement("div");
+      info.className = "calendar-match-info";
+      info.append(
+        textDiv(match.match_id, "match-id"),
+        textDiv(stageLabels[match.stage] || match.stage),
+        textDiv(match.group ? `Group ${match.group}` : "", "match-group"),
+        textDiv(formatJstDateTime(match.kickoff_jst), "match-jst"),
+        textDiv(venueText(match), "match-venue")
+      );
+
+      const center = document.createElement("div");
+      center.className = "calendar-match-center";
+      const status = statusBadge(match.match_id);
+      status.classList.add("calendar-match-status");
+      center.append(main, status);
+
+      card.append(info, center);
+      if (includeEditor) card.appendChild(createScoreEditor(match.match_id));
+      return card;
+    }
+
     main.append(
       textDiv(formatJstTime(match.kickoff_jst), "calendar-match-time"),
       teamLabel(matchHomeId(match), match.home_name_ja),

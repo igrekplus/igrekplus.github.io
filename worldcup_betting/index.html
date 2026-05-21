@@ -18,6 +18,7 @@
       --shadow: 0 10px 28px rgba(15, 23, 42, 0.14);
       --owner-tabs-height: 50px;
       --tournament-tabs-height: 43px;
+      --calendar-toolbar-height: 50px;
     }
 
     * {
@@ -1834,6 +1835,7 @@
       padding: 6px 0 8px;
       border-bottom: 1px solid var(--line);
       background: #fff;
+      min-height: var(--calendar-toolbar-height);
     }
 
     .calendar-nav,
@@ -1856,12 +1858,29 @@
       font-weight: 900;
     }
 
+    .calendar-month-wrap {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      overflow: visible;
+    }
+
+    .calendar-weekdays {
+      position: sticky;
+      top: calc(var(--owner-tabs-height) + var(--tournament-tabs-height) + var(--calendar-toolbar-height));
+      z-index: 65;
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      border-bottom: 1px solid var(--line);
+      border-radius: 8px 8px 0 0;
+      background: #eef6ff;
+      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+    }
+
     .calendar-month {
       display: grid;
       grid-template-columns: repeat(7, minmax(0, 1fr));
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      overflow: hidden;
+      overflow: visible;
       background: #fff;
     }
 
@@ -1872,7 +1891,6 @@
       text-align: center;
       font-size: 12px;
       font-weight: 900;
-      border-bottom: 1px solid var(--line);
     }
 
     .calendar-day-cell {
@@ -2084,6 +2102,51 @@
       height: 15px;
     }
 
+    .calendar-match-card-day {
+      grid-template-columns: 260px minmax(320px, 1fr) 252px;
+      gap: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .calendar-match-info,
+    .calendar-match-center {
+      min-width: 0;
+      padding: 12px;
+    }
+
+    .calendar-match-info {
+      display: grid;
+      align-content: center;
+      gap: 5px;
+      border-right: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .calendar-match-center {
+      display: grid;
+      align-content: center;
+      gap: 8px;
+    }
+
+    .calendar-match-card-day .calendar-match-main {
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    }
+
+    .calendar-match-status {
+      grid-column: auto;
+      margin: 0;
+    }
+
+    .calendar-match-card-day > .score-editor {
+      grid-column: 3;
+      grid-row: auto;
+      border-left: 1px solid var(--line);
+      border-top: 0;
+    }
+
     .calendar-empty {
       color: var(--muted);
       font-size: 12px;
@@ -2091,6 +2154,10 @@
     }
 
     @media (max-width: 760px) {
+      :root {
+        --calendar-toolbar-height: 122px;
+      }
+
       .calendar-toolbar {
         grid-template-columns: 1fr;
       }
@@ -2100,6 +2167,10 @@
       }
 
       .calendar-month {
+        font-size: 11px;
+      }
+
+      .calendar-weekdays {
         font-size: 11px;
       }
 
@@ -2129,6 +2200,33 @@
 
       .calendar-match-main {
         grid-template-columns: 1fr;
+      }
+
+      .calendar-match-card-day {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 10px;
+        overflow: visible;
+      }
+
+      .calendar-match-info,
+      .calendar-match-center {
+        padding: 0;
+      }
+
+      .calendar-match-info {
+        border-right: 0;
+      }
+
+      .calendar-match-card-day .calendar-match-main {
+        grid-template-columns: 1fr;
+      }
+
+      .calendar-match-card-day > .score-editor {
+        grid-column: auto;
+        grid-row: auto;
+        border-left: 0;
+        border-top: 1px solid var(--line);
       }
 
       .tournament-shared-score {
