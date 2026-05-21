@@ -61,6 +61,59 @@ FLAG_CODE_BY_TEAM_ID = {
     "PAN": "pa",
 }
 
+FIFA_RANKING_UPDATED_AT = "2026-04-01"
+FIFA_RANKING_SOURCE = "https://football-technology.fifa.com/fifa-world-ranking/men"
+FIFA_RANK_BY_TEAM_ID = {
+    "MEX": 15,
+    "RSA": 60,
+    "KOR": 25,
+    "CZE": 41,
+    "CAN": 30,
+    "SUI": 19,
+    "QAT": 55,
+    "BIH": 65,
+    "BRA": 6,
+    "MAR": 8,
+    "HAI": 83,
+    "SCO": 43,
+    "USA": 16,
+    "PAR": 40,
+    "AUS": 27,
+    "TUR": 22,
+    "GER": 10,
+    "CUW": 82,
+    "CIV": 34,
+    "ECU": 23,
+    "NED": 7,
+    "JPN": 18,
+    "TUN": 44,
+    "SWE": 38,
+    "BEL": 9,
+    "EGY": 29,
+    "IRN": 21,
+    "NZL": 85,
+    "ESP": 2,
+    "CPV": 69,
+    "KSA": 61,
+    "URU": 17,
+    "FRA": 1,
+    "SEN": 14,
+    "NOR": 31,
+    "IRQ": 57,
+    "ARG": 3,
+    "ALG": 28,
+    "AUT": 24,
+    "JOR": 63,
+    "POR": 5,
+    "UZB": 50,
+    "COL": 13,
+    "COD": 46,
+    "ENG": 4,
+    "CRO": 11,
+    "GHA": 74,
+    "PAN": 33,
+}
+
 
 @dataclass
 class TeamStats:
@@ -406,6 +459,10 @@ def team_as_site_dict(team_id: str, team: dict[str, str]) -> dict[str, str]:
         "name_en": team["team_name_en"],
         "fifa_code": team_id,
         "flag_code": flag_code,
+        "fifa_rank": FIFA_RANK_BY_TEAM_ID.get(team_id),
+        "fifa_points": None,
+        "ranking_updated_at": FIFA_RANKING_UPDATED_AT,
+        "ranking_source": FIFA_RANKING_SOURCE,
         "group": team["group"],
     }
 

@@ -1405,13 +1405,17 @@
     }
 
     .tournament-toolbar {
+      position: sticky;
+      top: 50px;
+      z-index: 80;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
       flex-wrap: wrap;
-      padding-bottom: 12px;
+      padding: 0 0 12px;
       border-bottom: 1px solid var(--line);
+      background: #fff;
     }
 
     .tournament-tabs {
@@ -2964,6 +2968,10 @@
     @media (max-width: 560px) {
       .owner-tabs {
         padding: 10px 10px 0;
+      }
+
+      .tournament-toolbar {
+        top: 48px;
       }
 
       .app {

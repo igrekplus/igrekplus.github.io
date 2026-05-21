@@ -126,7 +126,7 @@
   function loadSavedState() {
     const fallback = {
       version: 1,
-      scores: {},
+      scoreOverrides: {},
       lastUpdatedAt: "",
       standings: null,
       thirdRanking: null,
@@ -136,10 +136,18 @@
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return fallback;
       const parsed = JSON.parse(raw);
+      const scoreOverrides = parsed?.scoreOverrides && typeof parsed.scoreOverrides === "object"
+        ? parsed.scoreOverrides
+        : parsed?.scores && typeof parsed.scores === "object"
+          ? parsed.scores
+          : {};
       return {
-        ...fallback,
-        ...parsed,
-        scores: parsed?.scores && typeof parsed.scores === "object" ? parsed.scores : {}
+        version: parsed?.version || fallback.version,
+        scoreOverrides,
+        lastUpdatedAt: parsed?.lastUpdatedAt || fallback.lastUpdatedAt,
+        standings: parsed?.standings || fallback.standings,
+        thirdRanking: parsed?.thirdRanking || fallback.thirdRanking,
+        knockout: parsed?.knockout || fallback.knockout
       };
     } catch (error) {
       return fallback;
@@ -166,16 +174,16 @@
       return;
     }
 
-    const scoreCount = Object.keys(state.saved.scores).filter((matchId) => hasAnyScore(state.saved.scores[matchId])).length;
+    const scoreCount = savedScoreCount();
     if (summary) {
       const updated = state.saved.lastUpdatedAt ? ` / 最終更新 ${formatSavedDateTime(state.saved.lastUpdatedAt)}` : "";
       summary.textContent = `スコア/日程 / 全${state.matches.length}試合 / スコア保存 ${scoreCount}試合${updated}`;
     }
 
     if (state.view === "japan") {
-      content.appendChild(renderMatchList(state.matches.filter(isJapanMatch)));
+      content.appendChild(renderMatchList(computedMatches().filter(isJapanMatch)));
     } else if (state.view === "schedule") {
-      content.appendChild(renderMatchList(filterByGroup(state.matches)));
+      content.appendChild(renderMatchList(filterByGroup(computedMatches())));
     } else if (state.view === "calendar") {
       content.appendChild(renderCalendarView());
     } else if (state.view === "groups") {
@@ -321,20 +329,24 @@
     const key = input.dataset.scoreKey;
     const value = input.value.replace(/[^\d]/g, "");
     if (input.value !== value) input.value = value;
-    const current = state.saved.scores[matchId] || {};
+    const current = state.saved.scoreOverrides[matchId] || {};
     if (value === "") {
       delete current[key];
     } else {
       current[key] = value;
     }
-    state.saved.scores[matchId] = current;
+    if (hasAnyScore(current)) {
+      state.saved.scoreOverrides[matchId] = current;
+    } else {
+      delete state.saved.scoreOverrides[matchId];
+    }
     state.saved.lastUpdatedAt = new Date().toISOString();
     persist();
     if (state.elements.saveState) state.elements.saveState.textContent = "スコア保存済み";
   }
 
   function normalizedScore(matchId) {
-    const score = state.saved.scores[matchId] || {};
+    const score = state.saved.scoreOverrides[matchId] || {};
     const match = state.matches.find((item) => item.match_id === matchId) || {};
     return {
       score_home: valueOrEmpty(score.score_home ?? match.score_home),
@@ -342,6 +354,36 @@
       penalty_home: valueOrEmpty(score.penalty_home ?? match.penalty_home),
       penalty_away: valueOrEmpty(score.penalty_away ?? match.penalty_away)
     };
+  }
+
+  function computedMatches() {
+    return state.matches.map((match) => {
+      const score = normalizedScore(match.match_id);
+      return {
+        ...match,
+        score_home: scoreNumber(score, "score_home"),
+        score_away: scoreNumber(score, "score_away"),
+        penalty_home: scoreNumber(score, "penalty_home"),
+        penalty_away: scoreNumber(score, "penalty_away")
+      };
+    });
+  }
+
+  function savedScoreCount() {
+    return Object.keys(state.saved.scoreOverrides || {}).filter((matchId) => hasMainScore(normalizedScore(matchId))).length;
+  }
+
+  function scoreSignature() {
+    const normalized = {};
+    Object.keys(state.saved.scoreOverrides || {}).sort().forEach((matchId) => {
+      const score = normalizedScore(matchId);
+      const entry = {};
+      ["score_home", "score_away", "penalty_home", "penalty_away"].forEach((key) => {
+        if (score[key] !== "") entry[key] = score[key];
+      });
+      if (hasAnyScore(entry)) normalized[matchId] = entry;
+    });
+    return JSON.stringify(normalized);
   }
 
   function valueOrEmpty(value) {
@@ -599,7 +641,7 @@
 
   function matchesOnDay(day) {
     const key = dateKey(day);
-    return sortedMatches(filterByGroup(state.matches)).filter((match) => dateKey(jstDate(match.kickoff_jst)) === key);
+    return sortedMatches(filterByGroup(computedMatches())).filter((match) => dateKey(jstDate(match.kickoff_jst)) === key);
   }
 
   function firstMatchDate() {
@@ -670,6 +712,7 @@
 
   function updateTournamentSnapshots() {
     const updatedAt = new Date().toISOString();
+    const signature = scoreSignature();
     const standings = calculateGroupTables();
     const thirds = Object.values(standings)
       .map((table) => table[2])
@@ -682,14 +725,17 @@
       }));
     state.saved.standings = {
       updatedAt,
+      scoreSignature: signature,
       groups: standings
     };
     state.saved.thirdRanking = {
       updatedAt,
+      scoreSignature: signature,
       teams: thirds
     };
     state.saved.knockout = {
       updatedAt,
+      scoreSignature: signature,
       rounds: calculateKnockoutCards(standings)
     };
     persist();
@@ -699,7 +745,7 @@
 
   function calculateGroupTables() {
     const tables = {};
-    state.matches.filter((match) => match.stage === "group").forEach((match) => {
+    computedMatches().filter((match) => match.stage === "group").forEach((match) => {
       const homeId = matchHomeId(match);
       const awayId = matchAwayId(match);
       [homeId, awayId].forEach((teamId) => {
@@ -771,7 +817,7 @@
   }
 
   function renderStandingsSnapshot() {
-    if (!state.saved.standings?.groups) {
+    if (!state.saved.standings?.groups || state.saved.standings.scoreSignature !== scoreSignature()) {
       return message("まだ順位を更新していません。「更新」ボタンで再計算してください。");
     }
     const wrapper = document.createElement("div");
@@ -789,7 +835,7 @@
   }
 
   function renderThirdRankingSnapshot() {
-    if (!state.saved.thirdRanking?.teams) {
+    if (!state.saved.thirdRanking?.teams || state.saved.thirdRanking.scoreSignature !== scoreSignature()) {
       return message("まだ3位ランキングを更新していません。「更新」ボタンで再計算してください。");
     }
     const card = document.createElement("details");
@@ -840,7 +886,7 @@
     const rounds = {};
     knockoutStageOrder.forEach((stage) => {
       rounds[stage] = [];
-      sortedMatches(state.matches.filter((match) => match.stage === stage)).forEach((match) => {
+      sortedMatches(computedMatches().filter((match) => match.stage === stage)).forEach((match) => {
         const home = resolveRef(matchHomeId(match), resolved);
         const away = resolveRef(matchAwayId(match), resolved);
         const winnerName = winner(match.match_id, home, away);
@@ -899,7 +945,7 @@
   }
 
   function renderKnockoutSnapshot() {
-    if (!state.saved.knockout?.rounds) {
+    if (!state.saved.knockout?.rounds || state.saved.knockout.scoreSignature !== scoreSignature()) {
       return message("まだトーナメントを更新していません。「更新」ボタンで再計算してください。");
     }
     const wrapper = document.createElement("div");
@@ -930,7 +976,7 @@
     return {
       version: 1,
       source: DATA_URL,
-      scores: state.saved.scores,
+      scoreOverrides: state.saved.scoreOverrides,
       lastUpdatedAt: state.saved.lastUpdatedAt,
       standings: state.saved.standings,
       thirdRanking: state.saved.thirdRanking,
@@ -964,11 +1010,15 @@
   }
 
   function importState(payload) {
-    const scores = payload?.scores && typeof payload.scores === "object" ? payload.scores : payload;
-    if (!scores || typeof scores !== "object") return false;
+    const scoreOverrides = payload?.scoreOverrides && typeof payload.scoreOverrides === "object"
+      ? payload.scoreOverrides
+      : payload?.scores && typeof payload.scores === "object"
+        ? payload.scores
+        : payload;
+    if (!scoreOverrides || typeof scoreOverrides !== "object") return false;
     state.saved = {
       version: 1,
-      scores,
+      scoreOverrides,
       lastUpdatedAt: payload?.lastUpdatedAt || "",
       standings: payload?.standings || null,
       thirdRanking: payload?.thirdRanking || null,
@@ -981,7 +1031,9 @@
 
   function displayTeam(teamId, fallback = "") {
     if (teamId === "TBD") return "未確定";
-    return state.teams[teamId]?.name_ja || fallback || teamId;
+    const team = state.teams[teamId];
+    const name = team?.name_ja || fallback || teamId;
+    return team?.fifa_rank ? `${name}（${team.fifa_rank}位）` : name;
   }
 
   function matchHomeId(match) {

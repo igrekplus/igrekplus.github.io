@@ -8,6 +8,10 @@
       "name_en": "Mexico",
       "fifa_code": "MEX",
       "flag_code": "mx",
+      "fifa_rank": 15,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "A"
     },
     {
@@ -16,6 +20,10 @@
       "name_en": "South Africa",
       "fifa_code": "RSA",
       "flag_code": "za",
+      "fifa_rank": 60,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "A"
     },
     {
@@ -24,6 +32,10 @@
       "name_en": "South Korea",
       "fifa_code": "KOR",
       "flag_code": "kr",
+      "fifa_rank": 25,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "A"
     },
     {
@@ -32,6 +44,10 @@
       "name_en": "Czechia",
       "fifa_code": "CZE",
       "flag_code": "cz",
+      "fifa_rank": 41,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "A"
     },
     {
@@ -40,6 +56,10 @@
       "name_en": "Canada",
       "fifa_code": "CAN",
       "flag_code": "ca",
+      "fifa_rank": 30,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "B"
     },
     {
@@ -48,6 +68,10 @@
       "name_en": "Switzerland",
       "fifa_code": "SUI",
       "flag_code": "ch",
+      "fifa_rank": 19,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "B"
     },
     {
@@ -56,6 +80,10 @@
       "name_en": "Qatar",
       "fifa_code": "QAT",
       "flag_code": "qa",
+      "fifa_rank": 55,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "B"
     },
     {
@@ -64,6 +92,10 @@
       "name_en": "Bosnia and Herzegovina",
       "fifa_code": "BIH",
       "flag_code": "ba",
+      "fifa_rank": 65,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "B"
     },
     {
@@ -72,6 +104,10 @@
       "name_en": "Brazil",
       "fifa_code": "BRA",
       "flag_code": "br",
+      "fifa_rank": 6,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "C"
     },
     {
@@ -80,6 +116,10 @@
       "name_en": "Morocco",
       "fifa_code": "MAR",
       "flag_code": "ma",
+      "fifa_rank": 8,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "C"
     },
     {
@@ -88,6 +128,10 @@
       "name_en": "Haiti",
       "fifa_code": "HAI",
       "flag_code": "ht",
+      "fifa_rank": 83,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "C"
     },
     {
@@ -96,6 +140,10 @@
       "name_en": "Scotland",
       "fifa_code": "SCO",
       "flag_code": "gb-sct",
+      "fifa_rank": 43,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "C"
     },
     {
@@ -104,6 +152,10 @@
       "name_en": "United States",
       "fifa_code": "USA",
       "flag_code": "us",
+      "fifa_rank": 16,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "D"
     },
     {
@@ -112,6 +164,10 @@
       "name_en": "Paraguay",
       "fifa_code": "PAR",
       "flag_code": "py",
+      "fifa_rank": 40,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "D"
     },
     {
@@ -120,6 +176,10 @@
       "name_en": "Australia",
       "fifa_code": "AUS",
       "flag_code": "au",
+      "fifa_rank": 27,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "D"
     },
     {
@@ -128,6 +188,10 @@
       "name_en": "Turkiye",
       "fifa_code": "TUR",
       "flag_code": "tr",
+      "fifa_rank": 22,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "D"
     },
     {
@@ -136,6 +200,10 @@
       "name_en": "Germany",
       "fifa_code": "GER",
       "flag_code": "de",
+      "fifa_rank": 10,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "E"
     },
     {
@@ -144,6 +212,10 @@
       "name_en": "Curacao",
       "fifa_code": "CUW",
       "flag_code": "cw",
+      "fifa_rank": 82,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "E"
     },
     {
@@ -152,6 +224,10 @@
       "name_en": "Ivory Coast",
       "fifa_code": "CIV",
       "flag_code": "ci",
+      "fifa_rank": 34,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "E"
     },
     {
@@ -160,6 +236,10 @@
       "name_en": "Ecuador",
       "fifa_code": "ECU",
       "flag_code": "ec",
+      "fifa_rank": 23,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "E"
     },
     {
@@ -168,6 +248,10 @@
       "name_en": "Netherlands",
       "fifa_code": "NED",
       "flag_code": "nl",
+      "fifa_rank": 7,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "F"
     },
     {
@@ -176,6 +260,10 @@
       "name_en": "Japan",
       "fifa_code": "JPN",
       "flag_code": "jp",
+      "fifa_rank": 18,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "F"
     },
     {
@@ -184,6 +272,10 @@
       "name_en": "Tunisia",
       "fifa_code": "TUN",
       "flag_code": "tn",
+      "fifa_rank": 44,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "F"
     },
     {
@@ -192,6 +284,10 @@
       "name_en": "Sweden",
       "fifa_code": "SWE",
       "flag_code": "se",
+      "fifa_rank": 38,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "F"
     },
     {
@@ -200,6 +296,10 @@
       "name_en": "Belgium",
       "fifa_code": "BEL",
       "flag_code": "be",
+      "fifa_rank": 9,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "G"
     },
     {
@@ -208,6 +308,10 @@
       "name_en": "Egypt",
       "fifa_code": "EGY",
       "flag_code": "eg",
+      "fifa_rank": 29,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "G"
     },
     {
@@ -216,6 +320,10 @@
       "name_en": "Iran",
       "fifa_code": "IRN",
       "flag_code": "ir",
+      "fifa_rank": 21,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "G"
     },
     {
@@ -224,6 +332,10 @@
       "name_en": "New Zealand",
       "fifa_code": "NZL",
       "flag_code": "nz",
+      "fifa_rank": 85,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "G"
     },
     {
@@ -232,6 +344,10 @@
       "name_en": "Spain",
       "fifa_code": "ESP",
       "flag_code": "es",
+      "fifa_rank": 2,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "H"
     },
     {
@@ -240,6 +356,10 @@
       "name_en": "Cape Verde",
       "fifa_code": "CPV",
       "flag_code": "cv",
+      "fifa_rank": 69,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "H"
     },
     {
@@ -248,6 +368,10 @@
       "name_en": "Saudi Arabia",
       "fifa_code": "KSA",
       "flag_code": "sa",
+      "fifa_rank": 61,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "H"
     },
     {
@@ -256,6 +380,10 @@
       "name_en": "Uruguay",
       "fifa_code": "URU",
       "flag_code": "uy",
+      "fifa_rank": 17,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "H"
     },
     {
@@ -264,6 +392,10 @@
       "name_en": "France",
       "fifa_code": "FRA",
       "flag_code": "fr",
+      "fifa_rank": 1,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "I"
     },
     {
@@ -272,6 +404,10 @@
       "name_en": "Senegal",
       "fifa_code": "SEN",
       "flag_code": "sn",
+      "fifa_rank": 14,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "I"
     },
     {
@@ -280,6 +416,10 @@
       "name_en": "Norway",
       "fifa_code": "NOR",
       "flag_code": "no",
+      "fifa_rank": 31,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "I"
     },
     {
@@ -288,6 +428,10 @@
       "name_en": "Iraq",
       "fifa_code": "IRQ",
       "flag_code": "iq",
+      "fifa_rank": 57,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "I"
     },
     {
@@ -296,6 +440,10 @@
       "name_en": "Argentina",
       "fifa_code": "ARG",
       "flag_code": "ar",
+      "fifa_rank": 3,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "J"
     },
     {
@@ -304,6 +452,10 @@
       "name_en": "Algeria",
       "fifa_code": "ALG",
       "flag_code": "dz",
+      "fifa_rank": 28,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "J"
     },
     {
@@ -312,6 +464,10 @@
       "name_en": "Austria",
       "fifa_code": "AUT",
       "flag_code": "at",
+      "fifa_rank": 24,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "J"
     },
     {
@@ -320,6 +476,10 @@
       "name_en": "Jordan",
       "fifa_code": "JOR",
       "flag_code": "jo",
+      "fifa_rank": 63,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "J"
     },
     {
@@ -328,6 +488,10 @@
       "name_en": "Portugal",
       "fifa_code": "POR",
       "flag_code": "pt",
+      "fifa_rank": 5,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "K"
     },
     {
@@ -336,6 +500,10 @@
       "name_en": "Uzbekistan",
       "fifa_code": "UZB",
       "flag_code": "uz",
+      "fifa_rank": 50,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "K"
     },
     {
@@ -344,6 +512,10 @@
       "name_en": "Colombia",
       "fifa_code": "COL",
       "flag_code": "co",
+      "fifa_rank": 13,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "K"
     },
     {
@@ -352,6 +524,10 @@
       "name_en": "DR Congo",
       "fifa_code": "COD",
       "flag_code": "cd",
+      "fifa_rank": 46,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "K"
     },
     {
@@ -360,6 +536,10 @@
       "name_en": "England",
       "fifa_code": "ENG",
       "flag_code": "gb-eng",
+      "fifa_rank": 4,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "L"
     },
     {
@@ -368,6 +548,10 @@
       "name_en": "Croatia",
       "fifa_code": "CRO",
       "flag_code": "hr",
+      "fifa_rank": 11,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "L"
     },
     {
@@ -376,6 +560,10 @@
       "name_en": "Ghana",
       "fifa_code": "GHA",
       "flag_code": "gh",
+      "fifa_rank": 74,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "L"
     },
     {
@@ -384,6 +572,10 @@
       "name_en": "Panama",
       "fifa_code": "PAN",
       "flag_code": "pa",
+      "fifa_rank": 33,
+      "fifa_points": null,
+      "ranking_updated_at": "2026-04-01",
+      "ranking_source": "https://football-technology.fifa.com/fifa-world-ranking/men",
       "group": "L"
     }
   ],
