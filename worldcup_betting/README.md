@@ -1,5 +1,10 @@
 # 2026 FIFA World Cup manager
 
+## Shared data
+
+Shared cross-device state is stored in a GitHub Gist file named `worldcup_state.json`.
+The app does not use Supabase. `localStorage` is only a per-device cache or draft store.
+
 このディレクトリは、2026年FIFAワールドカップ本大会のみを管理します。
 
 大陸予選は対象外です。対象範囲は本大会のグループステージから決勝までです。

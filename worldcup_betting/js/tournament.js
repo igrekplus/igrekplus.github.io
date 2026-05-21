@@ -1779,18 +1779,19 @@
   }
 
   function importState(payload) {
-    const scoreOverrides = payload?.scoreOverrides && typeof payload.scoreOverrides === "object"
-      ? payload.scoreOverrides
-      : payload?.scores && typeof payload.scores === "object"
-        ? payload.scores
-        : payload;
+    const source = payload?.tournament && typeof payload.tournament === "object" ? payload.tournament : payload;
+    const scoreOverrides = source?.scoreOverrides && typeof source.scoreOverrides === "object"
+      ? source.scoreOverrides
+      : source?.scores && typeof source.scores === "object"
+        ? source.scores
+        : source;
     if (!scoreOverrides || typeof scoreOverrides !== "object") return false;
     importScoreOverrides(scoreOverrides, {
-      lastUpdatedAt: payload?.lastUpdatedAt || new Date().toISOString(),
-      matchNotes: payload?.matchNotes,
-      countryNotes: payload?.countryNotes,
-      starPlayers: payload?.starPlayers,
-      venueNotes: payload?.venueNotes
+      lastUpdatedAt: source?.lastUpdatedAt || payload?.lastUpdated || new Date().toISOString(),
+      matchNotes: source?.matchNotes,
+      countryNotes: source?.countryNotes,
+      starPlayers: source?.starPlayers,
+      venueNotes: source?.venueNotes
     });
     return true;
   }
@@ -1909,14 +1910,18 @@
     }
     state.saved.sharedScoreLoadedAt = new Date().toISOString();
     state.saved.lastUpdatedAt = state.saved.sharedScoreLoadedAt;
+    const source = payload?.tournament && typeof payload.tournament === "object" ? payload.tournament : payload;
     ["matchNotes", "countryNotes", "starPlayers", "venueNotes"].forEach((key) => {
-      if (payload?.[key] && typeof payload[key] === "object") state.saved[key] = payload[key];
+      if (source?.[key] && typeof source[key] === "object") state.saved[key] = source[key];
     });
     persist();
     renderContent();
   }
 
   function extractScoreOverrides(payload) {
+    const source = payload?.tournament && typeof payload.tournament === "object" ? payload.tournament : payload;
+    if (source?.scoreOverrides && typeof source.scoreOverrides === "object") return source.scoreOverrides;
+    if (source?.scores && typeof source.scores === "object") return source.scores;
     if (payload?.scoreOverrides && typeof payload.scoreOverrides === "object") return payload.scoreOverrides;
     if (payload?.scores && typeof payload.scores === "object") return payload.scores;
     return payload && typeof payload === "object" ? payload : null;
