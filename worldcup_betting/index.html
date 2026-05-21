@@ -49,6 +49,8 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
       padding: 12px 18px 0;
       background: var(--bg);
     }
@@ -62,6 +64,8 @@
       color: var(--muted);
       cursor: pointer;
       font-weight: 800;
+      flex: 0 0 auto;
+      white-space: nowrap;
     }
 
     .owner-tab.active {
@@ -1404,24 +1408,24 @@
       gap: 12px;
     }
 
-    .tournament-toolbar {
+    .tournament-tabs {
       position: sticky;
       top: 50px;
       z-index: 80;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
+      gap: 8px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
       padding: 0 0 12px;
       border-bottom: 1px solid var(--line);
       background: #fff;
     }
 
-    .tournament-tabs {
+    .tournament-toolbar {
       display: flex;
-      gap: 8px;
       flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
     }
 
     .tournament-tab {
@@ -1433,6 +1437,8 @@
       color: var(--text);
       cursor: pointer;
       font-weight: 800;
+      flex: 0 0 auto;
+      white-space: nowrap;
     }
 
     .tournament-tab.active {
@@ -1683,9 +1689,15 @@
       font-size: 15px;
     }
 
+    .standing-card {
+      overflow-x: auto;
+    }
+
     .standing-table {
       width: 100%;
+      min-width: 860px;
       border-collapse: collapse;
+      table-layout: fixed;
       font-size: 13px;
     }
 
@@ -1695,6 +1707,8 @@
       border-bottom: 1px solid var(--line);
       text-align: right;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .standing-table tr.cutline td {
@@ -1703,7 +1717,21 @@
 
     .standing-table th:nth-child(2),
     .standing-table td:nth-child(2) {
-      min-width: 120px;
+      width: 28%;
+      text-align: left;
+      white-space: normal;
+    }
+
+    .standing-table-thirds th:nth-child(2),
+    .standing-table-thirds td:nth-child(2) {
+      width: 56px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .standing-table-thirds th:nth-child(3),
+    .standing-table-thirds td:nth-child(3) {
+      width: 28%;
       text-align: left;
       white-space: normal;
     }
@@ -3038,7 +3066,7 @@
         padding: 10px 10px 0;
       }
 
-      .tournament-toolbar {
+      .tournament-tabs {
         top: 48px;
       }
 
@@ -3523,15 +3551,15 @@
         </section>
         <section class="view-panel tournament-panel" id="tournamentPanel" aria-label="スコア/日程">
           <div class="tournament-shell">
+            <div class="tournament-tabs" id="tournamentTabs" aria-label="スコア/日程メニュー">
+              <button class="tournament-tab active" type="button" data-tournament-view="japan">日本戦</button>
+              <button class="tournament-tab" type="button" data-tournament-view="schedule">全日程</button>
+              <button class="tournament-tab" type="button" data-tournament-view="groups">グループ順位</button>
+              <button class="tournament-tab" type="button" data-tournament-view="thirds">3位ランキング</button>
+              <button class="tournament-tab" type="button" data-tournament-view="knockout">決勝トーナメント</button>
+              <button class="tournament-tab" type="button" data-tournament-view="calendar">カレンダー</button>
+            </div>
             <div class="tournament-toolbar">
-              <div class="tournament-tabs" id="tournamentTabs" aria-label="スコア/日程メニュー">
-                <button class="tournament-tab active" type="button" data-tournament-view="japan">日本戦</button>
-                <button class="tournament-tab" type="button" data-tournament-view="schedule">全日程</button>
-                <button class="tournament-tab" type="button" data-tournament-view="groups">グループ順位</button>
-                <button class="tournament-tab" type="button" data-tournament-view="thirds">3位ランキング</button>
-                <button class="tournament-tab" type="button" data-tournament-view="knockout">決勝トーナメント</button>
-                <button class="tournament-tab" type="button" data-tournament-view="calendar">カレンダー</button>
-              </div>
               <div class="tournament-actions" aria-label="スコア/日程更新">
                 <button class="utility-button primary-button" type="button" id="tournamentUpdateButton">更新</button>
               </div>

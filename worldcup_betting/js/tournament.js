@@ -847,7 +847,7 @@
 
   function createStandingTable(stats, includeGroup = false) {
     const table = document.createElement("table");
-    table.className = "standing-table";
+    table.className = includeGroup ? "standing-table standing-table-thirds" : "standing-table";
     const head = document.createElement("thead");
     head.innerHTML = `<tr><th>順位</th>${includeGroup ? "<th>組</th>" : ""}<th>チーム</th><th>勝点</th><th>試</th><th>勝</th><th>分</th><th>敗</th><th>得</th><th>失</th><th>差</th><th>状態</th></tr>`;
     const body = document.createElement("tbody");
