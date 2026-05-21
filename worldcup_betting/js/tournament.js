@@ -1048,19 +1048,7 @@
         ? payload.scores
         : payload;
     if (!scoreOverrides || typeof scoreOverrides !== "object") return false;
-    state.saved = {
-      version: 1,
-      scoreOverrides,
-      sharedScoreOverrides: payload?.sharedScoreOverrides && typeof payload.sharedScoreOverrides === "object" ? payload.sharedScoreOverrides : state.saved.sharedScoreOverrides || {},
-      sharedScoreUrl: payload?.sharedScoreUrl || state.saved.sharedScoreUrl || "",
-      sharedScoreLoadedAt: payload?.sharedScoreLoadedAt || state.saved.sharedScoreLoadedAt || "",
-      lastUpdatedAt: payload?.lastUpdatedAt || "",
-      standings: payload?.standings || null,
-      thirdRanking: payload?.thirdRanking || null,
-      knockout: payload?.knockout || null
-    };
-    persist();
-    renderContent();
+    importScoreOverrides(scoreOverrides, { lastUpdatedAt: payload?.lastUpdatedAt || new Date().toISOString() });
     return true;
   }
 
@@ -1095,7 +1083,18 @@
   function importSharedScoreText() {
     const text = (state.elements.sharedTextInput?.value || "").trim();
     if (!text) {
-      setSharedScoreStatus("JSON本文を下のインポート欄に貼り付けてください");
+      setSharedScoreStatus("JSON本文または G-F-01:1-2 のような簡易スコア形式を貼り付けてください");
+      return;
+    }
+    if (!text.startsWith("{") && !text.startsWith("[")) {
+      try {
+        const scoreOverrides = parseSimpleScoreText(text);
+        importScoreOverrides(scoreOverrides, { lastUpdatedAt: new Date().toISOString() });
+        setSharedScoreStatus(`簡易スコア形式をインポートしました: ${formatSavedDateTime(state.saved.lastUpdatedAt)}（端末内に保存）`);
+        setSavedLabel("簡易スコアを端末内に保存済み");
+      } catch (error) {
+        setSharedScoreStatus(error.message || "簡易スコア形式を読み込めませんでした");
+      }
       return;
     }
     try {
@@ -1106,6 +1105,42 @@
     } catch (error) {
       setSharedScoreStatus("JSON形式が壊れています。途中で切れていないか、ダブルクォートが閉じているか確認してください");
     }
+  }
+
+  function parseSimpleScoreText(text) {
+    const scoreOverrides = {};
+    const lines = text.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+    if (lines.length === 0) throw new Error("簡易スコア形式が空です");
+    lines.forEach((line) => {
+      const match = line.match(/^([A-Z0-9-]+)\s*:\s*(\d+)\s*-\s*(\d+)(?:\s*:\s*(\d+)\s*-\s*(\d+))?$/);
+      if (!match) {
+        throw new Error(`簡易スコア形式を読み込めません: ${line}`);
+      }
+      const [, matchId, home, away, homePenalty, awayPenalty] = match;
+      scoreOverrides[matchId] = {
+        score_home: home,
+        score_away: away,
+        penalty_home: homePenalty ?? null,
+        penalty_away: awayPenalty ?? null
+      };
+    });
+    return scoreOverrides;
+  }
+
+  function importScoreOverrides(scoreOverrides, options = {}) {
+    state.saved = {
+      version: 1,
+      scoreOverrides,
+      sharedScoreOverrides: state.saved.sharedScoreOverrides || {},
+      sharedScoreUrl: state.saved.sharedScoreUrl || "",
+      sharedScoreLoadedAt: state.saved.sharedScoreLoadedAt || "",
+      lastUpdatedAt: options.lastUpdatedAt || new Date().toISOString(),
+      standings: null,
+      thirdRanking: null,
+      knockout: null
+    };
+    persist();
+    renderContent();
   }
 
   function applySharedScorePayload(payload, options = {}) {
