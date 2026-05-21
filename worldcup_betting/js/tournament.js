@@ -1036,15 +1036,13 @@
   }
 
   function importFromPrompt() {
-    const text = window.prompt("インポートするスコア/日程JSONを貼り付けてください");
-    if (!text) return;
-    try {
-      const payload = JSON.parse(text);
-      if (!importState(payload)) throw new Error("scores が見つかりません");
-      setSavedLabel("スコア/日程JSONをインポートしました");
-    } catch (error) {
-      window.alert(`JSONをインポートできませんでした。\n${error.message || error}`);
+    const input = state.elements.sharedTextInput;
+    if (input) {
+      input.focus();
+      setSharedScoreStatus("JSONエクスポートでコピーした全文を、下のJSON本文インポート欄に貼り付けてください");
+      return;
     }
+    window.alert("JSON本文インポート欄が見つかりません。ページを再読み込みしてください。");
   }
 
   function importState(payload) {
@@ -1106,9 +1104,9 @@
     }
     try {
       const payload = JSON.parse(text);
-      applySharedScorePayload(payload, { url: state.saved.sharedScoreUrl || "" });
-      setSharedScoreStatus(`JSON本文をインポートしました: ${formatSavedDateTime(state.saved.sharedScoreLoadedAt)}（端末内にも保存）`);
-      setSavedLabel("共有スコアを端末内に保存済み");
+      if (!importState(payload)) throw new Error("scoreOverrides が見つかりません");
+      setSharedScoreStatus(`JSON本文をインポートしました: ${formatSavedDateTime(state.saved.lastUpdatedAt)}（端末内に保存）`);
+      setSavedLabel("スコアJSONを端末内に保存済み");
     } catch (error) {
       setSharedScoreStatus("JSON形式が壊れています。途中で切れていないか、ダブルクォートが閉じているか確認してください");
     }
