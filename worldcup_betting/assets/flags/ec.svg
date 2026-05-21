@@ -1,6 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16" role="img" aria-label="EC flag">
-  <rect width="24" height="16" fill="#f8fafc"/>
-  <rect y="5.333" width="24" height="5.334" fill="#dbeafe"/>
-  <rect y="10.667" width="24" height="5.333" fill="#2563eb"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16" role="img" aria-label="Ecuador flag">
+  <rect width="24" height="8" fill="#ffdd00"/>
+  <rect y="8" width="24" height="4" fill="#034ea2"/>
+  <rect y="12" width="24" height="4" fill="#ed1c24"/>
+  <circle cx="12" cy="8" r="1.7" fill="#8c6b2f"/>
+  <path d="M10.6 8.2h2.8l-1.4 1.4z" fill="#034ea2"/>
   <rect x=".5" y=".5" width="23" height="15" fill="none" stroke="rgba(0,0,0,.18)"/>
 </svg>

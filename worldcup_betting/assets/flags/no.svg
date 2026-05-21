@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16" role="img" aria-label="NO flag">
-  <rect width="24" height="16" fill="#f8fafc"/>
-  <rect y="5.333" width="24" height="5.334" fill="#dbeafe"/>
-  <rect y="10.667" width="24" height="5.333" fill="#2563eb"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16" role="img" aria-label="Norway flag">
+  <rect width="24" height="16" fill="#ba0c2f"/>
+  <path d="M7 0v16M0 6h24" stroke="#fff" stroke-width="4"/>
+  <path d="M7 0v16M0 6h24" stroke="#00205b" stroke-width="2"/>
   <rect x=".5" y=".5" width="23" height="15" fill="none" stroke="rgba(0,0,0,.18)"/>
 </svg>

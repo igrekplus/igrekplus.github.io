@@ -1,6 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16" role="img" aria-label="JO flag">
-  <rect width="24" height="16" fill="#f8fafc"/>
-  <rect y="5.333" width="24" height="5.334" fill="#dbeafe"/>
-  <rect y="10.667" width="24" height="5.333" fill="#2563eb"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16" role="img" aria-label="Jordan flag">
+  <rect width="24" height="5.333" fill="#000"/>
+  <rect y="5.333" width="24" height="5.334" fill="#fff"/>
+  <rect y="10.667" width="24" height="5.333" fill="#007a3d"/>
+  <path d="M0 0v16l11-8z" fill="#ce1126"/>
+  <path d="m4.2 6 .45 1 .95.1-.75.6.25 1-.9-.55-.9.55.25-1-.75-.6.95-.1z" fill="#fff"/>
   <rect x=".5" y=".5" width="23" height="15" fill="none" stroke="rgba(0,0,0,.18)"/>
 </svg>

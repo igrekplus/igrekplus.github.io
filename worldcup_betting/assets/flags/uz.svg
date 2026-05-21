@@ -1,6 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16" role="img" aria-label="UZ flag">
-  <rect width="24" height="16" fill="#1eb6e7"/>
-  <rect y="5.333" width="24" height="5.334" fill="#ffffff"/>
-  <rect y="10.667" width="24" height="5.333" fill="#009b3a"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16" role="img" aria-label="Uzbekistan flag">
+  <rect width="24" height="5" fill="#0099b5"/>
+  <rect y="5" width="24" height=".7" fill="#ce1126"/>
+  <rect y="5.7" width="24" height="4.6" fill="#fff"/>
+  <rect y="10.3" width="24" height=".7" fill="#ce1126"/>
+  <rect y="11" width="24" height="5" fill="#1eb53a"/>
+  <circle cx="4" cy="2.5" r="1.2" fill="#fff"/>
+  <circle cx="4.5" cy="2.5" r="1.2" fill="#0099b5"/>
+  <g fill="#fff"><circle cx="7" cy="1.4" r=".25"/><circle cx="8.1" cy="1.4" r=".25"/><circle cx="9.2" cy="1.4" r=".25"/><circle cx="7.6" cy="2.4" r=".25"/><circle cx="8.7" cy="2.4" r=".25"/></g>
   <rect x=".5" y=".5" width="23" height="15" fill="none" stroke="rgba(0,0,0,.18)"/>
 </svg>

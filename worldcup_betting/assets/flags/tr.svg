@@ -1,6 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16" role="img" aria-label="TR flag">
-  <rect width="24" height="16" fill="#f8fafc"/>
-  <rect y="5.333" width="24" height="5.334" fill="#dbeafe"/>
-  <rect y="10.667" width="24" height="5.333" fill="#2563eb"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16" role="img" aria-label="Turkiye flag">
+  <rect width="24" height="16" fill="#e30a17"/>
+  <circle cx="10" cy="8" r="4" fill="#fff"/>
+  <circle cx="11.3" cy="8" r="3.2" fill="#e30a17"/>
+  <path d="m15.6 5.7.6 1.5 1.6.1-1.2 1 .4 1.6-1.4-.8-1.4.8.4-1.6-1.2-1 1.6-.1z" fill="#fff"/>
   <rect x=".5" y=".5" width="23" height="15" fill="none" stroke="rgba(0,0,0,.18)"/>
 </svg>

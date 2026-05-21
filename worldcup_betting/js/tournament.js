@@ -1015,27 +1015,25 @@
     const flagCode = teamFlag(teamId);
     const flagUrl = teamFlagUrl(teamId);
     const fallbackCode = teamFifaCode(teamId);
-    if (flagCode || flagUrl) {
-      const flagSpan = document.createElement("span");
-      flagSpan.className = "team-flag";
-      flagSpan.setAttribute("aria-hidden", "true");
-      if (flagUrl) {
-        const img = document.createElement("img");
-        img.className = "team-flag-img";
-        img.src = flagUrl;
-        img.alt = "";
-        img.loading = "lazy";
-        img.decoding = "async";
-        img.onerror = () => {
-          img.remove();
-          flagSpan.textContent = fallbackCode;
-        };
-        flagSpan.appendChild(img);
-      } else {
+    const flagSpan = document.createElement("span");
+    flagSpan.className = "team-flag";
+    flagSpan.setAttribute("aria-hidden", "true");
+    if (flagCode && flagUrl) {
+      const img = document.createElement("img");
+      img.className = "team-flag-img";
+      img.src = flagUrl;
+      img.alt = "";
+      img.loading = "lazy";
+      img.decoding = "async";
+      img.onerror = () => {
+        img.remove();
         flagSpan.textContent = fallbackCode;
-      }
-      wrapper.appendChild(flagSpan);
+      };
+      flagSpan.appendChild(img);
+    } else {
+      flagSpan.textContent = fallbackCode;
     }
+    wrapper.appendChild(flagSpan);
     const name = document.createElement("span");
     name.textContent = displayTeam(teamId, fallback || teamId);
     wrapper.appendChild(name);

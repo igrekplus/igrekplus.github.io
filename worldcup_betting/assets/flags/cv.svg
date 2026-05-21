@@ -1,6 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16" role="img" aria-label="CV flag">
-  <rect width="24" height="16" fill="#f8fafc"/>
-  <rect y="5.333" width="24" height="5.334" fill="#dbeafe"/>
-  <rect y="10.667" width="24" height="5.333" fill="#2563eb"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16" role="img" aria-label="Cape Verde flag">
+  <rect width="24" height="16" fill="#003893"/>
+  <rect y="8" width="24" height="3" fill="#fff"/>
+  <rect y="9" width="24" height="1" fill="#cf2027"/>
+  <g fill="#f7d116">
+    <circle cx="6" cy="5.1" r=".45"/><circle cx="7.5" cy="5.8" r=".45"/><circle cx="8.2" cy="7.3" r=".45"/><circle cx="7.5" cy="8.8" r=".45"/><circle cx="6" cy="9.5" r=".45"/>
+    <circle cx="4.5" cy="8.8" r=".45"/><circle cx="3.8" cy="7.3" r=".45"/><circle cx="4.5" cy="5.8" r=".45"/>
+  </g>
   <rect x=".5" y=".5" width="23" height="15" fill="none" stroke="rgba(0,0,0,.18)"/>
 </svg>
