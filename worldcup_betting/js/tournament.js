@@ -848,6 +848,7 @@
   function createStandingTable(stats, includeGroup = false) {
     const table = document.createElement("table");
     table.className = includeGroup ? "standing-table standing-table-thirds" : "standing-table";
+    table.appendChild(createStandingColGroup(includeGroup));
     const head = document.createElement("thead");
     head.innerHTML = `<tr><th>順位</th>${includeGroup ? "<th>組</th>" : ""}<th>チーム</th><th>勝点</th><th>試</th><th>勝</th><th>分</th><th>敗</th><th>得</th><th>失</th><th>差</th><th>状態</th></tr>`;
     const body = document.createElement("tbody");
@@ -874,6 +875,19 @@
     });
     table.append(head, body);
     return table;
+  }
+
+  function createStandingColGroup(includeGroup = false) {
+    const widths = includeGroup
+      ? [56, 56, 400, 72, 56, 56, 56, 56, 56, 56, 56, 88]
+      : [56, 400, 72, 56, 56, 56, 56, 56, 56, 56, 88];
+    const colgroup = document.createElement("colgroup");
+    widths.forEach((width) => {
+      const col = document.createElement("col");
+      col.style.width = `${width}px`;
+      colgroup.appendChild(col);
+    });
+    return colgroup;
   }
 
   function calculateKnockoutCards(standings) {
