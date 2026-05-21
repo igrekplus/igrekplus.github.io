@@ -50,6 +50,9 @@
       groupFilter: document.getElementById("tournamentGroupFilter"),
       exportButton: document.getElementById("tournamentExportButton"),
       importButton: document.getElementById("tournamentImportButton"),
+      sharedUrlInput: document.getElementById("sharedScoreUrlInput"),
+      sharedUrlButton: document.getElementById("sharedScoreUrlButton"),
+      sharedStatus: document.getElementById("sharedScoreStatus"),
       saveState: document.getElementById("saveState")
     };
 
@@ -66,6 +69,10 @@
     });
     state.elements.exportButton?.addEventListener("click", exportToClipboard);
     state.elements.importButton?.addEventListener("click", importFromPrompt);
+    state.elements.sharedUrlButton?.addEventListener("click", loadSharedScoreUrl);
+    if (state.elements.sharedUrlInput) {
+      state.elements.sharedUrlInput.value = state.saved.sharedScoreUrl || "";
+    }
 
     state.initialized = true;
     loadMatches();
@@ -127,6 +134,9 @@
     const fallback = {
       version: 1,
       scoreOverrides: {},
+      sharedScoreOverrides: {},
+      sharedScoreUrl: "",
+      sharedScoreLoadedAt: "",
       lastUpdatedAt: "",
       standings: null,
       thirdRanking: null,
@@ -144,6 +154,9 @@
       return {
         version: parsed?.version || fallback.version,
         scoreOverrides,
+        sharedScoreOverrides: parsed?.sharedScoreOverrides && typeof parsed.sharedScoreOverrides === "object" ? parsed.sharedScoreOverrides : {},
+        sharedScoreUrl: parsed?.sharedScoreUrl || fallback.sharedScoreUrl,
+        sharedScoreLoadedAt: parsed?.sharedScoreLoadedAt || fallback.sharedScoreLoadedAt,
         lastUpdatedAt: parsed?.lastUpdatedAt || fallback.lastUpdatedAt,
         standings: parsed?.standings || fallback.standings,
         thirdRanking: parsed?.thirdRanking || fallback.thirdRanking,
@@ -177,8 +190,10 @@
     const scoreCount = savedScoreCount();
     if (summary) {
       const updated = state.saved.lastUpdatedAt ? ` / 最終更新 ${formatSavedDateTime(state.saved.lastUpdatedAt)}` : "";
-      summary.textContent = `スコア/日程 / 全${state.matches.length}試合 / スコア保存 ${scoreCount}試合${updated}`;
+      const shared = state.saved.sharedScoreLoadedAt ? ` / 共有JSON ${formatSavedDateTime(state.saved.sharedScoreLoadedAt)}` : "";
+      summary.textContent = `スコア/日程 / 全${state.matches.length}試合 / スコア保存 ${scoreCount}試合${updated}${shared}`;
     }
+    updateSharedScoreStatus();
 
     if (state.view === "japan") {
       content.appendChild(renderMatchList(computedMatches().filter(isJapanMatch)));
@@ -335,12 +350,13 @@
 
   function normalizedScore(matchId) {
     const score = state.saved.scoreOverrides[matchId] || {};
+    const sharedScore = state.saved.sharedScoreOverrides?.[matchId] || {};
     const match = state.matches.find((item) => item.match_id === matchId) || {};
     return {
-      score_home: valueOrEmpty(score.score_home ?? match.score_home),
-      score_away: valueOrEmpty(score.score_away ?? match.score_away),
-      penalty_home: valueOrEmpty(score.penalty_home ?? match.penalty_home),
-      penalty_away: valueOrEmpty(score.penalty_away ?? match.penalty_away)
+      score_home: valueOrEmpty(score.score_home ?? sharedScore.score_home ?? match.score_home),
+      score_away: valueOrEmpty(score.score_away ?? sharedScore.score_away ?? match.score_away),
+      penalty_home: valueOrEmpty(score.penalty_home ?? sharedScore.penalty_home ?? match.penalty_home),
+      penalty_away: valueOrEmpty(score.penalty_away ?? sharedScore.penalty_away ?? match.penalty_away)
     };
   }
 
@@ -358,12 +374,12 @@
   }
 
   function savedScoreCount() {
-    return Object.keys(state.saved.scoreOverrides || {}).filter((matchId) => hasMainScore(normalizedScore(matchId))).length;
+    return Object.keys(effectiveScoreOverrides()).filter((matchId) => hasMainScore(normalizedScore(matchId))).length;
   }
 
   function scoreSignature() {
     const normalized = {};
-    Object.keys(state.saved.scoreOverrides || {}).sort().forEach((matchId) => {
+    Object.keys(effectiveScoreOverrides()).sort().forEach((matchId) => {
       const score = normalizedScore(matchId);
       const entry = {};
       ["score_home", "score_away", "penalty_home", "penalty_away"].forEach((key) => {
@@ -372,6 +388,13 @@
       if (hasAnyScore(entry)) normalized[matchId] = entry;
     });
     return JSON.stringify(normalized);
+  }
+
+  function effectiveScoreOverrides() {
+    return {
+      ...(state.saved.sharedScoreOverrides || {}),
+      ...(state.saved.scoreOverrides || {})
+    };
   }
 
   function valueOrEmpty(value) {
@@ -985,7 +1008,9 @@
     return {
       version: 1,
       source: DATA_URL,
-      scoreOverrides: state.saved.scoreOverrides,
+      scoreOverrides: effectiveScoreOverrides(),
+      sharedScoreUrl: state.saved.sharedScoreUrl || "",
+      sharedScoreLoadedAt: state.saved.sharedScoreLoadedAt || "",
       lastUpdatedAt: state.saved.lastUpdatedAt,
       standings: state.saved.standings,
       thirdRanking: state.saved.thirdRanking,
@@ -1028,6 +1053,9 @@
     state.saved = {
       version: 1,
       scoreOverrides,
+      sharedScoreOverrides: payload?.sharedScoreOverrides && typeof payload.sharedScoreOverrides === "object" ? payload.sharedScoreOverrides : state.saved.sharedScoreOverrides || {},
+      sharedScoreUrl: payload?.sharedScoreUrl || state.saved.sharedScoreUrl || "",
+      sharedScoreLoadedAt: payload?.sharedScoreLoadedAt || state.saved.sharedScoreLoadedAt || "",
       lastUpdatedAt: payload?.lastUpdatedAt || "",
       standings: payload?.standings || null,
       thirdRanking: payload?.thirdRanking || null,
@@ -1036,6 +1064,52 @@
     persist();
     renderContent();
     return true;
+  }
+
+  async function loadSharedScoreUrl() {
+    const input = state.elements.sharedUrlInput;
+    const url = (input?.value || "").trim();
+    if (!url) {
+      setSharedScoreStatus("共有JSON URLを入力してください");
+      return;
+    }
+    setSharedScoreStatus("共有JSONを読み込み中...");
+    try {
+      const response = await fetch(url, { cache: "no-store" });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const payload = await response.json();
+      const scoreOverrides = extractScoreOverrides(payload);
+      if (!scoreOverrides) throw new Error("scoreOverrides が見つかりません");
+      state.saved.sharedScoreOverrides = scoreOverrides;
+      state.saved.sharedScoreUrl = url;
+      state.saved.sharedScoreLoadedAt = new Date().toISOString();
+      state.saved.lastUpdatedAt = state.saved.sharedScoreLoadedAt;
+      persist();
+      renderContent();
+      setSharedScoreStatus(`共有JSON読込済み: ${formatSavedDateTime(state.saved.sharedScoreLoadedAt)}`);
+      setSavedLabel("共有スコアJSONを保存済み");
+    } catch (error) {
+      setSharedScoreStatus(`共有JSONを読み込めませんでした: ${error.message || error}`);
+    }
+  }
+
+  function extractScoreOverrides(payload) {
+    if (payload?.scoreOverrides && typeof payload.scoreOverrides === "object") return payload.scoreOverrides;
+    if (payload?.scores && typeof payload.scores === "object") return payload.scores;
+    return payload && typeof payload === "object" ? payload : null;
+  }
+
+  function updateSharedScoreStatus() {
+    if (!state.elements.sharedStatus) return;
+    if (state.saved.sharedScoreLoadedAt) {
+      state.elements.sharedStatus.textContent = `共有JSON: ${formatSavedDateTime(state.saved.sharedScoreLoadedAt)}`;
+    } else {
+      state.elements.sharedStatus.textContent = "共有JSON未読込";
+    }
+  }
+
+  function setSharedScoreStatus(text) {
+    if (state.elements.sharedStatus) state.elements.sharedStatus.textContent = text;
   }
 
   function displayTeam(teamId, fallback = "", options = {}) {

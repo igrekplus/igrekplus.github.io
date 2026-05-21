@@ -1457,6 +1457,31 @@
       flex-wrap: wrap;
     }
 
+    .tournament-shared-score {
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+      flex: 1 1 420px;
+      max-width: 720px;
+    }
+
+    .tournament-shared-score input {
+      min-height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0 10px;
+      font: inherit;
+      font-weight: 700;
+    }
+
+    .shared-score-status {
+      grid-column: 1 / -1;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
     .tournament-filter select {
       min-height: 34px;
       border: 1px solid var(--line);
@@ -2087,6 +2112,12 @@
 
       .calendar-match-main {
         grid-template-columns: 1fr;
+      }
+
+      .tournament-shared-score {
+        grid-template-columns: 1fr;
+        flex-basis: 100%;
+        max-width: none;
       }
 
       .calendar-match-main .match-score-display {
@@ -3588,6 +3619,11 @@
               <div class="tournament-json-actions" aria-label="スコア/日程データ">
                 <button class="utility-button" type="button" id="tournamentExportButton">JSONエクスポート</button>
                 <button class="utility-button" type="button" id="tournamentImportButton">JSONインポート</button>
+              </div>
+              <div class="tournament-shared-score" aria-label="共有スコアJSON">
+                <input id="sharedScoreUrlInput" type="url" inputmode="url" placeholder="共有スコアJSON URL">
+                <button class="utility-button" type="button" id="sharedScoreUrlButton">共有JSON読込</button>
+                <div class="shared-score-status" id="sharedScoreStatus">共有JSON未読込</div>
               </div>
             </div>
             <div class="tournament-summary" id="tournamentSummary">data/worldcup2026_matches.json を読み込み中...</div>
