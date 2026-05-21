@@ -103,7 +103,8 @@
     .board.tournament-only .shared-prediction-action,
     .board.roster-only .shared-prediction-action,
     .board.bet-only .shared-prediction-action,
-    .board.explain-only .shared-prediction-action {
+    .board.explain-only .shared-prediction-action,
+    .board.info-only .shared-prediction-action {
       display: none;
     }
 
@@ -242,15 +243,18 @@
       padding-top: 18px;
     }
 
-    .board.tournament-only {
+    .board.tournament-only,
+    .board.info-only {
       grid-template-rows: auto 1fr;
     }
 
-    .board.tournament-only .pitch-wrap {
+    .board.tournament-only .pitch-wrap,
+    .board.info-only .pitch-wrap {
       display: none;
     }
 
-    .board.tournament-only .view-panel {
+    .board.tournament-only .view-panel,
+    .board.info-only .view-panel {
       border-top: 0;
     }
 
@@ -2239,6 +2243,242 @@
       font-weight: 800;
     }
 
+    .match-watch-panel {
+      display: grid;
+      grid-template-columns: 150px 130px minmax(180px, 1fr) minmax(180px, 1fr) minmax(180px, 1fr) 140px 112px;
+      gap: 8px;
+      padding: 10px 12px 12px;
+      border-top: 1px solid var(--line);
+      background: #f8fbff;
+    }
+
+    .watch-field {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .watch-field input,
+    .watch-field select,
+    .watch-field textarea {
+      width: 100%;
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 7px 8px;
+      color: var(--text);
+      background: #fff;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .watch-field textarea {
+      min-height: 42px;
+      resize: vertical;
+    }
+
+    .watch-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      align-self: end;
+      min-height: 34px;
+      padding: 7px 8px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .watch-checkbox input {
+      width: auto;
+    }
+
+    .watch-map-button {
+      align-self: end;
+      min-height: 34px;
+    }
+
+    .info-panel .tournament-shell {
+      display: grid;
+      gap: 14px;
+    }
+
+    .info-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .info-title {
+      margin: 0 0 4px;
+      color: var(--blue);
+      font-size: 20px;
+    }
+
+    .info-sub {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 12px;
+    }
+
+    .info-card {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .info-card h3 {
+      margin: 0;
+      color: var(--text);
+      font-size: 16px;
+    }
+
+    .info-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .info-field {
+      display: grid;
+      gap: 4px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .info-field.full {
+      grid-column: 1 / -1;
+    }
+
+    .info-field input,
+    .info-field select,
+    .info-field textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 7px 8px;
+      background: #fff;
+      color: var(--text);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .info-field textarea {
+      min-height: 58px;
+      resize: vertical;
+    }
+
+    .venue-layout {
+      display: grid;
+      grid-template-columns: minmax(320px, 1.25fr) minmax(280px, 0.75fr);
+      gap: 12px;
+    }
+
+    .venue-map-card,
+    .venue-detail-card {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .north-america-map {
+      width: 100%;
+      min-height: 420px;
+      border-radius: 8px;
+      background: #eaf6ff;
+    }
+
+    .venue-pin {
+      cursor: pointer;
+    }
+
+    .venue-pin circle {
+      fill: #005bac;
+      stroke: #fff;
+      stroke-width: 3;
+      filter: drop-shadow(0 3px 4px rgba(15, 23, 42, 0.28));
+    }
+
+    .venue-pin.japan-venue circle {
+      fill: #d71920;
+      stroke: #ffd66b;
+      stroke-width: 4;
+    }
+
+    .venue-pin.selected circle {
+      fill: #0b8a52;
+      stroke: #111827;
+      stroke-width: 4;
+    }
+
+    .venue-pin text {
+      fill: #1e2933;
+      font-size: 12px;
+      font-weight: 800;
+      paint-order: stroke;
+      stroke: #fff;
+      stroke-width: 4px;
+      stroke-linejoin: round;
+    }
+
+    .venue-detail-card {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+
+    .venue-detail-card h3 {
+      margin: 0;
+      color: var(--blue);
+    }
+
+    .venue-meta-list {
+      display: grid;
+      gap: 8px;
+      font-size: 13px;
+    }
+
+    .venue-meta-list div {
+      display: grid;
+      grid-template-columns: 92px minmax(0, 1fr);
+      gap: 8px;
+    }
+
+    .venue-meta-list dt {
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .venue-meta-list dd {
+      margin: 0;
+      min-width: 0;
+    }
+
     @media (max-width: 760px) {
       :root {
         --calendar-toolbar-height: 122px;
@@ -2344,6 +2584,20 @@
         grid-column: auto;
         grid-row: auto;
         border-top: 1px solid var(--line);
+      }
+
+      .match-watch-panel,
+      .info-form-grid,
+      .venue-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .info-head {
+        display: grid;
+      }
+
+      .north-america-map {
+        min-height: 320px;
       }
 
       .knockout-match {
@@ -3449,6 +3703,9 @@
   <div class="shell">
     <nav class="owner-tabs" aria-label="予想者">
       <button class="owner-tab active" type="button" data-view="tournament">スコア/日程</button>
+      <button class="owner-tab" type="button" data-view="country-notes">国別メモ</button>
+      <button class="owner-tab" type="button" data-view="star-players">注目選手</button>
+      <button class="owner-tab" type="button" data-view="venues">開催地・時差・移動</button>
       <button class="owner-tab" type="button" data-view="compare">比較コート（日本代表）</button>
       <button class="owner-tab" type="button" data-view="owner" data-owner="karin">かりん予想（日本代表）</button>
       <button class="owner-tab" type="button" data-view="owner" data-owner="ryo">りょう予想（日本代表）</button>
@@ -3837,6 +4094,21 @@
             </div>
             <div class="tournament-summary" id="tournamentSummary"></div>
             <div id="tournamentContent"></div>
+          </div>
+        </section>
+        <section class="view-panel tournament-panel info-panel" id="countryNotesPanel" aria-label="国別メモ">
+          <div class="tournament-shell">
+            <div id="countryNotesContent"></div>
+          </div>
+        </section>
+        <section class="view-panel tournament-panel info-panel" id="starPlayersPanel" aria-label="注目選手">
+          <div class="tournament-shell">
+            <div id="starPlayersContent"></div>
+          </div>
+        </section>
+        <section class="view-panel tournament-panel info-panel" id="venuesPanel" aria-label="開催地・時差・移動">
+          <div class="tournament-shell">
+            <div id="venuesContent"></div>
           </div>
         </section>
       </section>
@@ -4555,6 +4827,9 @@
     const betUnpickedSummary = document.getElementById("betUnpickedSummary");
     const betUnpickedList = document.getElementById("betUnpickedList");
     const tournamentPanel = document.getElementById("tournamentPanel");
+    const countryNotesPanel = document.getElementById("countryNotesPanel");
+    const starPlayersPanel = document.getElementById("starPlayersPanel");
+    const venuesPanel = document.getElementById("venuesPanel");
     const rosterPanel = document.getElementById("rosterPanel");
     const rosterSearchInput = document.getElementById("rosterSearchInput");
     const rosterPositionFilter = document.getElementById("rosterPositionFilter");
@@ -5204,6 +5479,11 @@
         return;
       }
 
+      if (["country-notes", "star-players", "venues"].includes(activeView)) {
+        renderWorldCupInfo(activeView);
+        return;
+      }
+
       benchList.innerHTML = "";
       confirmedList.innerHTML = "";
       droppedList.innerHTML = "";
@@ -5295,11 +5575,13 @@
       board.classList.remove("bet-only");
       board.classList.remove("roster-only");
       board.classList.remove("tournament-only");
+      board.classList.remove("info-only");
       comparisonPanel.classList.add("active");
       positionPanel.classList.remove("active");
       rosterPanel.classList.remove("active");
       betPanel.classList.remove("active");
       tournamentPanel.classList.remove("active");
+      hideWorldCupInfoPanels();
 
       boardTitle.textContent = `比較コート（${teamName}）`;
       sideTitle.textContent = "比較";
@@ -5522,12 +5804,14 @@
       board.classList.remove("bet-only");
       board.classList.remove("roster-only");
       board.classList.remove("explain-only");
+      board.classList.remove("info-only");
       comparisonPanel.classList.remove("active");
       betPanel.classList.remove("active");
       rosterPanel.classList.remove("active");
       positionPanel.classList.remove("active");
       tournamentPanel.classList.add("active");
       [comparisonPanel, betPanel, rosterPanel, positionPanel].forEach((panel) => panel.classList.remove("active"));
+      hideWorldCupInfoPanels();
       clearPitchCards();
       clearComparePitches();
 
@@ -5547,6 +5831,57 @@
       });
     }
 
+    function hideWorldCupInfoPanels() {
+      [countryNotesPanel, starPlayersPanel, venuesPanel].forEach((panel) => panel?.classList.remove("active"));
+    }
+
+    function renderWorldCupInfo(view) {
+      clearPitchCards();
+      clearComparePitches();
+      benchList.innerHTML = "";
+      confirmedList.innerHTML = "";
+      droppedList.innerHTML = "";
+
+      app.classList.add("single-panel");
+      board.classList.add("with-panel");
+      board.classList.add("info-only");
+      board.classList.remove("compare-only");
+      board.classList.remove("bet-only");
+      board.classList.remove("roster-only");
+      board.classList.remove("explain-only");
+      board.classList.remove("tournament-only");
+      [comparisonPanel, betPanel, rosterPanel, positionPanel, tournamentPanel].forEach((panel) => panel.classList.remove("active"));
+      hideWorldCupInfoPanels();
+
+      const panelMap = {
+        "country-notes": countryNotesPanel,
+        "star-players": starPlayersPanel,
+        venues: venuesPanel
+      };
+      panelMap[view]?.classList.add("active");
+
+      const titleMap = {
+        "country-notes": "国別メモ",
+        "star-players": "注目選手",
+        venues: "開催地・時差・移動"
+      };
+      const title = titleMap[view] || "W杯2026";
+      boardTitle.textContent = title;
+      sideTitle.textContent = title;
+      sideSub.textContent = "観戦メモはJSON出力/読込で別端末にも反映できます。";
+      statusMessage.textContent = "";
+      window.clearTimeout(statusTimer);
+      pitchCount.textContent = "観戦メモ";
+      pitchCount.classList.remove("over-limit");
+      saveState.textContent = "端末内保存 / JSON共有可";
+
+      window.WorldCupTournament?.init();
+      window.WorldCupTournament?.renderAuxView(view);
+      ownerTabs.forEach((tab) => {
+        tab.classList.toggle("active", tab.dataset.view === view);
+      });
+    }
+
     function renderPositions() {
       clearPitchCards();
       clearComparePitches();
@@ -5561,10 +5896,12 @@
       board.classList.remove("bet-only");
       board.classList.remove("roster-only");
       board.classList.remove("tournament-only");
+      board.classList.remove("info-only");
       comparisonPanel.classList.remove("active");
       betPanel.classList.remove("active");
       rosterPanel.classList.remove("active");
       tournamentPanel.classList.remove("active");
+      hideWorldCupInfoPanels();
       positionPanel.classList.add("active");
 
       boardTitle.textContent = "ポジション解説";
@@ -5596,10 +5933,12 @@
       board.classList.remove("compare-only");
       board.classList.remove("roster-only");
       board.classList.remove("tournament-only");
+      board.classList.remove("info-only");
       comparisonPanel.classList.remove("active");
       positionPanel.classList.remove("active");
       rosterPanel.classList.remove("active");
       tournamentPanel.classList.remove("active");
+      hideWorldCupInfoPanels();
       betPanel.classList.add("active");
 
       boardTitle.textContent = "賭け結果";
@@ -5638,10 +5977,12 @@
       board.classList.remove("compare-only");
       board.classList.remove("bet-only");
       board.classList.remove("tournament-only");
+      board.classList.remove("info-only");
       comparisonPanel.classList.remove("active");
       positionPanel.classList.remove("active");
       betPanel.classList.remove("active");
       tournamentPanel.classList.remove("active");
+      hideWorldCupInfoPanels();
       rosterPanel.classList.add("active");
 
       boardTitle.textContent = "選手一覧";
@@ -5668,11 +6009,13 @@
       board.classList.remove("bet-only");
       board.classList.remove("roster-only");
       board.classList.remove("tournament-only");
+      board.classList.remove("info-only");
       comparisonPanel.classList.remove("active");
       positionPanel.classList.remove("active");
       betPanel.classList.remove("active");
       rosterPanel.classList.remove("active");
       tournamentPanel.classList.remove("active");
+      hideWorldCupInfoPanels();
       clearComparePitches();
     }
 

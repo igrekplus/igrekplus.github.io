@@ -28,6 +28,92 @@
   const scheduleStageOrder = ["group", ...knockoutStageOrder];
   const weekdayLabels = ["日", "月", "火", "水", "木", "金", "土"];
 
+  const defaultCountryNotes = [
+    ["JPN", "日本", "日本代表。全試合を観戦軸にする", "久保建英、遠藤航、堂安律、鈴木彩艶", "組織力、切り替え、2列目の質", "強豪相手の自陣耐久、セットプレー対応", "オランダ級には守備時間の整理が鍵", "試合前後の空気まで残す"],
+    ["NED", "オランダ", "日本の同組かつFIFA上位", "ファン・ダイク、フレンキー・デ・ヨング", "高さ、個の強度、中央の展開力", "押し込まれた時の運動量", "日本は速い切り替えで背後を狙いたい", "日本戦の最大基準点"],
+    ["TUN", "チュニジア", "日本の同組", "守備陣、カウンターの前線", "守備ブロック、球際", "得点力の波", "日本がボールを持つ展開になりやすい", "取りこぼせない相手として見る"],
+    ["SWE", "スウェーデン", "日本の同組", "イサク、クルゼフスキ", "高さ、前線の個、セットプレー", "細かい連係への対応", "日本は地上戦と背後管理が重要", "プレミア勢の質をチェック"],
+    ["ARG", "アルゼンチン", "FIFAランキングが日本以上、レジェンド枠", "メッシ、ラウタロ", "勝負強さ、前線の決定力", "世代交代の揺れ", "日本は守備の集中が最優先", "レジェンドの状態を追う"],
+    ["FRA", "フランス", "FIFAランキングが日本以上、プレミア勢も注目", "エムバペ、グリーズマン、サリバ", "個の破壊力、選手層", "主力依存とコンディション", "日本はサイド裏と中盤守備が鍵", "優勝候補の基準値"],
+    ["ENG", "イングランド", "プレミア勢が多い国", "ベリンガム、フォーデン、ケイン", "プレミア基準の強度、2列目", "重圧下の試合運び", "日本は守備ブロックとカウンター", "プレミア選手の状態を見る"],
+    ["BRA", "ブラジル", "FIFAランキングが日本以上、レジェンド候補多数", "ヴィニシウス、ロドリゴ", "個人技、前線のスピード", "守備の距離感", "日本は奪った後の一手が重要", "スター選手の見どころが多い"],
+    ["CAN", "カナダ", "開催国", "デイヴィス、デイヴィッド", "推進力、ホーム環境", "守備の安定感", "日本とはスピード勝負に注意", "開催国の雰囲気込みで見る"],
+    ["MEX", "メキシコ", "開催国", "ヒメネス、ロサーノ", "ホーム熱量、技術", "守備の切り替え", "日本はテンポを乱されないこと", "開幕戦と会場熱を確認"],
+    ["USA", "アメリカ", "開催国、プレミア関係選手も多い", "プリシッチ、マッケニー、レイナ", "運動量、若さ、ホーム環境", "試合運びの成熟度", "日本は中盤の強度勝負", "北米大会の主役候補"]
+  ].map(([id, country, reason, keyPlayers, strengths, weaknesses, japanFit, comment]) => ({
+    id,
+    country,
+    reason,
+    keyPlayers,
+    strengths,
+    weaknesses,
+    japanFit,
+    comment,
+    sourceUrl: "",
+    updatedAt: "2026-05-21"
+  }));
+
+  const defaultStarPlayers = [
+    ["kubo", "久保建英", "日本", "レアル・ソシエダ", "ラ・リーガ", "なし", "なし", "主力", "日本の攻撃の中心。右サイド、中央で違いを作れるか", "高", "選出想定", "確認中"],
+    ["endo", "遠藤航", "日本", "リバプール", "プレミアリーグ", "現所属", "なし", "ベテラン", "強豪相手の中盤防波堤。球際と回収力", "高", "選出想定", "確認中"],
+    ["van_dijk", "フィルジル・ファン・ダイク", "オランダ", "リバプール", "プレミアリーグ", "現所属", "なし", "ベテラン", "空中戦と最終ライン統率", "高", "選出状況確認", "確認中"],
+    ["isak", "アレクサンデル・イサク", "スウェーデン", "ニューカッスル", "プレミアリーグ", "現所属", "なし", "主力", "高さと足元を兼ねるCF。日本戦の危険人物", "高", "選出状況確認", "確認中"],
+    ["kulusevski", "デヤン・クルゼフスキ", "スウェーデン", "トッテナム", "プレミアリーグ", "現所属", "なし", "主力", "右サイドからの運びと左足", "中", "選出状況確認", "確認中"],
+    ["foden", "フィル・フォーデン", "イングランド", "マンチェスター・シティ", "プレミアリーグ", "現所属", "現所属", "主力", "狭い場所でのターンと左足", "高", "選出状況確認", "確認中"],
+    ["de_bruyne", "ケヴィン・デ・ブライネ", "ベルギー", "ナポリ", "セリエA", "元プレミア", "元所属", "レジェンド/ベテラン", "一発のパスと試合を変える力", "高", "選出状況確認", "確認中"],
+    ["messi", "リオネル・メッシ", "アルゼンチン", "インテル・マイアミ", "MLS", "なし", "なし", "レジェンド", "最後の大舞台になる可能性。プレー時間と状態に注目", "高", "選出状況確認", "確認中"],
+    ["mbappe", "キリアン・エムバペ", "フランス", "レアル・マドリード", "ラ・リーガ", "なし", "なし", "主力", "背後へのスピードと決定力", "高", "選出状況確認", "確認中"],
+    ["pulisic", "クリスチャン・プリシッチ", "アメリカ", "ミラン", "セリエA", "元プレミア", "なし", "主力", "開催国の攻撃の顔。ドリブルと決定力", "中", "選出状況確認", "確認中"]
+  ].map(([id, name, country, club, league, premierRelation, cityRelation, legendType, highlight, risk, selectionStatus, condition]) => ({
+    id,
+    name,
+    country,
+    club,
+    league,
+    premierRelation,
+    cityRelation,
+    legendType,
+    highlight,
+    risk,
+    selectionStatus,
+    condition,
+    sourceUrl: "",
+    updatedAt: "2026-05-21"
+  }));
+
+  const defaultVenues = [
+    ["toronto", "Toronto", "カナダ", "東部", "Toronto Stadium", "America/Toronto", "夏時間: 日本より13時間遅れ", "開閉式屋根なし", "五大湖沿いで比較的涼しい", "東部拠点。米国東海岸との移動は短め", "日本戦なら朝時間の観戦になりやすい", 585, 165],
+    ["vancouver", "Vancouver", "カナダ", "西部", "BC Place Vancouver", "America/Vancouver", "夏時間: 日本より16時間遅れ", "屋根あり", "西海岸で穏やか", "西海岸内の移動は比較的組みやすい", "日本時間は午前帯になりやすい", 205, 185],
+    ["seattle", "Seattle", "アメリカ", "西部", "Seattle Stadium", "America/Los_Angeles", "夏時間: 日本より16時間遅れ", "屋根なし", "涼しめ、雨に注意", "バンクーバーと近い", "移動負担は小さめ", 230, 220],
+    ["san-francisco", "San Francisco Bay Area", "アメリカ", "西部", "San Francisco Bay Area Stadium", "America/Los_Angeles", "夏時間: 日本より16時間遅れ", "屋根なし", "乾燥、夜は涼しい", "西海岸移動の中心", "日本時間は午前帯", 220, 320],
+    ["los-angeles", "Los Angeles", "アメリカ", "西部", "Los Angeles Stadium", "America/Los_Angeles", "夏時間: 日本より16時間遅れ", "屋根あり", "暑さと乾燥に注意", "西海岸の大拠点", "スター感のある会場", 245, 385],
+    ["guadalajara", "Guadalajara", "メキシコ", "中部", "Guadalajara Stadium", "America/Mexico_City", "夏時間なし想定: 日本より15時間遅れ", "屋根なし", "高地、暑さに注意", "メキシコ国内移動", "標高と環境を確認", 365, 520],
+    ["mexico-city", "Mexico City", "メキシコ", "中部", "Mexico City Stadium", "America/Mexico_City", "夏時間なし想定: 日本より15時間遅れ", "屋根なし", "高地、空気の薄さ", "メキシコ国内の中心", "開幕戦の熱量", 420, 535],
+    ["monterrey", "Monterrey", "メキシコ", "北部", "Monterrey Stadium", "America/Monterrey", "夏時間なし想定: 日本より15時間遅れ", "屋根なし", "暑さに注意", "米国南部と近い", "暑熱対応を見たい", 405, 460],
+    ["houston", "Houston", "アメリカ", "南部", "Houston Stadium", "America/Chicago", "夏時間: 日本より14時間遅れ", "屋根あり/空調あり", "高温多湿", "ダラス、カンザスシティへ移動しやすい", "屋内環境でプレーしやすい", 505, 440],
+    ["dallas", "Dallas", "アメリカ", "南部", "Dallas Stadium", "America/Chicago", "夏時間: 日本より14時間遅れ", "屋根あり/空調あり", "暑いが屋内環境", "米国中南部の大拠点", "決勝級の大型会場感", 505, 385],
+    ["kansas-city", "Kansas City", "アメリカ", "中西部", "Kansas City Stadium", "America/Chicago", "夏時間: 日本より14時間遅れ", "屋根なし", "暑さと雷雨に注意", "中西部移動の中継点", "雰囲気が強そう", 535, 330],
+    ["atlanta", "Atlanta", "アメリカ", "南東部", "Atlanta Stadium", "America/New_York", "夏時間: 日本より13時間遅れ", "屋根あり/空調あり", "高温多湿だが屋内", "東部、南部の移動拠点", "屋内でテンポが出そう", 650, 410],
+    ["miami", "Miami", "アメリカ", "南東部", "Miami Stadium", "America/New_York", "夏時間: 日本より13時間遅れ", "屋根あり", "暑熱と湿度", "南東端で移動距離は長め", "コンディション差に注目", 700, 500],
+    ["philadelphia", "Philadelphia", "アメリカ", "東部", "Philadelphia Stadium", "America/New_York", "夏時間: 日本より13時間遅れ", "屋根なし", "暑さは中程度", "NY/NJ、Bostonと近い", "東海岸連戦向き", 720, 285],
+    ["new-york-new-jersey", "New York New Jersey", "アメリカ", "東部", "New York New Jersey Stadium", "America/New_York", "夏時間: 日本より13時間遅れ", "屋根なし", "夏は蒸し暑い", "東海岸の中心", "決勝会場。雰囲気重視", 735, 250],
+    ["boston", "Boston", "アメリカ", "東部", "Boston Stadium", "America/New_York", "夏時間: 日本より13時間遅れ", "屋根なし", "比較的涼しめ", "東海岸北部", "早朝観戦になりやすい", 760, 205]
+  ].map(([id, city, country, region, stadium, timezone, jstDiff, roofAir, climateMemo, travelMemo, watchMemo, x, y]) => ({
+    id,
+    city,
+    country,
+    region,
+    stadium,
+    timezone,
+    jstDiff,
+    roofAir,
+    climateMemo,
+    travelMemo,
+    watchMemo,
+    x,
+    y
+  }));
+
   const state = {
     initialized: false,
     loaded: false,
@@ -42,6 +128,7 @@
     scheduleOpenStages: { group: true },
     calendarMode: "month",
     calendarDate: null,
+    selectedVenueId: "toronto",
     saved: loadSavedState(),
     elements: {}
   };
@@ -103,6 +190,12 @@
       state.loadError = `${DATA_URL} を読み込めませんでした: ${error.message || error}`;
     }
     renderContent();
+    renderActiveAuxView();
+  }
+
+  function renderActiveAuxView() {
+    const active = document.querySelector(".owner-tab.active")?.dataset.view;
+    if (["country-notes", "star-players", "venues"].includes(active)) renderAuxView(active);
   }
 
   function buildTeamMap(teamRows, matches) {
@@ -148,6 +241,10 @@
       sharedScoreUrl: "",
       sharedScoreLoadedAt: "",
       lastUpdatedAt: "",
+      matchNotes: {},
+      countryNotes: {},
+      starPlayers: {},
+      venueNotes: {},
       standings: null,
       thirdRanking: null,
       knockout: null
@@ -168,6 +265,10 @@
         sharedScoreUrl: parsed?.sharedScoreUrl || fallback.sharedScoreUrl,
         sharedScoreLoadedAt: parsed?.sharedScoreLoadedAt || fallback.sharedScoreLoadedAt,
         lastUpdatedAt: parsed?.lastUpdatedAt || fallback.lastUpdatedAt,
+        matchNotes: parsed?.matchNotes && typeof parsed.matchNotes === "object" ? parsed.matchNotes : {},
+        countryNotes: parsed?.countryNotes && typeof parsed.countryNotes === "object" ? parsed.countryNotes : {},
+        starPlayers: parsed?.starPlayers && typeof parsed.starPlayers === "object" ? parsed.starPlayers : {},
+        venueNotes: parsed?.venueNotes && typeof parsed.venueNotes === "object" ? parsed.venueNotes : {},
         standings: parsed?.standings || fallback.standings,
         thirdRanking: parsed?.thirdRanking || fallback.thirdRanking,
         knockout: parsed?.knockout || fallback.knockout
@@ -398,8 +499,86 @@
     play.append(teams, statusBadge(match.match_id), createScoreEditor(match.match_id));
 
     body.append(meta, play);
-    card.append(body);
+    card.append(body, createMatchWatchPanel(match));
     return card;
+  }
+
+  function createMatchWatchPanel(match) {
+    const note = matchNote(match.match_id);
+    const panel = document.createElement("div");
+    panel.className = "match-watch-panel";
+    panel.append(
+      watchSelect(match.match_id, "watchPlan", "観戦予定", note.watchPlan, [
+        ["", "未設定"],
+        ["live", "観戦予定"],
+        ["highlight", "ハイライトで見る"],
+        ["result", "結果だけでよい"],
+        ["skip", "見ない"]
+      ]),
+      watchSelect(match.match_id, "attention", "注目度", note.attention, [
+        ["", "未設定"],
+        ["5", "★★★★★"],
+        ["4", "★★★★"],
+        ["3", "★★★"],
+        ["2", "★★"],
+        ["1", "★"]
+      ]),
+      watchTextarea(match.match_id, "preComment", "試合前コメント", note.preComment, "見る理由・注目ポイント"),
+      watchTextarea(match.match_id, "oneLineComment", "1行コメント", note.oneLineComment, "見る理由 / 結果だけでよい理由"),
+      watchTextarea(match.match_id, "postMemo", "試合後メモ", note.postMemo, "結果、印象、後で見返す点"),
+      watchCheckbox(match.match_id, "highlightChecked", "ハイライト確認", note.highlightChecked),
+      mapButton(match)
+    );
+    return panel;
+  }
+
+  function watchSelect(matchId, key, labelText, value, options) {
+    const label = document.createElement("label");
+    label.className = "watch-field";
+    label.appendChild(textSpan(labelText));
+    const select = document.createElement("select");
+    options.forEach(([optionValue, text]) => {
+      const option = document.createElement("option");
+      option.value = optionValue;
+      option.textContent = text;
+      select.appendChild(option);
+    });
+    select.value = value || "";
+    select.addEventListener("change", () => updateMatchNote(matchId, key, select.value));
+    label.appendChild(select);
+    return label;
+  }
+
+  function watchTextarea(matchId, key, labelText, value, placeholder) {
+    const label = document.createElement("label");
+    label.className = "watch-field";
+    label.appendChild(textSpan(labelText));
+    const textarea = document.createElement("textarea");
+    textarea.value = value || "";
+    textarea.placeholder = placeholder || "";
+    textarea.addEventListener("input", () => updateMatchNote(matchId, key, textarea.value));
+    label.appendChild(textarea);
+    return label;
+  }
+
+  function watchCheckbox(matchId, key, labelText, checked) {
+    const label = document.createElement("label");
+    label.className = "watch-checkbox";
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.checked = Boolean(checked);
+    input.addEventListener("change", () => updateMatchNote(matchId, key, input.checked));
+    label.append(input, document.createTextNode(labelText));
+    return label;
+  }
+
+  function mapButton(match) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "utility-button watch-map-button";
+    button.textContent = "地図で見る";
+    button.addEventListener("click", () => openVenueFromMatch(match));
+    return button;
   }
 
   function statusBadge(matchId) {
@@ -485,6 +664,36 @@
     state.saved.lastUpdatedAt = new Date().toISOString();
     persist();
     if (state.elements.saveState) state.elements.saveState.textContent = "スコア保存済み";
+  }
+
+  function matchNote(matchId) {
+    return state.saved.matchNotes?.[matchId] || {};
+  }
+
+  function updateMatchNote(matchId, key, value) {
+    state.saved.matchNotes ||= {};
+    const current = { ...(state.saved.matchNotes[matchId] || {}) };
+    if (value === "" || value === false || value === null || value === undefined) {
+      delete current[key];
+    } else {
+      current[key] = value;
+    }
+    if (Object.keys(current).length) {
+      state.saved.matchNotes[matchId] = current;
+    } else {
+      delete state.saved.matchNotes[matchId];
+    }
+    state.saved.lastUpdatedAt = new Date().toISOString();
+    persist();
+    setSavedLabel("観戦メモ保存済み");
+  }
+
+  function openVenueFromMatch(match) {
+    const city = normalizeCity(match.city || "");
+    const venue = defaultVenues.find((item) => normalizeCity(item.city) === city);
+    if (venue) state.selectedVenueId = venue.id;
+    document.querySelector('[data-view="venues"]')?.click();
+    renderAuxView("venues");
   }
 
   function normalizedScore(matchId) {
@@ -1273,6 +1482,259 @@
     return textSpan(value || "未確定", "team-label knockout-placeholder");
   }
 
+  function renderAuxView(view) {
+    const target = {
+      "country-notes": document.getElementById("countryNotesContent"),
+      "star-players": document.getElementById("starPlayersContent"),
+      venues: document.getElementById("venuesContent")
+    }[view];
+    if (state.loadError) {
+      if (target) target.replaceChildren(message(state.loadError, "tournament-error"));
+      return;
+    }
+    if (!state.loaded) {
+      init();
+      if (target) target.replaceChildren(message(`${DATA_URL} を読み込み中...`));
+      return;
+    }
+    if (view === "country-notes") renderCountryNotes();
+    if (view === "star-players") renderStarPlayers();
+    if (view === "venues") renderVenues();
+  }
+
+  function renderCountryNotes() {
+    const target = document.getElementById("countryNotesContent");
+    if (!target) return;
+    target.innerHTML = "";
+    target.appendChild(infoHead("国別メモ", "日本、日本の同組、FIFA上位、プレミア勢、レジェンド候補、開催国を中心に絞って管理します。"));
+    const grid = document.createElement("div");
+    grid.className = "info-grid";
+    defaultCountryNotes.forEach((base) => {
+      const item = { ...base, ...(state.saved.countryNotes?.[base.id] || {}) };
+      grid.appendChild(countryNoteCard(item));
+    });
+    target.appendChild(grid);
+  }
+
+  function countryNoteCard(item) {
+    const card = document.createElement("article");
+    card.className = "info-card";
+    card.appendChild(textHeading(item.country));
+    const form = document.createElement("div");
+    form.className = "info-form-grid";
+    [
+      ["reason", "対象理由", "textarea"],
+      ["keyPlayers", "中心選手", "textarea"],
+      ["strengths", "強み", "textarea"],
+      ["weaknesses", "弱み", "textarea"],
+      ["japanFit", "日本との相性", "textarea"],
+      ["comment", "観戦コメント", "textarea"],
+      ["sourceUrl", "情報源URL", "input"],
+      ["updatedAt", "更新日", "input"]
+    ].forEach(([key, label, type]) => {
+      form.appendChild(infoField(label, item[key], type, (value) => updateAuxNote("countryNotes", item.id, key, value)));
+    });
+    card.appendChild(form);
+    return card;
+  }
+
+  function renderStarPlayers() {
+    const target = document.getElementById("starPlayersContent");
+    if (!target) return;
+    target.innerHTML = "";
+    target.appendChild(infoHead("注目選手", "プレミア関係、マンチェスター・シティ関係、レジェンド/ベテラン、日本にとっての危険度を観戦前に整理します。"));
+    const grid = document.createElement("div");
+    grid.className = "info-grid";
+    defaultStarPlayers.forEach((base) => {
+      const item = { ...base, ...(state.saved.starPlayers?.[base.id] || {}) };
+      grid.appendChild(starPlayerCard(item));
+    });
+    target.appendChild(grid);
+  }
+
+  function starPlayerCard(item) {
+    const card = document.createElement("article");
+    card.className = "info-card";
+    card.appendChild(textHeading(item.name));
+    const form = document.createElement("div");
+    form.className = "info-form-grid";
+    [
+      ["country", "国", "input"],
+      ["club", "所属クラブ", "input"],
+      ["league", "リーグ", "input"],
+      ["premierRelation", "プレミア関係", "input"],
+      ["cityRelation", "マンチェスター・シティ関係", "input"],
+      ["legendType", "レジェンド/ベテラン区分", "input"],
+      ["highlight", "見どころ", "textarea"],
+      ["risk", "日本にとっての危険度", "input"],
+      ["selectionStatus", "選出状況", "input"],
+      ["condition", "コンディション", "input"],
+      ["sourceUrl", "情報源URL", "input"],
+      ["updatedAt", "更新日", "input"]
+    ].forEach(([key, label, type]) => {
+      form.appendChild(infoField(label, item[key], type, (value) => updateAuxNote("starPlayers", item.id, key, value)));
+    });
+    card.appendChild(form);
+    return card;
+  }
+
+  function renderVenues() {
+    const target = document.getElementById("venuesContent");
+    if (!target) return;
+    target.innerHTML = "";
+    target.appendChild(infoHead("開催地・時差・移動", "16開催都市を簡易地図で確認できます。日本戦開催地は赤で強調します。"));
+    const layout = document.createElement("div");
+    layout.className = "venue-layout";
+    layout.append(renderVenueMap(), renderVenueDetail());
+    target.appendChild(layout);
+  }
+
+  function renderVenueMap() {
+    const wrap = document.createElement("div");
+    wrap.className = "venue-map-card";
+    const japanCities = new Set(computedSchedule().filter(isJapanMatch).map((match) => normalizeCity(match.city)));
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("viewBox", "0 0 900 620");
+    svg.setAttribute("class", "north-america-map");
+    svg.setAttribute("role", "img");
+    svg.setAttribute("aria-label", "北米の簡易開催地マップ");
+    svg.innerHTML = `
+      <path d="M155 90 L520 75 L800 160 L785 305 L705 390 L740 540 L560 565 L430 505 L310 560 L210 470 L150 330 Z" fill="#d7ecff" stroke="#9ac5e8" stroke-width="2"></path>
+      <path d="M290 430 L465 445 L520 560 L360 590 L265 540 Z" fill="#d9f2df" stroke="#9fcfb0" stroke-width="2"></path>
+      <text x="190" y="125" fill="#557" font-size="20" font-weight="800">Canada / USA</text>
+      <text x="330" y="575" fill="#557" font-size="20" font-weight="800">Mexico</text>
+    `;
+    defaultVenues.forEach((venue) => {
+      const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      group.setAttribute("class", [
+        "venue-pin",
+        venue.id === state.selectedVenueId ? "selected" : "",
+        japanCities.has(normalizeCity(venue.city)) ? "japan-venue" : ""
+      ].filter(Boolean).join(" "));
+      group.setAttribute("tabindex", "0");
+      group.setAttribute("role", "button");
+      group.addEventListener("click", () => selectVenue(venue.id));
+      group.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          selectVenue(venue.id);
+        }
+      });
+      const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      circle.setAttribute("cx", venue.x);
+      circle.setAttribute("cy", venue.y);
+      circle.setAttribute("r", "9");
+      const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      label.setAttribute("x", venue.x + 12);
+      label.setAttribute("y", venue.y + 4);
+      label.textContent = shortCityLabel(venue.city);
+      group.append(circle, label);
+      svg.appendChild(group);
+    });
+    wrap.appendChild(svg);
+    return wrap;
+  }
+
+  function renderVenueDetail() {
+    const base = defaultVenues.find((venue) => venue.id === state.selectedVenueId) || defaultVenues[0];
+    const item = { ...base, ...(state.saved.venueNotes?.[base.id] || {}) };
+    const card = document.createElement("section");
+    card.className = "venue-detail-card";
+    card.appendChild(textHeading(item.city));
+    const list = document.createElement("dl");
+    list.className = "venue-meta-list";
+    [
+      ["国", item.country],
+      ["地域", item.region],
+      ["スタジアム", item.stadium],
+      ["タイムゾーン", item.timezone],
+      ["日本時間との差", item.jstDiff],
+      ["屋根/空調", item.roofAir]
+    ].forEach(([label, value]) => {
+      const row = document.createElement("div");
+      row.append(textTag("dt", label), textTag("dd", value));
+      list.appendChild(row);
+    });
+    card.appendChild(list);
+    const form = document.createElement("div");
+    form.className = "info-form-grid";
+    [
+      ["climateMemo", "気候メモ", "textarea"],
+      ["travelMemo", "移動メモ", "textarea"],
+      ["watchMemo", "観戦メモ", "textarea"]
+    ].forEach(([key, label, type]) => {
+      form.appendChild(infoField(label, item[key], type, (value) => updateAuxNote("venueNotes", item.id, key, value, false)));
+    });
+    card.appendChild(form);
+    return card;
+  }
+
+  function selectVenue(id) {
+    state.selectedVenueId = id;
+    renderVenues();
+  }
+
+  function infoHead(title, sub) {
+    const head = document.createElement("div");
+    head.className = "info-head";
+    const text = document.createElement("div");
+    const h = document.createElement("h2");
+    h.className = "info-title";
+    h.textContent = title;
+    const p = document.createElement("p");
+    p.className = "info-sub";
+    p.textContent = sub;
+    text.append(h, p);
+    head.appendChild(text);
+    return head;
+  }
+
+  function infoField(labelText, value, type, onInput) {
+    const label = document.createElement("label");
+    label.className = `info-field ${type === "textarea" ? "full" : ""}`.trim();
+    label.appendChild(textSpan(labelText));
+    const input = document.createElement(type === "textarea" ? "textarea" : "input");
+    input.value = value || "";
+    input.addEventListener("input", () => onInput(input.value));
+    label.appendChild(input);
+    return label;
+  }
+
+  function updateAuxNote(bucket, id, key, value, rerender = false) {
+    state.saved[bucket] ||= {};
+    state.saved[bucket][id] ||= {};
+    if (value === "") {
+      delete state.saved[bucket][id][key];
+    } else {
+      state.saved[bucket][id][key] = value;
+    }
+    if (Object.keys(state.saved[bucket][id]).length === 0) delete state.saved[bucket][id];
+    state.saved.lastUpdatedAt = new Date().toISOString();
+    persist();
+    setSavedLabel("観戦メモ保存済み");
+    if (rerender) renderAuxView(bucket);
+  }
+
+  function textHeading(text) {
+    const h = document.createElement("h3");
+    h.textContent = text || "";
+    return h;
+  }
+
+  function textTag(tag, text) {
+    const node = document.createElement(tag);
+    node.textContent = text || "";
+    return node;
+  }
+
+  function shortCityLabel(city) {
+    return String(city).replace("New York New Jersey", "NY/NJ").replace("San Francisco Bay Area", "SF Bay");
+  }
+
+  function normalizeCity(city) {
+    return String(city || "").trim().toLowerCase().replace(/\s+/g, " ");
+  }
+
   function participantLabel(teamId, fallback = "", className = "", options = {}) {
     if (isResolvedTeam(teamId)) return teamLabel(teamId, fallback, className, options);
     const label = fallback || (teamId && teamId !== "TBD" ? teamId : "未確定");
@@ -1282,9 +1744,13 @@
   function exportState() {
     return {
       version: 1,
-      type: "worldcup2026_score_overrides",
+      type: "worldcup2026_watch_and_score_state",
       source: DATA_URL,
       scoreOverrides: effectiveScoreOverrides(),
+      matchNotes: state.saved.matchNotes || {},
+      countryNotes: state.saved.countryNotes || {},
+      starPlayers: state.saved.starPlayers || {},
+      venueNotes: state.saved.venueNotes || {},
       lastUpdatedAt: state.saved.lastUpdatedAt || new Date().toISOString()
     };
   }
@@ -1319,7 +1785,13 @@
         ? payload.scores
         : payload;
     if (!scoreOverrides || typeof scoreOverrides !== "object") return false;
-    importScoreOverrides(scoreOverrides, { lastUpdatedAt: payload?.lastUpdatedAt || new Date().toISOString() });
+    importScoreOverrides(scoreOverrides, {
+      lastUpdatedAt: payload?.lastUpdatedAt || new Date().toISOString(),
+      matchNotes: payload?.matchNotes,
+      countryNotes: payload?.countryNotes,
+      starPlayers: payload?.starPlayers,
+      venueNotes: payload?.venueNotes
+    });
     return true;
   }
 
@@ -1406,6 +1878,10 @@
       sharedScoreUrl: state.saved.sharedScoreUrl || "",
       sharedScoreLoadedAt: state.saved.sharedScoreLoadedAt || "",
       lastUpdatedAt: options.lastUpdatedAt || new Date().toISOString(),
+      matchNotes: options.matchNotes && typeof options.matchNotes === "object" ? options.matchNotes : state.saved.matchNotes || {},
+      countryNotes: options.countryNotes && typeof options.countryNotes === "object" ? options.countryNotes : state.saved.countryNotes || {},
+      starPlayers: options.starPlayers && typeof options.starPlayers === "object" ? options.starPlayers : state.saved.starPlayers || {},
+      venueNotes: options.venueNotes && typeof options.venueNotes === "object" ? options.venueNotes : state.saved.venueNotes || {},
       standings: null,
       thirdRanking: null,
       knockout: null
@@ -1433,6 +1909,9 @@
     }
     state.saved.sharedScoreLoadedAt = new Date().toISOString();
     state.saved.lastUpdatedAt = state.saved.sharedScoreLoadedAt;
+    ["matchNotes", "countryNotes", "starPlayers", "venueNotes"].forEach((key) => {
+      if (payload?.[key] && typeof payload[key] === "object") state.saved[key] = payload[key];
+    });
     persist();
     renderContent();
   }
@@ -1583,6 +2062,7 @@
     init,
     renderContent,
     updateTournamentSnapshots,
+    renderAuxView,
     exportState,
     importState
   };
