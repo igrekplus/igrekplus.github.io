@@ -160,6 +160,8 @@ class Match:
     kickoff_local: str
     local_timezone: str
     venue: str
+    city: str
+    country: str
     home_score: int | None
     away_score: int | None
     home_et_score: int | None
@@ -206,6 +208,8 @@ def load_matches() -> list[Match]:
                 kickoff_local=blank_to_none(row["kickoff_local"]) or "",
                 local_timezone=blank_to_none(row["local_timezone"]) or "",
                 venue=blank_to_none(row["venue"]) or "",
+                city=blank_to_none(row.get("city")) or "",
+                country=blank_to_none(row.get("country")) or "",
                 home_score=to_int(row["home_score"]),
                 away_score=to_int(row["away_score"]),
                 home_et_score=to_int(row["home_et_score"]),
@@ -441,6 +445,8 @@ def match_as_site_dict(match: Match, teams: dict[str, dict[str, str]]) -> dict[s
         "kickoff_local": match.kickoff_local,
         "local_timezone": match.local_timezone,
         "venue": match.venue,
+        "city": match.city,
+        "country": match.country,
         "score_home": match.home_score,
         "score_away": match.away_score,
         "penalty_home": match.home_pk_score,

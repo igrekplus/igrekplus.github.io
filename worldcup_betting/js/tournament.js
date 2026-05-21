@@ -256,9 +256,9 @@
     const teams = document.createElement("div");
     teams.className = "match-teams";
     teams.append(
-      teamLabel(matchHomeId(match), match.home_name_ja, "match-team"),
+      teamLabel(matchHomeId(match), match.home_name_ja, "match-team", { showRank: false }),
       textDiv(scoreText(match.match_id), "match-score-display"),
-      teamLabel(matchAwayId(match), match.away_name_ja, "match-team away")
+      teamLabel(matchAwayId(match), match.away_name_ja, "match-team away", { showRank: false })
     );
 
     body.append(meta, teams, createScoreEditor(match.match_id));
@@ -514,6 +514,7 @@
       const cell = document.createElement("div");
       cell.className = "calendar-day-cell";
       if (day.getMonth() !== date.getMonth()) cell.classList.add("outside");
+      if (matches.some(isJapanMatch)) cell.classList.add("has-japan-match");
       const dayHead = document.createElement("button");
       dayHead.type = "button";
       dayHead.className = "calendar-day-number";
@@ -524,6 +525,12 @@
         renderContent();
       });
       cell.appendChild(dayHead);
+      if (matches.some(isJapanMatch)) {
+        const label = document.createElement("div");
+        label.className = "calendar-japan-label";
+        label.textContent = "日本戦";
+        cell.appendChild(label);
+      }
       matches.slice(0, 3).forEach((match) => cell.appendChild(createCalendarMiniMatch(match)));
       if (matches.length > 3) {
         const more = document.createElement("button");
@@ -1029,11 +1036,11 @@
     return true;
   }
 
-  function displayTeam(teamId, fallback = "") {
+  function displayTeam(teamId, fallback = "", options = {}) {
     if (teamId === "TBD") return "未確定";
     const team = state.teams[teamId];
     const name = team?.name_ja || fallback || teamId;
-    return team?.fifa_rank ? `${name}（${team.fifa_rank}位）` : name;
+    return options.showRank === false || !team?.fifa_rank ? name : `${name}（${team.fifa_rank}位）`;
   }
 
   function matchHomeId(match) {
@@ -1057,7 +1064,7 @@
     return code ? `assets/flags/${code}.svg` : "";
   }
 
-  function teamLabel(teamId, fallback = "", className = "") {
+  function teamLabel(teamId, fallback = "", className = "", options = {}) {
     const wrapper = document.createElement("span");
     wrapper.className = `team-label ${className}`.trim();
     if (teamId === "TBD") {
@@ -1087,7 +1094,7 @@
     }
     wrapper.appendChild(flagSpan);
     const name = document.createElement("span");
-    name.textContent = displayTeam(teamId, fallback || teamId);
+    name.textContent = displayTeam(teamId, fallback || teamId, options);
     wrapper.appendChild(name);
     return wrapper;
   }
