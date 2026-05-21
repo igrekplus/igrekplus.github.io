@@ -52,6 +52,8 @@
       importButton: document.getElementById("tournamentImportButton"),
       sharedUrlInput: document.getElementById("sharedScoreUrlInput"),
       sharedUrlButton: document.getElementById("sharedScoreUrlButton"),
+      sharedTextInput: document.getElementById("sharedScoreTextInput"),
+      sharedTextButton: document.getElementById("sharedScoreTextButton"),
       sharedStatus: document.getElementById("sharedScoreStatus"),
       saveState: document.getElementById("saveState")
     };
@@ -70,6 +72,7 @@
     state.elements.exportButton?.addEventListener("click", exportToClipboard);
     state.elements.importButton?.addEventListener("click", importFromPrompt);
     state.elements.sharedUrlButton?.addEventListener("click", loadSharedScoreUrl);
+    state.elements.sharedTextButton?.addEventListener("click", importSharedScoreText);
     if (state.elements.sharedUrlInput) {
       state.elements.sharedUrlInput.value = state.saved.sharedScoreUrl || "";
     }
@@ -1074,24 +1077,54 @@
       setSharedScoreStatus("スマホ/PC共有用のスコアJSON URLを入力してください");
       return;
     }
+    if (url.startsWith("{")) {
+      setSharedScoreStatus("ここはURL入力欄です。JSON本文は下のインポート欄に貼り付けてください");
+      return;
+    }
+    if (!url.startsWith("https://")) {
+      setSharedScoreStatus("URL欄には https:// で始まる共有JSON URLを入力してください");
+      return;
+    }
     setSharedScoreStatus("共有スコアJSONを読み込み中...");
     try {
       const response = await fetch(url, { cache: "no-store" });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const payload = await response.json();
-      const scoreOverrides = extractScoreOverrides(payload);
-      if (!scoreOverrides) throw new Error("scoreOverrides が見つかりません");
-      state.saved.sharedScoreOverrides = scoreOverrides;
-      state.saved.sharedScoreUrl = url;
-      state.saved.sharedScoreLoadedAt = new Date().toISOString();
-      state.saved.lastUpdatedAt = state.saved.sharedScoreLoadedAt;
-      persist();
-      renderContent();
+      applySharedScorePayload(payload, { url });
       setSharedScoreStatus(`共有スコア読込済み: ${formatSavedDateTime(state.saved.sharedScoreLoadedAt)}（端末内にも保存）`);
       setSavedLabel("共有スコアを端末内に保存済み");
     } catch (error) {
       setSharedScoreStatus(`共有スコアJSONを読み込めませんでした: ${error.message || error}`);
     }
+  }
+
+  function importSharedScoreText() {
+    const text = (state.elements.sharedTextInput?.value || "").trim();
+    if (!text) {
+      setSharedScoreStatus("JSON本文を下のインポート欄に貼り付けてください");
+      return;
+    }
+    try {
+      const payload = JSON.parse(text);
+      applySharedScorePayload(payload, { url: state.saved.sharedScoreUrl || "" });
+      setSharedScoreStatus(`JSON本文をインポートしました: ${formatSavedDateTime(state.saved.sharedScoreLoadedAt)}（端末内にも保存）`);
+      setSavedLabel("共有スコアを端末内に保存済み");
+    } catch (error) {
+      setSharedScoreStatus("JSON形式が壊れています。途中で切れていないか、ダブルクォートが閉じているか確認してください");
+    }
+  }
+
+  function applySharedScorePayload(payload, options = {}) {
+    const scoreOverrides = extractScoreOverrides(payload);
+    if (!scoreOverrides) throw new Error("scoreOverrides が見つかりません");
+    state.saved.sharedScoreOverrides = scoreOverrides;
+    if (options.url !== undefined) {
+      state.saved.sharedScoreUrl = options.url;
+    }
+    state.saved.sharedScoreLoadedAt = new Date().toISOString();
+    state.saved.lastUpdatedAt = state.saved.sharedScoreLoadedAt;
+    persist();
+    renderContent();
   }
 
   function extractScoreOverrides(payload) {

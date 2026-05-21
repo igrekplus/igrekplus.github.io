@@ -1459,20 +1459,37 @@
 
     .tournament-shared-score {
       display: grid;
-      grid-template-columns: minmax(220px, 1fr) auto;
+      grid-template-columns: repeat(2, minmax(260px, 1fr));
       gap: 8px;
-      align-items: center;
       flex: 1 1 420px;
-      max-width: 720px;
+      max-width: 980px;
     }
 
-    .tournament-shared-score input {
+    .shared-score-block {
+      display: grid;
+      gap: 6px;
+      align-content: start;
+    }
+
+    .shared-score-block label {
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .tournament-shared-score input,
+    .tournament-shared-score textarea {
       min-height: 34px;
       border: 1px solid var(--line);
       border-radius: 8px;
-      padding: 0 10px;
+      padding: 8px 10px;
       font: inherit;
       font-weight: 700;
+    }
+
+    .tournament-shared-score textarea {
+      min-height: 78px;
+      resize: vertical;
     }
 
     .shared-score-status {
@@ -3621,8 +3638,16 @@
                 <button class="utility-button" type="button" id="tournamentImportButton">JSONインポート</button>
               </div>
               <div class="tournament-shared-score" aria-label="共有スコアJSON">
-                <input id="sharedScoreUrlInput" type="url" inputmode="url" placeholder="スマホ/PC共有用スコアJSON URL">
-                <button class="utility-button" type="button" id="sharedScoreUrlButton">共有スコアを読み込む</button>
+                <div class="shared-score-block">
+                  <label for="sharedScoreUrlInput">共有JSON URLから読み込む</label>
+                  <input id="sharedScoreUrlInput" type="url" inputmode="url" placeholder="https://example.com/scores.json">
+                  <button class="utility-button" type="button" id="sharedScoreUrlButton">URLから読み込む</button>
+                </div>
+                <div class="shared-score-block">
+                  <label for="sharedScoreTextInput">JSON本文を貼り付けてインポート</label>
+                  <textarea id="sharedScoreTextInput" spellcheck="false" placeholder='{ "scoreOverrides": { ... } }'></textarea>
+                  <button class="utility-button" type="button" id="sharedScoreTextButton">JSON本文をインポート</button>
+                </div>
                 <div class="shared-score-status" id="sharedScoreStatus">端末内保存のみ。スマホとPCは自動同期されません。</div>
               </div>
             </div>
