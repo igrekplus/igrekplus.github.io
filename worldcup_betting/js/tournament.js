@@ -94,7 +94,7 @@
     ["dallas", "Dallas", "アメリカ", "南部", "Dallas Stadium", "America/Chicago", "夏時間: 日本より14時間遅れ", "屋根あり/空調あり", "暑いが屋内環境", "米国中南部の大拠点", "決勝級の大型会場感", 505, 385],
     ["kansas-city", "Kansas City", "アメリカ", "中西部", "Kansas City Stadium", "America/Chicago", "夏時間: 日本より14時間遅れ", "屋根なし", "暑さと雷雨に注意", "中西部移動の中継点", "雰囲気が強そう", 535, 330],
     ["atlanta", "Atlanta", "アメリカ", "南東部", "Atlanta Stadium", "America/New_York", "夏時間: 日本より13時間遅れ", "屋根あり/空調あり", "高温多湿だが屋内", "東部、南部の移動拠点", "屋内でテンポが出そう", 650, 410],
-    ["miami", "Miami", "アメリカ", "南東部", "Miami Stadium", "America/New_York", "夏時間: 日本より13時間遅れ", "屋根あり", "暑熱と湿度", "南東端で移動距離は長め", "コンディション差に注目", 700, 500],
+    ["miami", "Miami", "アメリカ", "南東部", "Miami Stadium", "America/New_York", "夏時間: 日本より13時間遅れ", "屋根あり", "暑熱と湿度", "南東端で移動距離は長め", "コンディション差に注目", 730, 455],
     ["philadelphia", "Philadelphia", "アメリカ", "東部", "Philadelphia Stadium", "America/New_York", "夏時間: 日本より13時間遅れ", "屋根なし", "暑さは中程度", "NY/NJ、Bostonと近い", "東海岸連戦向き", 720, 285],
     ["new-york-new-jersey", "New York New Jersey", "アメリカ", "東部", "New York New Jersey Stadium", "America/New_York", "夏時間: 日本より13時間遅れ", "屋根なし", "夏は蒸し暑い", "東海岸の中心", "決勝会場。雰囲気重視", 735, 250],
     ["boston", "Boston", "アメリカ", "東部", "Boston Stadium", "America/New_York", "夏時間: 日本より13時間遅れ", "屋根なし", "比較的涼しめ", "東海岸北部", "早朝観戦になりやすい", 760, 205]
@@ -1547,15 +1547,13 @@
     svg.innerHTML = `
       <rect x="0" y="0" width="900" height="620" fill="#dff3ff"></rect>
       <path class="map-country-canada" d="M95 65 L505 48 L820 92 L825 185 L650 205 L510 184 L405 210 L280 196 L150 214 L82 160 Z"></path>
-      <path class="map-country-usa" d="M150 214 L280 196 L405 210 L510 184 L650 205 L825 185 L800 365 L705 420 L560 410 L455 428 L335 408 L245 430 L135 365 Z"></path>
+      <path class="map-country-usa" d="M150 214 L280 196 L405 210 L510 184 L650 205 L825 185 L800 365 L705 420 L735 468 L718 500 L675 430 L560 410 L455 428 L335 408 L245 430 L135 365 Z"></path>
       <path class="map-country-mexico" d="M245 430 L335 408 L455 428 L560 410 L616 515 L520 585 L378 575 L295 520 Z"></path>
       <path class="map-border-line" d="M150 214 L280 196 L405 210 L510 184 L650 205 L825 185"></path>
       <path class="map-border-line" d="M245 430 L335 408 L455 428 L560 410"></path>
       <text class="map-country-label" x="300" y="132">CANADA</text>
       <text class="map-country-label" x="385" y="318">UNITED STATES</text>
       <text class="map-country-label" x="350" y="520">MEXICO</text>
-      <text x="665" y="202" fill="#1f2937" font-size="13" font-weight="900">Canada / USA border</text>
-      <text x="465" y="447" fill="#1f2937" font-size="13" font-weight="900">USA / Mexico border</text>
     `;
     defaultVenues.forEach((venue) => {
       const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
