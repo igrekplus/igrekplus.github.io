@@ -581,6 +581,105 @@
     ]
   };
 
+  const localKeyPlayerImages = {
+    jpn_kubo_takefusa: "assets/players/jpn_kubo_takefusa.jpg",
+    jpn_endo_wataru: "assets/players/jpn_endo_wataru.jpg",
+    jpn_doan_ritsu: "assets/players/jpn_doan_ritsu.jpg",
+    ned_van_dijk: "assets/players/ned_van_dijk.jpg",
+    ned_frenkie_de_jong: "assets/players/ned_frenkie_de_jong.jpg",
+    ned_xavi_simons: "assets/players/ned_xavi_simons.jpg",
+    tun_ellyes_skhiri: "assets/players/tun_ellyes_skhiri.jpg",
+    tun_hannibal_mejbri: "assets/players/tun_hannibal_mejbri.jpg",
+    tun_hamza_rafia: "assets/players/tun_hamza_rafia.jpg",
+    swe_alexander_isak: "assets/players/swe_alexander_isak.jpg",
+    swe_dejan_kulusevski: "assets/players/swe_dejan_kulusevski.jpg",
+    swe_viktor_gyokeres: "assets/players/swe_viktor_gyokeres.jpg",
+    bra_vinicius_junior: "assets/players/bra_vinicius_junior.jpg",
+    bra_rodrygo: "assets/players/bra_rodrygo.jpg",
+    bra_bruno_guimaraes: "assets/players/bra_bruno_guimaraes.jpg",
+    mar_achraf_hakimi: "assets/players/mar_achraf_hakimi.jpg",
+    mar_yassine_bounou: "assets/players/mar_yassine_bounou.jpg",
+    mar_sofyan_amrabat: "assets/players/mar_sofyan_amrabat.jpg",
+    hai_duckens_nazon: "assets/players/hai_duckens_nazon.jpg",
+    hai_frantzdy_pierrot: "assets/players/hai_frantzdy_pierrot.jpg",
+    hai_jean_ricner_bellegarde: "assets/players/hai_jean_ricner_bellegarde.jpg",
+    sco_scott_mctominay: "assets/players/sco_scott_mctominay.jpg",
+    sco_andy_robertson: "assets/players/sco_andy_robertson.jpg",
+    sco_john_mcginn: "assets/players/sco_john_mcginn.jpg",
+    fra_kylian_mbappe: "assets/players/fra_kylian_mbappe.jpg",
+    fra_antoine_griezmann: "assets/players/fra_antoine_griezmann.jpg",
+    fra_william_saliba: "assets/players/fra_william_saliba.jpg",
+    esp_rodri: "assets/players/esp_rodri.jpg",
+    esp_pedri: "assets/players/esp_pedri.jpg",
+    esp_lamine_yamal: "assets/players/esp_lamine_yamal.jpg",
+    arg_lionel_messi: "assets/players/arg_lionel_messi.jpg",
+    arg_lautaro_martinez: "assets/players/arg_lautaro_martinez.jpg",
+    eng_phil_foden: "assets/players/eng_phil_foden.jpg",
+    eng_harry_kane: "assets/players/eng_harry_kane.jpg",
+    por_bruno_fernandes: "assets/players/por_bruno_fernandes.jpg",
+    por_bernardo_silva: "assets/players/por_bernardo_silva.jfif",
+    ger_jamal_musiala: "assets/players/ger_jamal_musiala.webp",
+    bel_kevin_de_bruyne: "assets/players/bel_kevin_de_bruyne.jpg",
+    bel_jeremy_doku: "assets/players/bel_jeremy_doku.jpg",
+    bel_romelu_lukaku: "assets/players/bel_romelu_lukaku.jpg"
+  };
+
+  const keyPlayerExternalImages = {
+    arg_alexis_mac_allister: "https://commons.wikimedia.org/wiki/Special:FilePath/Alexis%20Mac%20Allister%202022.jpg?width=320",
+    eng_jude_bellingham: "https://commons.wikimedia.org/wiki/Special:FilePath/Jude%20Bellingham%20WC2022.jpg?width=320",
+    por_rafael_leao: "https://commons.wikimedia.org/wiki/Special:FilePath/20231107%20110839%20Leao.jpg?width=320",
+    ger_florian_wirtz: "https://commons.wikimedia.org/wiki/Special:FilePath/Florian%20Wirtz%2004012026%20%283%29.jpg?width=320",
+    ger_joshua_kimmich: "https://commons.wikimedia.org/wiki/Special:FilePath/2015-05-01%20Joshua%20Kimmich.jpg?width=320"
+  };
+
+  const keyPlayerImageSources = {
+    jpn_kubo_takefusa: ["pics/久保建英.jpg", "既存ローカル画像"],
+    jpn_endo_wataru: ["pics/遠藤航.jpg", "既存ローカル画像"],
+    jpn_doan_ritsu: ["pics/堂安律.jpg", "既存ローカル画像"],
+    ned_van_dijk: ["pics/フィルジル・ファン・ダイク.jpg", "既存ローカル画像"],
+    ned_frenkie_de_jong: ["https://en.wikipedia.org/wiki/Frenkie_de_Jong", "Wikipedia / Wikimedia Commons"],
+    ned_xavi_simons: ["https://en.wikipedia.org/wiki/Xavi_Simons", "Wikipedia / Wikimedia Commons"],
+    tun_ellyes_skhiri: ["https://en.wikipedia.org/wiki/Ellyes_Skhiri", "Wikipedia / Wikimedia Commons"],
+    tun_hannibal_mejbri: ["https://en.wikipedia.org/wiki/Hannibal_Mejbri", "Wikipedia / Wikimedia Commons"],
+    tun_hamza_rafia: ["https://commons.wikimedia.org/wiki/File:Hamza_Rafia_(cropped).jpg", "Wikimedia Commons"],
+    swe_alexander_isak: ["https://commons.wikimedia.org/wiki/File:UEFA_EURO_qualifiers_Sweden_vs_Spain_20191015_Alexander_Isak_3.jpg", "Wikimedia Commons"],
+    swe_dejan_kulusevski: ["https://en.wikipedia.org/wiki/Dejan_Kulusevski", "Wikipedia / Wikimedia Commons"],
+    swe_viktor_gyokeres: ["https://commons.wikimedia.org/wiki/Category:Viktor_Gy%C3%B6keres", "Wikimedia Commons"],
+    bra_vinicius_junior: ["pics/ヴィニシウス・ジュニオール.jpg", "既存ローカル画像"],
+    bra_rodrygo: ["https://commons.wikimedia.org/wiki/File:RodrygoGoes.jpg", "Wikimedia Commons"],
+    bra_bruno_guimaraes: ["https://commons.wikimedia.org/wiki/Category:Bruno_Guimar%C3%A3es", "Wikimedia Commons"],
+    mar_achraf_hakimi: ["pics/アクラフ・ハキミ.jpg", "既存ローカル画像"],
+    mar_yassine_bounou: ["https://commons.wikimedia.org/wiki/File:Yassine_Bounou.jpg", "Wikimedia Commons"],
+    mar_sofyan_amrabat: ["https://commons.wikimedia.org/wiki/File:Sofyan_Amrabat_vs_Niger_(cropped).jpg", "Wikimedia Commons"],
+    hai_duckens_nazon: ["https://commons.wikimedia.org/wiki/Category:Duckens_Nazon", "Wikimedia Commons"],
+    hai_frantzdy_pierrot: ["https://www.frantzdypierrot.com/", "Frantzdy Pierrot official site"],
+    hai_jean_ricner_bellegarde: ["https://en.wikipedia.org/wiki/Jean-Ricner_Bellegarde", "Wikipedia / Wikimedia Commons"],
+    sco_scott_mctominay: ["https://commons.wikimedia.org/wiki/File:Scott_McTominay_2021.jpg", "Wikimedia Commons"],
+    sco_andy_robertson: ["pics/アンドリュー・ロバートソン.jpg", "既存ローカル画像"],
+    sco_john_mcginn: ["https://en.wikipedia.org/wiki/John_McGinn", "Wikipedia / Wikimedia Commons"],
+    fra_kylian_mbappe: ["https://en.wikipedia.org/wiki/Kylian_Mbapp%C3%A9", "Wikipedia / Wikimedia Commons"],
+    fra_antoine_griezmann: ["https://en.wikipedia.org/wiki/Antoine_Griezmann", "Wikipedia / Wikimedia Commons"],
+    fra_william_saliba: ["pics/ウィリアン・サリバ.jpg", "既存ローカル画像"],
+    esp_rodri: ["pics/ロドリ.jpg", "既存ローカル画像"],
+    esp_pedri: ["https://commons.wikimedia.org/wiki/Category:Pedri", "Wikimedia Commons"],
+    esp_lamine_yamal: ["pics/ラミン・ヤマル.jpg", "既存ローカル画像"],
+    arg_lionel_messi: ["pics/リオネル・メッシ.jpg", "既存ローカル画像"],
+    arg_lautaro_martinez: ["https://commons.wikimedia.org/wiki/File:Lautaro_Mart%C3%ADnez_2017.jpg", "Wikimedia Commons"],
+    arg_alexis_mac_allister: ["https://commons.wikimedia.org/wiki/File:Alexis_Mac_Allister_2022.jpg", "Wikimedia Commons"],
+    eng_jude_bellingham: ["https://commons.wikimedia.org/wiki/File:Jude_Bellingham_WC2022.jpg", "Wikimedia Commons"],
+    eng_phil_foden: ["pics/フィル・フォーデン.jpg", "既存ローカル画像"],
+    eng_harry_kane: ["pics/ハリー・ケイン.jpg", "既存ローカル画像"],
+    por_bruno_fernandes: ["https://commons.wikimedia.org/wiki/File:Bruno_Fernandes_2018.jpg", "Wikimedia Commons"],
+    por_bernardo_silva: ["pics/ベルナルド・シウバ.jfif", "既存ローカル画像"],
+    por_rafael_leao: ["https://commons.wikimedia.org/wiki/Category:Rafael_Le%C3%A3o", "Wikimedia Commons"],
+    ger_jamal_musiala: ["pics/ジャマル・ムシアラ.webp", "既存ローカル画像"],
+    ger_florian_wirtz: ["https://commons.wikimedia.org/wiki/File:Florian_Wirtz_04012026_(3).jpg", "Wikimedia Commons"],
+    ger_joshua_kimmich: ["https://commons.wikimedia.org/wiki/File:2015-05-01_Joshua_Kimmich.jpg", "Wikimedia Commons"],
+    bel_kevin_de_bruyne: ["https://commons.wikimedia.org/wiki/File:Kevin_de_Bruyne_(36243870980).jpg", "Wikimedia Commons"],
+    bel_jeremy_doku: ["pics/ジェレミー・ドク.jpg", "既存ローカル画像"],
+    bel_romelu_lukaku: ["https://commons.wikimedia.org/wiki/File:Romelu_Lukaku_2021.jpg", "Wikimedia Commons"]
+  };
+
   const defaultVenues = [
     ["toronto", "Toronto", "カナダ", "東部", "Toronto Stadium", "America/Toronto", "夏時間: 日本より13時間遅れ", "開閉式屋根なし", "五大湖沿いで比較的涼しい", "東部拠点。米国東海岸との移動は短め", "日本戦なら朝時間の観戦になりやすい", 585, 165],
     ["vancouver", "Vancouver", "カナダ", "西部", "BC Place Vancouver", "America/Vancouver", "夏時間: 日本より16時間遅れ", "屋根あり", "西海岸で穏やか", "西海岸内の移動は比較的組みやすい", "日本時間は午前帯になりやすい", 205, 185],
@@ -2159,8 +2258,21 @@
       watchPoint: override.watchPoint || defaultWatchPoint(team),
       japanChance: override.japanChance || japanChanceText(team),
       watchMemo: override.watchMemo || defaultWatchMemo(team),
-      key_players: override.key_players || countryKeyPlayers[teamId] || []
+      key_players: enrichKeyPlayers(override.key_players || countryKeyPlayers[teamId] || [])
     };
+  }
+
+  function enrichKeyPlayers(players) {
+    return players.map((player) => {
+      const source = keyPlayerImageSources[player.player_id] || [];
+      const localImage = localKeyPlayerImages[player.player_id] || "";
+      return {
+        ...player,
+        image_url: localImage || keyPlayerExternalImages[player.player_id] || player.image_url || "",
+        image_source_url: player.image_source_url || source[0] || "",
+        image_source_name: player.image_source_name || source[1] || ""
+      };
+    });
   }
 
   function groupsForTeams() {
