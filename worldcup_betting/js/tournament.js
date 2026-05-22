@@ -114,6 +114,44 @@
     y
   }));
 
+  const venueAtmosphereNotes = {
+    toronto: "都市型の会場で、街のイベント感とスタジアムの近さがほどよく混ざりそう。",
+    vancouver: "屋根付きで音がまとまりやすく、雨でも熱気が逃げにくそう。",
+    seattle: "観客の声量が出やすい会場で、サッカー専用に近い圧がありそう。",
+    "san-francisco": "開放感があり、晴れた日だと西海岸らしい軽さが出そう。",
+    "los-angeles": "大規模イベント向きで、演出も含めてかなり盛り上がりそう。",
+    guadalajara: "サッカー熱が濃く、観客席からの圧がじわっと来そうな感じ。",
+    "mexico-city": "歴史ある大箱なので、試合前から特別感が強そう。",
+    monterrey: "山の景色も込みで、会場全体の一体感が出やすそう。",
+    houston: "屋根付きで音が響いて、暑さを避けながら熱気が出やすそう。",
+    dallas: "巨大スタジアムらしいショー感があり、派手な雰囲気になりそう。",
+    "kansas-city": "観客席が近く、圧が強そう。声援の迫力を感じやすそう。",
+    atlanta: "屋根付きで音と光の演出が映え、イベント感が強そう。",
+    miami: "南国らしい開放感があり、試合前後も明るい雰囲気になりそう。",
+    philadelphia: "東海岸らしい熱さと近さがあり、応援の圧が出そう。",
+    "new-york-new-jersey": "決勝会場らしい大規模感があり、特別な空気になりそう。",
+    boston: "郊外型で広がりがありつつ、観客の熱量はしっかり出そう。"
+  };
+
+  const venuePhotoFiles = {
+    toronto: "BMO Field exterior, Toronto.JPG",
+    vancouver: "BC Place Stadium Vancouver (30853283068).jpg",
+    seattle: "Lumen Field @ Seattle (6258750489).jpg",
+    "san-francisco": "Levi's Stadium panorama (14659708347).jpg",
+    "los-angeles": "SoFi Stadium 2023.jpg",
+    guadalajara: "Estadio Akron 02-07-2022 cabecera sur lado derecho.jpg",
+    "mexico-city": "Estadio azteca.jpg",
+    monterrey: "Mexico Guadalupe Monterrey Estadio BBVA Bancomer fifa world cup 2026 1.JPG",
+    houston: "Reliantstadium.jpg",
+    dallas: "AT&T Stadium Aerial.jpeg",
+    "kansas-city": "Arrowhead Stadium.jpg",
+    atlanta: "Mercedes-Benz Stadium, December 2024.jpg",
+    miami: "Hard Rock Stadium.jpg",
+    philadelphia: "Lincoln Financial Field, Philadelphia.jpg",
+    "new-york-new-jersey": "Metlife stadium (Aerial view).jpg",
+    boston: "Gillette Stadium Foxboro MA.jpg"
+  };
+
   const state = {
     initialized: false,
     loaded: false,
@@ -1557,6 +1595,7 @@
     const card = document.createElement("section");
     card.className = "venue-detail-card";
     card.appendChild(textHeading(item.city));
+    card.appendChild(venuePhoto(item));
     const list = document.createElement("dl");
     list.className = "venue-meta-list";
     [
@@ -1581,8 +1620,61 @@
     ].forEach(([key, label, type]) => {
       form.appendChild(infoField(label, item[key], type, (value) => updateAuxNote("venueNotes", item.id, key, value, false)));
     });
+    form.appendChild(textDiv(venueAtmosphereNotes[item.id] || "", "venue-atmosphere"));
     card.appendChild(form);
     return card;
+  }
+
+  function venuePhoto(venue) {
+    const figure = document.createElement("figure");
+    figure.className = "venue-photo";
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "venue-photo-button";
+    const img = document.createElement("img");
+    img.src = venuePhotoUrl(venue.id, 720);
+    img.alt = `${venue.stadium}の写真`;
+    img.loading = "lazy";
+    img.decoding = "async";
+    img.onerror = () => {
+      button.textContent = "写真を読み込めませんでした";
+      button.disabled = true;
+    };
+    button.appendChild(img);
+    button.addEventListener("click", () => openVenuePhoto(venue));
+    const caption = document.createElement("figcaption");
+    caption.textContent = `${venue.stadium} / Wikimedia Commons`;
+    figure.append(button, caption);
+    return figure;
+  }
+
+  function openVenuePhoto(venue) {
+    const modal = document.createElement("div");
+    modal.className = "venue-photo-modal";
+    const close = document.createElement("button");
+    close.type = "button";
+    close.textContent = "×";
+    close.setAttribute("aria-label", "閉じる");
+    const img = document.createElement("img");
+    img.src = venuePhotoUrl(venue.id, 1280);
+    img.alt = `${venue.stadium}の拡大写真`;
+    const closeModal = () => modal.remove();
+    close.addEventListener("click", closeModal);
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) closeModal();
+    });
+    document.addEventListener("keydown", function handleKey(event) {
+      if (event.key !== "Escape") return;
+      closeModal();
+      document.removeEventListener("keydown", handleKey);
+    });
+    modal.append(close, img);
+    document.body.appendChild(modal);
+  }
+
+  function venuePhotoUrl(venueId, width) {
+    const file = venuePhotoFiles[venueId];
+    return file ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(file)}?width=${width}` : "";
   }
 
   function selectVenue(id) {
