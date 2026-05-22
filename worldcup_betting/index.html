@@ -2356,6 +2356,81 @@
       line-height: 1.6;
     }
 
+    .country-key-players {
+      display: grid;
+      gap: 8px;
+      padding-top: 4px;
+    }
+
+    .country-key-players h4 {
+      margin: 0;
+      color: var(--blue);
+      font-size: 12px;
+    }
+
+    .country-player-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .country-player-card {
+      display: grid;
+      grid-template-columns: 54px minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f8fafc;
+    }
+
+    .country-player-photo {
+      width: 54px;
+      height: 54px;
+      border-radius: 8px;
+      background: #d9e2ec;
+      color: var(--muted);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      font-size: 11px;
+      font-weight: 900;
+      text-align: center;
+      flex: 0 0 auto;
+    }
+
+    .country-player-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .country-player-photo.is-fallback {
+      border: 1px dashed #94a3b8;
+      background: #eef2f7;
+    }
+
+    .country-player-name {
+      font-size: 13px;
+      font-weight: 900;
+      color: var(--text);
+    }
+
+    .country-player-meta {
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .country-player-desc {
+      margin-top: 5px;
+      color: var(--text);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
     .country-data-controls {
       display: grid;
       grid-template-columns: minmax(180px, 1fr) repeat(3, minmax(140px, 180px));

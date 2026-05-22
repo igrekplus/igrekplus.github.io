@@ -188,6 +188,399 @@
     }
   };
 
+  const countryKeyPlayers = {
+    JPN: [
+      {
+        player_id: "jpn_kubo_takefusa",
+        name_ja: "久保建英",
+        position: "MF / WG",
+        club: "レアル・ソシエダ",
+        image_url: "pics/久保建英.jpg",
+        description: "狭いエリアで半身で受け、左足のラストパスやカットインで守備のズレを作れる。相手のプレスを外して前進の起点になれるかに注目。"
+      },
+      {
+        player_id: "jpn_endo_wataru",
+        name_ja: "遠藤航",
+        position: "MF",
+        club: "リバプール",
+        image_url: "pics/遠藤航.jpg",
+        description: "中盤の底でセカンドボールを拾い、カウンターの芽を早い段階で止める役割。強豪相手では守備ライン前の防波堤として重要。"
+      },
+      {
+        player_id: "jpn_doan_ritsu",
+        name_ja: "堂安律",
+        position: "MF / WG",
+        club: "フランクフルト",
+        image_url: "pics/堂安律.jpg",
+        description: "右サイドから内側へ入り、左足のシュートやラストパスで局面を変えられる。日本が押し込めない時間帯の単独打開に注目。"
+      }
+    ],
+    NED: [
+      {
+        player_id: "ned_van_dijk",
+        name_ja: "フィルジル・ファン・ダイク",
+        position: "DF",
+        club: "リバプール",
+        image_url: "pics/フィルジル・ファン・ダイク.jpg",
+        description: "最終ラインで空中戦とカバー範囲を担う守備の基準点。日本戦では前線への縦パスをどこまで跳ね返すかが焦点。"
+      },
+      {
+        player_id: "ned_frenkie_de_jong",
+        name_ja: "フレンキー・デ・ヨング",
+        position: "MF",
+        club: "バルセロナ",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Frenkie%20de%20Jong%202018.jpg?width=180",
+        description: "中盤の低い位置で受けて、相手のプレスを運ぶドリブルと縦パスで外せる。日本が前から行く時に最も消したい前進役。"
+      },
+      {
+        player_id: "ned_xavi_simons",
+        name_ja: "シャビ・シモンズ",
+        position: "MF / FW",
+        club: "ライプツィヒ",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Xavi%20Simons%202024.jpg?width=180",
+        description: "ライン間で前を向き、細かいタッチからラストパスやミドルを狙える。日本のボランチ脇で自由にさせないことが大事。"
+      }
+    ],
+    TUN: [
+      {
+        player_id: "tun_ellyes_skhiri",
+        name_ja: "エリス・スキリ",
+        position: "MF",
+        club: "フランクフルト",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Ellyes%20Skhiri%202019.jpg?width=180",
+        description: "中盤でボールを回収し、守備ブロックの前を埋め続ける選手。日本が中央から崩す時に、彼を動かせるかがポイント。"
+      },
+      {
+        player_id: "tun_hannibal_mejbri",
+        name_ja: "ハンニバル・メイブリ",
+        position: "MF",
+        club: "バーンリー",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Hannibal%20Mejbri%202021.jpg?width=180",
+        description: "球際に強く、狭い場所でも前向きに運ぼうとするタイプ。試合が荒れた時間帯にテンポを変える存在になり得る。"
+      },
+      {
+        player_id: "tun_hamza_rafia",
+        name_ja: "ハムザ・ラフィア",
+        position: "MF",
+        club: "レッチェ",
+        image_url: "",
+        description: "2列目で受けて前線との距離を縮める役割。守備的な時間が長い中で、数少ない前進の受け皿になれるかを見る。"
+      }
+    ],
+    SWE: [
+      {
+        player_id: "swe_alexander_isak",
+        name_ja: "アレクサンデル・イサク",
+        position: "FW",
+        club: "ニューカッスル",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Alexander%20Isak%202018.jpg?width=180",
+        description: "長いボールを収めるだけでなく、足元で受けて反転できるCF。日本のCBが縦パスを受ける前に制限できるかが重要。"
+      },
+      {
+        player_id: "swe_dejan_kulusevski",
+        name_ja: "デヤン・クルゼフスキ",
+        position: "MF / WG",
+        club: "トッテナム",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Dejan%20Kulusevski%202019.jpg?width=180",
+        description: "右から内側へ運び、左足で時間を作りながらパスとシュートを選べる。日本のサイド守備の受け渡しを試す存在。"
+      },
+      {
+        player_id: "swe_viktor_gyokeres",
+        name_ja: "ヴィクトル・ギェケレシュ",
+        position: "FW",
+        club: "スポルティングCP",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Viktor%20Gy%C3%B6keres%202023.jpg?width=180",
+        description: "縦への推進力とゴール前の強引さがあり、相手を背負ってもフィニッシュへ持ち込める。セットプレー以外の肉弾戦にも注意。"
+      }
+    ],
+    BRA: [
+      {
+        player_id: "bra_vinicius_junior",
+        name_ja: "ヴィニシウス・ジュニオール",
+        position: "FW",
+        club: "レアル・マドリード",
+        image_url: "pics/ヴィニシウス・ジュニオール.jpg",
+        description: "左サイドで加速して一気に背後を取れる。守備が整っていても1対1から試合を壊せるため、カバーの距離が大事。"
+      },
+      {
+        player_id: "bra_rodrygo",
+        name_ja: "ロドリゴ",
+        position: "FW",
+        club: "レアル・マドリード",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Rodrygo%20Goes%202018.jpg?width=180",
+        description: "中央とサイドを行き来し、狭い局面でワンタッチの崩しに絡める。ヴィニシウスに守備が寄った時の逆側の怖さ。"
+      },
+      {
+        player_id: "bra_bruno_guimaraes",
+        name_ja: "ブルーノ・ギマランイス",
+        position: "MF",
+        club: "ニューカッスル",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Bruno%20Guimar%C3%A3es%202022.jpg?width=180",
+        description: "中盤で相手を背負いながら前を向き、前線の個へ良い形で渡せる。ブラジルの速攻を支える配球役。"
+      }
+    ],
+    MAR: [
+      {
+        player_id: "mar_achraf_hakimi",
+        name_ja: "アクラフ・ハキミ",
+        position: "DF",
+        club: "パリ・サンジェルマン",
+        image_url: "pics/アクラフ・ハキミ.jpg",
+        description: "右サイドを大きく押し上げ、守備から攻撃へ一気に距離を進められる。相手の左サイドを押し込む推進力が武器。"
+      },
+      {
+        player_id: "mar_yassine_bounou",
+        name_ja: "ヤシン・ブヌ",
+        position: "GK",
+        club: "アル・ヒラル",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Yassine%20Bounou%202018.jpg?width=180",
+        description: "反応とPK対応に強く、劣勢の試合でも流れを切れるGK。堅守で接戦に持ち込むモロッコの土台になる。"
+      },
+      {
+        player_id: "mar_sofyan_amrabat",
+        name_ja: "ソフィアン・アムラバト",
+        position: "MF",
+        club: "フェネルバフチェ",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Sofyan%20Amrabat%202018.jpg?width=180",
+        description: "中盤で相手の前進ルートを潰し、奪った後にシンプルに前へつける。守備の粘りを支える回収役。"
+      }
+    ],
+    HAI: [
+      {
+        player_id: "hai_duckens_nazon",
+        name_ja: "デュケンス・ナゾン",
+        position: "FW",
+        club: "カイセリスポル",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Duckens%20Nazon%202018.jpg?width=180",
+        description: "前線で身体を張り、少ないチャンスを強引にシュートへ持ち込む。格上相手に耐える試合で出口になれるかが鍵。"
+      },
+      {
+        player_id: "hai_frantzdy_pierrot",
+        name_ja: "フランツディ・ピエロ",
+        position: "FW",
+        club: "AEKアテネ",
+        image_url: "",
+        description: "高さとゴール前への入り方で勝負するストライカー。押し込まれる時間が長い中で、セットプレーの的になれる。"
+      },
+      {
+        player_id: "hai_jean_ricner_bellegarde",
+        name_ja: "ジャン＝リクネル・ベルガルド",
+        position: "MF",
+        club: "ウルヴァーハンプトン",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Jean-Ricner%20Bellegarde%202019.jpg?width=180",
+        description: "中盤から前へ運ぶ力があり、守備一辺倒になりそうな試合でリズムを変えられる。カウンターの初動に注目。"
+      }
+    ],
+    SCO: [
+      {
+        player_id: "sco_scott_mctominay",
+        name_ja: "スコット・マクトミネイ",
+        position: "MF",
+        club: "ナポリ",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Scott%20McTominay%202018.jpg?width=180",
+        description: "中盤からゴール前へ入るタイミングが鋭く、クロスやこぼれ球に強い。守備だけでなく得点源として警戒したい。"
+      },
+      {
+        player_id: "sco_andy_robertson",
+        name_ja: "アンドリュー・ロバートソン",
+        position: "DF",
+        club: "リバプール",
+        image_url: "pics/アンドリュー・ロバートソン.jpg",
+        description: "左サイドで運動量とクロスの質を出せる主将格。押し込む時間を作ると、スコットランドの攻撃が一気に厚くなる。"
+      },
+      {
+        player_id: "sco_john_mcginn",
+        name_ja: "ジョン・マッギン",
+        position: "MF",
+        club: "アストン・ヴィラ",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/John%20McGinn%202019.jpg?width=180",
+        description: "低い重心でボールを守り、相手の中盤に身体を当てながら前進できる。試合のテンションを上げる存在。"
+      }
+    ],
+    FRA: [
+      {
+        player_id: "fra_kylian_mbappe",
+        name_ja: "キリアン・エムバペ",
+        position: "FW",
+        club: "レアル・マドリード",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Kylian%20Mbapp%C3%A9%202018.jpg?width=180",
+        description: "背後への一歩目とシュートまでの速さが突出する。守備が低くても高くても、数秒で決定機に変えられる。"
+      },
+      {
+        player_id: "fra_antoine_griezmann",
+        name_ja: "アントワーヌ・グリーズマン",
+        position: "MF / FW",
+        club: "アトレティコ・マドリード",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Antoine%20Griezmann%202018.jpg?width=180",
+        description: "前線と中盤の間で受け、守備にも戻りながらラストパスを出せる。フランスの攻守の接着剤として効く。"
+      },
+      {
+        player_id: "fra_william_saliba",
+        name_ja: "ウィリアン・サリバ",
+        position: "DF",
+        club: "アーセナル",
+        image_url: "pics/ウィリアン・サリバ.jpg",
+        description: "スピードのある相手にも慌てず、広いスペースを守れるCB。フランスが高いラインを保つ時の安定材料。"
+      }
+    ],
+    ESP: [
+      {
+        player_id: "esp_rodri",
+        name_ja: "ロドリ",
+        position: "MF",
+        club: "マンチェスター・シティ",
+        image_url: "pics/ロドリ.jpg",
+        description: "中盤の底で受け、相手のプレス方向を見てテンポを変えられる。スペインの保持が詰まらないための基準点。"
+      },
+      {
+        player_id: "esp_pedri",
+        name_ja: "ペドリ",
+        position: "MF",
+        club: "バルセロナ",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Pedri%202020.jpg?width=180",
+        description: "狭いライン間で受け、ワンタッチで守備の向きを変えられる。相手を走らせるスペインらしい崩しの中心。"
+      },
+      {
+        player_id: "esp_lamine_yamal",
+        name_ja: "ラミン・ヤマル",
+        position: "FW",
+        club: "バルセロナ",
+        image_url: "pics/ラミン・ヤマル.jpg",
+        description: "右サイドで縦にも内側にも行ける左利き。早い時間から1対1で優位を作ると、相手の守備計画を崩せる。"
+      }
+    ],
+    ARG: [
+      {
+        player_id: "arg_lionel_messi",
+        name_ja: "リオネル・メッシ",
+        position: "FW / MF",
+        club: "インテル・マイアミ",
+        image_url: "pics/リオネル・メッシ.jpg",
+        description: "歩きながら守備の隙間を探し、受けた瞬間に決定的なパスやシュートへ移れる。出場時間と状態そのものが見どころ。"
+      },
+      {
+        player_id: "arg_lautaro_martinez",
+        name_ja: "ラウタロ・マルティネス",
+        position: "FW",
+        club: "インテル",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Lautaro%20Mart%C3%ADnez%202018.jpg?width=180",
+        description: "DFの間で駆け引きし、少ないスペースでもシュートを打ち切れる。メッシの周囲で最後に仕上げる役割。"
+      },
+      {
+        player_id: "arg_alexis_mac_allister",
+        name_ja: "アレクシス・マック・アリスター",
+        position: "MF",
+        club: "リバプール",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Alexis%20Mac%20Allister%202022.jpg?width=180",
+        description: "中盤で受け直しながら前進ルートを作り、守備でも位置を埋められる。アルゼンチンの試合管理を支える。"
+      }
+    ],
+    ENG: [
+      {
+        player_id: "eng_jude_bellingham",
+        name_ja: "ジュード・ベリンガム",
+        position: "MF",
+        club: "レアル・マドリード",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Jude%20Bellingham%202020.jpg?width=180",
+        description: "中盤からゴール前まで一気に入れる万能型。相手の守備ラインと中盤の間で受けると、攻撃の方向を変えられる。"
+      },
+      {
+        player_id: "eng_phil_foden",
+        name_ja: "フィル・フォーデン",
+        position: "MF / FW",
+        club: "マンチェスター・シティ",
+        image_url: "pics/フィル・フォーデン.jpg",
+        description: "狭い場所でターンし、左足でラストパスとシュートを選べる。右でも中央でも、守備者の視野から消える動きが怖い。"
+      },
+      {
+        player_id: "eng_harry_kane",
+        name_ja: "ハリー・ケイン",
+        position: "FW",
+        club: "バイエルン",
+        image_url: "pics/ハリー・ケイン.jpg",
+        description: "下がって受けるパス能力と、ゴール前の決定力を両立するCF。2列目を走らせる起点としても機能する。"
+      }
+    ],
+    POR: [
+      {
+        player_id: "por_bruno_fernandes",
+        name_ja: "ブルーノ・フェルナンデス",
+        position: "MF",
+        club: "マンチェスター・ユナイテッド",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Bruno%20Fernandes%202018.jpg?width=180",
+        description: "縦パス、クロス、ミドルを早い判断で選べる。ポルトガルが詰まった時に、リスクを取って局面を動かす選手。"
+      },
+      {
+        player_id: "por_bernardo_silva",
+        name_ja: "ベルナルド・シウバ",
+        position: "MF / WG",
+        club: "マンチェスター・シティ",
+        image_url: "pics/ベルナルド・シウバ.jfif",
+        description: "右サイドや中央でボールを失わず、相手を引きつけて味方を空けられる。保持の安定と崩しを同時に担う。"
+      },
+      {
+        player_id: "por_rafael_leao",
+        name_ja: "ラファエル・レオン",
+        position: "FW",
+        club: "ミラン",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Rafael%20Le%C3%A3o%202022.jpg?width=180",
+        description: "左サイドで長いストライドから一気に加速する。守備が整う前に運ばれると、ファウル以外で止めにくい。"
+      }
+    ],
+    GER: [
+      {
+        player_id: "ger_jamal_musiala",
+        name_ja: "ジャマル・ムシアラ",
+        position: "MF / FW",
+        club: "バイエルン",
+        image_url: "pics/ジャマル・ムシアラ.webp",
+        description: "細かいタッチで密集を抜け、ゴール前で最後の一手を作れる。守備者が飛び込めない距離感で違いを出す。"
+      },
+      {
+        player_id: "ger_florian_wirtz",
+        name_ja: "フロリアン・ヴィルツ",
+        position: "MF",
+        club: "レバークーゼン",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Florian%20Wirtz%202020.jpg?width=180",
+        description: "ライン間で受け、ワンタッチの落としやスルーパスで守備の形を崩せる。ドイツの攻撃に流動性を足す存在。"
+      },
+      {
+        player_id: "ger_joshua_kimmich",
+        name_ja: "ヨシュア・キミッヒ",
+        position: "MF / DF",
+        club: "バイエルン",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Joshua%20Kimmich%202018.jpg?width=180",
+        description: "中盤でも右サイドでも試合の配置を整えられる。セットプレーのキックと、守備への戻り方も見どころ。"
+      }
+    ],
+    BEL: [
+      {
+        player_id: "bel_kevin_de_bruyne",
+        name_ja: "ケヴィン・デ・ブライネ",
+        position: "MF",
+        club: "ナポリ",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Kevin%20De%20Bruyne%202018.jpg?width=180",
+        description: "少し空いた瞬間に斜めのラストパスやクロスで決定機を作れる。ベルギーが押し込めない時間でも一発を持つ。"
+      },
+      {
+        player_id: "bel_jeremy_doku",
+        name_ja: "ジェレミー・ドク",
+        position: "FW",
+        club: "マンチェスター・シティ",
+        image_url: "pics/ジェレミー・ドク.jpg",
+        description: "タッチ数を増やしながら相手の重心を動かし、縦突破で深い位置を取れる。守備を横に広げる役割が大きい。"
+      },
+      {
+        player_id: "bel_romelu_lukaku",
+        name_ja: "ロメル・ルカク",
+        position: "FW",
+        club: "ナポリ",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Romelu%20Lukaku%202018.jpg?width=180",
+        description: "身体を預けてボールを収め、ゴール前では一気にフィニッシュへ持ち込む。クロスが増える展開で存在感が出る。"
+      }
+    ]
+  };
+
   const defaultStarPlayers = [
     ["kubo", "久保建英", "日本", "レアル・ソシエダ", "ラ・リーガ", "なし", "なし", "主力", "日本の攻撃の中心。右サイド、中央で違いを作れるか", "高", "選出想定", "確認中"],
     ["endo", "遠藤航", "日本", "リバプール", "プレミアリーグ", "現所属", "なし", "ベテラン", "強豪相手の中盤防波堤。球際と回収力", "高", "選出想定", "確認中"],
@@ -1693,10 +2086,9 @@
       ["戦い方の傾向", data.style],
       ["強み", data.strengths],
       ["弱み", data.weaknesses],
-      ["注目ポイント", data.watchPoint],
-      ["日本と当たる可能性", data.japanChance],
-      ["観戦メモ", data.watchMemo]
+      ["注目ポイント", data.watchPoint]
     ].forEach(([label, value]) => card.appendChild(countrySection(label, value)));
+    card.appendChild(countryKeyPlayersSection(data.key_players));
     return card;
   }
 
@@ -1716,6 +2108,64 @@
     body.textContent = value || "確認中";
     section.append(heading, body);
     return section;
+  }
+
+  function countryKeyPlayersSection(players) {
+    const section = document.createElement("section");
+    section.className = "country-key-players";
+    const heading = document.createElement("h4");
+    heading.textContent = "注目選手";
+    const list = document.createElement("div");
+    list.className = "country-player-list";
+    const items = Array.isArray(players) ? players : [];
+    if (!items.length) {
+      const empty = document.createElement("p");
+      empty.className = "country-player-desc";
+      empty.textContent = "確認中";
+      list.appendChild(empty);
+    } else {
+      items.slice(0, 3).forEach((player) => list.appendChild(countryPlayerCard(player)));
+    }
+    section.append(heading, list);
+    return section;
+  }
+
+  function countryPlayerCard(player) {
+    const card = document.createElement("article");
+    card.className = "country-player-card";
+    const photo = document.createElement("div");
+    photo.className = "country-player-photo";
+    const fallback = player.name_ja ? player.name_ja.trim().slice(0, 1) : "No Image";
+    if (player.image_url) {
+      const img = document.createElement("img");
+      img.src = player.image_url;
+      img.alt = `${player.name_ja || "注目選手"}の顔写真`;
+      img.loading = "lazy";
+      img.decoding = "async";
+      img.onerror = () => {
+        img.remove();
+        photo.textContent = fallback || "No Image";
+        photo.classList.add("is-fallback");
+      };
+      photo.appendChild(img);
+    } else {
+      photo.textContent = fallback || "No Image";
+      photo.classList.add("is-fallback");
+    }
+
+    const body = document.createElement("div");
+    const name = document.createElement("div");
+    name.className = "country-player-name";
+    name.textContent = player.name_ja || "確認中";
+    const meta = document.createElement("div");
+    meta.className = "country-player-meta";
+    meta.textContent = [player.position, player.club].filter(Boolean).join(" / ") || "所属確認中";
+    const desc = document.createElement("div");
+    desc.className = "country-player-desc";
+    desc.textContent = player.description || "確認中";
+    body.append(name, meta, desc);
+    card.append(photo, body);
+    return card;
   }
 
   function countryData(team) {
@@ -1740,7 +2190,8 @@
       weaknesses: override.weaknesses || defaultWeaknesses(confederation, rank),
       watchPoint: override.watchPoint || defaultWatchPoint(team),
       japanChance: override.japanChance || japanChanceText(team),
-      watchMemo: override.watchMemo || defaultWatchMemo(team)
+      watchMemo: override.watchMemo || defaultWatchMemo(team),
+      key_players: override.key_players || countryKeyPlayers[teamId] || []
     };
   }
 
