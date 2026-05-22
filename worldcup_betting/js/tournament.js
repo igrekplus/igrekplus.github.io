@@ -241,7 +241,6 @@
       sharedScoreUrl: "",
       sharedScoreLoadedAt: "",
       lastUpdatedAt: "",
-      matchNotes: {},
       countryNotes: {},
       starPlayers: {},
       venueNotes: {},
@@ -265,7 +264,6 @@
         sharedScoreUrl: parsed?.sharedScoreUrl || fallback.sharedScoreUrl,
         sharedScoreLoadedAt: parsed?.sharedScoreLoadedAt || fallback.sharedScoreLoadedAt,
         lastUpdatedAt: parsed?.lastUpdatedAt || fallback.lastUpdatedAt,
-        matchNotes: parsed?.matchNotes && typeof parsed.matchNotes === "object" ? parsed.matchNotes : {},
         countryNotes: parsed?.countryNotes && typeof parsed.countryNotes === "object" ? parsed.countryNotes : {},
         starPlayers: parsed?.starPlayers && typeof parsed.starPlayers === "object" ? parsed.starPlayers : {},
         venueNotes: parsed?.venueNotes && typeof parsed.venueNotes === "object" ? parsed.venueNotes : {},
@@ -483,7 +481,8 @@
       textDiv(stageLabels[match.stage] || match.stage),
       textDiv(match.group ? `Group ${match.group}` : "", "match-group"),
       textDiv(formatJstDateTime(match.kickoff_jst), "match-jst"),
-      textDiv(venueText(match), "match-venue")
+      textDiv(venueText(match), "match-venue"),
+      mapButton(match)
     );
 
     const teams = document.createElement("div");
@@ -499,83 +498,14 @@
     play.append(teams, statusBadge(match.match_id), createScoreEditor(match.match_id));
 
     body.append(meta, play);
-    card.append(body, createMatchWatchPanel(match));
+    card.append(body);
     return card;
-  }
-
-  function createMatchWatchPanel(match) {
-    const note = matchNote(match.match_id);
-    const panel = document.createElement("div");
-    panel.className = "match-watch-panel";
-    panel.append(
-      watchSelect(match.match_id, "watchPlan", "観戦予定", note.watchPlan, [
-        ["", "未設定"],
-        ["live", "観戦予定"],
-        ["highlight", "ハイライトで見る"],
-        ["result", "結果だけでよい"],
-        ["skip", "見ない"]
-      ]),
-      watchSelect(match.match_id, "attention", "注目度", note.attention, [
-        ["", "未設定"],
-        ["5", "★★★★★"],
-        ["4", "★★★★"],
-        ["3", "★★★"],
-        ["2", "★★"],
-        ["1", "★"]
-      ]),
-      watchTextarea(match.match_id, "preComment", "試合前コメント", note.preComment, "見る理由・注目ポイント"),
-      watchTextarea(match.match_id, "oneLineComment", "1行コメント", note.oneLineComment, "見る理由 / 結果だけでよい理由"),
-      watchTextarea(match.match_id, "postMemo", "試合後メモ", note.postMemo, "結果、印象、後で見返す点"),
-      watchCheckbox(match.match_id, "highlightChecked", "ハイライト確認", note.highlightChecked),
-      mapButton(match)
-    );
-    return panel;
-  }
-
-  function watchSelect(matchId, key, labelText, value, options) {
-    const label = document.createElement("label");
-    label.className = "watch-field";
-    label.appendChild(textSpan(labelText));
-    const select = document.createElement("select");
-    options.forEach(([optionValue, text]) => {
-      const option = document.createElement("option");
-      option.value = optionValue;
-      option.textContent = text;
-      select.appendChild(option);
-    });
-    select.value = value || "";
-    select.addEventListener("change", () => updateMatchNote(matchId, key, select.value));
-    label.appendChild(select);
-    return label;
-  }
-
-  function watchTextarea(matchId, key, labelText, value, placeholder) {
-    const label = document.createElement("label");
-    label.className = "watch-field";
-    label.appendChild(textSpan(labelText));
-    const textarea = document.createElement("textarea");
-    textarea.value = value || "";
-    textarea.placeholder = placeholder || "";
-    textarea.addEventListener("input", () => updateMatchNote(matchId, key, textarea.value));
-    label.appendChild(textarea);
-    return label;
-  }
-
-  function watchCheckbox(matchId, key, labelText, checked) {
-    const label = document.createElement("label");
-    label.className = "watch-checkbox";
-    const input = document.createElement("input");
-    input.type = "checkbox";
-    input.checked = Boolean(checked);
-    input.addEventListener("change", () => updateMatchNote(matchId, key, input.checked));
-    label.append(input, document.createTextNode(labelText));
-    return label;
   }
 
   function mapButton(match) {
     const button = document.createElement("button");
     button.type = "button";
-    button.className = "utility-button watch-map-button";
+    button.className = "utility-button match-map-button";
     button.textContent = "地図で見る";
     button.addEventListener("click", () => openVenueFromMatch(match));
     return button;
@@ -664,28 +594,6 @@
     state.saved.lastUpdatedAt = new Date().toISOString();
     persist();
     if (state.elements.saveState) state.elements.saveState.textContent = "スコア保存済み";
-  }
-
-  function matchNote(matchId) {
-    return state.saved.matchNotes?.[matchId] || {};
-  }
-
-  function updateMatchNote(matchId, key, value) {
-    state.saved.matchNotes ||= {};
-    const current = { ...(state.saved.matchNotes[matchId] || {}) };
-    if (value === "" || value === false || value === null || value === undefined) {
-      delete current[key];
-    } else {
-      current[key] = value;
-    }
-    if (Object.keys(current).length) {
-      state.saved.matchNotes[matchId] = current;
-    } else {
-      delete state.saved.matchNotes[matchId];
-    }
-    state.saved.lastUpdatedAt = new Date().toISOString();
-    persist();
-    setSavedLabel("観戦メモ保存済み");
   }
 
   function openVenueFromMatch(match) {
@@ -1599,15 +1507,23 @@
     svg.setAttribute("role", "img");
     svg.setAttribute("aria-label", "北米の簡易開催地マップ");
     svg.innerHTML = `
-      <path d="M155 90 L520 75 L800 160 L785 305 L705 390 L740 540 L560 565 L430 505 L310 560 L210 470 L150 330 Z" fill="#d7ecff" stroke="#9ac5e8" stroke-width="2"></path>
-      <path d="M290 430 L465 445 L520 560 L360 590 L265 540 Z" fill="#d9f2df" stroke="#9fcfb0" stroke-width="2"></path>
-      <text x="190" y="125" fill="#557" font-size="20" font-weight="800">Canada / USA</text>
-      <text x="330" y="575" fill="#557" font-size="20" font-weight="800">Mexico</text>
+      <rect x="0" y="0" width="900" height="620" fill="#dff3ff"></rect>
+      <path class="map-country-canada" d="M95 65 L505 48 L820 92 L825 185 L650 205 L510 184 L405 210 L280 196 L150 214 L82 160 Z"></path>
+      <path class="map-country-usa" d="M150 214 L280 196 L405 210 L510 184 L650 205 L825 185 L800 365 L705 420 L560 410 L455 428 L335 408 L245 430 L135 365 Z"></path>
+      <path class="map-country-mexico" d="M245 430 L335 408 L455 428 L560 410 L616 515 L520 585 L378 575 L295 520 Z"></path>
+      <path class="map-border-line" d="M150 214 L280 196 L405 210 L510 184 L650 205 L825 185"></path>
+      <path class="map-border-line" d="M245 430 L335 408 L455 428 L560 410"></path>
+      <text class="map-country-label" x="300" y="132">CANADA</text>
+      <text class="map-country-label" x="385" y="318">UNITED STATES</text>
+      <text class="map-country-label" x="350" y="520">MEXICO</text>
+      <text x="665" y="202" fill="#1f2937" font-size="13" font-weight="900">Canada / USA border</text>
+      <text x="465" y="447" fill="#1f2937" font-size="13" font-weight="900">USA / Mexico border</text>
     `;
     defaultVenues.forEach((venue) => {
       const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
       group.setAttribute("class", [
         "venue-pin",
+        venueCountryClass(venue.country),
         venue.id === state.selectedVenueId ? "selected" : "",
         japanCities.has(normalizeCity(venue.city)) ? "japan-venue" : ""
       ].filter(Boolean).join(" "));
@@ -1735,6 +1651,12 @@
     return String(city || "").trim().toLowerCase().replace(/\s+/g, " ");
   }
 
+  function venueCountryClass(country) {
+    if (country === "カナダ") return "pin-canada";
+    if (country === "メキシコ") return "pin-mexico";
+    return "pin-usa";
+  }
+
   function participantLabel(teamId, fallback = "", className = "", options = {}) {
     if (isResolvedTeam(teamId)) return teamLabel(teamId, fallback, className, options);
     const label = fallback || (teamId && teamId !== "TBD" ? teamId : "未確定");
@@ -1744,10 +1666,9 @@
   function exportState() {
     return {
       version: 1,
-      type: "worldcup2026_watch_and_score_state",
+      type: "worldcup2026_score_and_notes_state",
       source: DATA_URL,
       scoreOverrides: effectiveScoreOverrides(),
-      matchNotes: state.saved.matchNotes || {},
       countryNotes: state.saved.countryNotes || {},
       starPlayers: state.saved.starPlayers || {},
       venueNotes: state.saved.venueNotes || {},
@@ -1788,7 +1709,6 @@
     if (!scoreOverrides || typeof scoreOverrides !== "object") return false;
     importScoreOverrides(scoreOverrides, {
       lastUpdatedAt: source?.lastUpdatedAt || payload?.lastUpdated || new Date().toISOString(),
-      matchNotes: source?.matchNotes,
       countryNotes: source?.countryNotes,
       starPlayers: source?.starPlayers,
       venueNotes: source?.venueNotes
@@ -1879,7 +1799,6 @@
       sharedScoreUrl: state.saved.sharedScoreUrl || "",
       sharedScoreLoadedAt: state.saved.sharedScoreLoadedAt || "",
       lastUpdatedAt: options.lastUpdatedAt || new Date().toISOString(),
-      matchNotes: options.matchNotes && typeof options.matchNotes === "object" ? options.matchNotes : state.saved.matchNotes || {},
       countryNotes: options.countryNotes && typeof options.countryNotes === "object" ? options.countryNotes : state.saved.countryNotes || {},
       starPlayers: options.starPlayers && typeof options.starPlayers === "object" ? options.starPlayers : state.saved.starPlayers || {},
       venueNotes: options.venueNotes && typeof options.venueNotes === "object" ? options.venueNotes : state.saved.venueNotes || {},
@@ -1911,7 +1830,7 @@
     state.saved.sharedScoreLoadedAt = new Date().toISOString();
     state.saved.lastUpdatedAt = state.saved.sharedScoreLoadedAt;
     const source = payload?.tournament && typeof payload.tournament === "object" ? payload.tournament : payload;
-    ["matchNotes", "countryNotes", "starPlayers", "venueNotes"].forEach((key) => {
+    ["countryNotes", "starPlayers", "venueNotes"].forEach((key) => {
       if (source?.[key] && typeof source[key] === "object") state.saved[key] = source[key];
     });
     persist();

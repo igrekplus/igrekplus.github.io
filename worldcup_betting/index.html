@@ -2241,66 +2241,12 @@
       font-weight: 800;
     }
 
-    .match-watch-panel {
-      display: grid;
-      grid-template-columns: 150px 130px minmax(180px, 1fr) minmax(180px, 1fr) minmax(180px, 1fr) 140px 112px;
-      gap: 8px;
-      padding: 10px 12px 12px;
-      border-top: 1px solid var(--line);
-      background: #f8fbff;
-    }
-
-    .watch-field {
-      display: grid;
-      gap: 4px;
-      min-width: 0;
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 800;
-    }
-
-    .watch-field input,
-    .watch-field select,
-    .watch-field textarea {
-      width: 100%;
-      min-width: 0;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      padding: 7px 8px;
-      color: var(--text);
-      background: #fff;
-      font: inherit;
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .watch-field textarea {
-      min-height: 42px;
-      resize: vertical;
-    }
-
-    .watch-checkbox {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      align-self: end;
-      min-height: 34px;
-      padding: 7px 8px;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      background: #fff;
-      color: var(--text);
+    .match-map-button {
+      width: fit-content;
+      min-height: 30px;
+      padding: 5px 10px;
       font-size: 12px;
       font-weight: 800;
-    }
-
-    .watch-checkbox input {
-      width: auto;
-    }
-
-    .watch-map-button {
-      align-self: end;
-      min-height: 34px;
     }
 
     .info-panel .tournament-shell {
@@ -2408,7 +2354,43 @@
       width: 100%;
       min-height: 420px;
       border-radius: 8px;
-      background: #eaf6ff;
+      background: #dff3ff;
+    }
+
+    .map-country-canada {
+      fill: #d7ecff;
+      stroke: #5b8fb8;
+      stroke-width: 2;
+    }
+
+    .map-country-usa {
+      fill: #f4f1d0;
+      stroke: #b49c4f;
+      stroke-width: 2;
+    }
+
+    .map-country-mexico {
+      fill: #d8f1d5;
+      stroke: #6aa66a;
+      stroke-width: 2;
+    }
+
+    .map-border-line {
+      fill: none;
+      stroke: #1f2937;
+      stroke-width: 4;
+      stroke-dasharray: 10 6;
+      stroke-linecap: round;
+    }
+
+    .map-country-label {
+      fill: #1e2933;
+      font-size: 28px;
+      font-weight: 900;
+      paint-order: stroke;
+      stroke: #fff;
+      stroke-width: 5px;
+      stroke-linejoin: round;
     }
 
     .venue-pin {
@@ -2420,6 +2402,18 @@
       stroke: #fff;
       stroke-width: 3;
       filter: drop-shadow(0 3px 4px rgba(15, 23, 42, 0.28));
+    }
+
+    .venue-pin.pin-canada circle {
+      fill: #1f78b4;
+    }
+
+    .venue-pin.pin-usa circle {
+      fill: #b7791f;
+    }
+
+    .venue-pin.pin-mexico circle {
+      fill: #16803c;
     }
 
     .venue-pin.japan-venue circle {
@@ -2584,7 +2578,6 @@
         border-top: 1px solid var(--line);
       }
 
-      .match-watch-panel,
       .info-form-grid,
       .venue-layout {
         grid-template-columns: 1fr;
