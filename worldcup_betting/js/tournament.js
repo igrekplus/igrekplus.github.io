@@ -680,6 +680,85 @@
     bel_romelu_lukaku: ["https://commons.wikimedia.org/wiki/File:Romelu_Lukaku_2021.jpg", "Wikimedia Commons"]
   };
 
+  const localManagerImages = {
+    arg_lionel_scaloni: "assets/managers/arg_lionel_scaloni.jpg",
+    bra_carlo_ancelotti: "assets/managers/bra_carlo_ancelotti.jpg",
+    cuw_dick_advocaat: "assets/managers/cuw_dick_advocaat.jpg",
+    fra_didier_deschamps: "assets/managers/fra_didier_deschamps.jpg",
+    kor_hong_myung_bo: "assets/managers/kor_hong_myung_bo.jpg",
+    qat_julen_lopetegui: "assets/managers/qat_julen_lopetegui.jpg",
+    sui_murat_yakin: "assets/managers/sui_murat_yakin.jpg"
+  };
+
+  const countryManagers = {
+    MEX: manager("mex_javier_aguirre", "ハビエル・アギーレ", "Javier Aguirre", "メキシコ", "2024", "自国開催大会へ向けて再登板した経験豊富な監督。守備の規律と試合中の現実的な修正を重視する。", "中盤の強度とサイドの推進力を使い、相手に合わせてテンポを調整する。", "https://en.wikipedia.org/wiki/Javier_Aguirre", "Wikipedia / Wikimedia Commons"),
+    RSA: manager("rsa_hugo_broos", "ヒューゴ・ブロース", "Hugo Broos", "ベルギー", "2021", "経験豊富なベルギー人監督。南アフリカ代表では若い選手を使いながら粘り強いチームを作っている。", "守備ブロックを整え、奪った後は前線のスピードを生かして素早く出る。", "https://en.wikipedia.org/wiki/Hugo_Broos", "Wikipedia / Wikimedia Commons"),
+    KOR: manager("kor_hong_myung_bo", "洪明甫", "Hong Myung-bo", "韓国", "2024", "韓国代表のレジェンドDFで、代表監督として再登板。チームの規律と国内外の主力融合が焦点。", "4バックを軸に強度の高い守備と縦に速い攻撃を組み合わせる。", "https://en.wikipedia.org/wiki/Hong_Myung-bo", "Wikipedia / Wikimedia Commons"),
+    CZE: manager("cze_ivan_hasek", "イヴァン・ハシェック", "Ivan Hasek", "チェコ", "2024", "チェコ代表を率いる経験豊富な指導者。堅実な守備と欧州的な球際の強さを整理する。", "高さとセットプレー、縦への速さを生かしながら試合を壊さず進める。", "https://en.wikipedia.org/wiki/Ivan_Ha%C5%A1ek", "Wikipedia / Wikimedia Commons"),
+    CAN: manager("can_jesse_marsch", "ジェシー・マーシュ", "Jesse Marsch", "アメリカ", "2024", "レッドブル系のプレッシング思想を持つ監督。開催国カナダに強度と前向きな守備を植え付ける。", "前から圧力をかけ、奪った直後に縦へ速く進むトランジション重視。", "https://en.wikipedia.org/wiki/Jesse_Marsch", "Wikipedia / Wikimedia Commons"),
+    SUI: manager("sui_murat_yakin", "ムラト・ヤキン", "Murat Yakin", "スイス", "2021", "スイス代表を継続して率いる監督。大会での現実的な試合運びと守備の安定感が特徴。", "3バック/4バックを使い分け、相手の強みに合わせて中央を締める。", "https://en.wikipedia.org/wiki/Murat_Yakin", "Wikipedia / Wikimedia Commons"),
+    QAT: manager("qat_julen_lopetegui", "フレン・ロペテギ", "Julen Lopetegui", "スペイン", "2025", "スペイン代表やクラブで経験を積んだ監督。カタール代表では保持と配置の整理がテーマ。", "後方から丁寧に前進し、サイドと中盤の距離感を整えて崩す。", "https://en.wikipedia.org/wiki/Julen_Lopetegui", "Wikipedia / Wikimedia Commons"),
+    BIH: manager("bih_sergej_barbarez", "セルゲイ・バルバレス", "Sergej Barbarez", "ボスニア・ヘルツェゴビナ", "2024", "元代表FWで、代表の再建を担う監督。経験ある選手と若手の競争を促す。", "前線の個を生かしつつ、守備時の距離感と切り替えを整える。", "https://en.wikipedia.org/wiki/Sergej_Barbarez", "Wikipedia / Wikimedia Commons"),
+    BRA: manager("bra_carlo_ancelotti", "カルロ・アンチェロッティ", "Carlo Ancelotti", "イタリア", "2025", "欧州トップクラブで実績を重ねた名将。ブラジルでは個の自由度と勝負所の管理が注目される。", "前線の個を生かしながら、中盤のバランスと試合終盤の管理を重視する。", "https://en.wikipedia.org/wiki/Carlo_Ancelotti", "Wikipedia / Wikimedia Commons"),
+    MAR: manager("mar_walid_regragui", "ワリド・レグラギ", "Walid Regragui", "モロッコ", "2022", "2022年大会でモロッコを躍進させた監督。堅守と一体感を代表チームに落とし込んだ。", "中央を締める守備から、サイドの走力と速い切り替えで前へ出る。", "https://en.wikipedia.org/wiki/Walid_Regragui", "Wikipedia / Wikimedia Commons"),
+    HAI: manager("hai_sebastien_migne", "セバスティアン・ミニェ", "Sebastien Migne", "フランス", "2024", "アフリカやカリブ海での代表指導経験を持つ監督。ハイチでは組織力の底上げが役割。", "低い位置で耐えながら、前線の走力を生かすシンプルな前進を狙う。", "https://en.wikipedia.org/wiki/S%C3%A9bastien_Mign%C3%A9", "Wikipedia / Wikimedia Commons"),
+    SCO: manager("sco_steve_clarke", "スティーブ・クラーク", "Steve Clarke", "スコットランド", "2019", "長期政権でスコットランドをまとめる監督。守備組織と選手の役割整理に定評がある。", "3バック系を軸に、サイドの運動量とセットプレーで押し込む。", "https://en.wikipedia.org/wiki/Steve_Clarke", "Wikipedia / Wikimedia Commons"),
+    USA: manager("usa_mauricio_pochettino", "マウリシオ・ポチェッティーノ", "Mauricio Pochettino", "アルゼンチン", "2024", "欧州クラブで実績を残した監督。開催国アメリカにプレッシングと攻撃的な姿勢を加える。", "前線からの圧力、縦に速い前進、若いタレントの走力を組み合わせる。", "https://en.wikipedia.org/wiki/Mauricio_Pochettino", "Wikipedia / Wikimedia Commons"),
+    PAR: manager("par_gustavo_alfaro", "グスタボ・アルファロ", "Gustavo Alfaro", "アルゼンチン", "2024", "南米で経験豊富な監督。パラグアイでは守備の粘りと勝点を拾う現実性が重要。", "コンパクトな守備を作り、セットプレーとカウンターで勝負する。", "https://en.wikipedia.org/wiki/Gustavo_Alfaro", "Wikipedia / Wikimedia Commons"),
+    AUS: manager("aus_tony_popovic", "トニー・ポポヴィッチ", "Tony Popovic", "オーストラリア", "2024", "元代表DFで、Aリーグで実績を積んだ監督。強度と守備の整理を重視する。", "フィジカルとクロス対応を土台に、縦への速い攻撃を混ぜる。", "https://en.wikipedia.org/wiki/Tony_Popovic", "Wikipedia / Wikimedia Commons"),
+    TUR: manager("tur_vincenzo_montella", "ヴィンチェンツォ・モンテッラ", "Vincenzo Montella", "イタリア", "2023", "トルコ代表を率いるイタリア人監督。若い攻撃的タレントの配置とテンポ作りが見どころ。", "保持で前進しながら、2列目の技術とサイドの幅を生かす。", "https://en.wikipedia.org/wiki/Vincenzo_Montella", "Wikipedia / Wikimedia Commons"),
+    GER: manager("ger_julian_nagelsmann", "ユリアン・ナーゲルスマン", "Julian Nagelsmann", "ドイツ", "2023", "若くして欧州トップレベルを経験した監督。ドイツ代表では配置の流動性と攻撃の再構築を進める。", "中盤の立ち位置を変えながら前進し、前線の創造性を引き出す。", "https://en.wikipedia.org/wiki/Julian_Nagelsmann", "Wikipedia / Wikimedia Commons"),
+    CUW: manager("cuw_dick_advocaat", "ディック・アドフォカート", "Dick Advocaat", "オランダ", "2024", "多くの代表とクラブを率いたベテラン監督。キュラソーに試合運びの経験を持ち込む。", "守備の約束事を整理し、少ないチャンスを効率よく使う。", "https://en.wikipedia.org/wiki/Dick_Advocaat", "Wikipedia / Wikimedia Commons"),
+    CIV: manager("civ_emerse_fae", "エメルス・ファエ", "Emerse Fae", "コートジボワール", "2024", "AFCON優勝で評価を高めた監督。チームの勢いと個の能力を整理して戦う。", "中盤の強度と前線の個を生かし、奪ってから素早くゴールへ向かう。", "https://en.wikipedia.org/wiki/Emerse_Fa%C3%A9", "Wikipedia / Wikimedia Commons"),
+    ECU: manager("ecu_sebastian_beccacece", "セバスティアン・ベッカセセ", "Sebastian Beccacece", "アルゼンチン", "2024", "南米で経験を積んだ戦術家。エクアドルの走力と若さを組織に落とし込む。", "強度の高い守備と速い前進を軸に、相手のビルドアップへ圧をかける。", "https://en.wikipedia.org/wiki/Sebasti%C3%A1n_Beccacece", "Wikipedia / Wikimedia Commons"),
+    NED: manager("ned_ronald_koeman", "ロナルド・クーマン", "Ronald Koeman", "オランダ", "2023", "オランダ代表を再び率いる名DF出身監督。後方の安定と攻撃的なタレントの共存を図る。", "3バック/4バックを使い分け、後方から丁寧に前進してサイドを使う。", "https://en.wikipedia.org/wiki/Ronald_Koeman", "Wikipedia / Wikimedia Commons"),
+    JPN: manager("jpn_hajime_moriyasu", "森保一", "Hajime Moriyasu", "日本", "2018", "日本代表を長期的に率いる監督。守備の安定と状況に応じた可変システムを重視する。", "3バック系と4バック系を使い分け、相手や試合展開に合わせて現実的に戦う。", "https://www.jfa.jp/samuraiblue/", "JFA official"),
+    TUN: manager("tun_sami_trabelsi", "サミ・トラベルシ", "Sami Trabelsi", "チュニジア", "2025", "チュニジア代表を再び率いる元代表DF。守備の粘りと接戦での勝負強さを重視する。", "低いブロックで中央を締め、奪った後は前線へ早くつける。", "https://en.wikipedia.org/wiki/Sami_Trabelsi", "Wikipedia / Wikimedia Commons"),
+    SWE: manager("swe_jon_dahl_tomasson", "ヨン・ダール・トマソン", "Jon Dahl Tomasson", "デンマーク", "2024", "デンマーク出身の監督。スウェーデンでは前線のタレントを生かす攻撃再建がテーマ。", "保持と縦への速さを組み合わせ、イサクやクルゼフスキの受け方を整える。", "https://en.wikipedia.org/wiki/Jon_Dahl_Tomasson", "Wikipedia / Wikimedia Commons"),
+    BEL: manager("bel_rudi_garcia", "ルディ・ガルシア", "Rudi Garcia", "フランス", "2025", "クラブで豊富な実績を持つ監督。世代交代期のベルギーで攻守のバランスを作る。", "攻撃的な配置を取りつつ、前線の個と中盤の配球を生かす。", "https://en.wikipedia.org/wiki/Rudi_Garcia", "Wikipedia / Wikimedia Commons"),
+    EGY: manager("egy_hossam_hassan", "ホッサム・ハッサン", "Hossam Hassan", "エジプト", "2024", "エジプト代表の伝説的FW。代表の気迫と勝負強さを前面に出す。", "サラーら前線の決定力を生かし、守備から速く攻撃へ切り替える。", "https://en.wikipedia.org/wiki/Hossam_Hassan", "Wikipedia / Wikimedia Commons"),
+    IRN: manager("irn_amir_ghalenoei", "アミル・ガレノエイ", "Amir Ghalenoei", "イラン", "2023", "イラン国内で実績を積んだ監督。フィジカルと経験値のある代表を堅実にまとめる。", "守備の強度とセットプレーを土台に、前線の個へ早く届ける。", "https://en.wikipedia.org/wiki/Amir_Ghalenoei", "Wikipedia / Wikimedia Commons"),
+    NZL: manager("nzl_darren_bazeley", "ダレン・ベイズリー", "Darren Bazeley", "イングランド", "2023", "ニュージーランド代表を率いる監督。若手と海外組を組み合わせてチームを整える。", "守備の規律を保ち、前線の高さと走力でシンプルに前進する。", "https://en.wikipedia.org/wiki/Darren_Bazeley", "Wikipedia / Wikimedia Commons"),
+    ESP: manager("esp_luis_de_la_fuente", "ルイス・デ・ラ・フエンテ", "Luis de la Fuente", "スペイン", "2022", "スペインの年代別代表を長く率いた監督。若手の特長を理解し、A代表でも結果を出している。", "保持の配置と即時奪回を重視し、サイドの若い突破力を生かす。", "https://en.wikipedia.org/wiki/Luis_de_la_Fuente", "Wikipedia / Wikimedia Commons"),
+    CPV: manager("cpv_bubista", "ブビスタ", "Bubista", "カーボベルデ", "2020", "カーボベルデ代表を継続して率いる監督。限られた戦力を組織化し、粘り強く戦う。", "守備のまとまりを作り、前線のスピードとセットプレーで勝機を探る。", "https://en.wikipedia.org/wiki/Bubista", "Wikipedia / Wikimedia Commons"),
+    KSA: manager("ksa_herve_renard", "エルヴェ・ルナール", "Herve Renard", "フランス", "2024", "サウジアラビア代表に復帰した監督。大舞台での経験と選手を鼓舞する力がある。", "コンパクトな守備と速い切り替えを軸に、相手の隙を突く。", "https://en.wikipedia.org/wiki/Herv%C3%A9_Renard", "Wikipedia / Wikimedia Commons"),
+    URU: manager("uru_marcelo_bielsa", "マルセロ・ビエルサ", "Marcelo Bielsa", "アルゼンチン", "2023", "攻撃的なプレッシングで知られる名将。ウルグアイの強度に構造を与えている。", "前から激しく奪いに行き、奪った後は縦に速く人数をかける。", "https://en.wikipedia.org/wiki/Marcelo_Bielsa", "Wikipedia / Wikimedia Commons"),
+    FRA: manager("fra_didier_deschamps", "ディディエ・デシャン", "Didier Deschamps", "フランス", "2012", "長期政権でフランスを世界トップ級に保つ監督。スター集団を現実的に勝たせる。", "守備の安定を優先しつつ、エムバペら前線の個で一気に仕留める。", "https://en.wikipedia.org/wiki/Didier_Deschamps", "Wikipedia / Wikimedia Commons"),
+    SEN: manager("sen_pape_thiaw", "パプ・ティアウ", "Pape Thiaw", "セネガル", "2024", "セネガル代表を率いる元代表FW。身体能力と組織のバランスを整える。", "球際の強さとサイドの推進力を生かし、守備から速く前へ出る。", "https://en.wikipedia.org/wiki/Pape_Thiaw", "Wikipedia / Wikimedia Commons"),
+    NOR: manager("nor_stale_solbakken", "ストーレ・ソルバッケン", "Stale Solbakken", "ノルウェー", "2020", "ノルウェー代表を継続して率いる監督。ハーランド、ウーデゴールらの生かし方が焦点。", "前線の決定力へ良い形で届けるため、中盤の前進と守備の距離感を整える。", "https://en.wikipedia.org/wiki/St%C3%A5le_Solbakken", "Wikipedia / Wikimedia Commons"),
+    IRQ: manager("irq_graham_arnold", "グラハム・アーノルド", "Graham Arnold", "オーストラリア", "2025", "オーストラリア代表を率いた経験豊富な監督。イラクでは守備組織と勝点を拾う力が問われる。", "強度のある守備から、前線へ素早く届けてセカンドボールを拾う。", "https://en.wikipedia.org/wiki/Graham_Arnold", "Wikipedia / Wikimedia Commons"),
+    ARG: manager("arg_lionel_scaloni", "リオネル・スカローニ", "Lionel Scaloni", "アルゼンチン", "2018", "アルゼンチンを世界王者へ導いた監督。スターを生かしながら組織のバランスを崩さない。", "中盤の距離感と前線の自由度を両立し、試合終盤の管理も巧い。", "https://en.wikipedia.org/wiki/Lionel_Scaloni", "Wikipedia / Wikimedia Commons"),
+    ALG: manager("alg_vladimir_petkovic", "ウラジミール・ペトコヴィッチ", "Vladimir Petkovic", "スイス", "2024", "スイス代表で実績を残した監督。アルジェリアでは戦術整理と経験値の活用がテーマ。", "守備の配置を整え、前線の個とサイドの突破をバランスよく使う。", "https://en.wikipedia.org/wiki/Vladimir_Petkovi%C4%87", "Wikipedia / Wikimedia Commons"),
+    AUT: manager("aut_ralf_rangnick", "ラルフ・ラングニック", "Ralf Rangnick", "ドイツ", "2022", "プレッシング思想で知られる監督。オーストリアに明確な強度と前向きな守備を植え付けた。", "前から奪いに行き、奪った瞬間に縦へ入れるテンポの速いサッカー。", "https://en.wikipedia.org/wiki/Ralf_Rangnick", "Wikipedia / Wikimedia Commons"),
+    JOR: manager("jor_jamal_sellami", "ジャマル・セラミ", "Jamal Sellami", "モロッコ", "2024", "モロッコ出身の監督。ヨルダン代表では組織のまとまりと現実的な試合運びが重要。", "守備を整えて接戦に持ち込み、前線の走力とセットプレーで勝機を作る。", "https://en.wikipedia.org/wiki/Jamal_Sellami", "Wikipedia / Wikimedia Commons"),
+    POR: manager("por_roberto_martinez", "ロベルト・マルティネス", "Roberto Martinez", "スペイン", "2023", "ベルギー代表でも実績を残した監督。ポルトガルでは豪華な攻撃陣の共存を進める。", "保持で押し込み、ライン間の受け手とサイドの突破を組み合わせる。", "https://en.wikipedia.org/wiki/Roberto_Mart%C3%ADnez", "Wikipedia / Wikimedia Commons"),
+    UZB: manager("uzb_fabio_cannavaro", "ファビオ・カンナヴァーロ", "Fabio Cannavaro", "イタリア", "2025", "元イタリア代表DFの名選手。ウズベキスタンでは大会本番へ向けた守備整理が注目。", "守備の距離感を重視し、奪った後は縦に速く前線へ届ける。", "https://en.wikipedia.org/wiki/Fabio_Cannavaro", "Wikipedia / Wikimedia Commons"),
+    COL: manager("col_nestor_lorenzo", "ネストル・ロレンソ", "Nestor Lorenzo", "アルゼンチン", "2022", "コロンビア代表を安定させている監督。攻撃の個とチームのバランスを整える。", "中盤の強度を保ち、ディアスらサイドの突破力を生かして前進する。", "https://en.wikipedia.org/wiki/N%C3%A9stor_Lorenzo", "Wikipedia / Wikimedia Commons"),
+    COD: manager("cod_sebastien_desabre", "セバスティアン・デサーブル", "Sebastien Desabre", "フランス", "2022", "アフリカ各国で経験を積んだ監督。DRコンゴではフィジカルと組織力の両立を進める。", "守備の粘りと前線のパワーを生かし、セットプレーでも圧力をかける。", "https://en.wikipedia.org/wiki/S%C3%A9bastien_Desabre", "Wikipedia / Wikimedia Commons"),
+    ENG: manager("eng_thomas_tuchel", "トーマス・トゥヘル", "Thomas Tuchel", "ドイツ", "2025", "欧州トップクラブで実績を残した監督。イングランドの豊富なタレントに戦術的な整理を加える。", "相手に応じて配置を変え、前線と2列目の個を生かす構造を作る。", "https://en.wikipedia.org/wiki/Thomas_Tuchel", "Wikipedia / Wikimedia Commons"),
+    CRO: manager("cro_zlatko_dalic", "ズラトコ・ダリッチ", "Zlatko Dalic", "クロアチア", "2017", "クロアチアを長く率いる監督。大会での勝負強さと中盤の経験値を最大化する。", "中盤の保持と試合管理を重視し、接戦で粘り強く勝機を探る。", "https://en.wikipedia.org/wiki/Zlatko_Dali%C4%87", "Wikipedia / Wikimedia Commons"),
+    GHA: manager("gha_otto_addo", "オットー・アッド", "Otto Addo", "ガーナ", "2024", "ガーナ代表に復帰した監督。欧州組と若手の能力を整理してチーム化する。", "前線のスピードと中盤の球際を生かし、縦に速い攻撃を狙う。", "https://en.wikipedia.org/wiki/Otto_Addo", "Wikipedia / Wikimedia Commons"),
+    PAN: manager("pan_thomas_christiansen", "トーマス・クリスチャンセン", "Thomas Christiansen", "スペイン", "2020", "パナマ代表を継続して率いる監督。組織的な守備と粘り強い試合運びを作る。", "コンパクトに守り、サイドとセットプレーを使って少ない好機を生かす。", "https://en.wikipedia.org/wiki/Thomas_Christiansen", "Wikipedia / Wikimedia Commons")
+  };
+
+  function manager(id, nameJa, nameEn, nationality, appointedAt, description, tacticalNote, sourceUrl, sourceName) {
+    return {
+      manager_id: id,
+      name_ja: nameJa,
+      name_en: nameEn,
+      nationality,
+      appointed_at: appointedAt,
+      image_url: localManagerImages[id] || "",
+      image_source_url: sourceUrl,
+      image_source_name: sourceName,
+      manager_checked_at: "2026-05-22",
+      manager_source_url: sourceUrl,
+      manager_source_name: sourceName,
+      description,
+      tactical_note: tacticalNote
+    };
+  }
+
   const defaultVenues = [
     ["toronto", "Toronto", "カナダ", "東部", "Toronto Stadium", "America/Toronto", "夏時間: 日本より13時間遅れ", "開閉式屋根なし", "五大湖沿いで比較的涼しい", "東部拠点。米国東海岸との移動は短め", "日本戦なら朝時間の観戦になりやすい", 585, 165],
     ["vancouver", "Vancouver", "カナダ", "西部", "BC Place Vancouver", "America/Vancouver", "夏時間: 日本より16時間遅れ", "屋根あり", "西海岸で穏やか", "西海岸内の移動は比較的組みやすい", "日本時間は午前帯になりやすい", 205, 185],
@@ -2155,6 +2234,7 @@
       ["弱み", data.weaknesses],
       ["注目ポイント", data.watchPoint]
     ].forEach(([label, value]) => card.appendChild(countrySection(label, value)));
+    card.appendChild(countryManagerSection(data.manager));
     card.appendChild(countryKeyPlayersSection(data.key_players));
     return card;
   }
@@ -2174,6 +2254,53 @@
     const body = document.createElement("p");
     body.textContent = value || "確認中";
     section.append(heading, body);
+    return section;
+  }
+
+  function countryManagerSection(managerData) {
+    const section = document.createElement("section");
+    section.className = "country-key-players";
+    const heading = document.createElement("h4");
+    heading.textContent = "監督";
+    const card = document.createElement("article");
+    card.className = "country-manager-card";
+    const photo = document.createElement("div");
+    photo.className = "country-manager-photo";
+    const fallback = managerData?.name_ja ? managerData.name_ja.trim().slice(0, 1) : "No Image";
+    if (managerData?.image_url) {
+      const img = document.createElement("img");
+      img.src = managerData.image_url;
+      img.alt = `${managerData.name_ja || "監督"}の顔写真`;
+      img.loading = "lazy";
+      img.decoding = "async";
+      img.onerror = () => {
+        img.remove();
+        photo.textContent = fallback || "No Image";
+      };
+      photo.appendChild(img);
+    } else {
+      photo.textContent = fallback || "No Image";
+    }
+    const body = document.createElement("div");
+    const name = document.createElement("div");
+    name.className = "country-manager-name";
+    name.textContent = managerData?.name_ja || "確認中";
+    const meta = document.createElement("div");
+    meta.className = "country-manager-meta";
+    meta.textContent = [
+      managerData?.name_en,
+      managerData?.nationality ? `国籍: ${managerData.nationality}` : "",
+      managerData?.appointed_at ? `就任: ${managerData.appointed_at}` : ""
+    ].filter(Boolean).join(" / ");
+    const desc = document.createElement("div");
+    desc.className = "country-manager-desc";
+    desc.textContent = managerData?.description || "確認中";
+    const tactics = document.createElement("div");
+    tactics.className = "country-manager-tactics";
+    tactics.textContent = managerData?.tactical_note ? `戦術 / チーム作り: ${managerData.tactical_note}` : "戦術 / チーム作り: 確認中";
+    body.append(name, meta, desc, tactics);
+    card.append(photo, body);
+    section.append(heading, card);
     return section;
   }
 
@@ -2258,7 +2385,26 @@
       watchPoint: override.watchPoint || defaultWatchPoint(team),
       japanChance: override.japanChance || japanChanceText(team),
       watchMemo: override.watchMemo || defaultWatchMemo(team),
+      manager: override.manager || countryManagers[teamId] || defaultManager(team),
       key_players: enrichKeyPlayers(override.key_players || countryKeyPlayers[teamId] || [])
+    };
+  }
+
+  function defaultManager(team) {
+    return {
+      manager_id: `${team.team_id || "team"}_manager_unconfirmed`,
+      name_ja: "確認中",
+      name_en: "",
+      nationality: "",
+      appointed_at: "",
+      image_url: "",
+      image_source_url: "",
+      image_source_name: "",
+      manager_checked_at: "2026-05-22",
+      manager_source_url: "",
+      manager_source_name: "",
+      description: `${team.name_ja || team.name_en || team.team_id}の監督情報は確認中です。`,
+      tactical_note: "最新の公式情報を確認して更新します。"
     };
   }
 
