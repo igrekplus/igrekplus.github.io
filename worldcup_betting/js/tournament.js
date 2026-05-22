@@ -2270,13 +2270,16 @@
     list.className = "country-schedule-list";
     list.hidden = true;
     button.addEventListener("click", () => {
-      list.hidden = !list.hidden;
-      button.textContent = list.hidden ? "試合日程を見る" : "試合日程を閉じる";
-      if (!list.hidden && !list.dataset.rendered) {
+      const shouldOpen = list.hidden;
+      if (shouldOpen && !list.dataset.rendered) {
         renderCountrySchedule(teamId, list);
         list.dataset.rendered = "true";
       }
+      list.hidden = !shouldOpen;
+      button.textContent = shouldOpen ? "試合日程を閉じる" : "試合日程を見る";
+      button.setAttribute("aria-expanded", String(shouldOpen));
     });
+    button.setAttribute("aria-expanded", "false");
     section.append(button, list);
     return section;
   }
