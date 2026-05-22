@@ -28,30 +28,48 @@
   const scheduleStageOrder = ["group", ...knockoutStageOrder];
   const weekdayLabels = ["日", "月", "火", "水", "木", "金", "土"];
 
-  const defaultCountryNotes = [
-    ["JPN", "日本", "日本代表。全試合を観戦軸にする", "久保建英、遠藤航、堂安律、鈴木彩艶", "組織力、切り替え、2列目の質", "強豪相手の自陣耐久、セットプレー対応", "オランダ級には守備時間の整理が鍵", "試合前後の空気まで残す"],
-    ["NED", "オランダ", "日本の同組かつFIFA上位", "ファン・ダイク、フレンキー・デ・ヨング", "高さ、個の強度、中央の展開力", "押し込まれた時の運動量", "日本は速い切り替えで背後を狙いたい", "日本戦の最大基準点"],
-    ["TUN", "チュニジア", "日本の同組", "守備陣、カウンターの前線", "守備ブロック、球際", "得点力の波", "日本がボールを持つ展開になりやすい", "取りこぼせない相手として見る"],
-    ["SWE", "スウェーデン", "日本の同組", "イサク、クルゼフスキ", "高さ、前線の個、セットプレー", "細かい連係への対応", "日本は地上戦と背後管理が重要", "プレミア勢の質をチェック"],
-    ["ARG", "アルゼンチン", "FIFAランキングが日本以上、レジェンド枠", "メッシ、ラウタロ", "勝負強さ、前線の決定力", "世代交代の揺れ", "日本は守備の集中が最優先", "レジェンドの状態を追う"],
-    ["FRA", "フランス", "FIFAランキングが日本以上、プレミア勢も注目", "エムバペ、グリーズマン、サリバ", "個の破壊力、選手層", "主力依存とコンディション", "日本はサイド裏と中盤守備が鍵", "優勝候補の基準値"],
-    ["ENG", "イングランド", "プレミア勢が多い国", "ベリンガム、フォーデン、ケイン", "プレミア基準の強度、2列目", "重圧下の試合運び", "日本は守備ブロックとカウンター", "プレミア選手の状態を見る"],
-    ["BRA", "ブラジル", "FIFAランキングが日本以上、レジェンド候補多数", "ヴィニシウス、ロドリゴ", "個人技、前線のスピード", "守備の距離感", "日本は奪った後の一手が重要", "スター選手の見どころが多い"],
-    ["CAN", "カナダ", "開催国", "デイヴィス、デイヴィッド", "推進力、ホーム環境", "守備の安定感", "日本とはスピード勝負に注意", "開催国の雰囲気込みで見る"],
-    ["MEX", "メキシコ", "開催国", "ヒメネス、ロサーノ", "ホーム熱量、技術", "守備の切り替え", "日本はテンポを乱されないこと", "開幕戦と会場熱を確認"],
-    ["USA", "アメリカ", "開催国、プレミア関係選手も多い", "プリシッチ、マッケニー、レイナ", "運動量、若さ、ホーム環境", "試合運びの成熟度", "日本は中盤の強度勝負", "北米大会の主役候補"]
-  ].map(([id, country, reason, keyPlayers, strengths, weaknesses, japanFit, comment]) => ({
-    id,
-    country,
-    reason,
-    keyPlayers,
-    strengths,
-    weaknesses,
-    japanFit,
-    comment,
-    sourceUrl: "",
-    updatedAt: "2026-05-21"
-  }));
+  const confederationByTeam = {
+    MEX: "北中米カリブ海 / CONCACAF", RSA: "アフリカ / CAF", KOR: "アジア / AFC", CZE: "欧州 / UEFA",
+    CAN: "北中米カリブ海 / CONCACAF", SUI: "欧州 / UEFA", QAT: "アジア / AFC", BIH: "欧州 / UEFA",
+    BRA: "南米 / CONMEBOL", MAR: "アフリカ / CAF", HAI: "北中米カリブ海 / CONCACAF", SCO: "欧州 / UEFA",
+    USA: "北中米カリブ海 / CONCACAF", PAR: "南米 / CONMEBOL", AUS: "アジア / AFC", TUR: "欧州 / UEFA",
+    GER: "欧州 / UEFA", CUW: "北中米カリブ海 / CONCACAF", CIV: "アフリカ / CAF", ECU: "南米 / CONMEBOL",
+    NED: "欧州 / UEFA", JPN: "アジア / AFC", TUN: "アフリカ / CAF", SWE: "欧州 / UEFA",
+    BEL: "欧州 / UEFA", EGY: "アフリカ / CAF", IRN: "アジア / AFC", NZL: "オセアニア / OFC",
+    ESP: "欧州 / UEFA", CPV: "アフリカ / CAF", KSA: "アジア / AFC", URU: "南米 / CONMEBOL",
+    FRA: "欧州 / UEFA", SEN: "アフリカ / CAF", NOR: "欧州 / UEFA", IRQ: "アジア / AFC",
+    ARG: "南米 / CONMEBOL", ALG: "アフリカ / CAF", AUT: "欧州 / UEFA", JOR: "アジア / AFC",
+    POR: "欧州 / UEFA", UZB: "アジア / AFC", COL: "南米 / CONMEBOL", COD: "アフリカ / CAF",
+    ENG: "欧州 / UEFA", CRO: "欧州 / UEFA", GHA: "アフリカ / CAF", PAN: "北中米カリブ海 / CONCACAF"
+  };
+
+  const qualificationByTeam = {
+    CAN: "開催国", MEX: "開催国", USA: "開催国",
+    JPN: "アジア予選突破", KOR: "アジア予選突破", QAT: "アジア予選突破", AUS: "アジア予選突破", IRN: "アジア予選突破", KSA: "アジア予選突破", IRQ: "アジア予選突破", JOR: "アジア予選突破", UZB: "アジア予選突破",
+    BRA: "南米予選突破", ARG: "南米予選突破", ECU: "南米予選突破", URU: "南米予選突破", COL: "南米予選突破", PAR: "南米予選突破",
+    NZL: "オセアニア予選突破"
+  };
+
+  const countryDataOverrides = {
+    JPN: {
+      features: "前線からの守備と速い攻撃を軸にするチーム。",
+      style: "奪ってから素早くサイドや2列目へ運び、守備では全体の距離感を保つ。",
+      strengths: "スピードのあるサイド攻撃、切り替えの速さ、組織的な守備。",
+      weaknesses: "高さやパワー勝負、押し込まれた時間帯の耐久力。",
+      watchPoint: "強豪相手にどこまで主導権を握れるか。",
+      japanChance: "自国。Group Fの全試合が最重要。",
+      watchMemo: "オランダ戦を基準に、突破後の山も意識して見る。"
+    },
+    NED: {
+      features: "高さと個の強度を備えた欧州強豪。",
+      style: "最終ラインから組み立て、サイドと中央を使い分ける。",
+      strengths: "CBの強さ、中盤の展開力、セットプレー。",
+      weaknesses: "攻撃が停滞するとテンポが落ちる時間がありそう。",
+      watchPoint: "日本が守備だけでなく前進できるか。",
+      japanChance: "Group Fで対戦。",
+      watchMemo: "日本の現在地を見る一番わかりやすい相手。"
+    }
+  };
 
   const defaultStarPlayers = [
     ["kubo", "久保建英", "日本", "レアル・ソシエダ", "ラ・リーガ", "なし", "なし", "主力", "日本の攻撃の中心。右サイド、中央で違いを作れるか", "高", "選出想定", "確認中"],
@@ -161,6 +179,10 @@
     teams: {},
     knockoutMapping: {},
     groupFilter: "all",
+    countrySearch: "",
+    countryGroupFilter: "all",
+    countryConfederationFilter: "all",
+    countrySort: "group",
     scheduleStatusFilter: "all",
     scheduleSort: "date",
     scheduleOpenStages: { group: true },
@@ -279,7 +301,6 @@
       sharedScoreUrl: "",
       sharedScoreLoadedAt: "",
       lastUpdatedAt: "",
-      countryNotes: {},
       starPlayers: {},
       venueNotes: {},
       standings: null,
@@ -302,7 +323,6 @@
         sharedScoreUrl: parsed?.sharedScoreUrl || fallback.sharedScoreUrl,
         sharedScoreLoadedAt: parsed?.sharedScoreLoadedAt || fallback.sharedScoreLoadedAt,
         lastUpdatedAt: parsed?.lastUpdatedAt || fallback.lastUpdatedAt,
-        countryNotes: parsed?.countryNotes && typeof parsed.countryNotes === "object" ? parsed.countryNotes : {},
         starPlayers: parsed?.starPlayers && typeof parsed.starPlayers === "object" ? parsed.starPlayers : {},
         venueNotes: parsed?.venueNotes && typeof parsed.venueNotes === "object" ? parsed.venueNotes : {},
         standings: parsed?.standings || fallback.standings,
@@ -1452,36 +1472,242 @@
     const target = document.getElementById("countryNotesContent");
     if (!target) return;
     target.innerHTML = "";
-    target.appendChild(infoHead("国別メモ", "日本、日本の同組、FIFA上位、プレミア勢、レジェンド候補、開催国を中心に絞って管理します。"));
+    target.appendChild(infoHead("各国データ", "チームマスタをもとに、国旗・ランキング・グループ・地域・戦い方を読み取り専用で確認できます。"));
+    target.appendChild(countryDataControls());
     const grid = document.createElement("div");
     grid.className = "info-grid";
-    defaultCountryNotes.forEach((base) => {
-      const item = { ...base, ...(state.saved.countryNotes?.[base.id] || {}) };
-      grid.appendChild(countryNoteCard(item));
-    });
+    filteredCountryData().forEach((team) => grid.appendChild(countryDataCard(team)));
+    if (!grid.children.length) grid.appendChild(message("条件に一致する国がありません"));
     target.appendChild(grid);
   }
 
-  function countryNoteCard(item) {
-    const card = document.createElement("article");
-    card.className = "info-card";
-    card.appendChild(textHeading(item.country));
-    const form = document.createElement("div");
-    form.className = "info-form-grid";
-    [
-      ["reason", "対象理由", "textarea"],
-      ["keyPlayers", "中心選手", "textarea"],
-      ["strengths", "強み", "textarea"],
-      ["weaknesses", "弱み", "textarea"],
-      ["japanFit", "日本との相性", "textarea"],
-      ["comment", "観戦コメント", "textarea"],
-      ["sourceUrl", "情報源URL", "input"],
-      ["updatedAt", "更新日", "input"]
-    ].forEach(([key, label, type]) => {
-      form.appendChild(infoField(label, item[key], type, (value) => updateAuxNote("countryNotes", item.id, key, value)));
+  function countryDataControls() {
+    const controls = document.createElement("div");
+    controls.className = "country-data-controls";
+    const searchLabel = document.createElement("label");
+    searchLabel.className = "country-data-search";
+    const search = document.createElement("input");
+    search.type = "search";
+    search.placeholder = "国名・FIFAコードで検索";
+    search.value = state.countrySearch;
+    search.addEventListener("input", () => {
+      state.countrySearch = search.value;
+      renderCountryNotes();
     });
-    card.appendChild(form);
+    searchLabel.append(textSpan("国名検索"), search);
+    controls.append(
+      searchLabel,
+      countrySelect("グループ", state.countryGroupFilter, [["all", "全グループ"], ...groupsForTeams().map((group) => [group, `Group ${group}`])], (value) => {
+        state.countryGroupFilter = value;
+        renderCountryNotes();
+      }),
+      countrySelect("地域", state.countryConfederationFilter, [["all", "全地域"], ...confederationsForTeams().map((confederation) => [confederation, confederation])], (value) => {
+        state.countryConfederationFilter = value;
+        renderCountryNotes();
+      }),
+      countrySelect("並び順", state.countrySort, [
+        ["group", "グループ順"],
+        ["rank", "FIFAランキング順"],
+        ["name", "国名順"]
+      ], (value) => {
+        state.countrySort = value;
+        renderCountryNotes();
+      })
+    );
+    return controls;
+  }
+
+  function countrySelect(labelText, value, options, onChange) {
+    const select = document.createElement("select");
+    select.setAttribute("aria-label", labelText);
+    options.forEach(([optionValue, text]) => {
+      const option = document.createElement("option");
+      option.value = optionValue;
+      option.textContent = text;
+      select.appendChild(option);
+    });
+    select.value = value;
+    select.addEventListener("change", () => onChange(select.value));
+    return select;
+  }
+
+  function filteredCountryData() {
+    const query = state.countrySearch.trim().toLowerCase();
+    const teams = Object.values(state.teams).filter((team) => {
+      const data = countryData(team);
+      const matchesSearch = !query || [data.name, data.nameEn, data.fifaCode].some((value) => String(value || "").toLowerCase().includes(query));
+      const matchesGroup = state.countryGroupFilter === "all" || data.group === state.countryGroupFilter;
+      const matchesConfederation = state.countryConfederationFilter === "all" || data.confederation === state.countryConfederationFilter;
+      return matchesSearch && matchesGroup && matchesConfederation;
+    });
+    return teams.sort((a, b) => {
+      const dataA = countryData(a);
+      const dataB = countryData(b);
+      if (state.countrySort === "rank") return (dataA.rank || 999) - (dataB.rank || 999);
+      if (state.countrySort === "name") return dataA.name.localeCompare(dataB.name, "ja");
+      const groupCompare = String(dataA.group || "").localeCompare(String(dataB.group || ""));
+      if (groupCompare !== 0) return groupCompare;
+      return (dataA.rank || 999) - (dataB.rank || 999);
+    });
+  }
+
+  function countryDataCard(team) {
+    const data = countryData(team);
+    const card = document.createElement("article");
+    card.className = "info-card country-data-card";
+    const head = document.createElement("div");
+    head.className = "country-data-head";
+    head.appendChild(teamLabel(data.teamId, data.name, "", { showRank: false }));
+    head.appendChild(textSpan(`（${data.fifaCode}）`, "country-code"));
+    card.appendChild(head);
+    const meta = document.createElement("div");
+    meta.className = "country-data-meta";
+    [
+      ["FIFAランキング", data.rank ? `${data.rank}位` : "未設定"],
+      ["グループ", data.group ? `Group ${data.group}` : "未設定"],
+      ["ポット", data.pot],
+      ["出場区分", data.qualification],
+      ["地域 / 大陸連盟", data.confederation],
+      ["FIFAコード", data.fifaCode]
+    ].forEach(([label, value]) => meta.appendChild(countryChip(label, value)));
+    card.appendChild(meta);
+    [
+      ["主な特徴", data.features],
+      ["戦い方の傾向", data.style],
+      ["強み", data.strengths],
+      ["弱み", data.weaknesses],
+      ["注目ポイント", data.watchPoint],
+      ["日本と当たる可能性", data.japanChance],
+      ["観戦メモ", data.watchMemo]
+    ].forEach(([label, value]) => card.appendChild(countrySection(label, value)));
     return card;
+  }
+
+  function countryChip(label, value) {
+    const chip = document.createElement("div");
+    chip.className = "country-data-chip";
+    chip.append(textSpan(label), document.createTextNode(value || "未設定"));
+    return chip;
+  }
+
+  function countrySection(label, value) {
+    const section = document.createElement("section");
+    section.className = "country-data-section";
+    const heading = document.createElement("h4");
+    heading.textContent = label;
+    const body = document.createElement("p");
+    body.textContent = value || "確認中";
+    section.append(heading, body);
+    return section;
+  }
+
+  function countryData(team) {
+    const teamId = team.team_id;
+    const override = countryDataOverrides[teamId] || {};
+    const rank = Number(team.fifa_rank) || null;
+    const group = team.group || "";
+    const confederation = confederationByTeam[teamId] || inferConfederation(teamId);
+    return {
+      teamId,
+      name: team.name_ja || team.name_en || teamId,
+      nameEn: team.name_en || "",
+      fifaCode: team.fifa_code || teamId,
+      rank,
+      group,
+      pot: override.pot || potForRank(rank),
+      qualification: override.qualification || qualificationByTeam[teamId] || qualificationForConfederation(confederation),
+      confederation,
+      features: override.features || defaultFeature(confederation, rank),
+      style: override.style || defaultStyle(confederation, rank),
+      strengths: override.strengths || defaultStrengths(confederation, rank),
+      weaknesses: override.weaknesses || defaultWeaknesses(confederation, rank),
+      watchPoint: override.watchPoint || defaultWatchPoint(team),
+      japanChance: override.japanChance || japanChanceText(team),
+      watchMemo: override.watchMemo || defaultWatchMemo(team)
+    };
+  }
+
+  function groupsForTeams() {
+    return Array.from(new Set(Object.values(state.teams).map((team) => team.group).filter(Boolean))).sort();
+  }
+
+  function confederationsForTeams() {
+    return Array.from(new Set(Object.values(state.teams).map((team) => countryData(team).confederation).filter(Boolean))).sort();
+  }
+
+  function potForRank(rank) {
+    if (!rank) return "未設定";
+    if (rank <= 12) return "Pot 1相当";
+    if (rank <= 24) return "Pot 2相当";
+    if (rank <= 36) return "Pot 3相当";
+    return "Pot 4相当";
+  }
+
+  function qualificationForConfederation(confederation) {
+    if (confederation.includes("欧州")) return "欧州予選突破";
+    if (confederation.includes("アフリカ")) return "アフリカ予選突破";
+    if (confederation.includes("北中米")) return "北中米カリブ海予選突破";
+    if (confederation.includes("南米")) return "南米予選突破";
+    if (confederation.includes("アジア")) return "アジア予選突破";
+    if (confederation.includes("オセアニア")) return "オセアニア予選突破";
+    return "予選突破";
+  }
+
+  function inferConfederation(teamId) {
+    return ["CAN", "MEX", "USA", "PAN", "HAI", "CUW"].includes(teamId) ? "北中米カリブ海 / CONCACAF" : "確認中";
+  }
+
+  function defaultFeature(confederation, rank) {
+    if (rank && rank <= 10) return "世界上位の個の質と試合運びを持つ優勝候補クラス。";
+    if (confederation.includes("欧州")) return "戦術整理と球際の強度を備えた欧州型のチーム。";
+    if (confederation.includes("南米")) return "技術と勝負強さを軸に、前線の個で流れを変えられるチーム。";
+    if (confederation.includes("アフリカ")) return "身体能力と縦への推進力が出やすいチーム。";
+    if (confederation.includes("北中米")) return "ホーム環境や勢いを生かしやすいチーム。";
+    if (confederation.includes("アジア")) return "組織力と粘り強さをベースに戦うチーム。";
+    return "大会での立ち上がりを見ながら特徴を確認したいチーム。";
+  }
+
+  function defaultStyle(confederation, rank) {
+    if (rank && rank <= 10) return "ボール保持と速攻の両方を使い分け、主導権を握る時間を作る。";
+    if (confederation.includes("欧州")) return "守備の配置を整えつつ、サイドとセットプレーを使う傾向。";
+    if (confederation.includes("南米")) return "個の突破とテンポ変化で相手を崩す傾向。";
+    if (confederation.includes("アフリカ")) return "縦に速く、フィジカルを生かした展開になりやすい。";
+    return "相手との力関係に応じて、堅守と速攻を使い分ける。";
+  }
+
+  function defaultStrengths(confederation, rank) {
+    if (rank && rank <= 10) return "選手層、決定力、大舞台での経験。";
+    if (confederation.includes("欧州")) return "戦術理解、守備組織、セットプレー。";
+    if (confederation.includes("南米")) return "個人技、勝負所の集中力、前線の質。";
+    if (confederation.includes("アフリカ")) return "身体能力、スピード、球際の迫力。";
+    return "チームの一体感、走力、試合ごとの勢い。";
+  }
+
+  function defaultWeaknesses(confederation, rank) {
+    if (rank && rank <= 10) return "優勢時でもカウンター対応や主力依存が課題になり得る。";
+    if (confederation.includes("欧州")) return "展開が重い時に攻撃が単調になる可能性。";
+    if (confederation.includes("南米")) return "守備の距離感や試合中の波。";
+    if (confederation.includes("アフリカ")) return "試合運びの安定感や守備の細部。";
+    return "強豪相手に押し込まれた時間帯の耐久力。";
+  }
+
+  function defaultWatchPoint(team) {
+    if (team.group === "F") return "日本と同組として、直接対決や得失点差に影響する試合運び。";
+    if (Number(team.fifa_rank) <= 20) return "上位国らしい試合運びと、決勝トーナメントでの山への影響。";
+    return "グループ内でどこまで勝点を伸ばせるか。";
+  }
+
+  function japanChanceText(team) {
+    if (team.team_id === JAPAN_TEAM_ID) return "自国。";
+    if (team.group === "F") return "Group Fで対戦。";
+    return "決勝トーナメント以降で対戦する可能性あり。";
+  }
+
+  function defaultWatchMemo(team) {
+    if (team.group === "F") return "日本の突破条件に直結するため優先して確認。";
+    if (["CAN", "MEX", "USA"].includes(team.team_id)) return "開催国として会場の雰囲気も含めて見たい。";
+    if (Number(team.fifa_rank) <= 10) return "優勝候補の基準値としてチェック。";
+    return "結果だけでなく、戦い方の相性を見ておきたい。";
   }
 
   function renderStarPlayers() {
@@ -1759,7 +1985,6 @@
       type: "worldcup2026_score_and_notes_state",
       source: DATA_URL,
       scoreOverrides: effectiveScoreOverrides(),
-      countryNotes: state.saved.countryNotes || {},
       starPlayers: state.saved.starPlayers || {},
       venueNotes: state.saved.venueNotes || {},
       lastUpdatedAt: state.saved.lastUpdatedAt || new Date().toISOString()
@@ -1799,7 +2024,6 @@
     if (!scoreOverrides || typeof scoreOverrides !== "object") return false;
     importScoreOverrides(scoreOverrides, {
       lastUpdatedAt: source?.lastUpdatedAt || payload?.lastUpdated || new Date().toISOString(),
-      countryNotes: source?.countryNotes,
       starPlayers: source?.starPlayers,
       venueNotes: source?.venueNotes
     });
@@ -1889,7 +2113,6 @@
       sharedScoreUrl: state.saved.sharedScoreUrl || "",
       sharedScoreLoadedAt: state.saved.sharedScoreLoadedAt || "",
       lastUpdatedAt: options.lastUpdatedAt || new Date().toISOString(),
-      countryNotes: options.countryNotes && typeof options.countryNotes === "object" ? options.countryNotes : state.saved.countryNotes || {},
       starPlayers: options.starPlayers && typeof options.starPlayers === "object" ? options.starPlayers : state.saved.starPlayers || {},
       venueNotes: options.venueNotes && typeof options.venueNotes === "object" ? options.venueNotes : state.saved.venueNotes || {},
       standings: null,
@@ -1920,7 +2143,7 @@
     state.saved.sharedScoreLoadedAt = new Date().toISOString();
     state.saved.lastUpdatedAt = state.saved.sharedScoreLoadedAt;
     const source = payload?.tournament && typeof payload.tournament === "object" ? payload.tournament : payload;
-    ["countryNotes", "starPlayers", "venueNotes"].forEach((key) => {
+    ["starPlayers", "venueNotes"].forEach((key) => {
       if (source?.[key] && typeof source[key] === "object") state.saved[key] = source[key];
     });
     persist();

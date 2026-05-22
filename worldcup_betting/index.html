@@ -2299,6 +2299,95 @@
       font-size: 16px;
     }
 
+    .country-data-card {
+      align-content: start;
+    }
+
+    .country-data-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .country-data-head .team-label {
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .country-data-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .country-data-chip {
+      padding: 7px 8px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #f8fafc;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .country-data-chip span {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      margin-bottom: 2px;
+    }
+
+    .country-data-section {
+      display: grid;
+      gap: 4px;
+      padding-top: 4px;
+    }
+
+    .country-data-section h4 {
+      margin: 0;
+      color: var(--blue);
+      font-size: 12px;
+    }
+
+    .country-data-section p {
+      margin: 0;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .country-data-controls {
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) repeat(3, minmax(140px, 180px));
+      gap: 8px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .country-data-search {
+      display: grid;
+      gap: 4px;
+    }
+
+    .country-data-search span {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .country-data-controls input,
+    .country-data-controls select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 8px 10px;
+      font: inherit;
+      font-size: 13px;
+      background: #fff;
+    }
+
     .info-form-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2658,6 +2747,11 @@
 
       .info-head {
         display: grid;
+      }
+
+      .country-data-controls,
+      .country-data-meta {
+        grid-template-columns: 1fr;
       }
 
       .north-america-map {
@@ -3767,7 +3861,7 @@
   <div class="shell">
     <nav class="owner-tabs" aria-label="予想者">
       <button class="owner-tab active" type="button" data-view="tournament">スコア/日程</button>
-      <button class="owner-tab" type="button" data-view="country-notes">国別メモ</button>
+      <button class="owner-tab" type="button" data-view="country-notes">各国データ</button>
       <button class="owner-tab" type="button" data-view="star-players">注目選手</button>
       <button class="owner-tab" type="button" data-view="venues">開催地・時差・移動</button>
       <button class="owner-tab" type="button" data-view="compare">比較コート（日本代表）</button>
@@ -4163,7 +4257,7 @@
             <div id="tournamentContent"></div>
           </div>
         </section>
-        <section class="view-panel tournament-panel info-panel" id="countryNotesPanel" aria-label="国別メモ">
+        <section class="view-panel tournament-panel info-panel" id="countryNotesPanel" aria-label="各国データ">
           <div class="tournament-shell">
             <div id="countryNotesContent"></div>
           </div>
@@ -5933,7 +6027,7 @@
       panelMap[view]?.classList.add("active");
 
       const titleMap = {
-        "country-notes": "国別メモ",
+        "country-notes": "各国データ",
         "star-players": "注目選手",
         venues: "開催地・時差・移動"
       };
@@ -7323,7 +7417,7 @@
     async function importGistStateFromRawUrl() {
       const url = window.prompt("Gistの worldcup_state.json Raw URLを貼り付けてください");
       if (!url) return;
-      const ok = window.confirm("Gistの内容を、スコア/日程・観戦メモ・予想・国別メモ・注目選手・開催地に反映します。よろしいですか？");
+      const ok = window.confirm("Gistの内容を、スコア/日程・観戦メモ・予想・各国データ・注目選手・開催地に反映します。よろしいですか？");
       if (!ok) return;
       showStatus("Gist Raw URLから読み込み中...");
       try {
