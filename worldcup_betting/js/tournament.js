@@ -2301,26 +2301,38 @@
     const meta = document.createElement("div");
     meta.className = "country-schedule-meta";
     meta.append(
-      textDiv(formatJstDateTime(match.kickoff_jst)),
-      textDiv(stageLabels[match.stage] || match.stage),
-      textDiv(match.group ? `Group ${match.group}` : roundLabel(match))
+      textDiv(formatJstDateTime(match.kickoff_jst), "country-schedule-time"),
+      textDiv(`${stageLabels[match.stage] || match.stage} / ${match.group ? `Group ${match.group}` : roundLabel(match)}`, "country-schedule-stage"),
+      textDiv(`会場：${venueText(match)}`, "country-schedule-venue")
     );
-    const teams = document.createElement("div");
-    teams.className = "country-schedule-teams";
-    teams.append(
-      textDiv(`${displayScheduleParticipant(matchHomeId(match), match.home_name_ja)}  vs  ${displayScheduleParticipant(matchAwayId(match), match.away_name_ja)}`),
-      textDiv(venueText(match), "country-schedule-venue")
+    const play = document.createElement("div");
+    play.className = "country-schedule-play";
+    play.append(
+      scheduleParticipantLabel(matchHomeId(match), match.home_name_ja, "country-schedule-team"),
+      textDiv(countryScheduleScoreText(match.match_id), "country-schedule-score"),
+      scheduleParticipantLabel(matchAwayId(match), match.away_name_ja, "country-schedule-team away")
     );
     const result = document.createElement("div");
     result.className = "country-schedule-result";
-    result.append(textDiv(scoreText(match.match_id), "match-score-display"), statusBadge(match.match_id));
-    row.append(meta, teams, result);
+    result.append(textSpan(`ステータス：${matchStatus(match.match_id).label}`));
+    row.append(meta, play, result);
     return row;
   }
 
-  function displayScheduleParticipant(teamId, fallback) {
-    if (isResolvedTeam(teamId)) return displayTeam(teamId);
-    return fallback || "未確定";
+  function scheduleParticipantLabel(teamId, fallback, className = "") {
+    if (isResolvedTeam(teamId)) return teamLabel(teamId, "", className, { showRank: false });
+    const label = fallback || "未確定";
+    return textSpan(label, `team-label ${className} knockout-placeholder`.trim());
+  }
+
+  function countryScheduleScoreText(matchId) {
+    const score = normalizedScore(matchId);
+    if (!hasMainScore(score)) return "-";
+    let text = `${score.score_home} - ${score.score_away}`;
+    if (score.penalty_home !== "" && score.penalty_away !== "") {
+      text += ` PK ${score.penalty_home} - ${score.penalty_away}`;
+    }
+    return text;
   }
 
   function roundLabel(match) {

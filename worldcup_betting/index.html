@@ -2448,42 +2448,80 @@
 
     .country-schedule-match {
       display: grid;
-      grid-template-columns: 132px minmax(0, 1fr) 72px;
-      gap: 8px;
-      align-items: center;
-      padding: 9px;
+      gap: 10px;
+      padding: 10px;
       border: 1px solid var(--line);
       border-radius: 8px;
       background: #fff;
     }
 
     .country-schedule-meta {
-      color: var(--muted);
+      display: grid;
+      gap: 3px;
+      color: var(--text);
       font-size: 11px;
       font-weight: 800;
       line-height: 1.5;
     }
 
-    .country-schedule-teams {
-      color: var(--text);
+    .country-schedule-time {
+      color: #0f172a;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .country-schedule-stage {
+      color: #1d4ed8;
       font-size: 12px;
       font-weight: 900;
-      line-height: 1.5;
-      min-width: 0;
     }
 
     .country-schedule-venue {
-      margin-top: 3px;
       color: var(--muted);
       font-size: 11px;
       font-weight: 700;
       line-height: 1.45;
     }
 
+    .country-schedule-play {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      gap: 8px;
+      align-items: center;
+      padding-top: 8px;
+      border-top: 1px solid var(--line);
+    }
+
+    .country-schedule-team {
+      min-width: 0;
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--text);
+    }
+
+    .country-schedule-team.away {
+      text-align: right;
+    }
+
+    .country-schedule-score {
+      min-width: 58px;
+      padding: 5px 7px;
+      border-radius: 8px;
+      background: #f8fafc;
+      color: #0f172a;
+      font-size: 12px;
+      font-weight: 900;
+      text-align: center;
+      white-space: nowrap;
+    }
+
     .country-schedule-result {
       display: grid;
       gap: 5px;
-      justify-items: end;
+      justify-items: start;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
     }
 
     .country-player-list {
@@ -2960,8 +2998,17 @@
         width: 100%;
       }
 
-      .country-schedule-match {
+      .country-schedule-play {
         grid-template-columns: 1fr;
+        justify-items: stretch;
+      }
+
+      .country-schedule-team.away {
+        text-align: left;
+      }
+
+      .country-schedule-score {
+        width: max-content;
       }
 
       .north-america-map {
