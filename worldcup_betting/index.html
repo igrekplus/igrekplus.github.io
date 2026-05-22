@@ -2423,6 +2423,69 @@
       line-height: 1.55;
     }
 
+    .country-schedule {
+      display: grid;
+      gap: 8px;
+      padding-top: 4px;
+    }
+
+    .country-schedule-toggle {
+      width: max-content;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-size: 12px;
+      font-weight: 900;
+      padding: 7px 10px;
+      cursor: pointer;
+    }
+
+    .country-schedule-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .country-schedule-match {
+      display: grid;
+      grid-template-columns: 132px minmax(0, 1fr) 72px;
+      gap: 8px;
+      align-items: center;
+      padding: 9px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .country-schedule-meta {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1.5;
+    }
+
+    .country-schedule-teams {
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1.5;
+      min-width: 0;
+    }
+
+    .country-schedule-venue {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    .country-schedule-result {
+      display: grid;
+      gap: 5px;
+      justify-items: end;
+    }
+
     .country-player-list {
       display: grid;
       gap: 8px;
@@ -2891,6 +2954,14 @@
       .country-manager-photo {
         width: 56px;
         height: 56px;
+      }
+
+      .country-schedule-toggle {
+        width: 100%;
+      }
+
+      .country-schedule-match {
+        grid-template-columns: 1fr;
       }
 
       .north-america-map {

@@ -685,6 +685,7 @@
     bra_carlo_ancelotti: "assets/managers/bra_carlo_ancelotti.jpg",
     cuw_dick_advocaat: "assets/managers/cuw_dick_advocaat.jpg",
     fra_didier_deschamps: "assets/managers/fra_didier_deschamps.jpg",
+    jpn_hajime_moriyasu: "assets/managers/jpn_hajime_moriyasu.jpg",
     kor_hong_myung_bo: "assets/managers/kor_hong_myung_bo.jpg",
     qat_julen_lopetegui: "assets/managers/qat_julen_lopetegui.jpg",
     sui_murat_yakin: "assets/managers/sui_murat_yakin.jpg"
@@ -712,7 +713,7 @@
     CIV: manager("civ_emerse_fae", "エメルス・ファエ", "Emerse Fae", "コートジボワール", "2024", "AFCON優勝で評価を高めた監督。チームの勢いと個の能力を整理して戦う。", "中盤の強度と前線の個を生かし、奪ってから素早くゴールへ向かう。", "https://en.wikipedia.org/wiki/Emerse_Fa%C3%A9", "Wikipedia / Wikimedia Commons"),
     ECU: manager("ecu_sebastian_beccacece", "セバスティアン・ベッカセセ", "Sebastian Beccacece", "アルゼンチン", "2024", "南米で経験を積んだ戦術家。エクアドルの走力と若さを組織に落とし込む。", "強度の高い守備と速い前進を軸に、相手のビルドアップへ圧をかける。", "https://en.wikipedia.org/wiki/Sebasti%C3%A1n_Beccacece", "Wikipedia / Wikimedia Commons"),
     NED: manager("ned_ronald_koeman", "ロナルド・クーマン", "Ronald Koeman", "オランダ", "2023", "オランダ代表を再び率いる名DF出身監督。後方の安定と攻撃的なタレントの共存を図る。", "3バック/4バックを使い分け、後方から丁寧に前進してサイドを使う。", "https://en.wikipedia.org/wiki/Ronald_Koeman", "Wikipedia / Wikimedia Commons"),
-    JPN: manager("jpn_hajime_moriyasu", "森保一", "Hajime Moriyasu", "日本", "2018", "日本代表を長期的に率いる監督。守備の安定と状況に応じた可変システムを重視する。", "3バック系と4バック系を使い分け、相手や試合展開に合わせて現実的に戦う。", "https://www.jfa.jp/samuraiblue/", "JFA official"),
+    JPN: manager("jpn_hajime_moriyasu", "森保一", "Hajime Moriyasu", "日本", "2018", "日本代表を長期的に率いる監督。守備の安定と状況に応じた可変システムを重視する。", "3バック系と4バック系を使い分け、相手や試合展開に合わせて現実的に戦う。", "https://commons.wikimedia.org/wiki/File:Hajime_Moriyasu_in_Columbus.jpg", "Wikimedia Commons"),
     TUN: manager("tun_sami_trabelsi", "サミ・トラベルシ", "Sami Trabelsi", "チュニジア", "2025", "チュニジア代表を再び率いる元代表DF。守備の粘りと接戦での勝負強さを重視する。", "低いブロックで中央を締め、奪った後は前線へ早くつける。", "https://en.wikipedia.org/wiki/Sami_Trabelsi", "Wikipedia / Wikimedia Commons"),
     SWE: manager("swe_jon_dahl_tomasson", "ヨン・ダール・トマソン", "Jon Dahl Tomasson", "デンマーク", "2024", "デンマーク出身の監督。スウェーデンでは前線のタレントを生かす攻撃再建がテーマ。", "保持と縦への速さを組み合わせ、イサクやクルゼフスキの受け方を整える。", "https://en.wikipedia.org/wiki/Jon_Dahl_Tomasson", "Wikipedia / Wikimedia Commons"),
     BEL: manager("bel_rudi_garcia", "ルディ・ガルシア", "Rudi Garcia", "フランス", "2025", "クラブで豊富な実績を持つ監督。世代交代期のベルギーで攻守のバランスを作る。", "攻撃的な配置を取りつつ、前線の個と中盤の配球を生かす。", "https://en.wikipedia.org/wiki/Rudi_Garcia", "Wikipedia / Wikimedia Commons"),
@@ -2234,6 +2235,7 @@
       ["弱み", data.weaknesses],
       ["注目ポイント", data.watchPoint]
     ].forEach(([label, value]) => card.appendChild(countrySection(label, value)));
+    card.appendChild(countryScheduleSection(data.teamId));
     card.appendChild(countryManagerSection(data.manager));
     card.appendChild(countryKeyPlayersSection(data.key_players));
     return card;
@@ -2255,6 +2257,74 @@
     body.textContent = value || "確認中";
     section.append(heading, body);
     return section;
+  }
+
+  function countryScheduleSection(teamId) {
+    const section = document.createElement("section");
+    section.className = "country-schedule";
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "country-schedule-toggle";
+    button.textContent = "試合日程を見る";
+    const list = document.createElement("div");
+    list.className = "country-schedule-list";
+    list.hidden = true;
+    button.addEventListener("click", () => {
+      list.hidden = !list.hidden;
+      button.textContent = list.hidden ? "試合日程を見る" : "試合日程を閉じる";
+      if (!list.hidden && !list.dataset.rendered) {
+        renderCountrySchedule(teamId, list);
+        list.dataset.rendered = "true";
+      }
+    });
+    section.append(button, list);
+    return section;
+  }
+
+  function renderCountrySchedule(teamId, target) {
+    target.innerHTML = "";
+    const matches = sortedMatches(computedSchedule().filter((match) => matchIncludesTeam(match, teamId)));
+    if (!matches.length) {
+      target.appendChild(message("この国の試合日程はまだありません"));
+      return;
+    }
+    matches.forEach((match) => target.appendChild(countryScheduleMatch(match)));
+  }
+
+  function matchIncludesTeam(match, teamId) {
+    return matchHomeId(match) === teamId || matchAwayId(match) === teamId;
+  }
+
+  function countryScheduleMatch(match) {
+    const row = document.createElement("article");
+    row.className = "country-schedule-match";
+    const meta = document.createElement("div");
+    meta.className = "country-schedule-meta";
+    meta.append(
+      textDiv(formatJstDateTime(match.kickoff_jst)),
+      textDiv(stageLabels[match.stage] || match.stage),
+      textDiv(match.group ? `Group ${match.group}` : roundLabel(match))
+    );
+    const teams = document.createElement("div");
+    teams.className = "country-schedule-teams";
+    teams.append(
+      textDiv(`${displayScheduleParticipant(matchHomeId(match), match.home_name_ja)}  vs  ${displayScheduleParticipant(matchAwayId(match), match.away_name_ja)}`),
+      textDiv(venueText(match), "country-schedule-venue")
+    );
+    const result = document.createElement("div");
+    result.className = "country-schedule-result";
+    result.append(textDiv(scoreText(match.match_id), "match-score-display"), statusBadge(match.match_id));
+    row.append(meta, teams, result);
+    return row;
+  }
+
+  function displayScheduleParticipant(teamId, fallback) {
+    if (isResolvedTeam(teamId)) return displayTeam(teamId);
+    return fallback || "未確定";
+  }
+
+  function roundLabel(match) {
+    return stageLabels[match.stage] || match.round || "";
   }
 
   function countryManagerSection(managerData) {
