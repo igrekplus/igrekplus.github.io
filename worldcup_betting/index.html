@@ -3937,7 +3937,6 @@
     <nav class="owner-tabs" aria-label="予想者">
       <button class="owner-tab active" type="button" data-view="tournament">スコア/日程</button>
       <button class="owner-tab" type="button" data-view="country-notes">各国データ</button>
-      <button class="owner-tab" type="button" data-view="star-players">注目選手</button>
       <button class="owner-tab" type="button" data-view="venues">開催地・時差・移動</button>
       <button class="owner-tab" type="button" data-view="compare">比較コート（日本代表）</button>
       <button class="owner-tab" type="button" data-view="owner" data-owner="karin">かりん予想（日本代表）</button>
@@ -4335,11 +4334,6 @@
         <section class="view-panel tournament-panel info-panel" id="countryNotesPanel" aria-label="各国データ">
           <div class="tournament-shell">
             <div id="countryNotesContent"></div>
-          </div>
-        </section>
-        <section class="view-panel tournament-panel info-panel" id="starPlayersPanel" aria-label="注目選手">
-          <div class="tournament-shell">
-            <div id="starPlayersContent"></div>
           </div>
         </section>
         <section class="view-panel tournament-panel info-panel" id="venuesPanel" aria-label="開催地・時差・移動">
@@ -5069,7 +5063,6 @@
     const betUnpickedList = document.getElementById("betUnpickedList");
     const tournamentPanel = document.getElementById("tournamentPanel");
     const countryNotesPanel = document.getElementById("countryNotesPanel");
-    const starPlayersPanel = document.getElementById("starPlayersPanel");
     const venuesPanel = document.getElementById("venuesPanel");
     const rosterPanel = document.getElementById("rosterPanel");
     const rosterSearchInput = document.getElementById("rosterSearchInput");
@@ -5720,7 +5713,7 @@
         return;
       }
 
-      if (["country-notes", "star-players", "venues"].includes(activeView)) {
+      if (["country-notes", "venues"].includes(activeView)) {
         renderWorldCupInfo(activeView);
         return;
       }
@@ -6073,7 +6066,7 @@
     }
 
     function hideWorldCupInfoPanels() {
-      [countryNotesPanel, starPlayersPanel, venuesPanel].forEach((panel) => panel?.classList.remove("active"));
+      [countryNotesPanel, venuesPanel].forEach((panel) => panel?.classList.remove("active"));
     }
 
     function renderWorldCupInfo(view) {
@@ -6096,14 +6089,12 @@
 
       const panelMap = {
         "country-notes": countryNotesPanel,
-        "star-players": starPlayersPanel,
         venues: venuesPanel
       };
       panelMap[view]?.classList.add("active");
 
       const titleMap = {
         "country-notes": "各国データ",
-        "star-players": "注目選手",
         venues: "開催地・時差・移動"
       };
       const title = titleMap[view] || "W杯2026";
@@ -7492,7 +7483,7 @@
     async function importGistStateFromRawUrl() {
       const url = window.prompt("Gistの worldcup_state.json Raw URLを貼り付けてください");
       if (!url) return;
-      const ok = window.confirm("Gistの内容を、スコア/日程・観戦メモ・予想・各国データ・注目選手・開催地に反映します。よろしいですか？");
+      const ok = window.confirm("Gistの内容を、スコア/日程・観戦メモ・予想・各国データ・開催地に反映します。よろしいですか？");
       if (!ok) return;
       showStatus("Gist Raw URLから読み込み中...");
       try {

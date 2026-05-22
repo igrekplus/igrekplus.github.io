@@ -263,7 +263,7 @@
         name_ja: "ハムザ・ラフィア",
         position: "MF",
         club: "レッチェ",
-        image_url: "",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Hamza%20Rafia%20%28cropped%29.jpg?width=180",
         description: "2列目で受けて前線との距離を縮める役割。守備的な時間が長い中で、数少ない前進の受け皿になれるかを見る。"
       }
     ],
@@ -359,7 +359,7 @@
         name_ja: "フランツディ・ピエロ",
         position: "FW",
         club: "AEKアテネ",
-        image_url: "",
+        image_url: "https://images.mlssoccer.com/image/private/t_editorial_landscape_8_desktop_mobile/f_auto/mls-col/pg6iveb7qz5q1flh2hig.jpg",
         description: "高さとゴール前への入り方で勝負するストライカー。押し込まれる時間が長い中で、セットプレーの的になれる。"
       },
       {
@@ -581,34 +581,6 @@
     ]
   };
 
-  const defaultStarPlayers = [
-    ["kubo", "久保建英", "日本", "レアル・ソシエダ", "ラ・リーガ", "なし", "なし", "主力", "日本の攻撃の中心。右サイド、中央で違いを作れるか", "高", "選出想定", "確認中"],
-    ["endo", "遠藤航", "日本", "リバプール", "プレミアリーグ", "現所属", "なし", "ベテラン", "強豪相手の中盤防波堤。球際と回収力", "高", "選出想定", "確認中"],
-    ["van_dijk", "フィルジル・ファン・ダイク", "オランダ", "リバプール", "プレミアリーグ", "現所属", "なし", "ベテラン", "空中戦と最終ライン統率", "高", "選出状況確認", "確認中"],
-    ["isak", "アレクサンデル・イサク", "スウェーデン", "ニューカッスル", "プレミアリーグ", "現所属", "なし", "主力", "高さと足元を兼ねるCF。日本戦の危険人物", "高", "選出状況確認", "確認中"],
-    ["kulusevski", "デヤン・クルゼフスキ", "スウェーデン", "トッテナム", "プレミアリーグ", "現所属", "なし", "主力", "右サイドからの運びと左足", "中", "選出状況確認", "確認中"],
-    ["foden", "フィル・フォーデン", "イングランド", "マンチェスター・シティ", "プレミアリーグ", "現所属", "現所属", "主力", "狭い場所でのターンと左足", "高", "選出状況確認", "確認中"],
-    ["de_bruyne", "ケヴィン・デ・ブライネ", "ベルギー", "ナポリ", "セリエA", "元プレミア", "元所属", "レジェンド/ベテラン", "一発のパスと試合を変える力", "高", "選出状況確認", "確認中"],
-    ["messi", "リオネル・メッシ", "アルゼンチン", "インテル・マイアミ", "MLS", "なし", "なし", "レジェンド", "最後の大舞台になる可能性。プレー時間と状態に注目", "高", "選出状況確認", "確認中"],
-    ["mbappe", "キリアン・エムバペ", "フランス", "レアル・マドリード", "ラ・リーガ", "なし", "なし", "主力", "背後へのスピードと決定力", "高", "選出状況確認", "確認中"],
-    ["pulisic", "クリスチャン・プリシッチ", "アメリカ", "ミラン", "セリエA", "元プレミア", "なし", "主力", "開催国の攻撃の顔。ドリブルと決定力", "中", "選出状況確認", "確認中"]
-  ].map(([id, name, country, club, league, premierRelation, cityRelation, legendType, highlight, risk, selectionStatus, condition]) => ({
-    id,
-    name,
-    country,
-    club,
-    league,
-    premierRelation,
-    cityRelation,
-    legendType,
-    highlight,
-    risk,
-    selectionStatus,
-    condition,
-    sourceUrl: "",
-    updatedAt: "2026-05-21"
-  }));
-
   const defaultVenues = [
     ["toronto", "Toronto", "カナダ", "東部", "Toronto Stadium", "America/Toronto", "夏時間: 日本より13時間遅れ", "開閉式屋根なし", "五大湖沿いで比較的涼しい", "東部拠点。米国東海岸との移動は短め", "日本戦なら朝時間の観戦になりやすい", 585, 165],
     ["vancouver", "Vancouver", "カナダ", "西部", "BC Place Vancouver", "America/Vancouver", "夏時間: 日本より16時間遅れ", "屋根あり", "西海岸で穏やか", "西海岸内の移動は比較的組みやすい", "日本時間は午前帯になりやすい", 205, 185],
@@ -765,7 +737,7 @@
 
   function renderActiveAuxView() {
     const active = document.querySelector(".owner-tab.active")?.dataset.view;
-    if (["country-notes", "star-players", "venues"].includes(active)) renderAuxView(active);
+    if (["country-notes", "venues"].includes(active)) renderAuxView(active);
   }
 
   function buildTeamMap(teamRows, matches) {
@@ -811,7 +783,6 @@
       sharedScoreUrl: "",
       sharedScoreLoadedAt: "",
       lastUpdatedAt: "",
-      starPlayers: {},
       venueNotes: {},
       standings: null,
       thirdRanking: null,
@@ -833,7 +804,6 @@
         sharedScoreUrl: parsed?.sharedScoreUrl || fallback.sharedScoreUrl,
         sharedScoreLoadedAt: parsed?.sharedScoreLoadedAt || fallback.sharedScoreLoadedAt,
         lastUpdatedAt: parsed?.lastUpdatedAt || fallback.lastUpdatedAt,
-        starPlayers: parsed?.starPlayers && typeof parsed.starPlayers === "object" ? parsed.starPlayers : {},
         venueNotes: parsed?.venueNotes && typeof parsed.venueNotes === "object" ? parsed.venueNotes : {},
         standings: parsed?.standings || fallback.standings,
         thirdRanking: parsed?.thirdRanking || fallback.thirdRanking,
@@ -1961,7 +1931,6 @@
   function renderAuxView(view) {
     const target = {
       "country-notes": document.getElementById("countryNotesContent"),
-      "star-players": document.getElementById("starPlayersContent"),
       venues: document.getElementById("venuesContent")
     }[view];
     if (state.loadError) {
@@ -1974,7 +1943,6 @@
       return;
     }
     if (view === "country-notes") renderCountryNotes();
-    if (view === "star-players") renderStarPlayers();
     if (view === "venues") renderVenues();
   }
 
@@ -2282,46 +2250,6 @@
     return "結果だけでなく、戦い方の相性を見ておきたい。";
   }
 
-  function renderStarPlayers() {
-    const target = document.getElementById("starPlayersContent");
-    if (!target) return;
-    target.innerHTML = "";
-    target.appendChild(infoHead("注目選手", "プレミア関係、マンチェスター・シティ関係、レジェンド/ベテラン、日本にとっての危険度を観戦前に整理します。"));
-    const grid = document.createElement("div");
-    grid.className = "info-grid";
-    defaultStarPlayers.forEach((base) => {
-      const item = { ...base, ...(state.saved.starPlayers?.[base.id] || {}) };
-      grid.appendChild(starPlayerCard(item));
-    });
-    target.appendChild(grid);
-  }
-
-  function starPlayerCard(item) {
-    const card = document.createElement("article");
-    card.className = "info-card";
-    card.appendChild(textHeading(item.name));
-    const form = document.createElement("div");
-    form.className = "info-form-grid";
-    [
-      ["country", "国", "input"],
-      ["club", "所属クラブ", "input"],
-      ["league", "リーグ", "input"],
-      ["premierRelation", "プレミア関係", "input"],
-      ["cityRelation", "マンチェスター・シティ関係", "input"],
-      ["legendType", "レジェンド/ベテラン区分", "input"],
-      ["highlight", "見どころ", "textarea"],
-      ["risk", "日本にとっての危険度", "input"],
-      ["selectionStatus", "選出状況", "input"],
-      ["condition", "コンディション", "input"],
-      ["sourceUrl", "情報源URL", "input"],
-      ["updatedAt", "更新日", "input"]
-    ].forEach(([key, label, type]) => {
-      form.appendChild(infoField(label, item[key], type, (value) => updateAuxNote("starPlayers", item.id, key, value)));
-    });
-    card.appendChild(form);
-    return card;
-  }
-
   function renderVenues() {
     const target = document.getElementById("venuesContent");
     if (!target) return;
@@ -2557,7 +2485,6 @@
       type: "worldcup2026_score_and_notes_state",
       source: DATA_URL,
       scoreOverrides: effectiveScoreOverrides(),
-      starPlayers: state.saved.starPlayers || {},
       venueNotes: state.saved.venueNotes || {},
       lastUpdatedAt: state.saved.lastUpdatedAt || new Date().toISOString()
     };
@@ -2596,7 +2523,6 @@
     if (!scoreOverrides || typeof scoreOverrides !== "object") return false;
     importScoreOverrides(scoreOverrides, {
       lastUpdatedAt: source?.lastUpdatedAt || payload?.lastUpdated || new Date().toISOString(),
-      starPlayers: source?.starPlayers,
       venueNotes: source?.venueNotes
     });
     return true;
@@ -2685,7 +2611,6 @@
       sharedScoreUrl: state.saved.sharedScoreUrl || "",
       sharedScoreLoadedAt: state.saved.sharedScoreLoadedAt || "",
       lastUpdatedAt: options.lastUpdatedAt || new Date().toISOString(),
-      starPlayers: options.starPlayers && typeof options.starPlayers === "object" ? options.starPlayers : state.saved.starPlayers || {},
       venueNotes: options.venueNotes && typeof options.venueNotes === "object" ? options.venueNotes : state.saved.venueNotes || {},
       standings: null,
       thirdRanking: null,
@@ -2715,7 +2640,7 @@
     state.saved.sharedScoreLoadedAt = new Date().toISOString();
     state.saved.lastUpdatedAt = state.saved.sharedScoreLoadedAt;
     const source = payload?.tournament && typeof payload.tournament === "object" ? payload.tournament : payload;
-    ["starPlayers", "venueNotes"].forEach((key) => {
+    ["venueNotes"].forEach((key) => {
       if (source?.[key] && typeof source[key] === "object") state.saved[key] = source[key];
     });
     persist();
