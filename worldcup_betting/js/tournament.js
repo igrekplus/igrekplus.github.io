@@ -844,6 +844,7 @@
     countryGroupFilter: "all",
     countryConfederationFilter: "all",
     countrySort: "group",
+    countryScheduleOpenTeamId: "",
     scheduleStatusFilter: "all",
     scheduleSort: "date",
     scheduleOpenStages: { group: true },
@@ -2149,6 +2150,7 @@
     search.value = state.countrySearch;
     search.addEventListener("input", () => {
       state.countrySearch = search.value;
+      state.countryScheduleOpenTeamId = "";
       renderCountryNotes();
     });
     searchLabel.append(textSpan("国名検索"), search);
@@ -2156,10 +2158,12 @@
       searchLabel,
       countrySelect("グループ", state.countryGroupFilter, [["all", "全グループ"], ...groupsForTeams().map((group) => [group, `Group ${group}`])], (value) => {
         state.countryGroupFilter = value;
+        state.countryScheduleOpenTeamId = "";
         renderCountryNotes();
       }),
       countrySelect("地域", state.countryConfederationFilter, [["all", "全地域"], ...confederationsForTeams().map((confederation) => [confederation, confederation])], (value) => {
         state.countryConfederationFilter = value;
+        state.countryScheduleOpenTeamId = "";
         renderCountryNotes();
       }),
       countrySelect("並び順", state.countrySort, [
@@ -2168,6 +2172,7 @@
         ["name", "国名順"]
       ], (value) => {
         state.countrySort = value;
+        state.countryScheduleOpenTeamId = "";
         renderCountryNotes();
       })
     );
@@ -2265,21 +2270,17 @@
     const button = document.createElement("button");
     button.type = "button";
     button.className = "country-schedule-toggle";
-    button.textContent = "試合日程を見る";
+    const isOpen = state.countryScheduleOpenTeamId === teamId;
+    button.textContent = isOpen ? "▲ 試合日程を閉じる" : "▼ 試合日程を見る";
+    button.setAttribute("aria-expanded", String(isOpen));
     const list = document.createElement("div");
     list.className = "country-schedule-list";
-    list.hidden = true;
+    list.hidden = !isOpen;
+    if (isOpen) renderCountrySchedule(teamId, list);
     button.addEventListener("click", () => {
-      const shouldOpen = list.hidden;
-      if (shouldOpen && !list.dataset.rendered) {
-        renderCountrySchedule(teamId, list);
-        list.dataset.rendered = "true";
-      }
-      list.hidden = !shouldOpen;
-      button.textContent = shouldOpen ? "試合日程を閉じる" : "試合日程を見る";
-      button.setAttribute("aria-expanded", String(shouldOpen));
+      state.countryScheduleOpenTeamId = state.countryScheduleOpenTeamId === teamId ? "" : teamId;
+      renderCountryNotes();
     });
-    button.setAttribute("aria-expanded", "false");
     section.append(button, list);
     return section;
   }
