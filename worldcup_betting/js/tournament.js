@@ -578,8 +578,133 @@
         image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Romelu%20Lukaku%202018.jpg?width=180",
         description: "身体を預けてボールを収め、ゴール前では一気にフィニッシュへ持ち込む。クロスが増える展開で存在感が出る。"
       }
+    ],
+    MEX: [
+      keyPlayer("mex_santiago_gimenez", "サンティアゴ・ヒメネス", "Santiago Gimenez", "FW", "ミラン", "https://commons.wikimedia.org/wiki/Special:FilePath/Santiago%20Gimenez%202023.jpg?width=320", "Wikimedia Commons", "左足のフィニッシュとゴール前の動き直しが武器のストライカー。メキシコが押し込む展開で、クロスやこぼれ球を得点に変えられるかに注目。")
+    ],
+    RSA: [
+      keyPlayer("rsa_percy_tau", "パーシー・タウ", "Percy Tau", "FW / WG", "カタールSC", "https://commons.wikimedia.org/wiki/Special:FilePath/Percy%20Tau%202019.jpg?width=320", "Wikimedia Commons", "左利きのアタッカーで、狭い位置からでもターンして前を向ける。南アフリカがカウンターに出る時の最初の受け手になりやすい。")
+    ],
+    KOR: [
+      keyPlayer("kor_son_heung_min", "ソン・フンミン", "Son Heung-min", "FW / WG", "トッテナム", "https://commons.wikimedia.org/wiki/Special:FilePath/Son%20Heung-min%202018.jpg?width=320", "Wikimedia Commons", "背後へのスプリントと左右両足の決定力で試合を変えられる。韓国が低い位置から一気に出る時、最も警戒される出口。"),
+      keyPlayer("kor_kim_min_jae", "キム・ミンジェ", "Kim Min-jae", "DF", "バイエルン", "https://commons.wikimedia.org/wiki/Special:FilePath/Kim%20Min-jae%202019.jpg?width=320", "Wikimedia Commons", "対人守備と広いカバー範囲を持つCB。高いラインを保つ時も、低く守る時も韓国の守備基準になる。")
+    ],
+    CZE: [
+      keyPlayer("cze_patrik_schick", "パトリック・シック", "Patrik Schick", "FW", "レバークーゼン", "https://commons.wikimedia.org/wiki/Special:FilePath/Patrik%20Schick%202018.jpg?width=320", "Wikimedia Commons", "長身ながら足元も柔らかく、ワンタッチでシュートへ持ち込めるCF。チェコのクロスとセットプレーの終着点になる。")
+    ],
+    CAN: [
+      keyPlayer("can_alphonso_davies", "アルフォンソ・デイヴィス", "Alphonso Davies", "DF / WG", "バイエルン", "https://commons.wikimedia.org/wiki/Special:FilePath/Alphonso%20Davies%202018.jpg?width=320", "Wikimedia Commons", "左サイドを一気に運べる爆発的なスピードが最大の武器。守備から攻撃へ切り替わった瞬間に、相手の陣形を大きく押し下げる。"),
+      keyPlayer("can_jonathan_david", "ジョナサン・デイヴィッド", "Jonathan David", "FW", "ユヴェントス", "https://commons.wikimedia.org/wiki/Special:FilePath/Jonathan%20David%202019.jpg?width=320", "Wikimedia Commons", "DFの間で受け直し、少ないタッチでシュートまで行けるFW。カナダが前進した後の仕上げ役として重要。")
+    ],
+    SUI: [
+      keyPlayer("sui_granit_xhaka", "グラニト・ジャカ", "Granit Xhaka", "MF", "サンダーランド", "https://commons.wikimedia.org/wiki/Special:FilePath/Granit%20Xhaka%202018.jpg?width=320", "Wikimedia Commons", "中盤の底からテンポを作り、長短のパスで前進方向を決める。スイスが試合を落ち着かせる時の中心。")
+    ],
+    QAT: [
+      keyPlayer("qat_akram_afif", "アクラム・アフィフ", "Akram Afif", "FW / WG", "アル・サッド", "https://commons.wikimedia.org/wiki/Special:FilePath/Akram%20Afif%202019.jpg?width=320", "Wikimedia Commons", "左サイドや中央で受け、ドリブルとラストパスで違いを作る。カタールが少ない好機を形にする時の最重要選手。")
+    ],
+    BIH: [
+      keyPlayer("bih_edin_dzeko", "エディン・ジェコ", "Edin Dzeko", "FW", "フィオレンティーナ", "https://commons.wikimedia.org/wiki/Special:FilePath/Edin%20D%C5%BEeko%202018.jpg?width=320", "Wikimedia Commons", "ポストプレーとゴール前の駆け引きに優れるベテランCF。攻撃が詰まった時も、前線で時間を作れる存在。")
+    ],
+    USA: [
+      keyPlayer("usa_christian_pulisic", "クリスチャン・プリシッチ", "Christian Pulisic", "FW / WG", "ミラン", "https://commons.wikimedia.org/wiki/Special:FilePath/Christian%20Pulisic%202019.jpg?width=320", "Wikimedia Commons", "左サイドから内側へ入り、ドリブルとシュートで局面を動かす開催国の攻撃の顔。相手のSBを押し下げる力がある。"),
+      keyPlayer("usa_weston_mckennie", "ウェストン・マッケニー", "Weston McKennie", "MF", "ユヴェントス", "https://commons.wikimedia.org/wiki/Special:FilePath/Weston%20McKennie%202019.jpg?width=320", "Wikimedia Commons", "運動量とゴール前への飛び込みで中盤に厚みを出す。セカンドボールやクロス対応で流れを変えられる。")
+    ],
+    PAR: [
+      keyPlayer("par_miguel_almiron", "ミゲル・アルミロン", "Miguel Almiron", "MF / WG", "アトランタ・ユナイテッド", "https://commons.wikimedia.org/wiki/Special:FilePath/Miguel%20Almir%C3%B3n%202018.jpg?width=320", "Wikimedia Commons", "左足で運びながらスピードを落とさず前進できる。パラグアイが守備から抜け出す時、カウンターの推進役になる。")
+    ],
+    AUS: [
+      keyPlayer("aus_mitchell_duke", "ミッチェル・デューク", "Mitchell Duke", "FW", "町田ゼルビア", "https://commons.wikimedia.org/wiki/Special:FilePath/Mitchell%20Duke%202018.jpg?width=320", "Wikimedia Commons", "空中戦と前線での競り合いで攻撃の起点を作るFW。ロングボールを収め、2列目を押し上げる役割が大きい。")
+    ],
+    TUR: [
+      keyPlayer("tur_hakan_calhanoglu", "ハカン・チャルハノール", "Hakan Calhanoglu", "MF", "インテル", "https://commons.wikimedia.org/wiki/Special:FilePath/Hakan%20%C3%87alhano%C4%9Flu%202018.jpg?width=320", "Wikimedia Commons", "中盤の底から縦パスとセットプレーで違いを作る。トルコが保持する展開では、攻撃のテンポを決める存在。"),
+      keyPlayer("tur_arda_guler", "アルダ・ギュレル", "Arda Guler", "MF / WG", "レアル・マドリード", "https://commons.wikimedia.org/wiki/Special:FilePath/Arda%20G%C3%BCler%202023.jpg?width=320", "Wikimedia Commons", "左足のタッチとラストパスで狭い局面を開けられる若い創造役。途中出場でも試合のリズムを変えられる。")
+    ],
+    CUW: [
+      keyPlayer("cuw_jurien_gaari", "ユリエン・ガーリ", "Jurien Gaari", "DF", "RKCワールワイク", "https://commons.wikimedia.org/wiki/Special:FilePath/Jurien%20Gaari%202018.jpg?width=320", "Wikimedia Commons", "最終ラインで身体を張り、空中戦やクロス対応で守備を支える。格上相手に耐える時間が長い時のキーマン。")
+    ],
+    CIV: [
+      keyPlayer("civ_sebastien_haller", "セバスティアン・アレ", "Sebastien Haller", "FW", "ユトレヒト", "https://commons.wikimedia.org/wiki/Special:FilePath/S%C3%A9bastien%20Haller%202019.jpg?width=320", "Wikimedia Commons", "ペナルティエリア内で身体を使い、クロスやこぼれ球を得点に変えるCF。コートジボワールが押し込んだ時の仕上げ役。"),
+      keyPlayer("civ_franck_kessie", "フランク・ケシエ", "Franck Kessie", "MF", "アル・アハリ", "https://commons.wikimedia.org/wiki/Special:FilePath/Franck%20Kessi%C3%A9%202018.jpg?width=320", "Wikimedia Commons", "中盤で球際を制し、前線への押し上げを作るパワフルなMF。PKやミドルでも試合を動かせる。")
+    ],
+    ECU: [
+      keyPlayer("ecu_moises_caicedo", "モイセス・カイセド", "Moises Caicedo", "MF", "チェルシー", "https://commons.wikimedia.org/wiki/Special:FilePath/Mois%C3%A9s%20Caicedo%202023.jpg?width=320", "Wikimedia Commons", "広い範囲をカバーし、奪った後に前進のパスを入れられる中盤の要。エクアドルの強度を支える。"),
+      keyPlayer("ecu_piero_hincapie", "ピエロ・インカピエ", "Piero Hincapie", "DF", "アーセナル", "https://commons.wikimedia.org/wiki/Special:FilePath/Piero%20Hincapi%C3%A9%202022.jpg?width=320", "Wikimedia Commons", "左利きのDFで、対人守備と持ち上がりを両立する。高いラインの背後を守る時にも重要。")
+    ],
+    EGY: [
+      keyPlayer("egy_mohamed_salah", "モハメド・サラー", "Mohamed Salah", "FW / WG", "リバプール", "assets/players/egy_mohamed_salah.jpg", "既存ローカル画像", "右サイドから内側へ入り、左足のシュートとラストパスで試合を決められる。エジプトの攻撃は彼の受け方で大きく変わる。")
+    ],
+    IRN: [
+      keyPlayer("irn_mehdi_taremi", "メフディ・タレミ", "Mehdi Taremi", "FW", "オリンピアコス", "https://commons.wikimedia.org/wiki/Special:FilePath/Mehdi%20Taremi%202018.jpg?width=320", "Wikimedia Commons", "DFの背後と足元の両方で受けられるFW。イランが押し込まれた展開でも、少ないチャンスをシュートへ持ち込める。")
+    ],
+    NZL: [
+      keyPlayer("nzl_chris_wood", "クリス・ウッド", "Chris Wood", "FW", "ノッティンガム・フォレスト", "https://commons.wikimedia.org/wiki/Special:FilePath/Chris%20Wood%202018.jpg?width=320", "Wikimedia Commons", "空中戦とゴール前のポジション取りに優れるCF。ニュージーランドのクロスやセットプレーの最大のターゲット。")
+    ],
+    CPV: [
+      keyPlayer("cpv_bebe", "ベベ", "Bebe", "FW / WG", "ラージョ・バジェカーノ", "https://commons.wikimedia.org/wiki/Special:FilePath/Beb%C3%A9%202018.jpg?width=320", "Wikimedia Commons", "強烈なキックと縦への推進力を持つアタッカー。カーボベルデが距離のある位置からでもゴールを狙う時の選択肢。")
+    ],
+    KSA: [
+      keyPlayer("ksa_salem_al_dawsari", "サレム・アル・ドサリ", "Salem Al-Dawsari", "FW / WG", "アル・ヒラル", "https://commons.wikimedia.org/wiki/Special:FilePath/Salem%20Al-Dawsari%202018.jpg?width=320", "Wikimedia Commons", "左サイドからカットインし、ミドルやラストパスで局面を動かす。大舞台での得点経験もあり、流れを変える力がある。")
+    ],
+    URU: [
+      keyPlayer("uru_federico_valverde", "フェデリコ・バルベルデ", "Federico Valverde", "MF", "レアル・マドリード", "assets/players/uru_federico_valverde.jpg", "既存ローカル画像", "中盤から長い距離を走り、守備の戻りとミドルシュートを両立する。ビエルサの強度をピッチ上で体現する選手。"),
+      keyPlayer("uru_darwin_nunez", "ダーウィン・ヌニェス", "Darwin Nunez", "FW", "リバプール", "https://commons.wikimedia.org/wiki/Special:FilePath/Darwin%20N%C3%BA%C3%B1ez%202022.jpg?width=320", "Wikimedia Commons", "背後への飛び出しとゴール前の迫力で相手DFを下げる。ウルグアイが縦に速く出る時の主なターゲット。")
+    ],
+    SEN: [
+      keyPlayer("sen_sadio_mane", "サディオ・マネ", "Sadio Mane", "FW / WG", "アル・ナスル", "https://commons.wikimedia.org/wiki/Special:FilePath/Sadio%20Man%C3%A9%202018.jpg?width=320", "Wikimedia Commons", "スピードとゴール前の嗅覚を備えるセネガルの象徴。左サイドから中央へ入る動きで守備の視線をずらす。")
+    ],
+    NOR: [
+      keyPlayer("nor_erling_haaland", "アーリング・ハーランド", "Erling Haaland", "FW", "マンチェスター・シティ", "assets/players/nor_erling_haaland.jpg", "既存ローカル画像", "背後への加速とボックス内の決定力が突出するストライカー。ノルウェーは彼へ良い形で届けられるかが得点力を左右する。"),
+      keyPlayer("nor_martin_odegaard", "マルティン・ウーデゴール", "Martin Odegaard", "MF", "アーセナル", "https://commons.wikimedia.org/wiki/Special:FilePath/Martin%20Odegaard%202018.jpg?width=320", "Wikimedia Commons", "右ハーフスペースで受け、左足のパスでテンポを作る司令塔。ハーランドへのラストパスの質にも注目。")
+    ],
+    IRQ: [
+      keyPlayer("irq_ali_al_hamadi", "アリ・アル・ハマディ", "Ali Al-Hamadi", "FW", "イプスウィッチ", "https://commons.wikimedia.org/wiki/Special:FilePath/Ali%20Al-Hamadi%202024.jpg?width=320", "Wikimedia Commons", "前線で身体を張りながら背後も狙えるFW。イラクが押し込まれた時に、カウンターの出口になれる。")
+    ],
+    ALG: [
+      keyPlayer("alg_riyad_mahrez", "リヤド・マフレズ", "Riyad Mahrez", "FW / WG", "アル・アハリ", "https://commons.wikimedia.org/wiki/Special:FilePath/Riyad%20Mahrez%202018.jpg?width=320", "Wikimedia Commons", "右サイドで間を作り、左足のクロスやシュートで守備を崩せる。アルジェリアの攻撃に落ち着きと創造性を与える。")
+    ],
+    AUT: [
+      keyPlayer("aut_david_alaba", "ダヴィド・アラバ", "David Alaba", "DF / MF", "レアル・マドリード", "https://commons.wikimedia.org/wiki/Special:FilePath/David%20Alaba%202018.jpg?width=320", "Wikimedia Commons", "最終ラインと中盤の両方でプレーできるリーダー。コンディション次第だが、出場時はビルドアップと守備統率の質を上げる。"),
+      keyPlayer("aut_marcel_sabitzer", "マルセル・ザビッツァー", "Marcel Sabitzer", "MF", "ドルトムント", "https://commons.wikimedia.org/wiki/Special:FilePath/Marcel%20Sabitzer%202018.jpg?width=320", "Wikimedia Commons", "中盤からゴール前へ入り、ミドルやラストパスで攻撃に厚みを出す。ラングニックの縦に速い攻撃で重要な役割を担う。")
+    ],
+    JOR: [
+      keyPlayer("jor_mousa_al_tamari", "ムーサ・アル・ターマリ", "Mousa Al-Taamari", "FW / WG", "モンペリエ", "https://commons.wikimedia.org/wiki/Special:FilePath/Mousa%20Al-Taamari%202019.jpg?width=320", "Wikimedia Commons", "右サイドから縦にも内側にも仕掛けられるヨルダンの主力。守備から攻撃へ移る時に、単独で運べる貴重な存在。")
+    ],
+    UZB: [
+      keyPlayer("uzb_eldor_shomurodov", "エルドル・ショムロドフ", "Eldor Shomurodov", "FW", "ローマ", "https://commons.wikimedia.org/wiki/Special:FilePath/Eldor%20Shomurodov%202018.jpg?width=320", "Wikimedia Commons", "前線で収めて味方を押し上げるウズベキスタンの柱。クロスやカウンターの場面でゴール前に入るタイミングが重要。")
+    ],
+    COL: [
+      keyPlayer("col_luis_diaz", "ルイス・ディアス", "Luis Diaz", "FW / WG", "バイエルン", "assets/players/col_luis_diaz.jpg", "既存ローカル画像", "左サイドで加速して縦にも内側にも行ける。コロンビアが停滞した時でも、1対1から決定機を作れる選手。"),
+      keyPlayer("col_james_rodriguez", "ハメス・ロドリゲス", "James Rodriguez", "MF", "レオン", "https://commons.wikimedia.org/wiki/Special:FilePath/James%20Rodr%C3%ADguez%202018.jpg?width=320", "Wikimedia Commons", "左足のラストパスとセットプレーで試合を動かす司令塔。テンポを落として相手を引きつける場面で効く。")
+    ],
+    COD: [
+      keyPlayer("cod_yoane_wissa", "ヨアン・ウィサ", "Yoane Wissa", "FW", "ニューカッスル", "https://commons.wikimedia.org/wiki/Special:FilePath/Yoane%20Wissa%202021.jpg?width=320", "Wikimedia Commons", "前線で斜めに走り、少ないタッチでシュートまで行ける。DRコンゴが速く前進する時のフィニッシュ役。")
+    ],
+    CRO: [
+      keyPlayer("cro_luka_modric", "ルカ・モドリッチ", "Luka Modric", "MF", "ミラン", "https://commons.wikimedia.org/wiki/Special:FilePath/Luka%20Modri%C4%87%202018.jpg?width=320", "Wikimedia Commons", "中盤で受け直しながら試合のテンポを整えるベテラン。短いパスと外への展開で相手の守備を動かす。"),
+      keyPlayer("cro_josko_gvardiol", "ヨシュコ・グヴァルディオル", "Josko Gvardiol", "DF", "マンチェスター・シティ", "assets/players/cro_josko_gvardiol.jpg", "既存ローカル画像", "左サイドとCBをこなし、対人守備と持ち上がりを両立する。クロアチアが高い位置を取る時の支えになる。")
+    ],
+    GHA: [
+      keyPlayer("gha_mohammed_kudus", "モハメド・クドゥス", "Mohammed Kudus", "MF / FW", "トッテナム", "https://commons.wikimedia.org/wiki/Special:FilePath/Mohammed%20Kudus%202022.jpg?width=320", "Wikimedia Commons", "中央でもサイドでも受けられ、強いドリブルで相手を剥がせる。ガーナが個で前進したい場面の中心。")
+    ],
+    PAN: [
+      keyPlayer("pan_adalberto_carrasquilla", "アダルベルト・カラスキージャ", "Adalberto Carrasquilla", "MF", "UNAMプーマス", "https://commons.wikimedia.org/wiki/Special:FilePath/Adalberto%20Carrasquilla%202018.jpg?width=320", "Wikimedia Commons", "中盤で受けてターンし、前線への縦パスで攻撃の方向を作る。パナマが守備から抜ける時のリズムメーカー。")
     ]
   };
+
+  function keyPlayer(player_id, name_ja, name_en, position, club, image_url, image_source_name, description) {
+    const isLocal = image_url.startsWith("pics/") || image_url.startsWith("assets/");
+    return {
+      player_id,
+      name_ja,
+      name_en,
+      position,
+      club,
+      image_url,
+      image_source_url: isLocal ? image_url : image_url.replace(/\?width=\d+$/, ""),
+      image_source_name,
+      description
+    };
+  }
 
   const localKeyPlayerImages = {
     jpn_kubo_takefusa: "assets/players/jpn_kubo_takefusa.jpg",
