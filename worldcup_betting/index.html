@@ -4071,10 +4071,6 @@
         text-overflow: ellipsis;
       }
 
-      .player-card.on-pitch .number-badge {
-        display: none;
-      }
-
       .player-card.on-pitch .rating-mark {
         display: none;
       }
@@ -4649,7 +4645,36 @@
       }
     };
 
-    const allPlayers = applyPlayerOverrides(loadPlayerMaster([...players, ...candidatePlayers]));
+    const officialSquadNumbers = {
+      "鈴木彩艶": "1",
+      "菅原由勢": "2",
+      "谷口彰悟": "3",
+      "板倉滉": "4",
+      "長友佑都": "5",
+      "遠藤航": "6",
+      "田中碧": "7",
+      "久保建英": "8",
+      "後藤啓介": "9",
+      "堂安律": "10",
+      "前田大然": "11",
+      "大迫敬介": "12",
+      "中村敬斗": "13",
+      "伊東純也": "14",
+      "鎌田大地": "15",
+      "渡辺剛": "16",
+      "鈴木唯人": "17",
+      "上田綺世": "18",
+      "小川航基": "19",
+      "瀬古歩夢": "20",
+      "伊藤洋輝": "21",
+      "冨安健洋": "22",
+      "早川友基": "23",
+      "佐野海舟": "24",
+      "鈴木淳之介": "25",
+      "塩貝健人": "26"
+    };
+
+    const allPlayers = applyOfficialSquadNumbers(applyPlayerOverrides(loadPlayerMaster([...players, ...candidatePlayers])));
     const officialSquadNames = [
       "早川友基", "大迫敬介", "鈴木彩艶",
       "長友佑都", "谷口彰悟", "板倉滉", "渡辺剛", "冨安健洋", "伊藤洋輝", "瀬古歩夢", "菅原由勢", "鈴木淳之介",
@@ -4823,7 +4848,7 @@
     function createInitialState(owner) {
       return new Map(ownerPlayers[owner].map((player) => [
         player.id,
-        { area: "bench", x: 50, y: 50, rating: initialRating(player.status), number: player.number || "", manual: false }
+        { area: "bench", x: 50, y: 50, rating: initialRating(player.status), number: player.number || "", manual: false, playerId: player.id }
       ]));
     }
 
@@ -4831,6 +4856,13 @@
       return list.map((player) => {
         const override = playerOverrides[player.name];
         return override ? { ...player, ...override } : player;
+      });
+    }
+
+    function applyOfficialSquadNumbers(list) {
+      return list.map((player) => {
+        const number = officialSquadNumbers[player.name];
+        return number ? { ...player, number } : player;
       });
     }
 
@@ -4881,7 +4913,8 @@
       const safeRating = ratingOrder.includes(saved?.rating) ? saved.rating : fallback.rating;
       const safeX = Number.isFinite(Number(saved?.x)) ? clamp(Number(saved.x), 0, 100) : fallback.x;
       const safeY = Number.isFinite(Number(saved?.y)) ? clamp(Number(saved.y), 0, 100) : fallback.y;
-      const normalizedNumber = validateNumber(saved?.number ?? fallback.number);
+      const officialNumber = officialNumberForPlayerId(fallback.playerId);
+      const normalizedNumber = validateNumber(officialNumber || saved?.number || fallback.number);
       const safeNumber = normalizedNumber === null ? fallback.number : normalizedNumber;
       return {
         area: safeArea,
@@ -5566,7 +5599,12 @@
     }
 
     function currentNumber(playerId, owner = activeOwner) {
-      return states[owner]?.get(playerId)?.number || "";
+      return officialNumberForPlayerId(playerId) || states[owner]?.get(playerId)?.number || allPlayerById(playerId)?.number || "";
+    }
+
+    function officialNumberForPlayerId(playerId) {
+      const player = allPlayerById(playerId);
+      return player ? officialSquadNumbers[player.name] || "" : "";
     }
 
     function isInteractionLocked() {
@@ -5643,7 +5681,7 @@
         x: placement.x,
         y: placement.y,
         rating: current.rating || "△",
-        number: current.number || "",
+        number: officialNumberForPlayerId(playerId) || current.number || "",
         manual: placement.manual ?? current.manual ?? false
       });
     }
