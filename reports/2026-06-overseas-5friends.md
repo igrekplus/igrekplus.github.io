@@ -162,14 +162,14 @@
     </tr>
   </thead>
   <tbody>
-    <tr><td>09:00頃</td><td>ホテル出発。MRTで高雄車站 → 美麗島 → 西子湾へ</td></tr>
-    <tr><td>09:40頃</td><td>鼓山輪渡站からフェリーで旗津へ（乗船は約5分）</td></tr>
-    <tr><td>10:00〜12:00</td><td>旗津でレンタサイクル。星空隧道、海沿いのサイクリングロード、彩虹教堂、雙螺台、旗津海珍珠、風車公園あたりを無理なく回る</td></tr>
-    <tr><td>12:00〜13:30</td><td>旗后海産でランチ。海鮮を選んで調理してもらうスタイルなので、時価メニューは注文前に値段確認</td></tr>
-    <tr><td>13:30〜15:00</td><td>旗后灯塔・旗后砲台・旗津老街を散歩。暑ければカフェやアイス休憩を優先</td></tr>
+    <tr><td>09:00頃</td><td>ホテル出発。MRTで <a href="https://www.google.com/maps/search/?api=1&query=高雄車站" target="_blank" rel="noopener">高雄車站</a> → <a href="https://www.google.com/maps/search/?api=1&query=美麗島駅+高雄" target="_blank" rel="noopener">美麗島</a> → <a href="https://www.google.com/maps/search/?api=1&query=西子湾駅+高雄" target="_blank" rel="noopener">西子湾</a> へ</td></tr>
+    <tr><td>09:40頃</td><td><a href="https://www.google.com/maps/search/?api=1&query=鼓山輪渡站" target="_blank" rel="noopener">鼓山輪渡站</a> からフェリーで <a href="https://www.google.com/maps/search/?api=1&query=旗津+高雄" target="_blank" rel="noopener">旗津</a> へ（乗船は約5分）</td></tr>
+    <tr><td>10:00〜12:00</td><td>旗津でレンタサイクル。<a href="https://www.google.com/maps/search/?api=1&query=旗津星空隧道" target="_blank" rel="noopener">星空隧道</a>、海沿いのサイクリングロード、<a href="https://www.google.com/maps/search/?api=1&query=旗津彩虹教堂" target="_blank" rel="noopener">彩虹教堂</a>、<a href="https://www.google.com/maps/search/?api=1&query=旗津雙螺台" target="_blank" rel="noopener">雙螺台</a>、<a href="https://www.google.com/maps/search/?api=1&query=旗津海珍珠" target="_blank" rel="noopener">旗津海珍珠</a>、<a href="https://www.google.com/maps/search/?api=1&query=旗津風車公園" target="_blank" rel="noopener">風車公園</a> あたりを無理なく回る</td></tr>
+    <tr><td>12:00〜13:30</td><td><a href="https://www.google.com/maps/search/?api=1&query=旗后海產+高雄市旗津區廟前路31號" target="_blank" rel="noopener">旗后海産</a> でランチ。海鮮を選んで調理してもらうスタイルなので、時価メニューは注文前に値段確認</td></tr>
+    <tr><td>13:30〜15:00</td><td><a href="https://www.google.com/maps/search/?api=1&query=旗后灯塔" target="_blank" rel="noopener">旗后灯塔</a>・<a href="https://www.google.com/maps/search/?api=1&query=旗后砲台" target="_blank" rel="noopener">旗后砲台</a>・<a href="https://www.google.com/maps/search/?api=1&query=旗津老街" target="_blank" rel="noopener">旗津老街</a> を散歩。暑ければカフェやアイス休憩を優先</td></tr>
     <tr><td>15:00〜16:00</td><td>フェリーとMRTで一旦ホテルへ戻る</td></tr>
     <tr><td>16:00〜18:00</td><td>ホテルで休憩・身支度</td></tr>
-    <tr><td>18:00以降</td><td>ライトアップされた龍虎塔・蓮池潭を見て、夜市またはレストランへ</td></tr>
+    <tr><td>18:00以降</td><td>ライトアップされた <a href="https://www.google.com/maps/search/?api=1&query=龍虎塔+高雄" target="_blank" rel="noopener">龍虎塔</a>・<a href="https://www.google.com/maps/search/?api=1&query=蓮池潭+高雄" target="_blank" rel="noopener">蓮池潭</a> を見て、夜市またはレストランへ</td></tr>
   </tbody>
 </table>
 
@@ -190,14 +190,14 @@
   </thead>
   <tbody>
     <tr><td>09:00</td><td>ホテル出発</td></tr>
-    <tr><td>09:30〜10:30</td><td>高雄駅 → 台南駅へ移動</td></tr>
-    <tr><td>10:45</td><td>再發號百年肉粽で、まずは台南のちまき</td></tr>
-    <tr><td>11:45</td><td>赤崁楼を短時間だけ観光。雨が強ければ外観中心でもOK</td></tr>
-    <tr><td>12:45</td><td>林百貨で屋内休憩・買い物</td></tr>
-    <tr><td>14:00</td><td>台南小吃をもう一品追加。担仔麺、蝦仁飯、豆花あたりを気分で</td></tr>
-    <tr><td>15:30</td><td>小雨なら神農街。大雨ならカフェ・屋内で休憩</td></tr>
-    <tr><td>17:00</td><td>台南駅へ移動</td></tr>
-    <tr><td>17:30〜18:30</td><td>台南駅 → 高雄駅へ移動</td></tr>
+    <tr><td>09:30〜10:30</td><td><a href="https://www.google.com/maps/search/?api=1&query=高雄車站" target="_blank" rel="noopener">高雄駅</a> → <a href="https://www.google.com/maps/search/?api=1&query=台南駅" target="_blank" rel="noopener">台南駅</a> へ移動</td></tr>
+    <tr><td>10:45</td><td><a href="https://www.google.com/maps/search/?api=1&query=再發號百年肉粽+台南" target="_blank" rel="noopener">再發號百年肉粽</a> で、まずは台南のちまき</td></tr>
+    <tr><td>11:45</td><td><a href="https://www.google.com/maps/search/?api=1&query=赤崁楼+台南" target="_blank" rel="noopener">赤崁楼</a> を短時間だけ観光。雨が強ければ外観中心でもOK</td></tr>
+    <tr><td>12:45</td><td><a href="https://www.google.com/maps/search/?api=1&query=林百貨+台南" target="_blank" rel="noopener">林百貨</a> で屋内休憩・買い物</td></tr>
+    <tr><td>14:00</td><td>台南小吃をもう一品追加。<a href="https://www.google.com/maps/search/?api=1&query=度小月擔仔麵+台南" target="_blank" rel="noopener">担仔麺</a>、<a href="https://www.google.com/maps/search/?api=1&query=矮仔成蝦仁飯+台南" target="_blank" rel="noopener">蝦仁飯</a>、<a href="https://www.google.com/maps/search/?api=1&query=同記安平豆花+台南" target="_blank" rel="noopener">豆花</a> あたりを気分で</td></tr>
+    <tr><td>15:30</td><td>小雨なら <a href="https://www.google.com/maps/search/?api=1&query=神農街+台南" target="_blank" rel="noopener">神農街</a>。大雨なら <a href="https://www.google.com/maps/search/?api=1&query=台南+カフェ" target="_blank" rel="noopener">カフェ</a>・屋内で休憩</td></tr>
+    <tr><td>17:00</td><td><a href="https://www.google.com/maps/search/?api=1&query=台南駅" target="_blank" rel="noopener">台南駅</a> へ移動</td></tr>
+    <tr><td>17:30〜18:30</td><td><a href="https://www.google.com/maps/search/?api=1&query=台南駅" target="_blank" rel="noopener">台南駅</a> → <a href="https://www.google.com/maps/search/?api=1&query=高雄車站" target="_blank" rel="noopener">高雄駅</a> へ移動</td></tr>
     <tr><td>19:00</td><td>高雄着。ホテル周辺で軽めの夕食</td></tr>
   </tbody>
 </table>
