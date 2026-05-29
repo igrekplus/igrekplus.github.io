@@ -6,14 +6,15 @@
 
 ## 📝 要相談事項＆共有事項
 
-| 種別 | 内容 |
-|---|---|
-| 相談 | 1日目は、高雄到着後にエビ釣りへ行き、3時間ほど遊んでから夕食へ移動する流れで良いか確認したい。 |
-| 相談 | 2日目は晴れなら旗津、雨なら台南に切り替える案で良いか確認したい。ほぼ丸1日使えるのは2日目だけなので、遠出したい候補があればここで検討。 |
-| 相談 | 朝・昼・夜で「ここに行きたい」「これを食べたい」があれば出してほしい。 |
-| 相談 | スイーツ系はまだ薄め。6月はマンゴーやライチが美味しい時期らしいので、果物系の候補を足すか相談。 |
-| 相談 | 成田空港ではどのタイミングで合流するか決めたい。用事がある人は、高雄空港で合流でもOK。 |
-| 共有 | 現金が必要になりそうなので、永田家で台湾ドル現金を用意予定。使った分を全員で割り勘する想定。 |
+| No. | 種別 | 内容 |
+|---:|---|---|
+| 1 | 共有 | 台湾入国前に [オンライン事前入境登録](https://twac.immigration.gov.tw/) をする。登録は無料。<span style="color:#d1242f;font-weight:700;">6月23日から登録可</span>。 |
+| 2 | 相談 | 1日目は、高雄到着後にエビ釣りへ行き、3時間ほど遊んでから夕食へ移動する流れで良いか確認したい。 |
+| 3 | 相談 | 2日目は晴れなら旗津、雨なら台南に切り替える案で良いか確認したい。ほぼ丸1日使えるのは2日目だけなので、遠出したい候補があればここで検討。 |
+| 4 | 相談 | 朝・昼・夜で「ここに行きたい」「これを食べたい」があれば出してほしい。 |
+| 5 | 相談 | スイーツ系はまだ薄め。6月はマンゴーやライチが美味しい時期らしいので、果物系の候補を足すか相談。 |
+| 6 | 相談 | 成田空港ではどのタイミングで合流するか決めたい。用事がある人は、高雄空港で合流でもOK。 |
+| 7 | 共有 | 現金が必要になりそうなので、永田家で台湾ドル現金を用意予定。使った分を全員で割り勘する想定。 |
 
 ---
 
@@ -92,6 +93,14 @@
 | 高雄車站 → ホテル | 徒歩 | 約3分 |
 
 [📍 KHH 高雄国際空港](https://www.google.com/maps/search/?api=1&query=Kaohsiung+International+Airport+KHH)
+
+---
+
+## 🗺️ Google Maps 保存リスト
+
+旅先で見返す用の保存リストはこちら。お店・観光候補をまとめておく。
+
+[📍 Google Maps 保存リスト](https://maps.app.goo.gl/eYNbcVf8GzLfWMMh7)
 
 ---
 
@@ -267,6 +276,16 @@
 
 ## 🧾 お店リスト
 
+<div class="shopTabs">
+  <input type="radio" id="shop-tab-meals" name="shop-tabs" checked>
+  <input type="radio" id="shop-tab-sweets" name="shop-tabs">
+  <div class="shopTabLabels" role="tablist" aria-label="お店リスト">
+    <label for="shop-tab-meals" role="tab">ごはん・夜ごはん候補</label>
+    <label for="shop-tab-sweets" role="tab">甘いもの・ドリンク候補</label>
+  </div>
+  <div class="shopTabPanels">
+    <section id="shop-panel-meals" class="shopTabPanel" role="tabpanel">
+
 <table>
   <colgroup>
     <col style="width: 15%;">
@@ -294,14 +313,49 @@
     <tr><td>永筵小館</td><td>レストラン<br>予約推奨<br>お酒は要確認</td><td><a href="https://maps.app.goo.gl/82C5Z9HnVrvQ3GVV9" target="_blank" rel="noopener">📍 Google Maps</a></td><td>11:00〜12:30<br>17:00〜18:30<br>日・月休み目安</td><td>氷糖元蹄（豚足の甘辛煮）<br>香菜皮蛋（パクチーとピータン）<br>滑蛋蝦仁（海老玉子炒め）<br>臭豆腐肥腸（臭豆腐とホルモン）<br>人気店なので予約前提</td><td>昼・夜</td></tr>
     <tr><td>鴨肉珍</td><td>ローカル食堂<br>予約不要</td><td><a href="https://maps.app.goo.gl/d61mkjKpAWMmZrtf7" target="_blank" rel="noopener">📍 Google Maps</a></td><td>10:00〜20:00頃<br>火休み目安</td><td>鴨肉飯（鴨肉ごはん）<br>鴨肉冬粉（鴨肉春雨スープ）<br>鴨肉切盤（鴨肉盛り合わせ）<br>塩埕埔・駁二方面に行く日に合わせやすい</td><td>昼</td></tr>
     <tr><td>弘記肉燥飯舖<br>（Hung Chi Rice Shop）</td><td>ローカル食堂<br>予約不要<br>お酒なし想定</td><td><a href="https://maps.app.goo.gl/LQ1iSRUmT9azfEUbA?g_st=il" target="_blank" rel="noopener">📍 Google Maps</a></td><td>11:30〜14:30<br>17:00〜20:30</td><td>肉燥飯（肉そぼろごはん）<br>麻辣肉燥飯（ピリ辛肉そぼろごはん）<br>半熟目玉焼き追加（卵トッピング）<br>魚丸湯（魚団子スープ）</td><td>昼・夜</td></tr>
-    <tr><td>渡船頭海之冰</td><td>スイーツ<br>予約不要</td><td><a href="https://www.google.com/maps/search/?api=1&query=渡船頭海之冰+高雄市鼓山區濱海一路76號" target="_blank" rel="noopener">📍 Google Maps</a></td><td>11:00〜23:00<br>月休み</td><td>フルーツかき氷（果物たっぷり氷）<br>マンゴー系（定番フルーツ氷）<br>大きめサイズ（シェア向き）<br>旗津フェリー前後の休憩に</td><td>昼・休憩</td></tr>
     <tr><td>犇。三牛牛肉麵</td><td>牛肉麺<br>予約不要<br>お酒なし想定</td><td><a href="https://www.google.com/maps/search/?api=1&query=犇三牛牛肉麵+高雄市左營區勝利路85號" target="_blank" rel="noopener">📍 Google Maps</a></td><td>11:00〜15:00<br>17:00〜20:30頃<br>火休み目安</td><td>紅焼牛肉麵（醤油系牛肉麺）<br>清燉牛肉麵（あっさり牛肉麺）<br>小菜（小皿惣菜）<br>蓮池潭・龍虎塔の前後に寄りやすい</td><td>昼・夜</td></tr>
     <tr><td>曾氏福建炒麵</td><td>夜市屋台<br>予約不要<br>お酒は別調達</td><td><a href="https://maps.app.goo.gl/zMZ6RjXzyKzVSvXu5?g_st=al" target="_blank" rel="noopener">📍 Google Maps</a></td><td>17:00〜24:00<br>月・水休み</td><td>招牌海陸炒麵（海鮮と肉の炒め麺）<br>五花豬炒麵（豚バラ炒め麺）<br>川味海陸炒麵（ピリ辛海陸炒め麺）</td><td>夜</td></tr>
     <tr><td>汕頭泉成沙茶火鍋<br>中山總店</td><td>火鍋<br>最有力候補（永田家）<br>予約推奨<br>お酒は要確認</td><td><a href="https://maps.app.goo.gl/hmq4PbYLL5vCCakB7" target="_blank" rel="noopener">📍 Google Maps</a></td><td>11:00〜深夜帯<br>行く前に要確認</td><td>沙茶火鍋（沙茶だれの火鍋）<br>牛肉（しゃぶしゃぶ用）<br>海鮮盛り（鍋具材）<br>花枝漿（イカ団子）</td><td>夜</td></tr>
     <tr><td>雞伯燒酒雞</td><td>鶏料理<br>5人なら予約推奨<br>ビールあり</td><td><a href="https://maps.app.goo.gl/ZWKvwrZ81mQrPJNo9" target="_blank" rel="noopener">📍 Google Maps</a></td><td>17:00〜24:30頃<br>水曜休み、隔週火曜休み目安</td><td>燒酒雞（酒香る鶏鍋）<br>蒜頭雞（にんにく鶏鍋）<br>豆乳雞（台湾風鶏唐揚げ）<br>三杯雞（台湾バジル鶏炒め）<br>炒飯・麵線（締め候補）</td><td>夜</td></tr>
     <tr><td>六合夜市</td><td>夜市<br>予約不要<br>お酒は周辺調達</td><td><a href="https://maps.app.goo.gl/4mik1WtFexFay9f47?g_st=il" target="_blank" rel="noopener">📍 Google Maps</a></td><td>18:00〜26:00頃</td><td>海鮮（屋台シーフード）<br>牡蠣オムレツ（牡蠣入り卵焼き）<br>臭豆腐（発酵豆腐）<br>木瓜牛乳（パパイヤミルク）</td><td>夜</td></tr>
+    <tr><td>北平楊寶寶蒸餃<br>朝明店</td><td>餃子・北方麺食<br>予約不要<br>お酒は要確認</td><td><a href="https://maps.app.goo.gl/C1oPFSmQbhrxuVjM8?g_st=ic" target="_blank" rel="noopener">📍 Google Maps</a></td><td>10:30〜20:30頃<br>行く前に要確認</td><td>蒸餃（看板の蒸し餃子）<br>牛肉捲餅（牛肉ロール）<br>酸辣湯（サンラータン）<br>庶民派ビブグルマン餃子。楠梓方面に行くなら候補</td><td>昼</td></tr>
   </tbody>
 </table>
+
+    </section>
+    <section id="shop-panel-sweets" class="shopTabPanel" role="tabpanel">
+
+<table>
+  <colgroup>
+    <col style="width: 15%;">
+    <col style="width: 14%;">
+    <col style="width: 12%;">
+    <col style="width: 17%;">
+    <col style="width: 32%;">
+    <col style="width: 11%;">
+  </colgroup>
+  <thead>
+    <tr>
+      <th>店名</th>
+      <th>カテゴリ / 予約 / お酒</th>
+      <th>Google Maps</th>
+      <th>営業時間</th>
+      <th>おすすめメニュー</th>
+      <th>タイミング</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>渡船頭海之冰</td><td>スイーツ<br>予約不要</td><td><a href="https://www.google.com/maps/search/?api=1&query=渡船頭海之冰+高雄市鼓山區濱海一路76號" target="_blank" rel="noopener">📍 Google Maps</a></td><td>11:00〜23:00<br>月休み</td><td>フルーツかき氷（果物たっぷり氷）<br>マンゴー系（定番フルーツ氷）<br>大きめサイズ（シェア向き）<br>旗津フェリー前後の休憩に</td><td>昼・休憩</td></tr>
+    <tr><td>樺達奶茶</td><td>タピオカ・奶茶<br>予約不要</td><td><a href="https://www.google.com/maps/search/?api=1&query=樺達奶茶+高雄車站" target="_blank" rel="noopener">📍 Google Maps</a></td><td>09:00〜21:00頃<br>店舗により要確認</td><td>樺達奶茶（定番ミルクティー）<br>益壽奶茶（プーアル入り奶茶）<br>珍珠追加（タピオカ）<br>高雄発の老舗。駅近で買いやすい</td><td>朝・休憩</td></tr>
+    <tr><td>双妃奶茶</td><td>タピオカ・奶茶<br>予約不要</td><td><a href="https://www.google.com/maps/search/?api=1&query=双妃奶茶+高雄" target="_blank" rel="noopener">📍 Google Maps</a></td><td>09:00〜21:00頃<br>行く前に要確認</td><td>双妃奶茶（看板ミルクティー）<br>珍珠奶茶（タピオカミルクティー）<br>紅茶牛奶（紅茶ミルク）<br>塩埕埔・駁二方面の休憩候補</td><td>昼・休憩</td></tr>
+    <tr><td>希望奶茶</td><td>タピオカ・奶茶<br>予約不要</td><td><a href="https://www.google.com/maps/search/?api=1&query=希望奶茶+高雄" target="_blank" rel="noopener">📍 Google Maps</a></td><td>店舗により異なる<br>行く前に要確認</td><td>忘憂奶茶（濃いめミルクティー）<br>麵茶鮮奶茶（穀物香る鮮奶茶）<br>珍珠粉角（タピオカ系トッピング）<br>蓮池潭・左營方面に寄るなら候補</td><td>休憩</td></tr>
+    <tr><td>烏弄 UNOCHA</td><td>タピオカ・台湾茶<br>予約不要</td><td><a href="https://www.google.com/maps/search/?api=1&query=烏弄+UNOCHA+高雄" target="_blank" rel="noopener">📍 Google Maps</a></td><td>店舗により異なる<br>行く前に要確認</td><td>冬片仔（すっきり台湾茶）<br>珍珠奶茶（タピオカミルクティー）<br>杏仁凍（杏仁ゼリートッピング）<br>甘すぎないお茶系が欲しいときに</td><td>休憩</td></tr>
+  </tbody>
+</table>
+
+    </section>
+  </div>
+</div>
 
 > 営業時間は変更される可能性あり。行く直前にGoogle Mapsで再確認。
 

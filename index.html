@@ -221,6 +221,55 @@
       padding-left: 1.4em;
     }
 
+    .shopTabs {
+      margin: 16px 0 24px;
+    }
+
+    .shopTabs > input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .shopTabLabels {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--table-border);
+    }
+
+    .shopTabLabels label {
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      padding: 8px 14px;
+      border: 1px solid var(--table-border);
+      border-bottom: 0;
+      border-radius: 10px 10px 0 0;
+      background: #f8fafc;
+      color: var(--muted);
+      cursor: pointer;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .shopTabPanel {
+      display: none;
+    }
+
+    #shop-tab-meals:checked ~ .shopTabLabels label[for="shop-tab-meals"],
+    #shop-tab-sweets:checked ~ .shopTabLabels label[for="shop-tab-sweets"] {
+      background: #ffffff;
+      color: var(--accent);
+      border-color: color-mix(in srgb, var(--accent) 40%, var(--table-border));
+    }
+
+    #shop-tab-meals:checked ~ .shopTabPanels #shop-panel-meals,
+    #shop-tab-sweets:checked ~ .shopTabPanels #shop-panel-sweets {
+      display: block;
+    }
+
     .loading {
       color: var(--muted);
       text-align: center;
