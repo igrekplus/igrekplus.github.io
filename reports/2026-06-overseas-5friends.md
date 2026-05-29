@@ -277,12 +277,12 @@
 ## 🧾 お店リスト
 
 <div class="shopTabs">
-  <div class="shopTabLabels" role="tablist" aria-label="お店リスト">
-    <button type="button" class="shopTabButton" role="tab" aria-selected="true" data-shop-tab-target="shop-panel-meals">ごはん・夜ごはん候補</button>
-    <button type="button" class="shopTabButton" role="tab" aria-selected="false" data-shop-tab-target="shop-panel-sweets">甘いもの・ドリンク候補</button>
-  </div>
-  <div class="shopTabPanels">
-    <section id="shop-panel-meals" class="shopTabPanel" role="tabpanel">
+<div class="shopTabLabels" role="tablist" aria-label="お店リスト">
+<button type="button" class="shopTabButton" role="tab" aria-selected="true" data-shop-tab-target="shop-panel-meals">ごはん・夜ごはん候補</button>
+<button type="button" class="shopTabButton" role="tab" aria-selected="false" data-shop-tab-target="shop-panel-sweets">甘いもの・ドリンク候補</button>
+</div>
+<div class="shopTabPanels">
+<section id="shop-panel-meals" class="shopTabPanel" role="tabpanel">
 
 <table>
   <colgroup>
@@ -319,8 +319,8 @@
   </tbody>
 </table>
 
-    </section>
-    <section id="shop-panel-sweets" class="shopTabPanel" role="tabpanel" hidden>
+</section>
+<section id="shop-panel-sweets" class="shopTabPanel" role="tabpanel" hidden>
 
 <table>
   <colgroup>
@@ -351,8 +351,8 @@
   </tbody>
 </table>
 
-    </section>
-  </div>
+</section>
+</div>
 </div>
 
 > 営業時間は変更される可能性あり。行く直前にGoogle Mapsで再確認。
