@@ -246,12 +246,6 @@
       margin: 16px 0 24px;
     }
 
-    .shopTabs > input {
-      position: absolute;
-      opacity: 0;
-      pointer-events: none;
-    }
-
     .shopTabLabels {
       display: flex;
       flex-wrap: wrap;
@@ -260,7 +254,8 @@
       border-bottom: 1px solid var(--table-border);
     }
 
-    .shopTabLabels label {
+    .shopTabButton {
+      appearance: none;
       display: inline-flex;
       align-items: center;
       min-height: 38px;
@@ -273,22 +268,17 @@
       cursor: pointer;
       font-weight: 700;
       line-height: 1.3;
+      font: inherit;
     }
 
-    .shopTabPanel {
+    .shopTabPanel[hidden] {
       display: none;
     }
 
-    #shop-tab-meals:checked ~ .shopTabLabels label[for="shop-tab-meals"],
-    #shop-tab-sweets:checked ~ .shopTabLabels label[for="shop-tab-sweets"] {
+    .shopTabButton[aria-selected="true"] {
       background: #ffffff;
       color: var(--accent);
       border-color: color-mix(in srgb, var(--accent) 40%, var(--table-border));
-    }
-
-    #shop-tab-meals:checked ~ .shopTabPanels #shop-panel-meals,
-    #shop-tab-sweets:checked ~ .shopTabPanels #shop-panel-sweets {
-      display: block;
     }
 
     .loading {
@@ -561,6 +551,32 @@
         }
         table.replaceWith(wrapper);
         wrapper.appendChild(table);
+      }
+
+      const tabGroups = Array.from(root.querySelectorAll(".shopTabs"));
+      for (const tabGroup of tabGroups) {
+        const buttons = Array.from(tabGroup.querySelectorAll(".shopTabButton"));
+        const panels = Array.from(tabGroup.querySelectorAll(".shopTabPanel"));
+        if (!buttons.length || !panels.length) continue;
+
+        const activate = (targetId) => {
+          for (const button of buttons) {
+            const isActive = button.dataset.shopTabTarget === targetId;
+            button.setAttribute("aria-selected", isActive ? "true" : "false");
+          }
+          for (const panel of panels) {
+            panel.hidden = panel.id !== targetId;
+          }
+        };
+
+        for (const button of buttons) {
+          button.addEventListener("click", () => {
+            activate(button.dataset.shopTabTarget);
+          });
+        }
+
+        const initial = buttons.find((button) => button.getAttribute("aria-selected") === "true") || buttons[0];
+        activate(initial.dataset.shopTabTarget);
       }
     }
 

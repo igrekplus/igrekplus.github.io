@@ -277,11 +277,9 @@
 ## 🧾 お店リスト
 
 <div class="shopTabs">
-  <input type="radio" id="shop-tab-meals" name="shop-tabs" checked>
-  <input type="radio" id="shop-tab-sweets" name="shop-tabs">
   <div class="shopTabLabels" role="tablist" aria-label="お店リスト">
-    <label for="shop-tab-meals" role="tab">ごはん・夜ごはん候補</label>
-    <label for="shop-tab-sweets" role="tab">甘いもの・ドリンク候補</label>
+    <button type="button" class="shopTabButton" role="tab" aria-selected="true" data-shop-tab-target="shop-panel-meals">ごはん・夜ごはん候補</button>
+    <button type="button" class="shopTabButton" role="tab" aria-selected="false" data-shop-tab-target="shop-panel-sweets">甘いもの・ドリンク候補</button>
   </div>
   <div class="shopTabPanels">
     <section id="shop-panel-meals" class="shopTabPanel" role="tabpanel">
@@ -322,7 +320,7 @@
 </table>
 
     </section>
-    <section id="shop-panel-sweets" class="shopTabPanel" role="tabpanel">
+    <section id="shop-panel-sweets" class="shopTabPanel" role="tabpanel" hidden>
 
 <table>
   <colgroup>
