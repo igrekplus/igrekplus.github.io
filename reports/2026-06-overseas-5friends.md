@@ -146,44 +146,67 @@
 
 ### 2日目：6月27日（土）｜天気：詳細予報未発表（更新時に再確認）
 
-#### 通常案：旗津プラン
+<div class="shopTabs">
+<div class="shopTabLabels" role="tablist" aria-label="2日目スケジュール">
+<button type="button" class="shopTabButton" role="tab" aria-selected="true" data-shop-tab-target="day2-panel-cijin">晴れの場合：旗津プラン</button>
+<button type="button" class="shopTabButton" role="tab" aria-selected="false" data-shop-tab-target="day2-panel-tainan">雨の場合：台南プラン</button>
+</div>
+<div class="shopTabPanels">
+<section id="day2-panel-cijin" class="shopTabPanel" role="tabpanel">
 
-| 時刻 | 内容 |
-|---|---|
-| 09:00頃 | ホテル出発。MRTで高雄車站 → 美麗島 → 西子湾へ |
-| 09:40頃 | 鼓山輪渡站からフェリーで旗津へ（乗船は約5分） |
-| 10:00〜12:00 | 旗津でレンタサイクル。星空隧道、海沿いのサイクリングロード、彩虹教堂、雙螺台、旗津海珍珠、風車公園あたりを無理なく回る |
-| 12:00〜13:30 | 旗后海産でランチ。海鮮を選んで調理してもらうスタイルなので、時価メニューは注文前に値段確認 |
-| 13:30〜15:00 | 旗后灯塔・旗后砲台・旗津老街を散歩。暑ければカフェやアイス休憩を優先 |
-| 15:00〜16:00 | フェリーとMRTで一旦ホテルへ戻る |
-| 16:00〜18:00 | ホテルで休憩・身支度 |
-| 18:00以降 | ライトアップされた龍虎塔・蓮池潭を見て、夜市またはレストランへ |
+<table>
+  <thead>
+    <tr>
+      <th>時刻</th>
+      <th>内容</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>09:00頃</td><td>ホテル出発。MRTで高雄車站 → 美麗島 → 西子湾へ</td></tr>
+    <tr><td>09:40頃</td><td>鼓山輪渡站からフェリーで旗津へ（乗船は約5分）</td></tr>
+    <tr><td>10:00〜12:00</td><td>旗津でレンタサイクル。星空隧道、海沿いのサイクリングロード、彩虹教堂、雙螺台、旗津海珍珠、風車公園あたりを無理なく回る</td></tr>
+    <tr><td>12:00〜13:30</td><td>旗后海産でランチ。海鮮を選んで調理してもらうスタイルなので、時価メニューは注文前に値段確認</td></tr>
+    <tr><td>13:30〜15:00</td><td>旗后灯塔・旗后砲台・旗津老街を散歩。暑ければカフェやアイス休憩を優先</td></tr>
+    <tr><td>15:00〜16:00</td><td>フェリーとMRTで一旦ホテルへ戻る</td></tr>
+    <tr><td>16:00〜18:00</td><td>ホテルで休憩・身支度</td></tr>
+    <tr><td>18:00以降</td><td>ライトアップされた龍虎塔・蓮池潭を見て、夜市またはレストランへ</td></tr>
+  </tbody>
+</table>
 
-> 参考：旗津の回り方は [ほっこり高雄](https://hokkori-taiwan.com/cijin-trip/) と [ぷちち台湾のサイクリング記事](https://petit-tw.jp/cijin-island-cycling/) が見やすい。レンタサイクルはパスポートを預けるケースがあるので、代表者は持参必須。
->
-> フェリーは [高雄市輪船 鼓山-旗津航線](https://kcs.kcg.gov.tw/Content_List.aspx?n=2EDF685BBC9D2857) を確認。日中はおおむね **6〜15分間隔**、運賃は徒歩乗船 **30元**、自転車込み **40元** 目安。悠遊卡（Suica的な交通ICカード）も利用可。
+<p>参考：旗津の回り方は <a href="https://hokkori-taiwan.com/cijin-trip/" target="_blank" rel="noopener">ほっこり高雄</a> と <a href="https://petit-tw.jp/cijin-island-cycling/" target="_blank" rel="noopener">ぷちち台湾のサイクリング記事</a> が見やすい。レンタサイクルはパスポートを預けるケースがあるので、代表者は持参必須。</p>
+<p>フェリーは <a href="https://kcs.kcg.gov.tw/Content_List.aspx?n=2EDF685BBC9D2857" target="_blank" rel="noopener">高雄市輪船 鼓山-旗津航線</a> を確認。日中はおおむね <strong>6〜15分間隔</strong>、運賃は徒歩乗船 <strong>30元</strong>、自転車込み <strong>40元</strong> 目安。悠遊卡（Suica的な交通ICカード）も利用可。</p>
 
-<details>
-<summary>雨の場合：台南プラン</summary>
+</section>
+<section id="day2-panel-tainan" class="shopTabPanel" role="tabpanel" hidden>
 
-雨が強い日は、旗津の自転車移動をやめて台南へ。朝ごはんはホテル近辺で済ませてから、午前中のうちに台南入りする想定。
+<p>雨が強い日は、旗津の自転車移動をやめて台南へ。外歩きは短めにして、屋内休憩を挟みながら回る想定。</p>
 
-| 時刻 | 内容 |
-|---|---|
-| 08:00頃 | ホテル周辺で朝ごはん。興隆居、老江紅茶牛奶あたりで軽めに |
-| 09:00頃 | 高雄車站から台南へ移動。台鉄なら乗り換え少なめ、高鉄なら左営経由で早め |
-| 10:00頃 | 台南駅着。雨の強さを見ながらタクシー・徒歩・バスで市街地へ |
-| 10:30〜11:30 | 國立臺灣文學館。建物も展示も屋内なので、雨の日の一発目にちょうど良い |
-| 11:45〜12:45 | 台南市美術館 1館・2館周辺。展示を見るか、建築だけでも楽しめる |
-| 13:00〜14:00 | 度小月擔仔麵などで台南ランチ。担仔麺はここで食べるのが良さそう |
-| 14:15〜15:15 | 林百貨。お土産・雑貨・建物見学をまとめてできる屋内寄りスポット |
-| 15:30〜17:00 | 雨が弱ければ赤崁楼周辺を散歩。雨が強ければ奇美博物館へ振り替え |
-| 17:00〜18:00 | 台南から高雄へ戻る |
-| 18:30以降 | ホテルで休憩してから、高雄で夜ごはんへ |
+<table>
+  <thead>
+    <tr>
+      <th>時間</th>
+      <th>内容</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>09:00</td><td>ホテル出発</td></tr>
+    <tr><td>09:30〜10:30</td><td>高雄駅 → 台南駅へ移動</td></tr>
+    <tr><td>10:45</td><td>再發號百年肉粽で、まずは台南のちまき</td></tr>
+    <tr><td>11:45</td><td>赤崁楼を短時間だけ観光。雨が強ければ外観中心でもOK</td></tr>
+    <tr><td>12:45</td><td>林百貨で屋内休憩・買い物</td></tr>
+    <tr><td>14:00</td><td>台南小吃をもう一品追加。担仔麺、蝦仁飯、豆花あたりを気分で</td></tr>
+    <tr><td>15:30</td><td>小雨なら神農街。大雨ならカフェ・屋内で休憩</td></tr>
+    <tr><td>17:00</td><td>台南駅へ移動</td></tr>
+    <tr><td>17:30〜18:30</td><td>台南駅 → 高雄駅へ移動</td></tr>
+    <tr><td>19:00</td><td>高雄着。ホテル周辺で軽めの夕食</td></tr>
+  </tbody>
+</table>
 
-> 参考：[Travel.co 台南モデルコース](https://www.travel.co.jp/guide/article/38973/) と [4travel 高雄・台南旅行記](https://4travel.jp/travelogue/11865073) をベースに、雨の日用の屋内候補として [國立臺灣文學館](https://www.nmtl.gov.tw/)、[台南市美術館](https://www.tnam.museum/)、[林百貨](https://www.hayashi.com.tw/)、[奇美博物館](https://www.chimeimuseum.org/visit) あたりを軸にする。
+<p>参考：<a href="https://www.travel.co.jp/guide/article/38973/" target="_blank" rel="noopener">Travel.co 台南モデルコース</a> と <a href="https://4travel.jp/travelogue/11865073" target="_blank" rel="noopener">4travel 高雄・台南旅行記</a> をベースに、雨の日用の屋内候補として <a href="https://www.nmtl.gov.tw/" target="_blank" rel="noopener">國立臺灣文學館</a>、<a href="https://www.tnam.museum/" target="_blank" rel="noopener">台南市美術館</a>、<a href="https://www.hayashi.com.tw/" target="_blank" rel="noopener">林百貨</a>、<a href="https://www.chimeimuseum.org/visit" target="_blank" rel="noopener">奇美博物館</a> も控えにしておく。</p>
 
-</details>
+</section>
+</div>
+</div>
 
 #### 旗后海産メモ
 
