@@ -303,6 +303,7 @@
 <div class="shopTabLabels" role="tablist" aria-label="お店リスト">
 <button type="button" class="shopTabButton" role="tab" aria-selected="true" data-shop-tab-target="shop-panel-meals">ごはん・夜ごはん候補</button>
 <button type="button" class="shopTabButton" role="tab" aria-selected="false" data-shop-tab-target="shop-panel-sweets">甘いもの・ドリンク候補</button>
+<button type="button" class="shopTabButton" role="tab" aria-selected="false" data-shop-tab-target="shop-panel-bars">クラフトビール・バー候補</button>
 </div>
 <div class="shopTabPanels">
 <section id="shop-panel-meals" class="shopTabPanel" role="tabpanel">
@@ -371,6 +372,35 @@
     <tr><td>双妃奶茶</td><td>タピオカ・奶茶<br>予約不要</td><td><a href="https://www.google.com/maps/search/?api=1&query=双妃奶茶+高雄" target="_blank" rel="noopener">📍 Google Maps</a></td><td>09:00〜21:00頃<br>行く前に要確認</td><td>双妃奶茶（看板ミルクティー）<br>珍珠奶茶（タピオカミルクティー）<br>紅茶牛奶（紅茶ミルク）<br>塩埕埔・駁二方面の休憩候補</td><td>昼・休憩</td></tr>
     <tr><td>希望奶茶</td><td>タピオカ・奶茶<br>予約不要</td><td><a href="https://www.google.com/maps/search/?api=1&query=希望奶茶+高雄" target="_blank" rel="noopener">📍 Google Maps</a></td><td>店舗により異なる<br>行く前に要確認</td><td>忘憂奶茶（濃いめミルクティー）<br>麵茶鮮奶茶（穀物香る鮮奶茶）<br>珍珠粉角（タピオカ系トッピング）<br>蓮池潭・左營方面に寄るなら候補</td><td>休憩</td></tr>
     <tr><td>烏弄 UNOCHA</td><td>タピオカ・台湾茶<br>予約不要</td><td><a href="https://www.google.com/maps/search/?api=1&query=烏弄+UNOCHA+高雄" target="_blank" rel="noopener">📍 Google Maps</a></td><td>店舗により異なる<br>行く前に要確認</td><td>冬片仔（すっきり台湾茶）<br>珍珠奶茶（タピオカミルクティー）<br>杏仁凍（杏仁ゼリートッピング）<br>甘すぎないお茶系が欲しいときに</td><td>休憩</td></tr>
+  </tbody>
+</table>
+
+</section>
+<section id="shop-panel-bars" class="shopTabPanel" role="tabpanel" hidden>
+
+<table>
+  <colgroup>
+    <col style="width: 15%;">
+    <col style="width: 14%;">
+    <col style="width: 12%;">
+    <col style="width: 17%;">
+    <col style="width: 32%;">
+    <col style="width: 11%;">
+  </colgroup>
+  <thead>
+    <tr>
+      <th>店名</th>
+      <th>カテゴリ / 予約 / お酒</th>
+      <th>Google Maps</th>
+      <th>営業時間</th>
+      <th>おすすめメニュー</th>
+      <th>タイミング</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Beer Talk Cafe & Bar<br>駁二店</td><td>クラフトビール・餐酒館<br>5人なら予約推奨<br>ビールあり</td><td><a href="https://www.google.com/maps/search/?api=1&query=Beer+Talk+Cafe+%26+Bar+駁二店+高雄" target="_blank" rel="noopener">📍 Google Maps</a></td><td>昼〜夜営業目安<br>行く前に要確認</td><td>クラフトビール（タップビール）<br>フライ系（ビールつまみ）<br>パスタ・軽食（食事兼用）<br>駁二エリアで飲みたいときに寄りやすい</td><td>夜・休憩</td></tr>
+    <tr><td>掌門精釀啤酒<br>棧貳庫店</td><td>クラフトビール<br>休日は予約・事前確認推奨<br>ビールあり</td><td><a href="https://www.google.com/maps/search/?api=1&query=掌門精釀啤酒+棧貳庫店+高雄" target="_blank" rel="noopener">📍 Google Maps</a></td><td>棧貳庫の営業時間に準じる目安<br>行く前に要確認</td><td>精釀啤酒（クラフトビール）<br>飲み比べ（ビアフライト）<br>炸物（揚げ物つまみ）<br>港沿いで軽く飲む候補</td><td>昼・夜</td></tr>
+    <tr><td>小酌FEWdrink<br>精釀啤酒bar</td><td>バー・餐酒館<br>予約推奨<br>ビール・カクテルあり</td><td><a href="https://www.google.com/maps/search/?api=1&query=小酌FEWdrink+精釀啤酒bar+高雄" target="_blank" rel="noopener">📍 Google Maps</a></td><td>17:30〜深夜帯目安<br>行く前に要確認</td><td>クラフトビール（ビール）<br>カクテル（お酒）<br>墨魚義大利麵（イカ墨パスタ）<br>炊飯・小皿（つまみ）</td><td>夜</td></tr>
   </tbody>
 </table>
 
