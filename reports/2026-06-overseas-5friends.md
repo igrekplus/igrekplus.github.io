@@ -118,7 +118,7 @@
 | 〜14:00頃 | MRTで高雄車站へ移動。ホテルに荷物預け＋時間次第で周辺散策 |
 | 15:00 | ホテルチェックイン |
 | 16:00 | 🦐 エビ釣りへ。候補は <a href="?r=2026-06-overseas-5friends-ebitsuri" target="_blank" rel="noopener">エビ釣り候補ページ</a> を参照 |
-| 19:00頃 | 夕食へ |
+| 19:00頃 | 夕食へ。第一候補は <a href="https://maps.app.goo.gl/C1oPFSmQbhrxuVjM8?g_st=ic" target="_blank" rel="noopener">Yang Bao Bao（北平楊寶寶蒸餃）</a>。予約必須ではなさそうだが、人気店なので5人なら事前確認か早め到着が安心 |
 
 > ⚽ この日の朝08:00〜 W杯 日本代表 第3戦。機内で経過が気になるかも。
 
@@ -169,7 +169,7 @@
     <tr><td>13:30〜15:00</td><td><a href="https://www.google.com/maps/search/?api=1&query=旗后灯塔" target="_blank" rel="noopener">旗后灯塔</a>・<a href="https://www.google.com/maps/search/?api=1&query=旗后砲台" target="_blank" rel="noopener">旗后砲台</a>・<a href="https://www.google.com/maps/search/?api=1&query=旗津老街" target="_blank" rel="noopener">旗津老街</a> を散歩。暑ければカフェやアイス休憩を優先</td></tr>
     <tr><td>15:00〜16:00</td><td>フェリーとMRTで一旦ホテルへ戻る</td></tr>
     <tr><td>16:00〜18:00</td><td>ホテルで休憩・身支度</td></tr>
-    <tr><td>18:00以降</td><td>ライトアップされた <a href="https://www.google.com/maps/search/?api=1&query=龍虎塔+高雄" target="_blank" rel="noopener">龍虎塔</a>・<a href="https://www.google.com/maps/search/?api=1&query=蓮池潭+高雄" target="_blank" rel="noopener">蓮池潭</a> を見て、夜市またはレストランへ</td></tr>
+    <tr><td>18:00以降</td><td>ライトアップされた <a href="https://www.google.com/maps/search/?api=1&query=龍虎塔+高雄" target="_blank" rel="noopener">龍虎塔</a>・<a href="https://www.google.com/maps/search/?api=1&query=蓮池潭+高雄" target="_blank" rel="noopener">蓮池潭</a> を見て、夜市（候補：<a href="https://maps.app.goo.gl/4mik1WtFexFay9f47?g_st=il" target="_blank" rel="noopener">Liouhe Night Market／高雄市六合國際觀光夜市</a>）またはレストランへ</td></tr>
   </tbody>
 </table>
 
@@ -338,7 +338,7 @@
     <tr><td>汕頭泉成沙茶火鍋<br>中山總店</td><td>火鍋<br>最有力候補（永田家）<br>予約推奨<br>お酒は要確認</td><td><a href="https://maps.app.goo.gl/hmq4PbYLL5vCCakB7" target="_blank" rel="noopener">📍 Google Maps</a></td><td>11:00〜深夜帯<br>行く前に要確認</td><td>沙茶火鍋（沙茶だれの火鍋）<br>牛肉（しゃぶしゃぶ用）<br>海鮮盛り（鍋具材）<br>花枝漿（イカ団子）</td><td>夜</td></tr>
     <tr><td>雞伯燒酒雞</td><td>鶏料理<br>5人なら予約推奨<br>ビールあり</td><td><a href="https://maps.app.goo.gl/ZWKvwrZ81mQrPJNo9" target="_blank" rel="noopener">📍 Google Maps</a></td><td>17:00〜24:30頃<br>水曜休み、隔週火曜休み目安</td><td>燒酒雞（酒香る鶏鍋）<br>蒜頭雞（にんにく鶏鍋）<br>豆乳雞（台湾風鶏唐揚げ）<br>三杯雞（台湾バジル鶏炒め）<br>炒飯・麵線（締め候補）</td><td>夜</td></tr>
     <tr><td>六合夜市</td><td>夜市<br>予約不要<br>お酒は周辺調達</td><td><a href="https://maps.app.goo.gl/4mik1WtFexFay9f47?g_st=il" target="_blank" rel="noopener">📍 Google Maps</a></td><td>18:00〜26:00頃</td><td>海鮮（屋台シーフード）<br>牡蠣オムレツ（牡蠣入り卵焼き）<br>臭豆腐（発酵豆腐）<br>木瓜牛乳（パパイヤミルク）</td><td>夜</td></tr>
-    <tr><td>北平楊寶寶蒸餃<br>朝明店</td><td>餃子・北方麺食<br>予約不要<br>お酒は要確認</td><td><a href="https://maps.app.goo.gl/C1oPFSmQbhrxuVjM8?g_st=ic" target="_blank" rel="noopener">📍 Google Maps</a></td><td>10:30〜20:30頃<br>行く前に要確認</td><td>蒸餃（看板の蒸し餃子）<br>牛肉捲餅（牛肉ロール）<br>酸辣湯（サンラータン）<br>庶民派ビブグルマン餃子。楠梓方面に行くなら候補</td><td>昼</td></tr>
+    <tr><td>北平楊寶寶蒸餃<br>朝明店</td><td>餃子・北方麺食<br>予約必須ではなさそう<br>5人なら事前確認推奨<br>お酒は要確認</td><td><a href="https://maps.app.goo.gl/C1oPFSmQbhrxuVjM8?g_st=ic" target="_blank" rel="noopener">📍 Google Maps</a></td><td>10:30〜20:30頃<br>行く前に要確認</td><td>蒸餃（看板の蒸し餃子）<br>牛肉捲餅（牛肉ロール）<br>酸辣湯（サンラータン）<br>庶民派ビブグルマン餃子。1日目の夕食第一候補</td><td>夜</td></tr>
   </tbody>
 </table>
 
@@ -384,7 +384,7 @@
 
 | 日付 | 朝 | 昼 | 夜 | 備考 |
 |---|---|---|---|---|
-| 6月26日（金） | 各自 | 機内食なし。高雄到着後、ホテル近くで軽く食べる<br>候補：南豐魯肉飯、厚得福、老江紅茶牛奶 | エビ釣り後に夜ごはん<br>候補：雞伯燒酒雞、六合夜市、曾氏福建炒麵 | 到着後はチェックイン前後で無理なく調整 |
+| 6月26日（金） | 各自 | 機内食なし。高雄到着後、ホテル近くで軽く食べる<br>候補：南豐魯肉飯、厚得福、老江紅茶牛奶 | エビ釣り後に夜ごはん<br>第一候補：Yang Bao Bao（北平楊寶寶蒸餃）<br>候補：雞伯燒酒雞、六合夜市、曾氏福建炒麵 | 到着後はチェックイン前後で無理なく調整 |
 | 6月27日（土） | 興隆居、老江紅茶牛奶 | 晴れなら旗后海産。雨なら台南で担仔麺あたり | 候補：犇。三牛牛肉麵、永筵小館、六合夜市あたり | 旗津の日。雨なら台南プランに切り替え |
 | 6月28日（日） | 興隆居、老江紅茶牛奶、ホテル周辺で軽め | 空港で各自調達 | 成田着後、解散後に各自 | 11:43に美麗島駅発なので、昼は空港前提 |
 
