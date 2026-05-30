@@ -115,12 +115,14 @@
 | 08:00頃 | 成田空港 第3ターミナルのチェックインカウンター周辺で集合（時間は調整可） |
 | 09:55 | ✈️ 成田出発（GK 17） |
 | 13:00 | 🛬 高雄着 |
-| 〜14:00頃 | MRTで高雄車站へ移動。ホテルに荷物預け＋時間次第で周辺散策 |
+| 〜14:00頃 | MRTで高雄車站へ移動。ホテルに荷物預け＋時間次第で周辺散策。小腹が空いていれば <a href="https://maps.app.goo.gl/YZwTgDUEMsyv7nNdA" target="_blank" rel="noopener">前金肉燥飯</a> で軽めに食べる案もあり |
 | 15:00 | ホテルチェックイン |
 | 16:00 | 🦐 エビ釣りへ。候補は <a href="?r=2026-06-overseas-5friends-ebitsuri" target="_blank" rel="noopener">エビ釣り候補ページ</a> を参照 |
 | 19:00頃 | 夕食へ。第一候補は <a href="https://maps.app.goo.gl/C1oPFSmQbhrxuVjM8?g_st=ic" target="_blank" rel="noopener">Yang Bao Bao（北平楊寶寶蒸餃）</a>。予約必須ではなさそうだが、人気店なので5人なら事前確認か早め到着が安心 |
 
 > ⚽ この日の朝08:00〜 W杯 日本代表 第3戦。機内で経過が気になるかも。
+>
+> 到着後に前金肉燥飯、エビ釣り、餃子まで続くと食べるタイミングが詰まり気味。前金肉燥飯は「一口だけ寄る」くらいにするか、2日目・3日目の朝ごはん候補に回しても良さそう。
 
 <details>
 <summary>永田家スケジュール</summary>
@@ -207,6 +209,19 @@
 </section>
 </div>
 </div>
+
+#### 夜の追加案：愛河クルーズ
+
+| 項目 | 内容 |
+|---|---|
+| 候補 | 愛河の遊覧船「愛之船」。夜景を見る短時間クルーズとして良さそう。 |
+| 乗り場 | 主な乗り場は、国賓大飯店向かい側の愛之船乗り場、または二二八和平公園側の乗り場。どちらから乗っても、途中で折り返して基本は同じ乗り場へ戻るイメージ。 |
+| アクセス | MRTならオレンジライン。西側は鹽埕埔駅、東側は市議会駅が目安。ホテルからはタクシーで向かうのも楽。 |
+| 所要時間 | 乗船は約20分。夜は25分間隔目安で運航。 |
+| 料金目安 | 外国人は150元目安。現地掲示・公式情報で直前確認。 |
+| お酒 | 船内でお酒を飲みながら乗れる、という明確な情報は見つけられず。観光船として短時間乗り、飲むなら乗船前後にクラフトビール・バー候補へ回すのが無難。 |
+
+> 参考：<a href="https://taiwan-taipei.net/aifu/" target="_blank" rel="noopener">サボテン台湾の愛河・愛之船記事</a>、<a href="https://kcs.kcg.gov.tw/Content_List.aspx?n=38E3F0AC78634C4C" target="_blank" rel="noopener">高雄市輪船 愛之船公式情報</a>
 
 #### 旗后海産メモ
 
@@ -329,6 +344,7 @@
   </thead>
   <tbody>
     <tr><td>興隆居</td><td>朝食<br>予約不要</td><td><a href="https://www.google.com/maps/search/?api=1&query=興隆居+高雄市前金區六合二路186號" target="_blank" rel="noopener">📍 Google Maps</a></td><td>04:30〜11:30<br>月・火休み</td><td>湯包（点心・小籠包系）<br>飯糰（台湾おにぎり）<br>蘿蔔糕（大根餅）<br>ホテル周辺で朝ごはんに寄りやすい</td><td>朝</td></tr>
+    <tr><td>前金肉燥飯</td><td>ローカル食堂<br>予約不要<br>お酒なし想定</td><td><a href="https://maps.app.goo.gl/YZwTgDUEMsyv7nNdA" target="_blank" rel="noopener">📍 Google Maps</a></td><td>朝〜昼営業目安<br>行く前に要確認</td><td>肉燥飯（肉そぼろごはん）<br>魚丸湯（魚団子スープ）<br>滷味（煮込み惣菜）<br>到着直後は軽め、または2日目・3日目の朝に回す候補</td><td>朝・昼</td></tr>
     <tr><td>厚得福湯包麵食專賣店</td><td>麺・点心<br>予約不要<br>お酒なし想定</td><td><a href="https://maps.app.goo.gl/8qDWMSkce5WKmXqL8?g_st=il" target="_blank" rel="noopener">📍 Google Maps</a></td><td>11:00〜21:00</td><td>湯包（点心・小籠包系）<br>絲瓜蝦仁湯包（ヘチマ海老湯包）<br>酸辣湯（サンラータン）<br>蔥油餅（ねぎ焼き）</td><td>昼・夜</td></tr>
     <tr><td>南豐魯肉飯</td><td>ローカル食堂<br>予約不要<br>お酒なし想定</td><td><a href="https://maps.app.goo.gl/GByuNEKF38i3SjaZA?g_st=il" target="_blank" rel="noopener">📍 Google Maps</a></td><td>09:00〜24:00</td><td>魯肉飯（豚そぼろごはん）<br>滷味（煮込み惣菜）<br>苦瓜封湯（苦瓜の肉詰めスープ）<br>油豆腐（厚揚げ煮）</td><td>昼・夜</td></tr>
     <tr><td>永筵小館</td><td>レストラン<br>予約推奨<br>お酒は要確認</td><td><a href="https://maps.app.goo.gl/82C5Z9HnVrvQ3GVV9" target="_blank" rel="noopener">📍 Google Maps</a></td><td>11:00〜12:30<br>17:00〜18:30<br>日・月休み目安</td><td>氷糖元蹄（豚足の甘辛煮）<br>香菜皮蛋（パクチーとピータン）<br>滑蛋蝦仁（海老玉子炒め）<br>臭豆腐肥腸（臭豆腐とホルモン）<br>人気店なので予約前提</td><td>昼・夜</td></tr>
@@ -367,6 +383,7 @@
   </thead>
   <tbody>
     <tr><td>渡船頭海之冰</td><td>スイーツ<br>予約不要</td><td><a href="https://www.google.com/maps/search/?api=1&query=渡船頭海之冰+高雄市鼓山區濱海一路76號" target="_blank" rel="noopener">📍 Google Maps</a></td><td>11:00〜23:00<br>月休み</td><td>フルーツかき氷（果物たっぷり氷）<br>マンゴー系（定番フルーツ氷）<br>大きめサイズ（シェア向き）<br>旗津フェリー前後の休憩に</td><td>昼・休憩</td></tr>
+    <tr><td>冰塔職人雪花<br>文化店</td><td>スイーツ・雪花冰<br>予約不要</td><td><a href="https://maps.app.goo.gl/sB6tGmwevVo72jXW7" target="_blank" rel="noopener">📍 Google Maps</a></td><td>昼〜夜営業目安<br>行く前に要確認</td><td>雪花冰（ふわふわミルクかき氷）<br>マンゴー系（季節フルーツ氷）<br>水果系（フルーツ氷）<br>暑い日の休憩に良さそう</td><td>昼・休憩</td></tr>
     <tr><td>老江紅茶牛奶</td><td>カフェ・軽食<br>予約不要</td><td><a href="https://www.google.com/maps/search/?api=1&query=老江紅茶牛奶+高雄市新興區南台路51號" target="_blank" rel="noopener">📍 Google Maps</a></td><td>24時間</td><td>紅茶牛奶（ミルクティー）<br>蛋餅（台湾式クレープ）<br>トースト（軽食）<br>美麗島駅近くで朝・休憩どちらも使いやすい</td><td>朝・休憩</td></tr>
     <tr><td>樺達奶茶</td><td>タピオカ・奶茶<br>予約不要</td><td><a href="https://www.google.com/maps/search/?api=1&query=樺達奶茶+高雄車站" target="_blank" rel="noopener">📍 Google Maps</a></td><td>09:00〜21:00頃<br>店舗により要確認</td><td>樺達奶茶（定番ミルクティー）<br>益壽奶茶（プーアル入り奶茶）<br>珍珠追加（タピオカ）<br>高雄発の老舗。駅近で買いやすい</td><td>朝・休憩</td></tr>
     <tr><td>双妃奶茶</td><td>タピオカ・奶茶<br>予約不要</td><td><a href="https://www.google.com/maps/search/?api=1&query=双妃奶茶+高雄" target="_blank" rel="noopener">📍 Google Maps</a></td><td>09:00〜21:00頃<br>行く前に要確認</td><td>双妃奶茶（看板ミルクティー）<br>珍珠奶茶（タピオカミルクティー）<br>紅茶牛奶（紅茶ミルク）<br>塩埕埔・駁二方面の休憩候補</td><td>昼・休憩</td></tr>
@@ -414,9 +431,9 @@
 
 | 日付 | 朝 | 昼 | 夜 | 備考 |
 |---|---|---|---|---|
-| 6月26日（金） | 各自 | 機内食なし。高雄到着後、ホテル近くで軽く食べる<br>候補：南豐魯肉飯、厚得福、老江紅茶牛奶 | エビ釣り後に夜ごはん<br>第一候補：Yang Bao Bao（北平楊寶寶蒸餃）<br>候補：雞伯燒酒雞、六合夜市、曾氏福建炒麵 | 到着後はチェックイン前後で無理なく調整 |
-| 6月27日（土） | 興隆居、老江紅茶牛奶 | 晴れなら旗后海産。雨なら台南で担仔麺あたり | 候補：犇。三牛牛肉麵、永筵小館、六合夜市あたり | 旗津の日。雨なら台南プランに切り替え |
-| 6月28日（日） | 興隆居、老江紅茶牛奶、ホテル周辺で軽め | 空港で各自調達 | 成田着後、解散後に各自 | 11:43に美麗島駅発なので、昼は空港前提 |
+| 6月26日（金） | 各自 | 機内食なし。高雄到着後、ホテル近くで軽く食べる<br>候補：前金肉燥飯、南豐魯肉飯、厚得福、老江紅茶牛奶 | エビ釣り後に夜ごはん<br>第一候補：Yang Bao Bao（北平楊寶寶蒸餃）<br>候補：雞伯燒酒雞、六合夜市、曾氏福建炒麵 | 到着後は食べる予定が続くので、昼は軽めか翌朝に回しても良い |
+| 6月27日（土） | 興隆居、老江紅茶牛奶、前金肉燥飯 | 晴れなら旗后海産。雨なら台南で担仔麺あたり | 候補：愛河クルーズ、犇。三牛牛肉麵、永筵小館、六合夜市、クラフトビール・バー候補 | 旗津の日。雨なら台南プランに切り替え |
+| 6月28日（日） | 興隆居、老江紅茶牛奶、前金肉燥飯、ホテル周辺で軽め | 空港で各自調達 | 成田着後、解散後に各自 | 11:43に美麗島駅発なので、昼は空港前提 |
 
 ---
 
