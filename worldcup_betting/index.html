@@ -767,6 +767,40 @@
       padding: 16px;
     }
 
+    .bet-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 8px;
+    }
+
+    .bet-tab {
+      min-height: 36px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #edf2f7;
+      color: var(--text);
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .bet-tab.active {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+    }
+
+    .bet-sheet {
+      display: none;
+    }
+
+    .bet-sheet.active {
+      display: block;
+    }
+
     .bet-guide {
       margin: 0 0 12px;
       color: var(--muted);
@@ -814,6 +848,63 @@
       border-radius: 8px;
       background: #eef6ff;
       color: var(--text);
+      font-weight: 800;
+    }
+
+    .champion-bet-sheet {
+      gap: 12px;
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f8fafc;
+    }
+
+    .champion-bet-sheet.active {
+      display: grid;
+    }
+
+    .champion-bet-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .champion-bet-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(150px, 1fr));
+      gap: 10px;
+    }
+
+    .champion-bet-field {
+      display: grid;
+      gap: 6px;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .champion-bet-field select,
+    .champion-bet-field input {
+      min-height: 40px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+      padding: 0 10px;
+      font: inherit;
+      font-size: 14px;
+    }
+
+    .champion-bet-result {
+      display: grid;
+      gap: 8px;
+      border-radius: 8px;
+      background: #fff;
+      padding: 12px;
       font-weight: 800;
     }
 
@@ -1470,11 +1561,51 @@
     }
 
     .tournament-shared-score {
+      flex: 1 1 420px;
+      max-width: 980px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f8fafc;
+    }
+
+    .tournament-shared-score summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 38px;
+      padding: 8px 10px;
+      cursor: pointer;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 900;
+      list-style: none;
+    }
+
+    .tournament-shared-score summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .tournament-shared-score summary::after {
+      content: "開く";
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .tournament-shared-score[open] summary {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .tournament-shared-score[open] summary::after {
+      content: "閉じる";
+    }
+
+    .shared-score-body {
       display: grid;
       grid-template-columns: repeat(2, minmax(260px, 1fr));
       gap: 8px;
-      flex: 1 1 420px;
-      max-width: 980px;
+      padding: 10px;
     }
 
     .shared-score-block {
@@ -1567,6 +1698,50 @@
       border-radius: 8px;
       background: #fff;
       overflow: hidden;
+    }
+
+    .match-card.favorite-match,
+    .calendar-match-card.favorite-match,
+    .calendar-mini-match.favorite-match {
+      border-color: #f2b705;
+      box-shadow: inset 4px 0 0 #f2b705, 0 6px 16px rgba(242, 183, 5, 0.16);
+    }
+
+    .favorite-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      min-width: 34px;
+      height: 34px;
+      border: 1px solid #f2d17b;
+      border-radius: 999px;
+      background: #fff8df;
+      color: #9a6700;
+      cursor: pointer;
+      font-size: 19px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .favorite-button:hover {
+      border-color: #d69e00;
+      background: #fff1b8;
+      color: #7a5200;
+    }
+
+    .favorite-button.active {
+      border-color: #d69e00;
+      background: #f2b705;
+      color: #fff;
+      box-shadow: 0 4px 10px rgba(214, 158, 0, 0.22);
+    }
+
+    .favorite-button.compact {
+      width: 28px;
+      min-width: 28px;
+      height: 28px;
+      font-size: 15px;
     }
 
     .schedule-phase > summary {
@@ -2043,7 +2218,7 @@
     .calendar-mini-match {
       width: 100%;
       display: grid;
-      grid-template-columns: auto minmax(0, 1fr);
+      grid-template-columns: auto auto minmax(0, 1fr);
       gap: 3px 5px;
       align-items: center;
       margin-top: 4px;
@@ -2057,7 +2232,7 @@
     }
 
     .calendar-mini-match .team-label {
-      grid-column: 2;
+      grid-column: 3;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -2119,7 +2294,7 @@
 
     .calendar-match-main {
       display: grid;
-      grid-template-columns: 82px minmax(0, 1fr) auto minmax(0, 1fr);
+      grid-template-columns: auto 82px minmax(0, 1fr) auto minmax(0, 1fr);
       align-items: center;
       gap: 8px;
       font-weight: 900;
@@ -2195,6 +2370,10 @@
       gap: 0;
       padding: 0;
       overflow: hidden;
+    }
+
+    .calendar-match-card-day .calendar-match-main {
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     }
 
     .calendar-match-info,
@@ -2941,9 +3120,12 @@
       }
 
       .tournament-shared-score {
-        grid-template-columns: 1fr;
         flex-basis: 100%;
         max-width: none;
+      }
+
+      .shared-score-body {
+        grid-template-columns: 1fr;
       }
 
       .calendar-match-main .match-score-display {
@@ -3875,6 +4057,10 @@
         grid-template-columns: 1fr;
       }
 
+      .champion-bet-grid {
+        grid-template-columns: 1fr;
+      }
+
       .bet-hit-lists {
         grid-template-columns: 1fr;
       }
@@ -4245,70 +4431,108 @@
         </section>
         <section class="view-panel bet-panel" id="betPanel" aria-label="賭け結果">
           <div class="bet-card">
-            <p class="bet-guide">選手ごとの正式結果を保存すると、かりん予想・りょう予想の的中人数と支払額を自動計算します。</p>
-            <div class="bet-grid">
-              <label class="bet-field">
-                1人あたり金額
-                <input id="betAmountInput" type="text" inputmode="numeric" autocomplete="off">
-              </label>
+            <div class="bet-tabs" aria-label="賭け結果タブ">
+              <button class="bet-tab active" type="button" data-bet-view="squad">代表メンバー</button>
+              <button class="bet-tab" type="button" data-bet-view="champion">優勝国</button>
             </div>
-            <div class="official-squad">
-              <div class="official-squad-head">
-                <span>正式結果マスタ</span>
-                <div class="official-squad-actions">
-                  <span class="official-squad-count" id="officialSquadCount">招集：0人 / 落選：0人 / 未確定：0人</span>
-                  <button class="utility-button primary-button" type="button" id="betResultsSaveButton">正式結果を保存</button>
-                  <span class="result-save-state" id="betResultsSaveState">未保存</span>
+            <section class="bet-sheet active" id="squadBetSheet" aria-label="代表メンバー賭け">
+              <p class="bet-guide">選手ごとの正式結果を保存すると、かりん予想・りょう予想の的中人数と支払額を自動計算します。</p>
+              <div class="bet-grid">
+                <label class="bet-field">
+                  1人あたり金額
+                  <input id="betAmountInput" type="text" inputmode="numeric" autocomplete="off">
+                </label>
+              </div>
+              <div class="official-squad">
+                <div class="official-squad-head">
+                  <span>正式結果マスタ</span>
+                  <div class="official-squad-actions">
+                    <span class="official-squad-count" id="officialSquadCount">招集：0人 / 落選：0人 / 未確定：0人</span>
+                    <button class="utility-button primary-button" type="button" id="betResultsSaveButton">正式結果を保存</button>
+                    <span class="result-save-state" id="betResultsSaveState">未保存</span>
+                  </div>
+                </div>
+                <div class="official-squad-list" id="officialSquadList"></div>
+              </div>
+              <div class="bet-error" id="betError"></div>
+              <div class="bet-result" id="betResult">
+                <div class="bet-result-main" id="betResultMain">同点のため支払いなし</div>
+                <div class="bet-result-row"><span>正式結果</span><span id="betOfficialCountResult">招集 0人 / 落選 0人</span></div>
+                <div class="bet-result-row"><span>かりん選出メンバーの的中人数</span><span id="betKarinResult">0人</span></div>
+                <div class="bet-result-row"><span>りょう選出メンバーの的中人数</span><span id="betRyoResult">0人</span></div>
+                <div class="bet-result-row"><span>未判定数</span><span id="betPendingResult">0人</span></div>
+                <div class="bet-result-row"><span>差分人数</span><span id="betDiffResult">0人</span></div>
+                <div class="bet-result-row"><span>支払額</span><span id="betPaymentResult">0円</span></div>
+                <div class="bet-result-row"><span>勝者</span><span id="betWinnerResult">引き分け</span></div>
+                <div class="bet-result-row"><span>支払い方向</span><span id="betDirectionResult">なし</span></div>
+                <div class="bet-debug" id="betDebugResult">保存済み件数：0件 / 招集：0件 / 落選：0件 / 未確定：0件</div>
+                <div class="bet-hit-lists">
+                  <section class="bet-owner-column" aria-label="かりん賭け結果">
+                    <h3 class="bet-owner-title">かりん</h3>
+                    <div class="bet-hit-box">
+                      <h3>的中選手</h3>
+                      <div class="bet-hit-summary" id="betKarinHitSummary">的中：0人</div>
+                      <div class="bet-hit-list" id="betKarinHits">なし</div>
+                    </div>
+                    <div class="bet-hit-box">
+                      <h3>外れ選手</h3>
+                      <div class="bet-hit-summary" id="betKarinMissSummary">外れ：0人</div>
+                      <div class="bet-hit-list" id="betKarinMisses">なし</div>
+                    </div>
+                  </section>
+                  <section class="bet-owner-column" aria-label="りょう賭け結果">
+                    <h3 class="bet-owner-title">りょう</h3>
+                    <div class="bet-hit-box">
+                      <h3>的中選手</h3>
+                      <div class="bet-hit-summary" id="betRyoHitSummary">的中：0人</div>
+                      <div class="bet-hit-list" id="betRyoHits">なし</div>
+                    </div>
+                    <div class="bet-hit-box">
+                      <h3>外れ選手</h3>
+                      <div class="bet-hit-summary" id="betRyoMissSummary">外れ：0人</div>
+                      <div class="bet-hit-list" id="betRyoMisses">なし</div>
+                    </div>
+                  </section>
+                  <section class="bet-hit-box bet-shared-column" aria-label="選んでいなかった正式招集メンバー">
+                    <h3>選んでいなかった正式招集メンバー</h3>
+                    <div class="bet-hit-summary" id="betUnpickedSummary">未選出：0人</div>
+                    <div class="bet-hit-list" id="betUnpickedList">なし</div>
+                  </section>
                 </div>
               </div>
-              <div class="official-squad-list" id="officialSquadList"></div>
-            </div>
-            <div class="bet-error" id="betError"></div>
-            <div class="bet-result" id="betResult">
-              <div class="bet-result-main" id="betResultMain">同点のため支払いなし</div>
-              <div class="bet-result-row"><span>正式結果</span><span id="betOfficialCountResult">招集 0人 / 落選 0人</span></div>
-              <div class="bet-result-row"><span>かりん選出メンバーの的中人数</span><span id="betKarinResult">0人</span></div>
-              <div class="bet-result-row"><span>りょう選出メンバーの的中人数</span><span id="betRyoResult">0人</span></div>
-              <div class="bet-result-row"><span>未判定数</span><span id="betPendingResult">0人</span></div>
-              <div class="bet-result-row"><span>差分人数</span><span id="betDiffResult">0人</span></div>
-              <div class="bet-result-row"><span>支払額</span><span id="betPaymentResult">0円</span></div>
-              <div class="bet-result-row"><span>勝者</span><span id="betWinnerResult">引き分け</span></div>
-              <div class="bet-result-row"><span>支払い方向</span><span id="betDirectionResult">なし</span></div>
-              <div class="bet-debug" id="betDebugResult">保存済み件数：0件 / 招集：0件 / 落選：0件 / 未確定：0件</div>
-              <div class="bet-hit-lists">
-                <section class="bet-owner-column" aria-label="かりん賭け結果">
-                  <h3 class="bet-owner-title">かりん</h3>
-                  <div class="bet-hit-box">
-                    <h3>的中選手</h3>
-                    <div class="bet-hit-summary" id="betKarinHitSummary">的中：0人</div>
-                    <div class="bet-hit-list" id="betKarinHits">なし</div>
-                  </div>
-                  <div class="bet-hit-box">
-                    <h3>外れ選手</h3>
-                    <div class="bet-hit-summary" id="betKarinMissSummary">外れ：0人</div>
-                    <div class="bet-hit-list" id="betKarinMisses">なし</div>
-                  </div>
-                </section>
-                <section class="bet-owner-column" aria-label="りょう賭け結果">
-                  <h3 class="bet-owner-title">りょう</h3>
-                  <div class="bet-hit-box">
-                    <h3>的中選手</h3>
-                    <div class="bet-hit-summary" id="betRyoHitSummary">的中：0人</div>
-                    <div class="bet-hit-list" id="betRyoHits">なし</div>
-                  </div>
-                  <div class="bet-hit-box">
-                    <h3>外れ選手</h3>
-                    <div class="bet-hit-summary" id="betRyoMissSummary">外れ：0人</div>
-                    <div class="bet-hit-list" id="betRyoMisses">なし</div>
-                  </div>
-                </section>
-                <section class="bet-hit-box bet-shared-column" aria-label="選んでいなかった正式招集メンバー">
-                  <h3>選んでいなかった正式招集メンバー</h3>
-                  <div class="bet-hit-summary" id="betUnpickedSummary">未選出：0人</div>
-                  <div class="bet-hit-list" id="betUnpickedList">なし</div>
-                </section>
+            </section>
+            <section class="bet-sheet champion-bet-sheet" id="championBetSheet" aria-label="優勝国ベット">
+              <div class="champion-bet-head">
+                <span>優勝国ベット</span>
+                <span class="result-save-state" id="championBetSaveState">未保存</span>
               </div>
-            </div>
+              <div class="champion-bet-grid">
+                <label class="champion-bet-field">
+                  1口あたりの金額
+                  <input id="championBetAmountInput" type="text" inputmode="numeric" autocomplete="off">
+                </label>
+                <label class="champion-bet-field">
+                  かりん予想
+                  <select id="championBetKarinSelect"></select>
+                </label>
+                <label class="champion-bet-field">
+                  りょう予想
+                  <select id="championBetRyoSelect"></select>
+                </label>
+                <label class="champion-bet-field">
+                  正式優勝国
+                  <select id="championBetOfficialSelect"></select>
+                </label>
+              </div>
+              <div class="champion-bet-result">
+                <div class="bet-result-main" id="championBetResultMain">正式優勝国を選ぶと計算します</div>
+                <div class="bet-result-row"><span>かりん予想</span><span id="championBetKarinResult">未選択</span></div>
+                <div class="bet-result-row"><span>りょう予想</span><span id="championBetRyoResult">未選択</span></div>
+                <div class="bet-result-row"><span>正式優勝国</span><span id="championBetOfficialResult">未確定</span></div>
+                <div class="bet-result-row"><span>支払額</span><span id="championBetPaymentResult">0円</span></div>
+                <div class="bet-result-row"><span>支払い方向</span><span id="championBetDirectionResult">なし</span></div>
+              </div>
+            </section>
           </div>
         </section>
         <section class="view-panel roster-panel" id="rosterPanel" aria-label="選手一覧">
@@ -4469,6 +4693,7 @@
             <div class="tournament-toolbar">
               <div class="tournament-actions" aria-label="スコア/日程更新">
                 <button class="utility-button primary-button" type="button" id="tournamentUpdateButton">更新</button>
+                <button class="utility-button" type="button" id="favoriteCalendarButton">お気に入りをGoogleカレンダー用に出力</button>
               </div>
               <label class="tournament-filter">
                 <select id="tournamentGroupFilter" aria-label="グループで絞り込み">
@@ -4491,19 +4716,22 @@
                 <button class="utility-button" type="button" id="tournamentExportButton">JSONエクスポート</button>
                 <button class="utility-button" type="button" id="tournamentImportButton">JSONインポート</button>
               </div>
-              <div class="tournament-shared-score" aria-label="共有スコアJSON">
-                <div class="shared-score-block">
-                  <label for="sharedScoreUrlInput">共有JSON URLから読み込む</label>
-                  <input id="sharedScoreUrlInput" type="url" inputmode="url" placeholder="https://example.com/scores.json">
-                  <button class="utility-button" type="button" id="sharedScoreUrlButton">URLから読み込む</button>
+              <details class="tournament-shared-score">
+                <summary>端末内保存・JSON共有</summary>
+                <div class="shared-score-body" aria-label="共有スコアJSON">
+                  <div class="shared-score-block">
+                    <label for="sharedScoreUrlInput">共有JSON URLから読み込む</label>
+                    <input id="sharedScoreUrlInput" type="url" inputmode="url" placeholder="https://example.com/scores.json">
+                    <button class="utility-button" type="button" id="sharedScoreUrlButton">URLから読み込む</button>
+                  </div>
+                  <div class="shared-score-block">
+                    <label for="sharedScoreTextInput">JSON本文を貼り付けてインポート</label>
+                    <textarea id="sharedScoreTextInput" spellcheck="false" placeholder='JSON全文、または G-F-01:1-2 / R32-01:1-1:4-3'></textarea>
+                    <button class="utility-button" type="button" id="sharedScoreTextButton">JSON本文をインポート</button>
+                  </div>
+                  <div class="shared-score-status" id="sharedScoreStatus">端末内保存のみ。スマホとPCは自動同期されません。</div>
                 </div>
-                <div class="shared-score-block">
-                  <label for="sharedScoreTextInput">JSON本文を貼り付けてインポート</label>
-                  <textarea id="sharedScoreTextInput" spellcheck="false" placeholder='JSON全文、または G-F-01:1-2 / R32-01:1-1:4-3'></textarea>
-                  <button class="utility-button" type="button" id="sharedScoreTextButton">JSON本文をインポート</button>
-                </div>
-                <div class="shared-score-status" id="sharedScoreStatus">端末内保存のみ。スマホとPCは自動同期されません。</div>
-              </div>
+              </details>
             </div>
             <div class="tournament-summary" id="tournamentSummary"></div>
             <div id="tournamentContent"></div>
@@ -4774,6 +5002,7 @@
     const playerMasterStorageKey = "formationBoard_players_japan";
     const betStorageKey = "formationBoard_bet_japan";
     const betResultsStorageKey = "worldCupBetResults";
+    const championBetStorageKey = "worldCupChampionBet";
     const officialSquadStorageKey = "formationBoard_officialSquad_japan";
     const gistSettingsStorageKey = "worldcup2026_gist_settings";
     const gistStateFileName = "worldcup_state.json";
@@ -5024,6 +5253,37 @@
       }
     }
 
+    function loadChampionBetState() {
+      const initial = { amount: "1000", karin: "", ryo: "", official: "" };
+      try {
+        const raw = localStorage.getItem(championBetStorageKey);
+        if (!raw) return initial;
+        const saved = JSON.parse(raw);
+        return {
+          amount: saved?.amount ?? initial.amount,
+          karin: saved?.karin || "",
+          ryo: saved?.ryo || "",
+          official: saved?.official || ""
+        };
+      } catch (error) {
+        console.warn(`${championBetStorageKey} の復元に失敗しました`, error);
+        return initial;
+      }
+    }
+
+    function saveChampionBetState() {
+      try {
+        localStorage.setItem(championBetStorageKey, JSON.stringify(championBetState));
+        if (championBetSaveState) {
+          championBetSaveState.textContent = `保存済み：${new Date().toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" })}`;
+        }
+        updateSaveState(activeOwner);
+      } catch (error) {
+        console.warn(`${championBetStorageKey} の保存に失敗しました`, error);
+        if (championBetSaveState) championBetSaveState.textContent = "保存失敗";
+      }
+    }
+
     function loadOfficialSquad() {
       return new Set(officialSquadDefaultIds);
     }
@@ -5142,6 +5402,8 @@
     const officialSquadIds = loadOfficialSquad();
     let betResults = loadBetResults();
     let betResultDraft = { ...betResults };
+    const championBetState = loadChampionBetState();
+    let activeBetView = "squad";
 
     const benchSortModes = {
       karin: "original",
@@ -5250,6 +5512,8 @@
     const ryoOnlyList = document.getElementById("ryoOnlyList");
     const showBetButton = document.getElementById("showBetButton");
     const betPanel = document.getElementById("betPanel");
+    const betTabs = Array.from(document.querySelectorAll(".bet-tab"));
+    const betSheets = Array.from(document.querySelectorAll(".bet-sheet"));
     const betAmountInput = document.getElementById("betAmountInput");
     const betError = document.getElementById("betError");
     const betResultMain = document.getElementById("betResultMain");
@@ -5276,6 +5540,17 @@
     const betRyoMissSummary = document.getElementById("betRyoMissSummary");
     const betUnpickedSummary = document.getElementById("betUnpickedSummary");
     const betUnpickedList = document.getElementById("betUnpickedList");
+    const championBetAmountInput = document.getElementById("championBetAmountInput");
+    const championBetKarinSelect = document.getElementById("championBetKarinSelect");
+    const championBetRyoSelect = document.getElementById("championBetRyoSelect");
+    const championBetOfficialSelect = document.getElementById("championBetOfficialSelect");
+    const championBetSaveState = document.getElementById("championBetSaveState");
+    const championBetResultMain = document.getElementById("championBetResultMain");
+    const championBetKarinResult = document.getElementById("championBetKarinResult");
+    const championBetRyoResult = document.getElementById("championBetRyoResult");
+    const championBetOfficialResult = document.getElementById("championBetOfficialResult");
+    const championBetPaymentResult = document.getElementById("championBetPaymentResult");
+    const championBetDirectionResult = document.getElementById("championBetDirectionResult");
     const tournamentPanel = document.getElementById("tournamentPanel");
     const countryNotesPanel = document.getElementById("countryNotesPanel");
     const venuesPanel = document.getElementById("venuesPanel");
@@ -6404,6 +6679,8 @@
 
       betAmountInput.value = betState.amount;
       renderOfficialSquadList();
+      renderChampionBetSheet();
+      renderBetTabs();
       if (betResultsSaveState?.textContent === "未保存") {
         betResultsSaveState.textContent = betResultsLoadedFromStorage ? "保存済み" : "未保存";
       }
@@ -7233,6 +7510,101 @@
       });
     }
 
+    function championTeams() {
+      return window.WorldCupTournament?.championBetTeams?.() || [];
+    }
+
+    function championTeamName(teamId) {
+      if (!teamId) return "未選択";
+      const team = championTeams().find((item) => item.id === teamId);
+      return team ? team.name : teamId;
+    }
+
+    function fillChampionSelect(select, value, placeholder) {
+      if (!select) return;
+      const teams = championTeams();
+      select.innerHTML = "";
+      const blank = document.createElement("option");
+      blank.value = "";
+      blank.textContent = placeholder;
+      select.appendChild(blank);
+      teams.forEach((team) => {
+        const option = document.createElement("option");
+        option.value = team.id;
+        option.textContent = `${team.name}${team.group ? ` / Group ${team.group}` : ""}${team.rank ? ` / FIFA ${team.rank}位` : ""}`;
+        select.appendChild(option);
+      });
+      select.value = teams.some((team) => team.id === value) ? value : "";
+    }
+
+    function renderChampionBetSheet() {
+      window.WorldCupTournament?.init?.();
+      fillChampionSelect(championBetKarinSelect, championBetState.karin, "かりんの優勝予想");
+      fillChampionSelect(championBetRyoSelect, championBetState.ryo, "りょうの優勝予想");
+      fillChampionSelect(championBetOfficialSelect, championBetState.official, "正式優勝国");
+      championBetAmountInput.value = championBetState.amount;
+      if (championTeams().length === 0) {
+        window.setTimeout(() => {
+          if (activeView === "bet") renderChampionBetSheet();
+        }, 600);
+      }
+      updateChampionBetResult(false);
+    }
+
+    function renderBetTabs() {
+      betTabs.forEach((tab) => {
+        tab.classList.toggle("active", tab.dataset.betView === activeBetView);
+      });
+      betSheets.forEach((sheet) => {
+        sheet.classList.toggle("active", sheet.id === `${activeBetView}BetSheet`);
+      });
+      if (activeBetView === "champion") {
+        sideSub.textContent = "優勝国ベットの予想と正式優勝国を保存できます。";
+      } else {
+        sideSub.textContent = "選手ごとの正式結果を保存すると、かりん予想・りょう予想の的中人数と支払額を自動計算します。";
+      }
+    }
+
+    function updateChampionBetResult(shouldSave = true) {
+      championBetState.amount = championBetAmountInput.value;
+      championBetState.karin = championBetKarinSelect.value;
+      championBetState.ryo = championBetRyoSelect.value;
+      championBetState.official = championBetOfficialSelect.value;
+
+      const amount = parseWholeNumber(championBetState.amount);
+      const invalidAmount = amount === null || amount <= 0;
+      const karinHit = championBetState.official && championBetState.karin === championBetState.official;
+      const ryoHit = championBetState.official && championBetState.ryo === championBetState.official;
+
+      championBetKarinResult.textContent = championTeamName(championBetState.karin);
+      championBetRyoResult.textContent = championTeamName(championBetState.ryo);
+      championBetOfficialResult.textContent = championBetState.official ? championTeamName(championBetState.official) : "未確定";
+
+      if (invalidAmount) {
+        championBetResultMain.textContent = "金額は1以上の数字で入力してください";
+        championBetPaymentResult.textContent = "-";
+        championBetDirectionResult.textContent = "-";
+      } else if (!championBetState.official) {
+        championBetResultMain.textContent = "正式優勝国を選ぶと計算します";
+        championBetPaymentResult.textContent = formatYen(0);
+        championBetDirectionResult.textContent = "なし";
+      } else if (karinHit === ryoHit) {
+        championBetResultMain.textContent = karinHit ? "両方的中のため支払いなし" : "両方外れのため支払いなし";
+        championBetPaymentResult.textContent = formatYen(0);
+        championBetDirectionResult.textContent = "なし";
+      } else if (karinHit) {
+        championBetResultMain.textContent = `かりんが優勝国を的中`;
+        championBetPaymentResult.textContent = formatYen(amount);
+        championBetDirectionResult.textContent = "りょう → かりん";
+      } else {
+        championBetResultMain.textContent = `りょうが優勝国を的中`;
+        championBetPaymentResult.textContent = formatYen(amount);
+        championBetDirectionResult.textContent = "かりん → りょう";
+      }
+
+      if (shouldSave) saveChampionBetState();
+    }
+
     function renderOfficialSquadList() {
       officialSquadList.innerHTML = "";
       betResultDraft = { ...betResults };
@@ -7499,7 +7871,8 @@
         karinPrediction,
         ryoPrediction,
         betResults: { ...betResults },
-        bet: { amount: betState.amount }
+        bet: { amount: betState.amount },
+        championBet: { ...championBetState }
       };
     }
 
@@ -7581,6 +7954,13 @@
       if (payload.bet?.amount !== undefined) {
         betState.amount = String(payload.bet.amount);
         saveBetState();
+      }
+      if (payload.championBet && typeof payload.championBet === "object") {
+        championBetState.amount = String(payload.championBet.amount ?? championBetState.amount);
+        championBetState.karin = payload.championBet.karin || "";
+        championBetState.ryo = payload.championBet.ryo || "";
+        championBetState.official = payload.championBet.official || "";
+        saveChampionBetState();
       }
       const settings = loadGistSettings();
       saveGistSettings({
@@ -7792,6 +8172,17 @@
     });
 
     betAmountInput.addEventListener("input", () => updateBetResult(true));
+    betTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        activeBetView = tab.dataset.betView || "squad";
+        if (activeBetView === "champion") renderChampionBetSheet();
+        renderBetTabs();
+      });
+    });
+    [championBetAmountInput, championBetKarinSelect, championBetRyoSelect, championBetOfficialSelect].forEach((control) => {
+      control.addEventListener("input", () => updateChampionBetResult(true));
+      control.addEventListener("change", () => updateChampionBetResult(true));
+    });
     betResultsSaveButton.addEventListener("click", () => {
       betResults = normalizeBetResults(betResults);
       betResultDraft = { ...betResults };

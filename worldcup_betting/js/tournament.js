@@ -971,6 +971,7 @@
     countrySort: "group",
     countryScheduleOpenTeamId: "",
     scheduleStatusFilter: "all",
+    scheduleFavoriteFilter: "all",
     scheduleSort: "date",
     scheduleOpenStages: { group: true },
     calendarMode: "month",
@@ -987,6 +988,7 @@
       content: document.getElementById("tournamentContent"),
       summary: document.getElementById("tournamentSummary"),
       updateButton: document.getElementById("tournamentUpdateButton"),
+      favoriteCalendarButton: document.getElementById("favoriteCalendarButton"),
       groupFilter: document.getElementById("tournamentGroupFilter"),
       exportButton: document.getElementById("tournamentExportButton"),
       importButton: document.getElementById("tournamentImportButton"),
@@ -1005,6 +1007,7 @@
       });
     });
     state.elements.updateButton?.addEventListener("click", updateTournamentSnapshots);
+    state.elements.favoriteCalendarButton?.addEventListener("click", downloadFavoriteMatchesCalendar);
     state.elements.groupFilter?.addEventListener("change", () => {
       state.groupFilter = state.elements.groupFilter.value;
       renderContent();
@@ -1088,6 +1091,7 @@
       sharedScoreUrl: "",
       sharedScoreLoadedAt: "",
       lastUpdatedAt: "",
+      favoriteMatchIds: [],
       venueNotes: {},
       standings: null,
       thirdRanking: null,
@@ -1109,6 +1113,7 @@
         sharedScoreUrl: parsed?.sharedScoreUrl || fallback.sharedScoreUrl,
         sharedScoreLoadedAt: parsed?.sharedScoreLoadedAt || fallback.sharedScoreLoadedAt,
         lastUpdatedAt: parsed?.lastUpdatedAt || fallback.lastUpdatedAt,
+        favoriteMatchIds: normalizeFavoriteMatchIds(parsed?.favoriteMatchIds),
         venueNotes: parsed?.venueNotes && typeof parsed.venueNotes === "object" ? parsed.venueNotes : {},
         standings: parsed?.standings || fallback.standings,
         thirdRanking: parsed?.thirdRanking || fallback.thirdRanking,
@@ -1144,7 +1149,8 @@
     if (summary) {
       const updated = state.saved.lastUpdatedAt ? ` / 最終更新 ${formatSavedDateTime(state.saved.lastUpdatedAt)}` : "";
       const shared = state.saved.sharedScoreLoadedAt ? ` / 共有JSON ${formatSavedDateTime(state.saved.sharedScoreLoadedAt)}` : "";
-      summary.textContent = `スコア/日程 / 全${state.matches.length}試合 / スコア保存 ${scoreCount}試合${updated}${shared}`;
+      const favoriteCount = favoriteMatchIdSet().size;
+      summary.textContent = `スコア/日程 / 全${state.matches.length}試合 / お気に入り ${favoriteCount}試合 / スコア保存 ${scoreCount}試合${updated}${shared}`;
     }
     updateSharedScoreStatus();
 
@@ -1183,6 +1189,132 @@
     return matches.filter((match) => match.group === state.groupFilter);
   }
 
+  function normalizeFavoriteMatchIds(value) {
+    if (!Array.isArray(value)) return [];
+    return Array.from(new Set(value.map((item) => String(item || "").trim()).filter(Boolean)));
+  }
+
+  function favoriteMatchIdSet() {
+    state.saved.favoriteMatchIds = normalizeFavoriteMatchIds(state.saved.favoriteMatchIds);
+    return new Set(state.saved.favoriteMatchIds);
+  }
+
+  function isFavoriteMatch(matchId) {
+    return favoriteMatchIdSet().has(String(matchId));
+  }
+
+  function toggleFavoriteMatch(matchId) {
+    const normalizedId = String(matchId || "").trim();
+    if (!normalizedId) return;
+    const ids = favoriteMatchIdSet();
+    if (ids.has(normalizedId)) {
+      ids.delete(normalizedId);
+    } else {
+      ids.add(normalizedId);
+    }
+    state.saved.favoriteMatchIds = Array.from(ids).sort((a, b) => matchSortIndex(a) - matchSortIndex(b) || a.localeCompare(b));
+    state.saved.lastUpdatedAt = new Date().toISOString();
+    persist();
+    setSavedLabel(ids.has(normalizedId) ? "お気に入りに追加しました" : "お気に入りを解除しました");
+    renderContent();
+  }
+
+  function matchSortIndex(matchId) {
+    const index = state.matches.findIndex((match) => match.match_id === matchId);
+    return index === -1 ? Number.MAX_SAFE_INTEGER : index;
+  }
+
+  function favoriteButton(matchId, compact = false) {
+    const active = isFavoriteMatch(matchId);
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `favorite-button${active ? " active" : ""}${compact ? " compact" : ""}`;
+    button.textContent = active ? "★" : "☆";
+    button.setAttribute("aria-pressed", active ? "true" : "false");
+    button.setAttribute("aria-label", active ? "お気に入りを解除" : "お気に入りに追加");
+    button.title = active ? "お気に入りを解除" : "お気に入りに追加";
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      toggleFavoriteMatch(matchId);
+    });
+    return button;
+  }
+
+  function favoriteMatches() {
+    const favoriteIds = favoriteMatchIdSet();
+    return sortedMatches(computedSchedule().filter((match) => favoriteIds.has(match.match_id)));
+  }
+
+  function downloadFavoriteMatchesCalendar() {
+    const matches = favoriteMatches().filter((match) => !Number.isNaN(jstDate(match.kickoff_jst).getTime()));
+    if (matches.length === 0) {
+      setSummary("お気に入り登録済みで日時が入っている試合がありません");
+      return;
+    }
+    const calendarText = buildFavoriteMatchesIcs(matches);
+    const blob = new Blob([calendarText], { type: "text/calendar;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "worldcup_favorite_matches.ics";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+    setSummary(`お気に入り${matches.length}試合のカレンダーファイルを出力しました`);
+  }
+
+  function buildFavoriteMatchesIcs(matches) {
+    const lines = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "PRODID:-//igrekplus//WorldCup Betting//JA",
+      "CALSCALE:GREGORIAN",
+      "METHOD:PUBLISH",
+      "X-WR-CALNAME:W杯2026 お気に入り試合"
+    ];
+    const stamp = icsDateTime(new Date());
+    matches.forEach((match) => {
+      const start = jstDate(match.kickoff_jst);
+      const end = new Date(start.getTime() + 2 * 60 * 60 * 1000);
+      const title = `W杯2026: ${displayTeam(matchHomeId(match), match.home_name_ja, { showRank: false })} vs ${displayTeam(matchAwayId(match), match.away_name_ja, { showRank: false })}`;
+      const description = [
+        match.match_id,
+        stageLabels[match.stage] || match.stage,
+        match.group ? `Group ${match.group}` : "",
+        `日本時間: ${formatJstDateTime(match.kickoff_jst)}`,
+        `スコア: ${scoreText(match.match_id)}`,
+        "お気に入り登録した試合"
+      ].filter(Boolean).join("\n");
+      lines.push(
+        "BEGIN:VEVENT",
+        `UID:${icsEscape(match.match_id)}@worldcup-betting.igrekplus.github.io`,
+        `DTSTAMP:${stamp}`,
+        `DTSTART:${icsDateTime(start)}`,
+        `DTEND:${icsDateTime(end)}`,
+        `SUMMARY:${icsEscape(title)}`,
+        `DESCRIPTION:${icsEscape(description)}`,
+        `LOCATION:${icsEscape(venueText(match))}`,
+        "END:VEVENT"
+      );
+    });
+    lines.push("END:VCALENDAR");
+    return `${lines.join("\r\n")}\r\n`;
+  }
+
+  function icsDateTime(date) {
+    return date.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
+  }
+
+  function icsEscape(value) {
+    return String(value || "")
+      .replace(/\\/g, "\\\\")
+      .replace(/\n/g, "\\n")
+      .replace(/,/g, "\\,")
+      .replace(/;/g, "\\;");
+  }
+
   function renderMatchList(matches) {
     const list = document.createElement("div");
     list.className = "match-list";
@@ -1202,6 +1334,9 @@
     const filtered = matches.filter((match) => {
       if (state.scheduleStatusFilter === "all") return true;
       return matchStatusKey(match.match_id) === state.scheduleStatusFilter;
+    }).filter((match) => {
+      if (state.scheduleFavoriteFilter === "all") return true;
+      return isFavoriteMatch(match.match_id);
     });
 
     const grouped = groupMatchesByStage(sortScheduleMatches(filtered));
@@ -1256,6 +1391,13 @@
         ["review", "要確認"]
       ], (value) => {
         state.scheduleStatusFilter = value;
+        renderContent();
+      }),
+      createSelectControl("お気に入り", state.scheduleFavoriteFilter, [
+        ["all", "全て"],
+        ["favorites", "お気に入りのみ"]
+      ], (value) => {
+        state.scheduleFavoriteFilter = value;
         renderContent();
       }),
       createSelectControl("並び順", state.scheduleSort, [
@@ -1313,6 +1455,7 @@
     const card = document.createElement("article");
     card.className = "match-card";
     if (isJapanMatch(match)) card.classList.add("japan-highlight");
+    if (isFavoriteMatch(match.match_id)) card.classList.add("favorite-match");
 
     const body = document.createElement("div");
     body.className = "match-card-body";
@@ -1320,6 +1463,7 @@
     const meta = document.createElement("div");
     meta.className = "match-meta";
     meta.append(
+      favoriteButton(match.match_id),
       textDiv(match.match_id, "match-id"),
       textDiv(stageLabels[match.stage] || match.stage),
       textDiv(match.group ? `Group ${match.group}` : "", "match-group"),
@@ -1755,12 +1899,14 @@
     row.type = "button";
     row.className = "calendar-mini-match";
     if (isJapanMatch(match)) row.classList.add("japan-highlight");
+    if (isFavoriteMatch(match.match_id)) row.classList.add("favorite-match");
     row.addEventListener("click", () => {
       state.calendarDate = jstDate(match.kickoff_jst);
       state.calendarMode = "day";
       renderContent();
     });
     row.append(
+      favoriteButton(match.match_id, true),
       textSpan(formatJstTime(match.kickoff_jst), "calendar-mini-time"),
       participantLabel(matchHomeId(match), match.home_name_ja),
       textSpan("vs", "calendar-vs"),
@@ -1782,6 +1928,7 @@
       });
     }
     if (isJapanMatch(match)) card.classList.add("japan-highlight");
+    if (isFavoriteMatch(match.match_id)) card.classList.add("favorite-match");
 
     const main = document.createElement("div");
     main.className = "calendar-match-main";
@@ -1795,6 +1942,7 @@
       const info = document.createElement("div");
       info.className = "calendar-match-info";
       info.append(
+        favoriteButton(match.match_id),
         textDiv(match.match_id, "match-id"),
         textDiv(stageLabels[match.stage] || match.stage),
         textDiv(match.group ? `Group ${match.group}` : "", "match-group"),
@@ -1814,6 +1962,7 @@
     }
 
     main.append(
+      favoriteButton(match.match_id, true),
       textDiv(formatJstTime(match.kickoff_jst), "calendar-match-time"),
       participantLabel(matchHomeId(match), match.home_name_ja),
       textDiv(scoreText(match.match_id), "match-score-display"),
@@ -2954,6 +3103,7 @@
       type: "worldcup2026_score_and_notes_state",
       source: DATA_URL,
       scoreOverrides: effectiveScoreOverrides(),
+      favoriteMatchIds: normalizeFavoriteMatchIds(state.saved.favoriteMatchIds),
       venueNotes: state.saved.venueNotes || {},
       lastUpdatedAt: state.saved.lastUpdatedAt || new Date().toISOString()
     };
@@ -2992,6 +3142,7 @@
     if (!scoreOverrides || typeof scoreOverrides !== "object") return false;
     importScoreOverrides(scoreOverrides, {
       lastUpdatedAt: source?.lastUpdatedAt || payload?.lastUpdated || new Date().toISOString(),
+      favoriteMatchIds: source?.favoriteMatchIds || payload?.favoriteMatchIds,
       venueNotes: source?.venueNotes
     });
     return true;
@@ -3080,6 +3231,7 @@
       sharedScoreUrl: state.saved.sharedScoreUrl || "",
       sharedScoreLoadedAt: state.saved.sharedScoreLoadedAt || "",
       lastUpdatedAt: options.lastUpdatedAt || new Date().toISOString(),
+      favoriteMatchIds: normalizeFavoriteMatchIds(options.favoriteMatchIds ?? state.saved.favoriteMatchIds),
       venueNotes: options.venueNotes && typeof options.venueNotes === "object" ? options.venueNotes : state.saved.venueNotes || {},
       standings: null,
       thirdRanking: null,
@@ -3112,6 +3264,9 @@
     ["venueNotes"].forEach((key) => {
       if (source?.[key] && typeof source[key] === "object") state.saved[key] = source[key];
     });
+    if (Array.isArray(source?.favoriteMatchIds)) {
+      state.saved.favoriteMatchIds = normalizeFavoriteMatchIds(source.favoriteMatchIds);
+    }
     persist();
     renderContent();
   }
@@ -3261,12 +3416,30 @@
     if (state.elements.summary) state.elements.summary.textContent = text;
   }
 
+  function championBetTeams() {
+    return Object.values(state.teams)
+      .filter((team) => team?.team_id && team.team_id !== "TBD")
+      .sort((a, b) => {
+        const rankA = Number(a.fifa_rank || 999);
+        const rankB = Number(b.fifa_rank || 999);
+        if (rankA !== rankB) return rankA - rankB;
+        return String(a.name_ja || a.team_id).localeCompare(String(b.name_ja || b.team_id), "ja");
+      })
+      .map((team) => ({
+        id: team.team_id,
+        name: team.name_ja || team.team_id,
+        group: team.group || "",
+        rank: team.fifa_rank || ""
+      }));
+  }
+
   window.WorldCupTournament = {
     init,
     renderContent,
     updateTournamentSnapshots,
     renderAuxView,
     exportState,
-    importState
+    importState,
+    championBetTeams
   };
 })();
