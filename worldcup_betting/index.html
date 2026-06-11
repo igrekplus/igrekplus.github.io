@@ -7642,7 +7642,12 @@
         card.className = "champion-round-card";
         const head = document.createElement("div");
         head.className = "champion-round-head";
-        head.append(textSpan(label), textSpan(key === "pre" ? "初回予想" : "乗り換え予想", "result-save-state"));
+        const title = document.createElement("span");
+        title.textContent = label;
+        const badge = document.createElement("span");
+        badge.className = "result-save-state";
+        badge.textContent = key === "pre" ? "初回予想" : "乗り換え予想";
+        head.append(title, badge);
         const noteEl = document.createElement("div");
         noteEl.className = "champion-round-note";
         noteEl.textContent = note;
