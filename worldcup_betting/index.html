@@ -4620,7 +4620,9 @@
                 <div class="bet-result-row"><span>かりん有効予想</span><span id="championBetKarinResult">未選択</span></div>
                 <div class="bet-result-row"><span>りょう有効予想</span><span id="championBetRyoResult">未選択</span></div>
                 <div class="bet-result-row"><span>正式優勝国</span><span id="championBetOfficialResult">未確定</span></div>
-                <div class="bet-result-row"><span>支払額</span><span id="championBetPaymentResult">0円</span></div>
+                <div class="bet-result-row"><span>敗退時精算</span><span id="championBetEliminationResult">なし</span></div>
+                <div class="bet-result-row"><span>最終優勝精算</span><span id="championBetFinalResult">未確定</span></div>
+                <div class="bet-result-row"><span>合計精算</span><span id="championBetPaymentResult">0円</span></div>
                 <div class="bet-result-row"><span>支払い方向</span><span id="championBetDirectionResult">なし</span></div>
               </div>
               <div class="champion-rounds" id="championRoundList"></div>
@@ -5692,6 +5694,8 @@
     const championBetKarinResult = document.getElementById("championBetKarinResult");
     const championBetRyoResult = document.getElementById("championBetRyoResult");
     const championBetOfficialResult = document.getElementById("championBetOfficialResult");
+    const championBetEliminationResult = document.getElementById("championBetEliminationResult");
+    const championBetFinalResult = document.getElementById("championBetFinalResult");
     const championBetPaymentResult = document.getElementById("championBetPaymentResult");
     const championBetDirectionResult = document.getElementById("championBetDirectionResult");
     const championRoundList = document.getElementById("championRoundList");
@@ -7782,7 +7786,7 @@
           const noteEl = document.createElement("div");
           noteEl.className = "champion-round-note";
           noteEl.textContent = previousPick
-            ? `${championTeamName(previousPick)}の敗退が確定したら、賭け金を保持したまま次の予想国を選びます。`
+            ? `${championTeamName(previousPick)}の敗退が確定したら、その時点で1口分を精算し、次の予想国を選びます。`
             : "まず直前の予想国を選んでください。";
 
           row.append(
@@ -7850,6 +7854,9 @@
       const ryoActivePick = currentChampionPick("ryo");
       const karinHit = championBetState.official && karinActivePick === championBetState.official;
       const ryoHit = championBetState.official && ryoActivePick === championBetState.official;
+      const eliminationSettlement = invalidAmount ? { balance: 0, summary: "-" } : championEliminationSettlement(amount);
+      let finalBalance = 0;
+      let finalSummary = "未確定";
 
       championBetKarinResult.textContent = championTeamName(karinActivePick);
       championBetRyoResult.textContent = championTeamName(ryoActivePick);
@@ -7857,30 +7864,74 @@
 
       if (invalidAmount) {
         championBetResultMain.textContent = "金額は1以上の数字で入力してください";
+        championBetEliminationResult.textContent = "-";
+        championBetFinalResult.textContent = "-";
         championBetPaymentResult.textContent = "-";
         championBetDirectionResult.textContent = "-";
       } else if (!championBetState.official) {
-        championBetResultMain.textContent = "正式優勝国を選ぶと計算します";
-        championBetPaymentResult.textContent = formatYen(0);
-        championBetDirectionResult.textContent = "なし";
+        championBetResultMain.textContent = eliminationSettlement.balance
+          ? "途中敗退の精算があります。正式優勝国を選ぶと最終精算も計算します"
+          : "正式優勝国を選ぶと計算します";
       } else if (karinHit === ryoHit) {
-        championBetResultMain.textContent = karinHit ? "両方的中のため支払いなし" : "両方外れのため支払いなし";
-        championBetPaymentResult.textContent = formatYen(0);
-        championBetDirectionResult.textContent = "なし";
+        finalSummary = karinHit ? "両方的中のため支払いなし" : "両方外れのため支払いなし";
+        championBetResultMain.textContent = finalSummary;
       } else if (karinHit) {
-        championBetResultMain.textContent = `かりんが優勝国を的中`;
-        championBetPaymentResult.textContent = formatYen(amount);
-        championBetDirectionResult.textContent = "りょう → かりん";
+        finalBalance = amount;
+        finalSummary = `りょう → かりん ${formatYen(amount)}`;
+        championBetResultMain.textContent = "かりんが優勝国を的中";
       } else {
-        championBetResultMain.textContent = `りょうが優勝国を的中`;
-        championBetPaymentResult.textContent = formatYen(amount);
-        championBetDirectionResult.textContent = "かりん → りょう";
+        finalBalance = -amount;
+        finalSummary = `かりん → りょう ${formatYen(amount)}`;
+        championBetResultMain.textContent = "りょうが優勝国を的中";
+      }
+
+      if (!invalidAmount) {
+        const totalBalance = eliminationSettlement.balance + finalBalance;
+        championBetEliminationResult.textContent = eliminationSettlement.summary;
+        championBetFinalResult.textContent = finalSummary;
+        championBetPaymentResult.textContent = formatYen(Math.abs(totalBalance));
+        championBetDirectionResult.textContent = championPaymentDirection(totalBalance);
       }
 
       if (shouldSave) {
         renderChampionRounds();
         saveChampionBetState();
       }
+    }
+
+    function championPaymentDirection(balance) {
+      if (balance > 0) return "りょう → かりん";
+      if (balance < 0) return "かりん → りょう";
+      return "なし";
+    }
+
+    function championEliminationSettlement(amount) {
+      let balance = 0;
+      const items = [];
+      championRoundStages.forEach(([key]) => {
+        const karinPick = championBetState.rounds?.[key]?.karin || "";
+        const ryoPick = championBetState.rounds?.[key]?.ryo || "";
+        const karinOut = Boolean(karinPick && championBetState.eliminated?.[key]?.karin);
+        const ryoOut = Boolean(ryoPick && championBetState.eliminated?.[key]?.ryo);
+        if (!karinOut && !ryoOut) return;
+        if (karinOut && ryoOut) {
+          items.push(`${championTeamName(karinPick)}・${championTeamName(ryoPick)}敗退：支払いなし`);
+          return;
+        }
+        if (karinOut && ryoPick) {
+          balance -= amount;
+          items.push(`${championTeamName(karinPick)}敗退：かりん → りょう ${formatYen(amount)}`);
+          return;
+        }
+        if (ryoOut && karinPick) {
+          balance += amount;
+          items.push(`${championTeamName(ryoPick)}敗退：りょう → かりん ${formatYen(amount)}`);
+        }
+      });
+      return {
+        balance,
+        summary: items.length ? items.join(" / ") : "なし"
+      };
     }
 
     function currentChampionPick(owner) {
