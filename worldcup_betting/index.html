@@ -882,8 +882,19 @@
       gap: 10px;
     }
 
+    .champion-bet-grid-primary {
+      align-items: end;
+    }
+
     .champion-rounds {
       display: grid;
+      grid-template-columns: repeat(2, minmax(260px, 1fr));
+      gap: 10px;
+    }
+
+    .champion-owner-path {
+      display: grid;
+      align-content: start;
       gap: 10px;
     }
 
@@ -894,6 +905,11 @@
       border-radius: 8px;
       background: #fff;
       padding: 12px;
+    }
+
+    .champion-round-card.locked {
+      background: #f1f5f9;
+      color: var(--muted);
     }
 
     .champion-round-head {
@@ -911,6 +927,32 @@
       font-size: 12px;
       font-weight: 800;
       line-height: 1.5;
+    }
+
+    .champion-owner-title {
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .champion-owner-current {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .champion-eliminated-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .champion-eliminated-toggle input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--blue);
     }
 
     .champion-round-grid {
@@ -4104,6 +4146,10 @@
         grid-template-columns: 1fr;
       }
 
+      .champion-rounds {
+        grid-template-columns: 1fr;
+      }
+
       .bet-hit-lists {
         grid-template-columns: 1fr;
       }
@@ -4549,11 +4595,7 @@
                 <span>優勝国ベット</span>
                 <span class="result-save-state" id="championBetSaveState">未保存</span>
               </div>
-              <div class="champion-bet-grid">
-                <label class="champion-bet-field">
-                  1口あたりの金額
-                  <input id="championBetAmountInput" type="text" inputmode="numeric" autocomplete="off">
-                </label>
+              <div class="champion-bet-grid champion-bet-grid-primary">
                 <label class="champion-bet-field">
                   かりん予想
                   <select id="championBetKarinSelect"></select>
@@ -4561,6 +4603,12 @@
                 <label class="champion-bet-field">
                   りょう予想
                   <select id="championBetRyoSelect"></select>
+                </label>
+              </div>
+              <div class="champion-bet-grid champion-bet-grid-secondary">
+                <label class="champion-bet-field">
+                  1口あたりの金額
+                  <input id="championBetAmountInput" type="text" inputmode="numeric" autocomplete="off">
                 </label>
                 <label class="champion-bet-field">
                   正式優勝国
@@ -5305,7 +5353,7 @@
     }
 
     function loadChampionBetState() {
-      const initial = { amount: "1000", karin: "", ryo: "", official: "", rounds: championBetInitialRounds() };
+      const initial = { amount: "1000", karin: "", ryo: "", official: "", rounds: championBetInitialRounds(), eliminated: championBetInitialEliminations() };
       try {
         const raw = localStorage.getItem(championBetStorageKey);
         if (!raw) return initial;
@@ -5315,7 +5363,8 @@
           karin: saved?.karin || "",
           ryo: saved?.ryo || "",
           official: saved?.official || "",
-          rounds: normalizeChampionRounds(saved?.rounds)
+          rounds: normalizeChampionRounds(saved?.rounds),
+          eliminated: normalizeChampionEliminations(saved?.eliminated)
         };
         if (!saved?.rounds && (state.karin || state.ryo)) {
           state.rounds.pre = { karin: state.karin, ryo: state.ryo };
@@ -5334,6 +5383,13 @@
       }, {});
     }
 
+    function championBetInitialEliminations() {
+      return championRoundStages.reduce((eliminated, [key]) => {
+        eliminated[key] = { karin: false, ryo: false };
+        return eliminated;
+      }, {});
+    }
+
     function normalizeChampionRounds(value) {
       const rounds = championBetInitialRounds();
       if (!value || typeof value !== "object") return rounds;
@@ -5344,6 +5400,18 @@
         };
       });
       return rounds;
+    }
+
+    function normalizeChampionEliminations(value) {
+      const eliminated = championBetInitialEliminations();
+      if (!value || typeof value !== "object") return eliminated;
+      championRoundStages.forEach(([key]) => {
+        eliminated[key] = {
+          karin: Boolean(value[key]?.karin),
+          ryo: Boolean(value[key]?.ryo)
+        };
+      });
+      return eliminated;
     }
 
     function saveChampionBetState() {
@@ -7613,16 +7681,21 @@
       select.value = teams.some((team) => team.id === value) ? value : "";
     }
 
-    function createChampionRoundField(roundKey, owner, value) {
+    function createChampionRoundField(roundKey, owner, value, disabled = false) {
       const label = document.createElement("label");
       label.className = "champion-bet-field";
-      label.textContent = owners[owner];
+      label.textContent = "次の予想国";
       const select = document.createElement("select");
       select.dataset.roundKey = roundKey;
       select.dataset.owner = owner;
+      select.disabled = disabled;
       fillChampionSelect(select, value, `${owners[owner]}の予想国`);
       select.addEventListener("change", () => {
+        const previousValue = championBetState.rounds[roundKey][owner];
         championBetState.rounds[roundKey][owner] = select.value;
+        if (previousValue !== select.value) {
+          resetChampionEliminationsFrom(roundKey, owner);
+        }
         if (roundKey === "pre") {
           championBetState[owner] = select.value;
           if (owner === "karin") championBetKarinSelect.value = select.value;
@@ -7634,37 +7707,100 @@
       return label;
     }
 
+    function resetChampionEliminationsFrom(roundKey, owner) {
+      const startIndex = championRoundStages.findIndex(([key]) => key === roundKey);
+      if (startIndex < 0) return;
+      championRoundStages.slice(startIndex).forEach(([key]) => {
+        championBetState.eliminated[key][owner] = false;
+      });
+    }
+
+    function previousChampionStageKey(roundKey) {
+      const index = championRoundStages.findIndex(([key]) => key === roundKey);
+      return index > 0 ? championRoundStages[index - 1][0] : "";
+    }
+
+    function isChampionRoundUnlocked(roundKey, owner) {
+      if (roundKey === "pre") return true;
+      const previousKey = previousChampionStageKey(roundKey);
+      const previousPick = championBetState.rounds?.[previousKey]?.[owner] || "";
+      return Boolean(previousPick && championBetState.eliminated?.[previousKey]?.[owner]);
+    }
+
+    function createChampionEliminatedToggle(roundKey, owner, teamId) {
+      const label = document.createElement("label");
+      label.className = "champion-eliminated-toggle";
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.disabled = !teamId;
+      checkbox.checked = Boolean(teamId && championBetState.eliminated?.[roundKey]?.[owner]);
+      const text = document.createElement("span");
+      text.textContent = teamId ? `${championTeamName(teamId)}の敗退確定` : "前の予想国を選択してください";
+      checkbox.addEventListener("change", () => {
+        championBetState.eliminated[roundKey][owner] = checkbox.checked;
+        updateChampionBetResult(true);
+      });
+      label.append(checkbox, text);
+      return label;
+    }
+
     function renderChampionRounds() {
       championRoundList.innerHTML = "";
       championBetState.rounds = normalizeChampionRounds(championBetState.rounds);
-      championRoundStages.forEach(([key, label, note]) => {
-        const card = document.createElement("section");
-        card.className = "champion-round-card";
-        const head = document.createElement("div");
-        head.className = "champion-round-head";
+      championBetState.eliminated = normalizeChampionEliminations(championBetState.eliminated);
+      Object.keys(owners).forEach((owner) => {
+        const ownerCard = document.createElement("section");
+        ownerCard.className = "champion-owner-path";
+        const ownerHead = document.createElement("div");
+        ownerHead.className = "champion-round-head";
         const title = document.createElement("span");
-        title.textContent = label;
-        const badge = document.createElement("span");
-        badge.className = "result-save-state";
-        badge.textContent = key === "pre" ? "初回予想" : "乗り換え予想";
-        head.append(title, badge);
-        const noteEl = document.createElement("div");
-        noteEl.className = "champion-round-note";
-        noteEl.textContent = note;
-        const grid = document.createElement("div");
-        grid.className = "champion-round-grid";
-        grid.append(
-          createChampionRoundField(key, "karin", championBetState.rounds[key].karin),
-          createChampionRoundField(key, "ryo", championBetState.rounds[key].ryo)
-        );
-        card.append(head, noteEl, grid);
-        championRoundList.appendChild(card);
+        title.className = "champion-owner-title";
+        title.textContent = owners[owner];
+        const current = document.createElement("span");
+        current.className = "champion-owner-current";
+        current.textContent = `有効予想：${championTeamName(currentChampionPick(owner))}`;
+        ownerHead.append(title, current);
+        ownerCard.appendChild(ownerHead);
+
+        championRoundStages.slice(1).forEach(([key]) => {
+          const previousKey = previousChampionStageKey(key);
+          const previousPick = championBetState.rounds[previousKey][owner];
+          const unlocked = isChampionRoundUnlocked(key, owner);
+          const row = document.createElement("section");
+          row.className = "champion-round-card";
+          row.classList.toggle("locked", !unlocked);
+
+          const head = document.createElement("div");
+          head.className = "champion-round-head";
+          const roundTitle = document.createElement("span");
+          roundTitle.textContent = previousPick ? `${championTeamName(previousPick)}敗退後` : "前の予想国の敗退後";
+          const badge = document.createElement("span");
+          badge.className = "result-save-state";
+          badge.textContent = unlocked ? "選択可能" : "敗退確定待ち";
+          head.append(roundTitle, badge);
+
+          const noteEl = document.createElement("div");
+          noteEl.className = "champion-round-note";
+          noteEl.textContent = previousPick
+            ? `${championTeamName(previousPick)}の敗退が確定したら、賭け金を保持したまま次の予想国を選びます。`
+            : "まず直前の予想国を選んでください。";
+
+          row.append(
+            head,
+            noteEl,
+            createChampionEliminatedToggle(previousKey, owner, previousPick),
+            createChampionRoundField(key, owner, championBetState.rounds[key][owner], !unlocked)
+          );
+          ownerCard.appendChild(row);
+        });
+        championRoundList.appendChild(ownerCard);
       });
     }
 
     function renderChampionBetSheet() {
       window.WorldCupTournament?.init?.();
       championBetState.rounds = normalizeChampionRounds(championBetState.rounds);
+      championBetState.eliminated = normalizeChampionEliminations(championBetState.eliminated);
       championBetState.karin = championBetState.rounds.pre.karin || championBetState.karin;
       championBetState.ryo = championBetState.rounds.pre.ryo || championBetState.ryo;
       fillChampionSelect(championBetKarinSelect, championBetState.karin, "かりんの初回優勝予想");
@@ -7695,13 +7831,18 @@
     }
 
     function updateChampionBetResult(shouldSave = true) {
+      const previousKarinInitial = championBetState.rounds?.pre?.karin || "";
+      const previousRyoInitial = championBetState.rounds?.pre?.ryo || "";
       championBetState.amount = championBetAmountInput.value;
       championBetState.karin = championBetKarinSelect.value;
       championBetState.ryo = championBetRyoSelect.value;
       championBetState.official = championBetOfficialSelect.value;
       championBetState.rounds = normalizeChampionRounds(championBetState.rounds);
+      championBetState.eliminated = normalizeChampionEliminations(championBetState.eliminated);
       championBetState.rounds.pre.karin = championBetState.karin;
       championBetState.rounds.pre.ryo = championBetState.ryo;
+      if (previousKarinInitial !== championBetState.karin) resetChampionEliminationsFrom("pre", "karin");
+      if (previousRyoInitial !== championBetState.ryo) resetChampionEliminationsFrom("pre", "ryo");
 
       const amount = parseWholeNumber(championBetState.amount);
       const invalidAmount = amount === null || amount <= 0;
@@ -7743,11 +7884,13 @@
     }
 
     function currentChampionPick(owner) {
-      let latest = "";
-      championRoundStages.forEach(([key]) => {
+      let latest = championBetState.rounds?.pre?.[owner] || "";
+      for (let index = 1; index < championRoundStages.length; index += 1) {
+        const key = championRoundStages[index][0];
+        if (!isChampionRoundUnlocked(key, owner)) break;
         const value = championBetState.rounds?.[key]?.[owner] || "";
         if (value) latest = value;
-      });
+      }
       return latest;
     }
 
@@ -8107,6 +8250,7 @@
         championBetState.ryo = payload.championBet.ryo || "";
         championBetState.official = payload.championBet.official || "";
         championBetState.rounds = normalizeChampionRounds(payload.championBet.rounds);
+        championBetState.eliminated = normalizeChampionEliminations(payload.championBet.eliminated);
         if (!payload.championBet.rounds && (championBetState.karin || championBetState.ryo)) {
           championBetState.rounds.pre = {
             karin: championBetState.karin,
