@@ -5,6 +5,8 @@
   const JAPAN_TEAM_ID = "JPN";
   const JST_TIME_ZONE = "Asia/Tokyo";
   const DAY_MS = 24 * 60 * 60 * 1000;
+  const FIREBASE_TOURNAMENT_URL = "https://football-delay-watching-a8830-default-rtdb.firebaseio.com/worldcup2026/state/tournament";
+  let firebasePersistTimer = null;
 
   const stageLabels = {
     group: "グループステージ",
@@ -1126,6 +1128,19 @@
 
   function persist() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state.saved));
+    clearTimeout(firebasePersistTimer);
+    firebasePersistTimer = setTimeout(() => {
+      fetch(`${FIREBASE_TOURNAMENT_URL}.json`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          scoreOverrides: state.saved.scoreOverrides || {},
+          favoriteMatchIds: state.saved.favoriteMatchIds || [],
+          venueNotes: state.saved.venueNotes || {},
+          lastUpdatedAt: state.saved.lastUpdatedAt || new Date().toISOString()
+        })
+      }).catch(() => {});
+    }, 500);
   }
 
   function renderContent() {
