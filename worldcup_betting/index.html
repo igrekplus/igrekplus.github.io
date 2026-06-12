@@ -8456,13 +8456,27 @@
         if (!res.ok) return;
         const payload = await res.json();
         if (!payload) return;
-        applyWorldCupStateData(payload);
+
+        // トーナメントスコアは常に適用（オーナーデータがなくても）
+        if (payload.tournament) {
+          window.WorldCupTournament?.importState?.(payload.tournament);
+        }
+
+        // オーナーデータがある場合は全体適用
+        const hasOwnerData = payload.karinPrediction || payload.owners?.karin || payload.karin;
+        if (hasOwnerData) {
+          try { applyWorldCupStateData(payload); } catch (e) { console.warn("applyWorldCupStateData:", e); }
+        }
+
         if (!silent) {
           showStatus("DBの内容を読み込みました");
           render();
         }
-      } catch (_) {
-        if (!silent) showStatus("DB読み込みに失敗しました");
+      } catch (e) {
+        if (!silent) {
+          showStatus("DB読み込みに失敗しました");
+          console.warn("loadFirebaseState:", e);
+        }
       }
     }
 
