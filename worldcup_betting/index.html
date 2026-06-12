@@ -4427,9 +4427,8 @@
               <button class="utility-button" type="button" id="importButton">このシートJSON読込</button>
               <button class="utility-button" type="button" id="gistExportButton">共有JSON出力</button>
               <button class="utility-button" type="button" id="gistImportButton">共有JSON URL読込</button>
-              <button class="utility-button" type="button" id="gistSettingsButton">Gist設定</button>
-              <button class="utility-button" type="button" id="gistLoadButton">Gistから読込</button>
-              <button class="utility-button primary-button" type="button" id="gistSaveButton">Gistへ保存</button>
+              <button class="utility-button" type="button" id="gistLoadButton">DBから読込</button>
+              <button class="utility-button primary-button" type="button" id="gistSaveButton">DBへ保存</button>
             </div>
             <div class="action-group owner-only-action" aria-label="ピッチ配置リセット">
               <button class="reset" type="button" id="resetButton">ピッチ配置をリセット</button>
@@ -5100,6 +5099,8 @@
     const officialSquadStorageKey = "formationBoard_officialSquad_japan";
     const gistSettingsStorageKey = "worldcup2026_gist_settings";
     const gistStateFileName = "worldcup_state.json";
+    const FIREBASE_DB_URL = "https://football-delay-watching-a8830-default-rtdb.firebaseio.com/worldcup2026/state";
+    let firebaseSaveTimer = null;
     const betResultValues = ["pending", "selected", "not_selected"];
     const betResultLabels = {
       pending: "未確定",
@@ -5613,7 +5614,6 @@
     const importButton = document.getElementById("importButton");
     const gistExportButton = document.getElementById("gistExportButton");
     const gistImportButton = document.getElementById("gistImportButton");
-    const gistSettingsButton = document.getElementById("gistSettingsButton");
     const gistLoadButton = document.getElementById("gistLoadButton");
     const gistSaveButton = document.getElementById("gistSaveButton");
     const screenshotButton = document.getElementById("screenshotButton");
@@ -6417,7 +6417,7 @@
 
       boardTitle.textContent = `${owners[activeOwner]}予想（${teamName}）`;
       sideTitle.textContent = `${owners[activeOwner]}の予想`;
-      sideSub.textContent = "共有保存先はGitHub Gistの worldcup_state.json です。端末内保存は一時キャッシュです。";
+      sideSub.textContent = "共有保存先はFirebase Realtime Databaseです。端末内保存は一時キャッシュです。";
       pitchCount.textContent = `ピッチ: ${pitchTotal}人/${pitchLimit}人`;
       pitchCount.classList.toggle("over-limit", pitchTotal > pitchLimit);
       benchCount.textContent = `ベンチ: ${benchTotal}人`;
@@ -6694,7 +6694,7 @@
 
       boardTitle.textContent = "W杯2026";
       sideTitle.textContent = "スコア/日程";
-      sideSub.textContent = "共有保存先はGitHub Gistの worldcup_state.json です。localStorageは一時キャッシュです。";
+      sideSub.textContent = "共有保存先はFirebase Realtime Databaseです。localStorageは一時キャッシュです。";
       statusMessage.textContent = "";
       window.clearTimeout(statusTimer);
       pitchCount.textContent = "2026本大会";
@@ -6743,7 +6743,7 @@
       const title = titleMap[view] || "W杯2026";
       boardTitle.textContent = title;
       sideTitle.textContent = title;
-      sideSub.textContent = "共有保存先はGitHub Gistの worldcup_state.json です。localStorageは一時キャッシュです。";
+      sideSub.textContent = "共有保存先はFirebase Realtime Databaseです。localStorageは一時キャッシュです。";
       statusMessage.textContent = "";
       window.clearTimeout(statusTimer);
       pitchCount.textContent = "観戦メモ";
@@ -8428,6 +8428,44 @@
       copyJsonToClipboard(buildGistExportData(), "worldcup_state.json 用JSONをコピーしました");
     }
 
+    async function saveFirebaseState() {
+      showStatus("DBに保存中...");
+      try {
+        const payload = buildWorldCupStateData();
+        const res = await fetch(`${FIREBASE_DB_URL}.json`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) throw new Error(`保存エラー: ${res.status}`);
+        showStatus(`DBに保存しました: ${payload.lastUpdated}`);
+      } catch (error) {
+        window.alert(`DBへ保存できませんでした。\n${error.message || error}`);
+        showStatus("DB保存に失敗しました");
+      }
+    }
+
+    async function loadFirebaseState(silent = false) {
+      if (!silent) {
+        const ok = window.confirm("DBの最新データを読み込み、現在の端末内データより優先して反映します。よろしいですか？");
+        if (!ok) return;
+        showStatus("DBから読み込み中...");
+      }
+      try {
+        const res = await fetch(`${FIREBASE_DB_URL}.json`, { cache: "no-store" });
+        if (!res.ok) return;
+        const payload = await res.json();
+        if (!payload) return;
+        applyWorldCupStateData(payload);
+        if (!silent) {
+          showStatus("DBの内容を読み込みました");
+          render();
+        }
+      } catch (_) {
+        if (!silent) showStatus("DB読み込みに失敗しました");
+      }
+    }
+
     async function importGistStateFromRawUrl() {
       const url = window.prompt("Gistの worldcup_state.json Raw URLを貼り付けてください");
       if (!url) return;
@@ -8577,9 +8615,8 @@
     importButton.addEventListener("click", importCurrentState);
     gistExportButton.addEventListener("click", exportGistState);
     gistImportButton.addEventListener("click", importGistStateFromRawUrl);
-    gistSettingsButton.addEventListener("click", configureGistSettings);
-    gistLoadButton.addEventListener("click", loadGistState);
-    gistSaveButton.addEventListener("click", saveGistState);
+    gistLoadButton.addEventListener("click", () => loadFirebaseState(false));
+    gistSaveButton.addEventListener("click", saveFirebaseState);
 
     screenshotButton.addEventListener("click", () => {
       screenshotMode = !screenshotMode;
@@ -8630,6 +8667,7 @@
     });
 
     render();
+    loadFirebaseState(true).then(() => render());
   </script>
 </body>
 </html>
