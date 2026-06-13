@@ -1485,8 +1485,12 @@
       textDiv(stageLabels[match.stage] || match.stage, "match-stage"),
       textDiv(match.group ? `Group ${match.group}` : "", "match-group"),
       textDiv(formatJstDateTime(match.kickoff_jst), "match-jst"),
-      textDiv(venueText(match), "match-venue"),
-      mapButton(match)
+      (() => {
+        const wrap = document.createElement("div");
+        wrap.className = "match-venue-wrap";
+        wrap.append(textDiv(venueText(match), "match-venue"), mapButton(match));
+        return wrap;
+      })()
     );
 
     const teams = document.createElement("div");

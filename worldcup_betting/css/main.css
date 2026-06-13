@@ -1914,6 +1914,13 @@
       margin-top: 2px;
     }
 
+    .match-venue-wrap {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex: 1 1 auto;
+    }
+
     .match-venue {
       color: #4a5568;
       font-size: 12px;
@@ -3228,17 +3235,22 @@
         display: none;
       }
 
-      .match-venue {
+      .match-venue-wrap {
         flex-basis: 100%;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+      }
+
+      .match-venue {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
       }
 
       .match-map-button {
         padding: 3px;
         width: 24px;
         min-height: 24px;
+        border-color: var(--blue);
+        color: var(--blue);
       }
 
       .match-play {
@@ -3255,7 +3267,7 @@
       }
 
       .match-play .match-teams .team-label {
-        white-space: nowrap;
+        white-space: normal;
       }
 
       .match-play .match-status {
