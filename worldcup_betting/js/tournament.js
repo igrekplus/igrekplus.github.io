@@ -989,7 +989,6 @@
       tabs: Array.from(document.querySelectorAll(".tournament-tab")),
       content: document.getElementById("tournamentContent"),
       summary: document.getElementById("tournamentSummary"),
-      updateButton: document.getElementById("tournamentUpdateButton"),
       favoriteCalendarButton: document.getElementById("favoriteCalendarButton"),
       groupFilter: document.getElementById("tournamentGroupFilter"),
       exportButton: document.getElementById("tournamentExportButton"),
@@ -1005,10 +1004,13 @@
     state.elements.tabs.forEach((button) => {
       button.addEventListener("click", () => {
         state.view = button.dataset.tournamentView || "japan";
-        renderContent();
+        if (["groups", "thirds", "knockout"].includes(state.view) && state.loaded) {
+          autoUpdateSnapshotsIfStale();
+        } else {
+          renderContent();
+        }
       });
     });
-    state.elements.updateButton?.addEventListener("click", updateTournamentSnapshots);
     state.elements.favoriteCalendarButton?.addEventListener("click", downloadFavoriteMatchesCalendar);
     state.elements.groupFilter?.addEventListener("change", () => {
       state.groupFilter = state.elements.groupFilter.value;
@@ -2067,6 +2069,15 @@
 
   function pad(value) {
     return String(value).padStart(2, "0");
+  }
+
+  function autoUpdateSnapshotsIfStale() {
+    const sig = scoreSignature();
+    if (!state.saved.standings || state.saved.standings.scoreSignature !== sig) {
+      updateTournamentSnapshots();
+    } else {
+      renderContent();
+    }
   }
 
   function updateTournamentSnapshots() {
