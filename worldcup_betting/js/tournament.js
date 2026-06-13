@@ -215,6 +215,22 @@
         club: "フランクフルト",
         image_url: "pics/堂安律.jpg",
         description: "右サイドから内側へ入り、左足のシュートやラストパスで局面を変えられる。日本が押し込めない時間帯の単独打開に注目。"
+      },
+      {
+        player_id: "jpn_ito_junya",
+        name_ja: "伊東純也",
+        position: "WG",
+        club: "スタッド・ランス",
+        image_url: "pics/伊東純也.jpg",
+        description: "右サイドから縦一本で背後を狙えるスプリンターで、相手の左SBを押し下げ続ける。日本がカウンターに出る時に最初の出口になれる。"
+      },
+      {
+        player_id: "jpn_tomiyasu_takehiro",
+        name_ja: "冨安健洋",
+        position: "DF",
+        club: "アヤックス",
+        image_url: "pics/冨安健洋.jpg",
+        description: "CBとSBを兼ねる守備の軸で、空中戦と対人の強さが際立つ。オランダの前線に対して個で対応できるCBとして、最終ラインの安定を担う。"
       }
     ],
     NED: [
@@ -241,6 +257,22 @@
         club: "ライプツィヒ",
         image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Xavi%20Simons%202024.jpg?width=180",
         description: "ライン間で前を向き、細かいタッチからラストパスやミドルを狙える。日本のボランチ脇で自由にさせないことが大事。"
+      },
+      {
+        player_id: "ned_cody_gakpo",
+        name_ja: "コーディ・ガクポ",
+        position: "FW",
+        club: "リバプール",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Cody%20Gakpo%202022.jpg?width=320",
+        description: "左サイドから斜めに切り込み、右足のシュートと中央へのラストパスで局面を動かす。日本の右サイド守備にとって、最も意識しなければならない前線の脅威。"
+      },
+      {
+        player_id: "ned_denzel_dumfries",
+        name_ja: "デンゼル・ドゥムフリース",
+        position: "DF",
+        club: "インテル",
+        image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Denzel%20Dumfries%202021.jpg?width=320",
+        description: "右サイドを大きく押し上げ、スピードとクロスで相手の左守備陣を圧迫する。日本の三笘や左SBとのマッチアップが日本戦の重要な個人的対決になる。"
       }
     ],
     TUN: [
@@ -712,6 +744,8 @@
     jpn_kubo_takefusa: "assets/players/jpn_kubo_takefusa.jpg",
     jpn_endo_wataru: "assets/players/jpn_endo_wataru.jpg",
     jpn_doan_ritsu: "assets/players/jpn_doan_ritsu.jpg",
+    jpn_ito_junya: "pics/伊東純也.jpg",
+    jpn_tomiyasu_takehiro: "pics/冨安健洋.jpg",
     ned_van_dijk: "assets/players/ned_van_dijk.jpg",
     ned_frenkie_de_jong: "assets/players/ned_frenkie_de_jong.jpg",
     ned_xavi_simons: "assets/players/ned_xavi_simons.jpg",
@@ -763,7 +797,11 @@
     jpn_kubo_takefusa: ["pics/久保建英.jpg", "既存ローカル画像"],
     jpn_endo_wataru: ["pics/遠藤航.jpg", "既存ローカル画像"],
     jpn_doan_ritsu: ["pics/堂安律.jpg", "既存ローカル画像"],
+    jpn_ito_junya: ["pics/伊東純也.jpg", "既存ローカル画像"],
+    jpn_tomiyasu_takehiro: ["pics/冨安健洋.jpg", "既存ローカル画像"],
     ned_van_dijk: ["pics/フィルジル・ファン・ダイク.jpg", "既存ローカル画像"],
+    ned_cody_gakpo: ["https://en.wikipedia.org/wiki/Cody_Gakpo", "Wikipedia / Wikimedia Commons"],
+    ned_denzel_dumfries: ["https://en.wikipedia.org/wiki/Denzel_Dumfries", "Wikipedia / Wikimedia Commons"],
     ned_frenkie_de_jong: ["https://en.wikipedia.org/wiki/Frenkie_de_Jong", "Wikipedia / Wikimedia Commons"],
     ned_xavi_simons: ["https://en.wikipedia.org/wiki/Xavi_Simons", "Wikipedia / Wikimedia Commons"],
     tun_ellyes_skhiri: ["https://en.wikipedia.org/wiki/Ellyes_Skhiri", "Wikipedia / Wikimedia Commons"],
@@ -2694,7 +2732,7 @@
       empty.textContent = "確認中";
       list.appendChild(empty);
     } else {
-      items.slice(0, 3).forEach((player) => list.appendChild(countryPlayerCard(player)));
+      items.slice(0, 5).forEach((player) => list.appendChild(countryPlayerCard(player)));
     }
     section.append(heading, list);
     return section;
