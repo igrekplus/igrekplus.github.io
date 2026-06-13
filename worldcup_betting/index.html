@@ -4425,8 +4425,6 @@
               <span class="action-label">共有：</span>
               <button class="utility-button" type="button" id="exportButton">このシートJSON出力</button>
               <button class="utility-button" type="button" id="importButton">このシートJSON読込</button>
-              <button class="utility-button" type="button" id="gistExportButton">共有JSON出力</button>
-              <button class="utility-button" type="button" id="gistImportButton">共有JSON URL読込</button>
               <button class="utility-button" type="button" id="gistLoadButton">DBから読込</button>
               <button class="utility-button primary-button" type="button" id="gistSaveButton">DBへ保存</button>
             </div>
@@ -4776,12 +4774,12 @@
         <section class="view-panel tournament-panel" id="tournamentPanel" aria-label="スコア/日程">
           <div class="tournament-shell">
             <div class="tournament-tabs" id="tournamentTabs" aria-label="スコア/日程メニュー">
-              <button class="tournament-tab active" type="button" data-tournament-view="japan">日本戦</button>
-              <button class="tournament-tab" type="button" data-tournament-view="schedule">全日程</button>
+              <button class="tournament-tab active" type="button" data-tournament-view="schedule">全日程</button>
               <button class="tournament-tab" type="button" data-tournament-view="groups">グループ順位</button>
               <button class="tournament-tab" type="button" data-tournament-view="thirds">3位ランキング</button>
               <button class="tournament-tab" type="button" data-tournament-view="knockout">決勝トーナメント</button>
               <button class="tournament-tab" type="button" data-tournament-view="calendar">カレンダー</button>
+              <button class="tournament-tab" type="button" data-tournament-view="japan">日本戦</button>
             </div>
             <div class="tournament-toolbar">
               <div class="tournament-actions" aria-label="スコア/日程更新">
@@ -4805,26 +4803,6 @@
                   <option value="L">Group L</option>
                 </select>
               </label>
-              <div class="tournament-json-actions" aria-label="スコア/日程データ">
-                <button class="utility-button" type="button" id="tournamentExportButton">JSONエクスポート</button>
-                <button class="utility-button" type="button" id="tournamentImportButton">JSONインポート</button>
-              </div>
-              <details class="tournament-shared-score">
-                <summary>端末内保存・JSON共有</summary>
-                <div class="shared-score-body" aria-label="共有スコアJSON">
-                  <div class="shared-score-block">
-                    <label for="sharedScoreUrlInput">共有JSON URLから読み込む</label>
-                    <input id="sharedScoreUrlInput" type="url" inputmode="url" placeholder="https://example.com/scores.json">
-                    <button class="utility-button" type="button" id="sharedScoreUrlButton">URLから読み込む</button>
-                  </div>
-                  <div class="shared-score-block">
-                    <label for="sharedScoreTextInput">JSON本文を貼り付けてインポート</label>
-                    <textarea id="sharedScoreTextInput" spellcheck="false" placeholder='JSON全文、または G-F-01:1-2 / R32-01:1-1:4-3'></textarea>
-                    <button class="utility-button" type="button" id="sharedScoreTextButton">JSON本文をインポート</button>
-                  </div>
-                  <div class="shared-score-status" id="sharedScoreStatus">端末内保存のみ。スマホとPCは自動同期されません。</div>
-                </div>
-              </details>
             </div>
             <div class="tournament-summary" id="tournamentSummary"></div>
             <div id="tournamentContent"></div>
@@ -5612,8 +5590,6 @@
     const lockButton = document.getElementById("lockButton");
     const exportButton = document.getElementById("exportButton");
     const importButton = document.getElementById("importButton");
-    const gistExportButton = document.getElementById("gistExportButton");
-    const gistImportButton = document.getElementById("gistImportButton");
     const gistLoadButton = document.getElementById("gistLoadButton");
     const gistSaveButton = document.getElementById("gistSaveButton");
     const screenshotButton = document.getElementById("screenshotButton");
@@ -8627,8 +8603,6 @@
 
     exportButton.addEventListener("click", exportCurrentState);
     importButton.addEventListener("click", importCurrentState);
-    gistExportButton.addEventListener("click", exportGistState);
-    gistImportButton.addEventListener("click", importGistStateFromRawUrl);
     gistLoadButton.addEventListener("click", () => loadFirebaseState(false));
     gistSaveButton.addEventListener("click", saveFirebaseState);
 

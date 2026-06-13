@@ -962,7 +962,7 @@
     initialized: false,
     loaded: false,
     loadError: "",
-    view: "japan",
+    view: "schedule",
     matches: [],
     teams: {},
     knockoutMapping: {},
