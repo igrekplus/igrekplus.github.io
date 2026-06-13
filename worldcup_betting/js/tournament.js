@@ -1482,7 +1482,7 @@
     meta.append(
       favoriteButton(match.match_id),
       textDiv(match.match_id, "match-id"),
-      textDiv(stageLabels[match.stage] || match.stage),
+      textDiv(stageLabels[match.stage] || match.stage, "match-stage"),
       textDiv(match.group ? `Group ${match.group}` : "", "match-group"),
       textDiv(formatJstDateTime(match.kickoff_jst), "match-jst"),
       textDiv(venueText(match), "match-venue"),
@@ -1492,14 +1492,14 @@
     const teams = document.createElement("div");
     teams.className = "match-teams";
     teams.append(
-      participantLabel(matchHomeId(match), match.home_name_ja, "match-team"),
+      participantLabel(matchHomeId(match), match.home_name_ja, "match-team", { showRank: false }),
       textDiv(scoreText(match.match_id), "match-score-display"),
-      participantLabel(matchAwayId(match), match.away_name_ja, "match-team away")
+      participantLabel(matchAwayId(match), match.away_name_ja, "match-team away", { showRank: false })
     );
 
     const play = document.createElement("div");
     play.className = "match-play";
-    play.append(teams, statusBadge(match.match_id), createScoreEditor(match.match_id));
+    play.append(teams, statusBadge(match.match_id), createScoreEditor(match.match_id, match.stage));
 
     body.append(meta, play);
     card.append(body);
@@ -1548,13 +1548,10 @@
     return "review";
   }
 
-  function createScoreEditor(matchId) {
-    const fields = [
-      ["score_home", "H"],
-      ["score_away", "A"],
-      ["penalty_home", "H PK"],
-      ["penalty_away", "A PK"]
-    ];
+  function createScoreEditor(matchId, stage = "") {
+    const fields = stage === "group"
+      ? [["score_home", "H"], ["score_away", "A"]]
+      : [["score_home", "H"], ["score_away", "A"], ["penalty_home", "H PK"], ["penalty_away", "A PK"]];
     const score = normalizedScore(matchId);
     const editor = document.createElement("div");
     editor.className = "score-editor";
