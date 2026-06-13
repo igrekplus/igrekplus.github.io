@@ -4388,10 +4388,8 @@
         width: 100%;
       }
 
-      .standing-table [data-col="played"],
       .standing-table [data-col="gf"],
       .standing-table [data-col="ga"],
-      .standing-table [data-col="gd"],
       .standing-table [data-col="status"] {
         display: none;
       }
