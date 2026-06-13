@@ -2214,7 +2214,7 @@
     table.className = includeGroup ? "standing-table standing-table-thirds" : "standing-table";
     table.appendChild(createStandingColGroup(includeGroup));
     const head = document.createElement("thead");
-    head.innerHTML = `<tr><th>順位</th>${includeGroup ? "<th>組</th>" : ""}<th>チーム</th><th>勝点</th><th>試</th><th>勝</th><th>分</th><th>敗</th><th>得</th><th>失</th><th>差</th><th>状態</th></tr>`;
+    head.innerHTML = `<tr><th>順位</th>${includeGroup ? "<th>組</th>" : ""}<th data-col="team">チーム</th><th>勝点</th><th data-col="played">試</th><th>勝</th><th>分</th><th>敗</th><th data-col="gf">得</th><th data-col="ga">失</th><th data-col="gd">差</th><th data-col="status">状態</th></tr>`;
     const body = document.createElement("tbody");
     stats.forEach((team, index) => {
       const hasAdvanceStatus = Object.prototype.hasOwnProperty.call(team, "advances");
@@ -2225,16 +2225,17 @@
       appendCell(row, index + 1);
       if (includeGroup) appendCell(row, team.group);
       const teamCell = appendCell(row, "");
+      teamCell.dataset.col = "team";
       teamCell.appendChild(teamLabel(team.teamId, team.name));
       appendCell(row, team.points);
-      appendCell(row, team.played);
+      appendCell(row, team.played).dataset.col = "played";
       appendCell(row, team.wins);
       appendCell(row, team.draws);
       appendCell(row, team.losses);
-      appendCell(row, team.gf);
-      appendCell(row, team.ga);
-      appendCell(row, team.gf - team.ga);
-      appendCell(row, status);
+      appendCell(row, team.gf).dataset.col = "gf";
+      appendCell(row, team.ga).dataset.col = "ga";
+      appendCell(row, team.gf - team.ga).dataset.col = "gd";
+      appendCell(row, status).dataset.col = "status";
       body.appendChild(row);
     });
     table.append(head, body);

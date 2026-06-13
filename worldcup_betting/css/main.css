@@ -4376,3 +4376,36 @@
         font-size: 8.5px;
       }
     }
+
+    @media (max-width: 600px) {
+      .standing-table {
+        table-layout: auto !important;
+        min-width: 0 !important;
+        width: 100%;
+      }
+
+      .standing-table-thirds {
+        width: 100%;
+      }
+
+      .standing-table [data-col="played"],
+      .standing-table [data-col="gf"],
+      .standing-table [data-col="ga"],
+      .standing-table [data-col="gd"],
+      .standing-table [data-col="status"] {
+        display: none;
+      }
+
+      .standing-table [data-col="team"] {
+        max-width: 90px;
+        white-space: nowrap !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .standing-table th,
+      .standing-table td {
+        padding: 6px 5px;
+        font-size: 12px;
+      }
+    }
