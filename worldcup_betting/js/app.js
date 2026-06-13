@@ -708,10 +708,6 @@
     const resetButton = document.getElementById("resetButton");
     const sortByRatingButton = document.getElementById("sortByRatingButton");
     const lockButton = document.getElementById("lockButton");
-    const exportButton = document.getElementById("exportButton");
-    const importButton = document.getElementById("importButton");
-    const gistLoadButton = document.getElementById("gistLoadButton");
-    const gistSaveButton = document.getElementById("gistSaveButton");
     const screenshotButton = document.getElementById("screenshotButton");
     const screenshotReturnButton = document.getElementById("screenshotReturnButton");
     const saveState = document.getElementById("saveState");
@@ -3721,10 +3717,6 @@
       render();
     });
 
-    exportButton.addEventListener("click", exportCurrentState);
-    importButton.addEventListener("click", importCurrentState);
-    gistLoadButton.addEventListener("click", () => loadFirebaseState(false));
-    gistSaveButton.addEventListener("click", saveFirebaseState);
 
     screenshotButton.addEventListener("click", () => {
       screenshotMode = !screenshotMode;
