@@ -1488,7 +1488,7 @@
       (() => {
         const wrap = document.createElement("div");
         wrap.className = "match-venue-wrap";
-        wrap.append(textDiv(venueText(match), "match-venue"), mapButton(match), calendarButton(match));
+        wrap.append(textDiv(venueText(match), "match-venue"), mapButton(match), icsButton(match));
         return wrap;
       })()
     );
@@ -1520,7 +1520,7 @@
     return button;
   }
 
-  function calendarButton(match) {
+  function icsButton(match) {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "utility-button match-calendar-button";
