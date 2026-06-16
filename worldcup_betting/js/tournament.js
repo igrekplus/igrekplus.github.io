@@ -1488,7 +1488,7 @@
       (() => {
         const wrap = document.createElement("div");
         wrap.className = "match-venue-wrap";
-        wrap.append(textDiv(venueText(match), "match-venue"), mapButton(match));
+        wrap.append(textDiv(venueText(match), "match-venue"), mapButton(match), calendarButton(match));
         return wrap;
       })()
     );
@@ -1518,6 +1518,58 @@
     button.setAttribute("aria-label", "地図で見る");
     button.addEventListener("click", () => openVenueFromMatch(match));
     return button;
+  }
+
+  function calendarButton(match) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "utility-button match-calendar-button";
+    button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.11-.89-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>';
+    button.setAttribute("aria-label", "カレンダーに追加");
+    button.addEventListener("click", () => downloadSingleMatchIcs(match));
+    return button;
+  }
+
+  function downloadSingleMatchIcs(match) {
+    const start = jstDate(match.kickoff_jst);
+    if (Number.isNaN(start.getTime())) return;
+    const end = new Date(start.getTime() + 2 * 60 * 60 * 1000);
+    const home = displayTeam(matchHomeId(match), match.home_name_ja, { showRank: false });
+    const away = displayTeam(matchAwayId(match), match.away_name_ja, { showRank: false });
+    const title = `W杯2026: ${home} vs ${away}`;
+    const description = [
+      match.match_id,
+      stageLabels[match.stage] || match.stage,
+      match.group ? `Group ${match.group}` : "",
+      `日本時間: ${formatJstDateTime(match.kickoff_jst)}`
+    ].filter(Boolean).join("\n");
+    const stamp = icsDateTime(new Date());
+    const lines = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "PRODID:-//igrekplus//WorldCup Betting//JA",
+      "CALSCALE:GREGORIAN",
+      "METHOD:PUBLISH",
+      "BEGIN:VEVENT",
+      `UID:${icsEscape(match.match_id)}@worldcup-betting.igrekplus.github.io`,
+      `DTSTAMP:${stamp}`,
+      `DTSTART:${icsDateTime(start)}`,
+      `DTEND:${icsDateTime(end)}`,
+      `SUMMARY:${icsEscape(title)}`,
+      `DESCRIPTION:${icsEscape(description)}`,
+      `LOCATION:${icsEscape(venueText(match))}`,
+      "END:VEVENT",
+      "END:VCALENDAR"
+    ];
+    const blob = new Blob([`${lines.join("\r\n")}\r\n`], { type: "text/calendar;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `worldcup_${match.match_id}.ics`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
   }
 
   function statusBadge(matchId) {
