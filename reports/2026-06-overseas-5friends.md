@@ -294,7 +294,8 @@
 
 | 時刻 | 内容 |
 |---|---|
-| 09:00〜10:15 | ホテル近くでお土産買い出し。第一候補は <a href="https://www.google.com/maps/search/?api=1&query=家樂福高雄愛河店" target="_blank" rel="noopener">家樂福高雄愛河店</a>。量販店なのでお菓子・調味料・飲み物系がまとめて見やすい |
+| 07:00台 | ホテル近くで朝ごはん。候補は <a href="https://www.google.com/maps/search/?api=1&query=興隆居+高雄市前金區六合二路186號" target="_blank" rel="noopener">興隆居</a>、<a href="https://maps.app.goo.gl/YZwTgDUEMsyv7nNdA" target="_blank" rel="noopener">前金肉燥飯</a>、<a href="https://www.google.com/maps/search/?api=1&query=老江紅茶牛奶+高雄市新興區南台路51號" target="_blank" rel="noopener">老江紅茶牛奶</a> あたり |
+| 08:30〜10:15 | ホテル近くでお土産買い出し。第一候補は <a href="https://www.google.com/maps/search/?api=1&query=家樂福高雄愛河店" target="_blank" rel="noopener">家樂福高雄愛河店</a>。量販店なのでお菓子・調味料・飲み物系がまとめて見やすい |
 | 10:15〜11:30 | ホテルに戻って荷造り・チェックアウト・空港へ向かう準備 |
 | 11:43 | 🚇 美麗島駅 発（紅線・小港行き） |
 | 11:59 | 🚇 高雄国際機場站 着 |
@@ -327,8 +328,16 @@
 
 | 候補 | ホテルから | 営業時間 | メモ |
 |---|---|---|---|
-| <a href="https://www.google.com/maps/search/?api=1&query=家樂福高雄愛河店" target="_blank" rel="noopener">家樂福高雄愛河店</a> | タクシーで約10分目安 | 09:00〜23:00目安<br>直前にGoogle Mapsで再確認 | ホテル周辺で品揃え重視ならここ。台湾菓子、調味料、インスタント麺、ドリンク系をまとめて買いやすい。 |
+| <a href="https://www.google.com/maps/search/?api=1&query=家樂福高雄愛河店" target="_blank" rel="noopener">家樂福高雄愛河店</a> | タクシーで約10分目安 | 08:30〜23:00目安<br>直前にGoogle Mapsで再確認 | ホテル周辺で品揃え重視ならここ。台湾菓子、調味料、インスタント麺、ドリンク系をまとめて買いやすい。 |
 | <a href="https://www.google.com/maps/search/?api=1&query=全聯福利中心+高雄車站" target="_blank" rel="noopener">全聯福利中心（高雄車站周辺）</a> | 徒歩〜タクシー圏内 | 08:00〜23:00目安<br>店舗により差あり | 近場で軽く買うなら候補。品揃えは家樂福よりコンパクトなので、時間優先のとき向き。 |
+
+#### 3日目朝：朝ごはん候補
+
+| 候補 | Google Maps | 営業時間 | メモ |
+|---|---|---|---|
+| 興隆居 | <a href="https://www.google.com/maps/search/?api=1&query=興隆居+高雄市前金區六合二路186號" target="_blank" rel="noopener">📍 Google Maps</a> | 04:30〜11:30<br>月・火休み | 口コミ高めの朝食定番。湯包・飯糰・蘿蔔糕。朝からしっかり食べたい場合。 |
+| 前金肉燥飯 | <a href="https://maps.app.goo.gl/YZwTgDUEMsyv7nNdA" target="_blank" rel="noopener">📍 Google Maps</a> | 朝〜昼営業目安<br>行く前に要確認 | 1日目チェックイン前に寄る予定だった候補。到着日に重ければ、3日目朝へ回すのがちょうど良さそう。 |
+| 老江紅茶牛奶 | <a href="https://www.google.com/maps/search/?api=1&query=老江紅茶牛奶+高雄市新興區南台路51號" target="_blank" rel="noopener">📍 Google Maps</a> | 24時間 | ミルクティーと軽食。時間調整しやすく、軽めに済ませたい場合。 |
 
 ## 🗺️ 観光スポット
 
