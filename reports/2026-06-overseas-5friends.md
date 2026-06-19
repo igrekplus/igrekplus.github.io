@@ -139,7 +139,7 @@
 | 〜14:00頃 | MRTで高雄車站へ移動。ホテルに荷物預け＋時間次第で周辺散策。小腹が空いていれば <a href="https://maps.app.goo.gl/YZwTgDUEMsyv7nNdA" target="_blank" rel="noopener">前金肉燥飯</a> で軽めに食べる案もあり |
 | 15:00 | ホテルチェックイン |
 | 16:00 | 🦐 エビ釣りへ。候補は <a href="?r=2026-06-overseas-5friends-ebitsuri" target="_blank" rel="noopener">エビ釣り候補ページ</a> を参照 |
-| 19:00頃 | 夕食へ。第一候補は <a href="https://maps.app.goo.gl/C1oPFSmQbhrxuVjM8?g_st=ic" target="_blank" rel="noopener">Yang Bao Bao（北平楊寶寶蒸餃）</a>。予約必須ではなさそうだが、人気店なので5人なら事前確認か早め到着が安心 |
+| 19:00頃 | 夕食へ。第一候補は <a href="https://maps.app.goo.gl/C1oPFSmQbhrxuVjM8?g_st=ic" target="_blank" rel="noopener">Yang Bao Bao（北平楊寶寶蒸餃／楠梓ブランチ）</a>。ネット予約できる導線は確認できず。5人なら電話確認、または早め到着が安心 |
 
 > ⚽ この日の朝08:00〜 W杯 日本代表 第3戦。機内で経過が気になるかも。
 >
@@ -279,7 +279,8 @@
 
 | 時刻 | 内容 |
 |---|---|
-| 〜11:30 | チェックアウト・空港へ向かう準備 |
+| 09:00〜10:15 | ホテル近くでお土産買い出し。第一候補は <a href="https://www.google.com/maps/search/?api=1&query=家樂福高雄愛河店" target="_blank" rel="noopener">家樂福高雄愛河店</a>。量販店なのでお菓子・調味料・飲み物系がまとめて見やすい |
+| 10:15〜11:30 | ホテルに戻って荷造り・チェックアウト・空港へ向かう準備 |
 | 11:43 | 🚇 美麗島駅 発（紅線・小港行き） |
 | 11:59 | 🚇 高雄国際機場站 着 |
 | 12:00頃 | 空港到着。ななみんは韓国へ向かうため、ここで空港解散 |
@@ -306,6 +307,13 @@
 </table>
 
 </details>
+
+#### 3日目朝：お土産スーパー候補
+
+| 候補 | ホテルから | 営業時間 | メモ |
+|---|---|---|---|
+| <a href="https://www.google.com/maps/search/?api=1&query=家樂福高雄愛河店" target="_blank" rel="noopener">家樂福高雄愛河店</a> | タクシーで約10分目安 | 09:00〜23:00目安<br>直前にGoogle Mapsで再確認 | ホテル周辺で品揃え重視ならここ。台湾菓子、調味料、インスタント麺、ドリンク系をまとめて買いやすい。 |
+| <a href="https://www.google.com/maps/search/?api=1&query=全聯福利中心+高雄車站" target="_blank" rel="noopener">全聯福利中心（高雄車站周辺）</a> | 徒歩〜タクシー圏内 | 08:00〜23:00目安<br>店舗により差あり | 近場で軽く買うなら候補。品揃えは家樂福よりコンパクトなので、時間優先のとき向き。 |
 
 ## 🗺️ 観光スポット
 
@@ -385,7 +393,7 @@
     <tr><td>汕頭泉成沙茶火鍋<br>中山總店</td><td>火鍋<br>最有力候補（永田家）<br>予約推奨<br>お酒は要確認</td><td><a href="https://maps.app.goo.gl/hmq4PbYLL5vCCakB7" target="_blank" rel="noopener">📍 Google Maps</a></td><td>11:00〜深夜帯<br>行く前に要確認</td><td>沙茶火鍋（沙茶だれの火鍋）<br>牛肉（しゃぶしゃぶ用）<br>海鮮盛り（鍋具材）<br>花枝漿（イカ団子）</td><td>夜</td></tr>
     <tr><td>雞伯燒酒雞</td><td>鶏料理<br>5人なら予約推奨<br>ビールあり</td><td><a href="https://maps.app.goo.gl/ZWKvwrZ81mQrPJNo9" target="_blank" rel="noopener">📍 Google Maps</a></td><td>17:00〜24:30頃<br>水曜休み、隔週火曜休み目安</td><td>燒酒雞（酒香る鶏鍋）<br>蒜頭雞（にんにく鶏鍋）<br>豆乳雞（台湾風鶏唐揚げ）<br>三杯雞（台湾バジル鶏炒め）<br>炒飯・麵線（締め候補）</td><td>夜</td></tr>
     <tr><td>六合夜市</td><td>夜市<br>予約不要<br>お酒は周辺調達</td><td><a href="https://maps.app.goo.gl/4mik1WtFexFay9f47?g_st=il" target="_blank" rel="noopener">📍 Google Maps</a></td><td>18:00〜26:00頃</td><td>海鮮（屋台シーフード）<br>牡蠣オムレツ（牡蠣入り卵焼き）<br>臭豆腐（発酵豆腐）<br>木瓜牛乳（パパイヤミルク）</td><td>夜</td></tr>
-    <tr><td>北平楊寶寶蒸餃<br>朝明店</td><td>餃子・北方麺食<br>予約必須ではなさそう<br>5人なら事前確認推奨<br>お酒は要確認</td><td><a href="https://maps.app.goo.gl/C1oPFSmQbhrxuVjM8?g_st=ic" target="_blank" rel="noopener">📍 Google Maps</a></td><td>10:30〜20:30頃<br>行く前に要確認</td><td>蒸餃（看板の蒸し餃子）<br>牛肉捲餅（牛肉ロール）<br>酸辣湯（サンラータン）<br>庶民派ビブグルマン餃子。1日目の夕食第一候補</td><td>夜</td></tr>
+    <tr><td>北平楊寶寶蒸餃<br>楠梓ブランチ</td><td>餃子・北方麺食<br>ネット予約導線は未確認<br>5人なら電話確認か早め到着推奨<br>お酒は要確認</td><td><a href="https://maps.app.goo.gl/C1oPFSmQbhrxuVjM8?g_st=ic" target="_blank" rel="noopener">📍 Google Maps</a></td><td>10:30〜20:30頃<br>行く前に要確認</td><td>蒸餃（看板の蒸し餃子）<br>牛肉捲餅（牛肉ロール）<br>酸辣湯（サンラータン）<br>庶民派ビブグルマン餃子。1日目の夕食第一候補</td><td>夜</td></tr>
   </tbody>
 </table>
 
