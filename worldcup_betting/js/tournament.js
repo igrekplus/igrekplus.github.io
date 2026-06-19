@@ -2266,10 +2266,64 @@
       card.open = true;
       const heading = document.createElement("summary");
       heading.textContent = `Group ${group}`;
-      card.append(heading, createStandingTable(state.saved.standings.groups[group]));
+      card.append(
+        heading,
+        createStandingTable(state.saved.standings.groups[group]),
+        createGroupScheduleList(group)
+      );
       wrapper.appendChild(card);
     });
     return wrapper;
+  }
+
+  function createGroupScheduleList(group) {
+    const section = document.createElement("section");
+    section.className = "standing-schedule";
+    const heading = document.createElement("h3");
+    heading.textContent = `Group ${group} 試合日程`;
+    const list = document.createElement("div");
+    list.className = "standing-schedule-list";
+    const matches = sortedMatches(computedSchedule().filter((match) => match.group === group));
+    if (matches.length === 0) {
+      list.appendChild(message("このグループの試合日程はありません", "standing-schedule-empty"));
+    } else {
+      matches.forEach((match) => list.appendChild(createStandingScheduleMatch(match)));
+    }
+    section.append(heading, list);
+    return section;
+  }
+
+  function createStandingScheduleMatch(match) {
+    const row = document.createElement("button");
+    row.type = "button";
+    row.className = "standing-schedule-match";
+    if (isJapanMatch(match)) row.classList.add("japan-highlight");
+    if (isFavoriteMatch(match.match_id)) row.classList.add("favorite-match");
+    row.addEventListener("click", () => {
+      state.calendarDate = jstDate(match.kickoff_jst);
+      state.calendarMode = "day";
+      state.view = "calendar";
+      renderContent();
+    });
+
+    const meta = document.createElement("span");
+    meta.className = "standing-schedule-meta";
+    meta.textContent = `${match.match_id} / ${formatJstDateTime(match.kickoff_jst)}`;
+
+    const play = document.createElement("span");
+    play.className = "standing-schedule-play";
+    play.append(
+      participantLabel(matchHomeId(match), match.home_name_ja),
+      textSpan(scoreText(match.match_id), "standing-schedule-score"),
+      participantLabel(matchAwayId(match), match.away_name_ja)
+    );
+
+    const venue = document.createElement("span");
+    venue.className = "standing-schedule-venue";
+    venue.textContent = venueText(match);
+
+    row.append(meta, play, venue);
+    return row;
   }
 
   function renderThirdRankingSnapshot() {

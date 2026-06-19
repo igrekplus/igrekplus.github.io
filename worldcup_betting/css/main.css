@@ -1884,6 +1884,93 @@
       display: none;
     }
 
+    .standing-schedule {
+      display: grid;
+      gap: 8px;
+      border-top: 1px solid var(--line);
+      padding: 10px;
+      background: #f8fafc;
+    }
+
+    .standing-schedule h3 {
+      margin: 0;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .standing-schedule-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .standing-schedule-match {
+      display: grid;
+      grid-template-columns: minmax(170px, 0.95fr) minmax(260px, 1.45fr) minmax(160px, 0.9fr);
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 8px;
+      color: var(--text);
+      cursor: pointer;
+      font: inherit;
+      text-align: left;
+    }
+
+    .standing-schedule-match:hover {
+      border-color: var(--blue);
+      background: #f0f7ff;
+    }
+
+    .standing-schedule-match.japan-highlight,
+    .standing-schedule-match.favorite-match {
+      border-color: #b7d8ff;
+      background: #eef6ff;
+    }
+
+    .standing-schedule-meta,
+    .standing-schedule-venue,
+    .standing-schedule-empty {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    .standing-schedule-play {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .standing-schedule-play .team-label {
+      min-width: 0;
+    }
+
+    .standing-schedule-play .team-label:last-child {
+      justify-content: end;
+      text-align: right;
+    }
+
+    .standing-schedule-score {
+      min-width: 58px;
+      border-radius: 999px;
+      background: #edf2f7;
+      padding: 3px 8px;
+      text-align: center;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
     .match-meta {
       display: grid;
       gap: 4px;
@@ -4466,5 +4553,22 @@
       .standing-table td {
         padding: 6px 5px;
         font-size: 12px;
+      }
+
+      .standing-schedule-match {
+        grid-template-columns: 1fr;
+      }
+
+      .standing-schedule-play {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .standing-schedule-play .team-label:last-child {
+        justify-content: start;
+        text-align: left;
+      }
+
+      .standing-schedule-score {
+        width: fit-content;
       }
     }
