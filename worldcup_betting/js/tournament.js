@@ -1805,7 +1805,7 @@
     nav.className = "calendar-nav";
     const previous = calendarButton("前へ", () => moveCalendar(-1));
     const today = calendarButton("今日", () => {
-      state.calendarDate = firstMatchDate() || new Date();
+      state.calendarDate = todayInJst();
       renderContent();
     });
     const next = calendarButton("次へ", () => moveCalendar(1));
@@ -2066,6 +2066,19 @@
 
   function calendarDate() {
     return state.calendarDate ? new Date(state.calendarDate) : firstMatchDate() || new Date();
+  }
+
+  function todayInJst(now = new Date()) {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: "Asia/Tokyo",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    }).formatToParts(now).reduce((result, part) => {
+      if (part.type !== "literal") result[part.type] = part.value;
+      return result;
+    }, {});
+    return new Date(Number(parts.year), Number(parts.month) - 1, Number(parts.day));
   }
 
   function jstDate(value) {
