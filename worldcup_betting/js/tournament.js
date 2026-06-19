@@ -1806,6 +1806,7 @@
     const previous = calendarButton("前へ", () => moveCalendar(-1));
     const today = calendarButton("今日", () => {
       state.calendarDate = todayInJst();
+      state.calendarMode = "day";
       renderContent();
     });
     const next = calendarButton("次へ", () => moveCalendar(1));
