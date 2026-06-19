@@ -188,7 +188,7 @@
     <tr><td>09:00頃</td><td>ホテル出発。MRTで <a href="https://www.google.com/maps/search/?api=1&query=高雄車站" target="_blank" rel="noopener">高雄車站</a> → <a href="https://www.google.com/maps/search/?api=1&query=美麗島駅+高雄" target="_blank" rel="noopener">美麗島</a> → <a href="https://www.google.com/maps/search/?api=1&query=西子湾駅+高雄" target="_blank" rel="noopener">西子湾</a> へ</td></tr>
     <tr><td>09:40頃</td><td><a href="https://www.google.com/maps/search/?api=1&query=鼓山輪渡站" target="_blank" rel="noopener">鼓山輪渡站</a> からフェリーで <a href="https://www.google.com/maps/search/?api=1&query=旗津+高雄" target="_blank" rel="noopener">旗津</a> へ（乗船は約5分）</td></tr>
     <tr><td>10:00〜12:00</td><td>旗津でレンタサイクル。<a href="https://www.google.com/maps/search/?api=1&query=旗津星空隧道" target="_blank" rel="noopener">星空隧道</a>、海沿いのサイクリングロード、<a href="https://www.google.com/maps/search/?api=1&query=旗津彩虹教堂" target="_blank" rel="noopener">彩虹教堂</a>、<a href="https://www.google.com/maps/search/?api=1&query=旗津雙螺台" target="_blank" rel="noopener">雙螺台</a>、<a href="https://www.google.com/maps/search/?api=1&query=旗津海珍珠" target="_blank" rel="noopener">旗津海珍珠</a>、<a href="https://www.google.com/maps/search/?api=1&query=旗津風車公園" target="_blank" rel="noopener">風車公園</a> あたりを無理なく回る</td></tr>
-    <tr><td>12:00〜13:30</td><td><a href="https://www.google.com/maps/search/?api=1&query=旗后海產+高雄市旗津區廟前路31號" target="_blank" rel="noopener">旗后海産</a> でランチ。海鮮を選んで調理してもらうスタイルなので、時価メニューは注文前に値段確認</td></tr>
+    <tr><td>12:00〜13:30</td><td><a href="https://www.google.com/maps/search/?api=1&query=旗后海產+高雄市旗津區廟前路31號" target="_blank" rel="noopener">旗后海産</a> でランチ。予約できるかは事前に電話確認。難しければ下の海鮮ランチ候補へ。海鮮を選んで調理してもらうスタイルなので、時価メニューは注文前に値段確認</td></tr>
     <tr><td>13:30〜15:00</td><td><a href="https://www.google.com/maps/search/?api=1&query=旗后灯塔" target="_blank" rel="noopener">旗后灯塔</a>・<a href="https://www.google.com/maps/search/?api=1&query=旗后砲台" target="_blank" rel="noopener">旗后砲台</a>・<a href="https://www.google.com/maps/search/?api=1&query=旗津老街" target="_blank" rel="noopener">旗津老街</a> を散歩。暑ければカフェやアイス休憩を優先</td></tr>
     <tr><td>15:00〜16:00</td><td>フェリーとMRTで一旦ホテルへ戻る</td></tr>
     <tr><td>16:00〜18:00</td><td>ホテルで休憩・身支度</td></tr>
@@ -239,9 +239,24 @@
 | 店名 | 旗后海産（旗后活海産店） |
 | Google Maps | <a href="https://www.google.com/maps/search/?api=1&query=旗后海產+高雄市旗津區廟前路31號" target="_blank" rel="noopener">📍 Google Maps</a> |
 | 営業時間 | 11:00〜21:00頃（月曜休み目安） |
+| 予約 | オンライン予約できる導線は確認できず。5人なので、行く前にGoogle Maps掲載の電話で確認。予約不可・電話がつながらない場合は、早め到着か下の候補へ切り替え。 |
 | おすすめ | 活燙蝦、炸銀魚、海鮮炒飯・炒麺、季節の魚介、空芯菜など |
 | お酒 | ビールあり |
 | 支払い | 現金前提が安心。カード可否は入店時に確認 |
+
+</details>
+
+<details>
+<summary>旗津の海鮮ランチ候補</summary>
+
+口コミの良さ、店内写真の清潔感、お酒が飲めそうかを優先して直前確認する候補。旗津の海鮮店は現地運用が変わりやすいので、入店前に席・ビール・支払い方法を確認。
+
+| 候補 | Google Maps | 予約・入りやすさ | お酒・メモ |
+|---|---|---|---|
+| 旗后海産（本命） | <a href="https://www.google.com/maps/search/?api=1&query=旗后海產+高雄市旗津區廟前路31號" target="_blank" rel="noopener">📍 Google Maps</a> | 予約可否は電話確認<br>早め到着が安心 | ビールあり。旗津らしい活海鮮。時価メニューは注文前に金額確認。 |
+| 萬三小吃部 | <a href="https://www.google.com/maps/search/?api=1&query=萬三小吃部+旗津" target="_blank" rel="noopener">📍 Google Maps</a> | 大箱で入りやすい候補<br>予約より回転重視の想定 | ビールは入店時に確認。旗津の有名海鮮食堂で、人数がいても入りやすそう。 |
+| 萬二小吃部 | <a href="https://www.google.com/maps/search/?api=1&query=萬二小吃部+旗津" target="_blank" rel="noopener">📍 Google Maps</a> | 大箱で入りやすい候補<br>混雑時は待ち前提 | ビールは入店時に確認。萬三と同系統の海鮮食堂候補。店内写真を見て清潔感を確認。 |
+| 旗津道沙灘酒店周辺のレストラン | <a href="https://www.google.com/maps/search/?api=1&query=旗津道沙灘酒店+餐廳" target="_blank" rel="noopener">📍 Google Maps</a> | ホテル系なので事前確認しやすい | お酒は事前確認。清潔感優先の逃げ道。ローカル活海鮮感は弱くなるが、席の安心感を取りたい場合に。 |
 
 </details>
 
