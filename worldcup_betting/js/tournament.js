@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
   const STORAGE_KEY = "worldcup2026_tournament_state";
   const DATA_URL = "data/worldcup2026_matches.json";
   const KNOCKOUT_MAPPING_URL = "data/knockout_mapping.json";
@@ -1388,6 +1388,11 @@
 
     const filtered = matches.filter((match) => {
       if (state.scheduleStatusFilter === "all") return true;
+      if (state.scheduleStatusFilter === "unentered") {
+        // 「未入力」フィルターは、両スコアが揃っていない試合を全て対象とする
+        // （片方だけ入力されている場合も「未入力」として扱う）
+        return !hasMainScore(normalizedScore(match.match_id));
+      }
       return matchStatusKey(match.match_id) === state.scheduleStatusFilter;
     }).filter((match) => {
       if (state.scheduleFavoriteFilter === "all") return true;
@@ -1442,8 +1447,7 @@
         ["all", "全て"],
         ["unentered", "未入力"],
         ["entered", "入力済み"],
-        ["pk", "PKあり"],
-        ["review", "要確認"]
+        ["pk", "PKあり"]
       ], (value) => {
         state.scheduleStatusFilter = value;
         renderContent();
@@ -1501,8 +1505,8 @@
     const sorted = sortedMatches(matches);
     if (state.scheduleSort === "date") return sorted;
     const priority = state.scheduleSort === "unentered_first"
-      ? { unentered: 0, review: 1, entered: 2, pk: 3 }
-      : { entered: 0, pk: 1, review: 2, unentered: 3 };
+      ? { unentered: 0, entered: 1, pk: 2 }
+      : { entered: 0, pk: 1, unentered: 2 };
     return sorted.sort((a, b) => (priority[matchStatusKey(a.match_id)] ?? 9) - (priority[matchStatusKey(b.match_id)] ?? 9));
   }
 
@@ -1620,7 +1624,6 @@
 
   function matchStatus(matchId) {
     const statusKey = matchStatusKey(matchId);
-    if (statusKey === "review") return { label: "要確認", className: "review" };
     if (statusKey === "unentered") return { label: "未入力", className: "" };
     if (statusKey === "pk") return { label: "PKあり", className: "pk" };
     return { label: "入力済み", className: "entered" };
@@ -1634,13 +1637,13 @@
     const hasPenalty = penalties.map((value) => value !== "");
     const allEmpty = [...main, ...penalties].every((value) => value === "");
     if (allEmpty) return "unentered";
-    if ([...main, ...penalties].some((value) => value !== "" && !isNumericScore(value))) return "review";
-    if (hasMain[0] !== hasMain[1]) return "review";
-    if (!hasMain[0] && (hasPenalty[0] || hasPenalty[1])) return "review";
-    if (hasPenalty[0] !== hasPenalty[1]) return "review";
+    if (!hasMain[0] || !hasMain[1]) return "unentered";
+    if ([...main, ...penalties].some((value) => value !== "" && !isNumericScore(value))) return "unentered";
+    if (!hasMain[0] && (hasPenalty[0] || hasPenalty[1])) return "unentered";
+    if (hasPenalty[0] !== hasPenalty[1]) return "unentered";
     if (hasMain[0] && hasPenalty[0]) return "pk";
     if (hasMain[0]) return "entered";
-    return "review";
+    return "unentered";
   }
 
   function createScoreEditor(matchId, stage = "") {
@@ -1812,7 +1815,7 @@
   function scoreText(matchId) {
     const score = normalizedScore(matchId);
     const statusKey = matchStatusKey(matchId);
-    if (statusKey === "review") return "要確認";
+    // 「要確認」ステータスは廃止済み（全て「未入力」として扱う）
     if (!hasMainScore(score)) return "未入力";
     let text = `${score.score_home}-${score.score_away}`;
     if (score.penalty_home !== "" && score.penalty_away !== "") {
