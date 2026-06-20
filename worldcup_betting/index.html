@@ -12,11 +12,12 @@
       <button class="owner-tab active" type="button" data-view="tournament">スコア/日程</button>
       <button class="owner-tab" type="button" data-view="country-notes">各国データ</button>
       <button class="owner-tab" type="button" data-view="venues">開催地・時差・移動</button>
+      <button class="owner-tab" type="button" data-view="roster">選手一覧</button>
+      <button class="owner-tab" type="button" data-view="positions">ポジション解説</button>
+      <button class="owner-tab" type="button" data-view="match-lineup">日本代表 試合記録</button>
       <button class="owner-tab" type="button" data-view="compare">比較コート（日本代表）</button>
       <button class="owner-tab" type="button" data-view="owner" data-owner="karin">かりん予想（日本代表）</button>
       <button class="owner-tab" type="button" data-view="owner" data-owner="ryo">りょう予想（日本代表）</button>
-      <button class="owner-tab" type="button" data-view="roster">選手一覧</button>
-      <button class="owner-tab" type="button" data-view="positions">ポジション解説</button>
       <button class="owner-tab" type="button" data-view="bet">賭け結果</button>
     </nav>
 
@@ -128,6 +129,9 @@
           <div class="compare-link-actions">
             <button class="utility-button" type="button" id="showBetButton">賭け結果を見る</button>
           </div>
+        </section>
+        <section class="view-panel match-lineup-panel" id="matchLineupPanel" aria-label="日本代表 試合記録">
+          <!-- JS で描画 -->
         </section>
         <section class="view-panel bet-panel" id="betPanel" aria-label="賭け結果">
           <div class="bet-card">
@@ -471,7 +475,7 @@
 
   <footer class="site-footer">
     <span class="site-footer-label">最終更新:</span>
-    <time class="site-footer-time" id="commitTime">2026-06-20 17:37:41 +0900</time>
+    <time class="site-footer-time" id="commitTime">2026-06-20 18:02:55 +0900</time>
   </footer>
 
   <div class="modal-backdrop" id="editModal" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">

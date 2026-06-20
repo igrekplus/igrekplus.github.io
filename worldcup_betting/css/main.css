@@ -4598,3 +4598,191 @@
   color: #999;
 }
 
+/* ===== 試合記録パネル (match-lineup) ===== */
+
+/* board.lineup-only: ピッチ本体を非表示にしてパネルだけ表示 */
+.board.lineup-only .pitch-wrap,
+.board.lineup-only .screenshot-summary,
+.board.lineup-only .board-header .action-group,
+.board.lineup-only .board-header .screenshot-return,
+.board.lineup-only .board-header .save-state {
+  display: none;
+}
+
+.lineup-wrapper {
+  padding: 20px 24px 32px;
+}
+
+/* ヘッダー: 試合名 + 日付 */
+.lineup-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.lineup-match-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--blue);
+  margin: 0;
+}
+
+.lineup-match-select {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--blue);
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  padding: 6px 12px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.lineup-date {
+  font-size: 13px;
+  color: var(--muted);
+  background: #f0f4f8;
+  border-radius: 6px;
+  padding: 3px 10px;
+}
+
+/* 2面ピッチのグリッド */
+.lineup-courts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.lineup-court {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lineup-court-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lineup-team-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text);
+  margin: 0;
+}
+
+.lineup-formation-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--blue);
+  border-radius: 5px;
+  padding: 2px 8px;
+  letter-spacing: 0.04em;
+}
+
+/* ピッチ上の選手カード（compare-card 流用 + 上書き） */
+.lineup-card {
+  pointer-events: none; /* 閲覧専用のためドラッグ無効 */
+}
+
+.lineup-card .photo {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4a90d9, #2563eb);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* 交代セクション */
+.lineup-subs-section {
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
+}
+
+.lineup-subs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.lineup-subs-col {
+  /* column */
+}
+
+.lineup-subs-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--muted);
+  margin: 0 0 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.lineup-subs-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lineup-sub-item {
+  display: grid;
+  grid-template-columns: 36px 1fr 1fr;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  background: #f8fafc;
+  border: 1px solid #e8edf3;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.sub-minute {
+  font-weight: 800;
+  color: var(--blue);
+  font-size: 12px;
+  text-align: right;
+}
+
+.sub-in {
+  color: #16a34a;
+  font-weight: 700;
+}
+
+.sub-out {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.lineup-subs-empty {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* レスポンシブ: 小画面では1カラムに */
+@media (max-width: 720px) {
+  .lineup-courts,
+  .lineup-subs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lineup-wrapper {
+    padding: 16px;
+  }
+}
+
+

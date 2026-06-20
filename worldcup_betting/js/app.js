@@ -795,6 +795,7 @@
     const countryNotesPanel = document.getElementById("countryNotesPanel");
     const venuesPanel = document.getElementById("venuesPanel");
     const rosterPanel = document.getElementById("rosterPanel");
+    const matchLineupPanel = document.getElementById("matchLineupPanel");
     const rosterSearchInput = document.getElementById("rosterSearchInput");
     const rosterPositionFilter = document.getElementById("rosterPositionFilter");
     const rosterTotalCount = document.getElementById("rosterTotalCount");
@@ -1453,6 +1454,11 @@
         return;
       }
 
+      if (activeView === "match-lineup") {
+        renderMatchLineup();
+        return;
+      }
+
       benchList.innerHTML = "";
       confirmedList.innerHTML = "";
       droppedList.innerHTML = "";
@@ -1970,8 +1976,74 @@
       });
     }
 
-    function resetOwnerViewShell() {
-      app.classList.remove("single-panel");
+    // ===== 試合スタメンデータ =====
+    const matchLineupData = [
+      {
+        id: "vs-ned-gs1",
+        label: "vs オランダ（グループステージ 第1節）",
+        date: "2026年6月15日",
+        formation: "3-4-3",
+        japan: {
+          starters: [
+            { name: "鈴木彩艶",   position: "GK",  x: 50, y: 90 },
+            { name: "谷口彰悟",   position: "CB",  x: 70, y: 73 },
+            { name: "渡辺剛",     position: "CB",  x: 50, y: 73 },
+            { name: "伊藤洋輝",   position: "CB",  x: 30, y: 73 },
+            { name: "堂安律",     position: "RWB", x: 84, y: 50 },
+            { name: "佐野海舟",   position: "DMF", x: 62, y: 50 },
+            { name: "鎌田大地",   position: "DMF", x: 38, y: 50 },
+            { name: "中村敬斗",   position: "LWB", x: 16, y: 50 },
+            { name: "久保建英",   position: "RW",  x: 73, y: 23 },
+            { name: "上田綺世",   position: "CF",  x: 50, y: 13 },
+            { name: "前田大然",   position: "LW",  x: 27, y: 23 },
+          ],
+          subs: [
+            { minute: 66,  in: "伊東純也",  out: "前田大然",  inPos: "RW"  },
+            { minute: 75,  in: "冨安健洋",  out: "渡辺剛",   inPos: "CB"  },
+            { minute: 75,  in: "菅原由勢",  out: "堂安律",   inPos: "RWB" },
+            { minute: 75,  in: "小川航基",  out: "久保建英", inPos: "CF"  },
+            { minute: 83,  in: "塩貝健人",  out: "上田綺世", inPos: "CF"  },
+          ],
+        },
+        opponent: {
+          name: "オランダ",
+          flag: "🇳🇱",
+          formation: "4-3-3",
+          starters: [
+            { name: "フェルブルッヘン",         position: "GK",  x: 50, y: 90 },
+            { name: "ダンフリース",             position: "RB",  x: 80, y: 73 },
+            { name: "ファン・ヘッケ",           position: "CB",  x: 62, y: 73 },
+            { name: "ファン・ダイク",           position: "CB",  x: 38, y: 73 },
+            { name: "ファン・デ・フェン",       position: "LB",  x: 20, y: 73 },
+            { name: "フラーフェンベルフ",       position: "CM",  x: 65, y: 50 },
+            { name: "デ・ヨング",               position: "CM",  x: 50, y: 50 },
+            { name: "ラインデルス",             position: "CM",  x: 35, y: 50 },
+            { name: "サマーフィル",             position: "RW",  x: 76, y: 23 },
+            { name: "ガクポ",                   position: "CF",  x: 50, y: 13 },
+            { name: "マレン",                   position: "LW",  x: 24, y: 23 },
+          ],
+          subs: [
+            { minute: 71,  in: "クインテン・ティンバー",    out: "ラインデルス",           inPos: "CM"  },
+            { minute: 71,  in: "メンフィス・デパイ",         out: "マレン",                inPos: "LW"  },
+            { minute: 71,  in: "コープマイネルス",           out: "サマーフィル",           inPos: "RW"  },
+            { minute: 81,  in: "ナタン・アケ",              out: "フラーフェンベルフ",      inPos: "CB"  },
+            { minute: 84,  in: "ブライアン・ブロビー",       out: "ガクポ",                inPos: "CF"  },
+          ],
+        },
+      },
+    ];
+
+    let activeMatchLineupId = matchLineupData[0]?.id;
+
+    function renderMatchLineup() {
+      clearPitchCards();
+      clearComparePitches();
+      benchList.innerHTML = "";
+      confirmedList.innerHTML = "";
+      droppedList.innerHTML = "";
+
+      app.classList.add("single-panel");
+      board.classList.add("lineup-only");
       board.classList.remove("with-panel");
       board.classList.remove("explain-only");
       board.classList.remove("compare-only");
@@ -1984,6 +2056,202 @@
       betPanel.classList.remove("active");
       rosterPanel.classList.remove("active");
       tournamentPanel.classList.remove("active");
+      hideWorldCupInfoPanels();
+      matchLineupPanel.classList.add("active");
+
+      boardTitle.textContent = "日本代表 試合記録";
+      sideTitle.textContent = "試合記録";
+      sideSub.textContent = "";
+      statusMessage.textContent = "";
+      window.clearTimeout(statusTimer);
+      pitchCount.textContent = "スタメン・交代";
+      pitchCount.classList.remove("over-limit");
+      saveState.textContent = "閲覧専用";
+
+      matchLineupPanel.innerHTML = "";
+      matchLineupPanel.appendChild(buildMatchLineupContent());
+
+      ownerTabs.forEach((tab) => {
+        tab.classList.toggle("active", tab.dataset.view === "match-lineup");
+      });
+    }
+
+    function buildMatchLineupContent() {
+      const match = matchLineupData.find((m) => m.id === activeMatchLineupId) || matchLineupData[0];
+      if (!match) return document.createTextNode("データがありません");
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "lineup-wrapper";
+
+      // ── 試合選択ヘッダー ──
+      const header = document.createElement("div");
+      header.className = "lineup-header";
+
+      if (matchLineupData.length > 1) {
+        const sel = document.createElement("select");
+        sel.className = "lineup-match-select";
+        matchLineupData.forEach((m) => {
+          const opt = document.createElement("option");
+          opt.value = m.id;
+          opt.textContent = m.label;
+          opt.selected = m.id === activeMatchLineupId;
+          sel.appendChild(opt);
+        });
+        sel.addEventListener("change", () => {
+          activeMatchLineupId = sel.value;
+          matchLineupPanel.innerHTML = "";
+          matchLineupPanel.appendChild(buildMatchLineupContent());
+        });
+        header.appendChild(sel);
+      } else {
+        const title = document.createElement("h2");
+        title.className = "lineup-match-title";
+        title.textContent = match.label;
+        header.appendChild(title);
+      }
+
+      const dateBadge = document.createElement("span");
+      dateBadge.className = "lineup-date";
+      dateBadge.textContent = match.date;
+      header.appendChild(dateBadge);
+      wrapper.appendChild(header);
+
+      // ── ピッチ2面（日本 | 相手） ──
+      const courts = document.createElement("div");
+      courts.className = "lineup-courts";
+      courts.appendChild(buildLineupCourt("🇯🇵 日本", match.formation, match.japan.starters, "japan"));
+      courts.appendChild(buildLineupCourt(`${match.opponent.flag} ${match.opponent.name}`, match.opponent.formation, match.opponent.starters, "opponent"));
+      wrapper.appendChild(courts);
+
+      // ── 交代セクション ──
+      const subsSection = document.createElement("div");
+      subsSection.className = "lineup-subs-section";
+
+      const subsGrid = document.createElement("div");
+      subsGrid.className = "lineup-subs-grid";
+
+      subsGrid.appendChild(buildSubsList("🇯🇵 日本 交代", match.japan.subs));
+      subsGrid.appendChild(buildSubsList(`${match.opponent.flag} ${match.opponent.name} 交代`, match.opponent.subs));
+
+      subsSection.appendChild(subsGrid);
+      wrapper.appendChild(subsSection);
+
+      return wrapper;
+    }
+
+    function buildLineupCourt(teamLabel, formation, players, side) {
+      const court = document.createElement("section");
+      court.className = "lineup-court";
+
+      const courtHeader = document.createElement("div");
+      courtHeader.className = "lineup-court-header";
+      const teamTitle = document.createElement("h3");
+      teamTitle.className = "lineup-team-title";
+      teamTitle.textContent = teamLabel;
+      const formationBadge = document.createElement("span");
+      formationBadge.className = "lineup-formation-badge";
+      formationBadge.textContent = formation;
+      courtHeader.append(teamTitle, formationBadge);
+      court.appendChild(courtHeader);
+
+      // ピッチ（compare-pitch 流用）
+      const pitch = document.createElement("div");
+      pitch.className = "compare-pitch lineup-pitch";
+      ["goal", "penalty", "goal-area", "arc"].forEach((areaClass) => {
+        const area = document.createElement("div");
+        area.className = `area ${areaClass}`;
+        pitch.appendChild(area);
+      });
+      [["guide-gk", "GK"], ["guide-df", "DF"], ["guide-dmf", "DMF"], ["guide-omf", "OMF"], ["guide-cf", "CF"]].forEach(([cls, text]) => {
+        const lbl = document.createElement("div");
+        lbl.className = `guide-label ${cls}`;
+        lbl.textContent = text;
+        pitch.appendChild(lbl);
+      });
+
+      players.forEach((player) => {
+        const card = buildLineupCard(player);
+        card.style.left = `${player.x}%`;
+        card.style.top  = `${player.y}%`;
+        pitch.appendChild(card);
+      });
+
+      court.appendChild(pitch);
+      return court;
+    }
+
+    function buildLineupCard(player) {
+      const card = document.createElement("div");
+      card.className = "compare-card lineup-card";
+
+      // 写真エリア（イニシャルフォールバック）
+      const photo = document.createElement("div");
+      photo.className = "photo";
+      photo.textContent = player.name.slice(0, 1);
+
+      // テキスト情報
+      const info = document.createElement("div");
+      info.className = "info";
+      const name = document.createElement("div");
+      name.className = "name";
+      name.textContent = player.name;
+      const meta = document.createElement("div");
+      meta.className = "meta";
+      const pos = document.createElement("span");
+      pos.className = `position ${positionClass(player.position)}`;
+      pos.textContent = player.position;
+      meta.appendChild(pos);
+      info.append(name, meta);
+      card.append(photo, info);
+      return card;
+    }
+
+    function buildSubsList(heading, subs) {
+      const section = document.createElement("section");
+      section.className = "lineup-subs-col";
+      const h = document.createElement("h4");
+      h.className = "lineup-subs-title";
+      h.textContent = heading;
+      section.appendChild(h);
+      if (!subs.length) {
+        const empty = document.createElement("p");
+        empty.className = "lineup-subs-empty";
+        empty.textContent = "交代なし";
+        section.appendChild(empty);
+        return section;
+      }
+      const ul = document.createElement("ul");
+      ul.className = "lineup-subs-list";
+      subs.forEach((sub) => {
+        const li = document.createElement("li");
+        li.className = "lineup-sub-item";
+        li.innerHTML = `
+          <span class="sub-minute">${sub.minute}'</span>
+          <span class="sub-in">▲ ${sub.in}</span>
+          <span class="sub-out">▼ ${sub.out}</span>
+        `;
+        ul.appendChild(li);
+      });
+      section.appendChild(ul);
+      return section;
+    }
+
+    function resetOwnerViewShell() {
+      app.classList.remove("single-panel");
+      board.classList.remove("with-panel");
+      board.classList.remove("explain-only");
+      board.classList.remove("compare-only");
+      board.classList.remove("bet-only");
+      board.classList.remove("roster-only");
+      board.classList.remove("tournament-only");
+      board.classList.remove("info-only");
+      board.classList.remove("lineup-only");
+      comparisonPanel.classList.remove("active");
+      positionPanel.classList.remove("active");
+      betPanel.classList.remove("active");
+      rosterPanel.classList.remove("active");
+      tournamentPanel.classList.remove("active");
+      matchLineupPanel.classList.remove("active");
       hideWorldCupInfoPanels();
       clearComparePitches();
     }
