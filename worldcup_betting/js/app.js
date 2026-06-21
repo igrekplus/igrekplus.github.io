@@ -1551,11 +1551,13 @@
       board.classList.remove("roster-only");
       board.classList.remove("tournament-only");
       board.classList.remove("info-only");
+      board.classList.remove("lineup-only");
       comparisonPanel.classList.add("active");
       positionPanel.classList.remove("active");
       rosterPanel.classList.remove("active");
       betPanel.classList.remove("active");
       tournamentPanel.classList.remove("active");
+      matchLineupPanel.classList.remove("active");
       hideWorldCupInfoPanels();
 
       boardTitle.textContent = `比較コート（${teamName}）`;
@@ -1780,10 +1782,12 @@
       board.classList.remove("roster-only");
       board.classList.remove("explain-only");
       board.classList.remove("info-only");
+      board.classList.remove("lineup-only");
       comparisonPanel.classList.remove("active");
       betPanel.classList.remove("active");
       rosterPanel.classList.remove("active");
       positionPanel.classList.remove("active");
+      matchLineupPanel.classList.remove("active");
       tournamentPanel.classList.add("active");
       [comparisonPanel, betPanel, rosterPanel, positionPanel].forEach((panel) => panel.classList.remove("active"));
       hideWorldCupInfoPanels();
@@ -1825,7 +1829,8 @@
       board.classList.remove("roster-only");
       board.classList.remove("explain-only");
       board.classList.remove("tournament-only");
-      [comparisonPanel, betPanel, rosterPanel, positionPanel, tournamentPanel].forEach((panel) => panel.classList.remove("active"));
+      board.classList.remove("lineup-only");
+      [comparisonPanel, betPanel, rosterPanel, positionPanel, tournamentPanel, matchLineupPanel].forEach((panel) => panel?.classList.remove("active"));
       hideWorldCupInfoPanels();
 
       const panelMap = {
@@ -1870,10 +1875,12 @@
       board.classList.remove("roster-only");
       board.classList.remove("tournament-only");
       board.classList.remove("info-only");
+      board.classList.remove("lineup-only");
       comparisonPanel.classList.remove("active");
       betPanel.classList.remove("active");
       rosterPanel.classList.remove("active");
       tournamentPanel.classList.remove("active");
+      matchLineupPanel.classList.remove("active");
       hideWorldCupInfoPanels();
       positionPanel.classList.add("active");
 
@@ -1907,10 +1914,12 @@
       board.classList.remove("roster-only");
       board.classList.remove("tournament-only");
       board.classList.remove("info-only");
+      board.classList.remove("lineup-only");
       comparisonPanel.classList.remove("active");
       positionPanel.classList.remove("active");
       rosterPanel.classList.remove("active");
       tournamentPanel.classList.remove("active");
+      matchLineupPanel.classList.remove("active");
       hideWorldCupInfoPanels();
       betPanel.classList.add("active");
 
@@ -1953,10 +1962,12 @@
       board.classList.remove("bet-only");
       board.classList.remove("tournament-only");
       board.classList.remove("info-only");
+      board.classList.remove("lineup-only");
       comparisonPanel.classList.remove("active");
       positionPanel.classList.remove("active");
       betPanel.classList.remove("active");
       tournamentPanel.classList.remove("active");
+      matchLineupPanel.classList.remove("active");
       hideWorldCupInfoPanels();
       rosterPanel.classList.add("active");
 
