@@ -4693,15 +4693,8 @@
 .lineup-card .photo {
   width: 42px;
   height: 42px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #4a90d9, #2563eb);
-  color: #fff;
   font-size: 15px;
   font-weight: 800;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
 }
 
 /* 交代セクション */

@@ -1982,7 +1982,7 @@
         id: "vs-ned-gs1",
         label: "vs オランダ（グループステージ 第1節）",
         date: "2026年6月15日",
-        formation: "3-4-3",
+        formation: "3-4-2-1",
         japan: {
           starters: [
             { name: "鈴木彩艶",   position: "GK",  x: 50, y: 90 },
@@ -1990,12 +1990,12 @@
             { name: "渡辺剛",     position: "CB",  x: 50, y: 73 },
             { name: "伊藤洋輝",   position: "CB",  x: 30, y: 73 },
             { name: "堂安律",     position: "RWB", x: 84, y: 50 },
-            { name: "佐野海舟",   position: "DMF", x: 62, y: 50 },
-            { name: "鎌田大地",   position: "DMF", x: 38, y: 50 },
+            { name: "佐野海舟",   position: "DMF", x: 60, y: 52 },
+            { name: "鎌田大地",   position: "DMF", x: 40, y: 52 },
             { name: "中村敬斗",   position: "LWB", x: 16, y: 50 },
-            { name: "久保建英",   position: "RW",  x: 73, y: 23 },
+            { name: "久保建英",   position: "SH",  x: 67, y: 30 },
             { name: "上田綺世",   position: "CF",  x: 50, y: 13 },
-            { name: "前田大然",   position: "LW",  x: 27, y: 23 },
+            { name: "前田大然",   position: "SH",  x: 33, y: 30 },
           ],
           subs: [
             { minute: 66,  in: "伊東純也",  out: "前田大然",  inPos: "RW"  },
@@ -2184,10 +2184,28 @@
       const card = document.createElement("div");
       card.className = "compare-card lineup-card";
 
-      // 写真エリア（イニシャルフォールバック）
+      // allPlayers から名前で選手を検索して写真を取得
+      const fullPlayer = allPlayers.find((p) => p.name === player.name);
+
       const photo = document.createElement("div");
       photo.className = "photo";
-      photo.textContent = player.name.slice(0, 1);
+
+      if (fullPlayer?.imageUrl) {
+        const img = document.createElement("img");
+        img.src = fullPlayer.imageUrl;
+        img.alt = fullPlayer.name;
+        if (fullPlayer.imageClass) img.className = fullPlayer.imageClass;
+        img.onerror = () => {
+          const nextIndex = Number(img.dataset.fallbackIndex || 0);
+          if (applyImageFallback(img, fullPlayer, nextIndex)) return;
+          photo.textContent = initialOf(player.name);
+          img.remove();
+        };
+        photo.appendChild(img);
+      } else {
+        // 海外選手など allPlayers にいない場合はイニシャル表示
+        photo.textContent = initialOf(player.name);
+      }
 
       // テキスト情報
       const info = document.createElement("div");
