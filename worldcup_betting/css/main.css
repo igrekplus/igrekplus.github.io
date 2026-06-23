@@ -1971,6 +1971,114 @@
       white-space: nowrap;
     }
 
+    .fair-play-panel {
+      border-top: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .fair-play-panel > summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px;
+      color: var(--blue);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 900;
+      list-style: none;
+    }
+
+    .fair-play-panel > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .fair-play-panel > summary::after {
+      content: "開く";
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 2px 8px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .fair-play-panel[open] > summary::after {
+      content: "閉じる";
+    }
+
+    .fair-play-body {
+      display: grid;
+      gap: 10px;
+      padding: 0 10px 10px;
+    }
+
+    .fair-play-note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.6;
+    }
+
+    .fair-play-tie-block {
+      display: grid;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f8fafc;
+      padding: 10px;
+    }
+
+    .fair-play-tie-block h4 {
+      margin: 0;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .fair-play-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .fair-play-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 92px 64px;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 8px;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .fair-play-team {
+      min-width: 0;
+    }
+
+    .fair-play-row input {
+      min-width: 0;
+      min-height: 32px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 0 8px;
+      background: #fff;
+      color: var(--text);
+      font: inherit;
+      text-align: right;
+    }
+
+    .fair-play-current {
+      color: var(--muted);
+      text-align: right;
+      white-space: nowrap;
+    }
+
     .match-meta {
       display: grid;
       gap: 4px;
@@ -4570,6 +4678,18 @@
 
       .standing-schedule-score {
         width: fit-content;
+      }
+
+      .fair-play-row {
+        grid-template-columns: 1fr;
+      }
+
+      .fair-play-row input {
+        max-width: 120px;
+      }
+
+      .fair-play-current {
+        text-align: left;
       }
     }
 

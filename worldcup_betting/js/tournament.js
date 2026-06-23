@@ -1134,6 +1134,7 @@
       sharedScoreLoadedAt: "",
       lastUpdatedAt: "",
       favoriteMatchIds: [],
+      fairPlayPoints: {},
       venueNotes: {},
       standings: null,
       thirdRanking: null,
@@ -1156,6 +1157,7 @@
         sharedScoreLoadedAt: parsed?.sharedScoreLoadedAt || fallback.sharedScoreLoadedAt,
         lastUpdatedAt: parsed?.lastUpdatedAt || fallback.lastUpdatedAt,
         favoriteMatchIds: normalizeFavoriteMatchIds(parsed?.favoriteMatchIds),
+        fairPlayPoints: parsed?.fairPlayPoints && typeof parsed.fairPlayPoints === "object" ? parsed.fairPlayPoints : {},
         venueNotes: parsed?.venueNotes && typeof parsed.venueNotes === "object" ? parsed.venueNotes : {},
         standings: parsed?.standings || fallback.standings,
         thirdRanking: parsed?.thirdRanking || fallback.thirdRanking,
@@ -1176,6 +1178,7 @@
         body: JSON.stringify({
           scoreOverrides: state.saved.scoreOverrides || {},
           favoriteMatchIds: state.saved.favoriteMatchIds || [],
+          fairPlayPoints: state.saved.fairPlayPoints || {},
           venueNotes: state.saved.venueNotes || {},
           lastUpdatedAt: state.saved.lastUpdatedAt || new Date().toISOString()
         })
@@ -2307,14 +2310,133 @@
       card.open = true;
       const heading = document.createElement("summary");
       heading.textContent = `Group ${group}`;
+      const groupTable = state.saved.standings.groups[group];
       card.append(
         heading,
-        createStandingTable(state.saved.standings.groups[group]),
+        createStandingTable(groupTable),
+        createFairPlayPanel(group, groupTable),
         createGroupScheduleList(group)
       );
       wrapper.appendChild(card);
     });
     return wrapper;
+  }
+
+  function createFairPlayPanel(group, table) {
+    const tieGroups = fairPlayTieGroups(table);
+    if (!groupHasEnteredScore(group) || tieGroups.length === 0) return document.createDocumentFragment();
+    const details = document.createElement("details");
+    details.className = "fair-play-panel";
+    const summary = document.createElement("summary");
+    const candidateCount = tieGroups.reduce((sum, teams) => sum + teams.length, 0);
+    summary.textContent = `フェアプレーポイント確認（${candidateCount}チーム）`;
+
+    const body = document.createElement("div");
+    body.className = "fair-play-body";
+    const note = document.createElement("p");
+    note.className = "fair-play-note";
+    note.textContent = "勝点・得失点・得点まで並んだ場合の確認用です。FIFAのフェアプレーポイントは数値が大きい方が上です（例：-1 は -3 より上）。";
+    body.appendChild(note);
+
+    tieGroups.forEach((teams) => {
+      const block = document.createElement("section");
+      block.className = "fair-play-tie-block";
+      const heading = document.createElement("h4");
+      heading.textContent = `勝点${teams[0].points} / 得失点${teams[0].gf - teams[0].ga} / 得点${teams[0].gf}`;
+      const list = document.createElement("div");
+      list.className = "fair-play-list";
+      fairPlaySortedTeams(group, teams).forEach((team) => list.appendChild(createFairPlayRow(group, team)));
+      block.append(heading, list);
+      body.appendChild(block);
+    });
+
+    details.append(summary, body);
+    return details;
+  }
+
+  function fairPlayTieGroups(table) {
+    const groups = {};
+    (table || []).filter((team) => team.played > 0).forEach((team) => {
+      const key = `${team.points}|${team.gf - team.ga}|${team.gf}`;
+      groups[key] ||= [];
+      groups[key].push(team);
+    });
+    return Object.values(groups).filter((teams) => teams.length > 1);
+  }
+
+  function groupHasEnteredScore(group) {
+    return computedSchedule().some((match) => {
+      if (match.group !== group) return false;
+      const score = effectiveScoreOverrides()[match.match_id];
+      if (!score) return false;
+      return hasMainScore(normalizedScore(match.match_id));
+    });
+  }
+
+  function fairPlaySortedTeams(group, teams) {
+    return [...teams].sort((a, b) => {
+      const aValue = fairPlayValue(group, a.teamId);
+      const bValue = fairPlayValue(group, b.teamId);
+      if (aValue !== null && bValue !== null && aValue !== bValue) return bValue - aValue;
+      if (aValue !== null && bValue === null) return -1;
+      if (aValue === null && bValue !== null) return 1;
+      return a.teamId.localeCompare(b.teamId);
+    });
+  }
+
+  function createFairPlayRow(group, team) {
+    const row = document.createElement("label");
+    row.className = "fair-play-row";
+    const teamNode = document.createElement("span");
+    teamNode.className = "fair-play-team";
+    teamNode.appendChild(teamLabel(team.teamId, team.name));
+
+    const input = document.createElement("input");
+    input.type = "number";
+    input.inputMode = "numeric";
+    input.step = "1";
+    input.placeholder = "例 -2";
+    input.value = fairPlayRawValue(group, team.teamId);
+    input.dataset.group = group;
+    input.dataset.teamId = team.teamId;
+    input.addEventListener("input", handleFairPlayInput);
+    input.addEventListener("change", renderContent);
+
+    const current = document.createElement("span");
+    current.className = "fair-play-current";
+    const value = fairPlayValue(group, team.teamId);
+    current.textContent = value === null ? "未入力" : `${value} pt`;
+    row.append(teamNode, input, current);
+    return row;
+  }
+
+  function fairPlayRawValue(group, teamId) {
+    return state.saved.fairPlayPoints?.[group]?.[teamId] ?? "";
+  }
+
+  function fairPlayValue(group, teamId) {
+    const raw = fairPlayRawValue(group, teamId);
+    if (raw === "" || raw === null || raw === undefined) return null;
+    const value = Number(raw);
+    return Number.isFinite(value) ? value : null;
+  }
+
+  function handleFairPlayInput(event) {
+    const input = event.currentTarget;
+    const group = input.dataset.group;
+    const teamId = input.dataset.teamId;
+    const value = input.value.replace(/[^\d-]/g, "").replace(/(?!^)-/g, "");
+    if (input.value !== value) input.value = value;
+    state.saved.fairPlayPoints ||= {};
+    state.saved.fairPlayPoints[group] ||= {};
+    if (value === "") {
+      delete state.saved.fairPlayPoints[group][teamId];
+      if (Object.keys(state.saved.fairPlayPoints[group]).length === 0) delete state.saved.fairPlayPoints[group];
+    } else {
+      state.saved.fairPlayPoints[group][teamId] = value;
+    }
+    state.saved.lastUpdatedAt = new Date().toISOString();
+    persist();
   }
 
   function createGroupScheduleList(group) {
@@ -3294,6 +3416,7 @@
       source: DATA_URL,
       scoreOverrides: effectiveScoreOverrides(),
       favoriteMatchIds: normalizeFavoriteMatchIds(state.saved.favoriteMatchIds),
+      fairPlayPoints: state.saved.fairPlayPoints || {},
       venueNotes: state.saved.venueNotes || {},
       lastUpdatedAt: state.saved.lastUpdatedAt || new Date().toISOString()
     };
@@ -3333,6 +3456,7 @@
     importScoreOverrides(scoreOverrides, {
       lastUpdatedAt: source?.lastUpdatedAt || payload?.lastUpdated || new Date().toISOString(),
       favoriteMatchIds: source?.favoriteMatchIds || payload?.favoriteMatchIds,
+      fairPlayPoints: source?.fairPlayPoints || payload?.fairPlayPoints,
       venueNotes: source?.venueNotes
     });
     return true;
@@ -3422,6 +3546,7 @@
       sharedScoreLoadedAt: state.saved.sharedScoreLoadedAt || "",
       lastUpdatedAt: options.lastUpdatedAt || new Date().toISOString(),
       favoriteMatchIds: normalizeFavoriteMatchIds(options.favoriteMatchIds ?? state.saved.favoriteMatchIds),
+      fairPlayPoints: options.fairPlayPoints && typeof options.fairPlayPoints === "object" ? options.fairPlayPoints : state.saved.fairPlayPoints || {},
       venueNotes: options.venueNotes && typeof options.venueNotes === "object" ? options.venueNotes : state.saved.venueNotes || {},
       standings: null,
       thirdRanking: null,
@@ -3451,7 +3576,7 @@
     state.saved.sharedScoreLoadedAt = new Date().toISOString();
     state.saved.lastUpdatedAt = state.saved.sharedScoreLoadedAt;
     const source = payload?.tournament && typeof payload.tournament === "object" ? payload.tournament : payload;
-    ["venueNotes"].forEach((key) => {
+    ["fairPlayPoints", "venueNotes"].forEach((key) => {
       if (source?.[key] && typeof source[key] === "object") state.saved[key] = source[key];
     });
     if (Array.isArray(source?.favoriteMatchIds)) {
