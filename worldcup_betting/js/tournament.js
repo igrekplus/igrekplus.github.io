@@ -2746,14 +2746,24 @@
 
   function knockoutParticipantLabel(value, provisional = false) {
     if (isResolvedTeam(value) || value === "TBD") {
-      const label = teamLabel(value);
-      if (provisional && isResolvedTeam(value)) {
-        label.classList.add("knockout-provisional");
-        label.appendChild(textSpan("(仮)", "knockout-provisional-mark"));
+      const label = teamLabel(value, "", "", { showRank: false });
+      if (isResolvedTeam(value)) {
+        const rankText = teamGroupRankText(value);
+        if (rankText) label.appendChild(textSpan(rankText, "knockout-group-rank" + (provisional ? " knockout-provisional" : "")));
+        if (provisional) label.appendChild(textSpan("(仮)", "knockout-provisional-mark"));
       }
       return label;
     }
     return textSpan(value || "未確定", "team-label knockout-placeholder");
+  }
+
+  function teamGroupRankText(teamId) {
+    const teamData = state.teams[teamId];
+    if (!teamData?.group) return null;
+    const groupTable = state.saved.standings?.groups?.[teamData.group] || [];
+    const rank = groupTable.findIndex((t) => t.teamId === teamId);
+    if (rank < 0) return null;
+    return `(${teamData.group}${rank + 1}位)`;
   }
 
   function renderAuxView(view) {

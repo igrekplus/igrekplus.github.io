@@ -2358,6 +2358,13 @@
       white-space: nowrap;
     }
 
+    .knockout-group-rank {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-left: 2px;
+    }
+
     .knockout-provisional {
       opacity: 0.75;
     }
