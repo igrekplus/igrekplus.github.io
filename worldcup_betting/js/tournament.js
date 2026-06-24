@@ -2306,7 +2306,7 @@
 
   function renderStandingsSnapshot() {
     if (!state.saved.standings?.groups || state.saved.standings.scoreSignature !== scoreSignature()) {
-      return message("まだ順位を更新していません。「更新」ボタンで再計算してください。");
+      return message("まだ順位を更新していません。タブを切り替えると自動で再計算されます。");
     }
     const wrapper = document.createElement("div");
     wrapper.className = "group-standings-grid";
@@ -2497,7 +2497,7 @@
 
   function renderThirdRankingSnapshot() {
     if (!state.saved.thirdRanking?.teams || state.saved.thirdRanking.scoreSignature !== scoreSignature()) {
-      return message("まだ3位ランキングを更新していません。「更新」ボタンで再計算してください。");
+      return message("まだ3位ランキングを更新していません。タブを切り替えると自動で再計算されます。");
     }
     const card = document.createElement("details");
     card.className = "standing-card";
@@ -2696,7 +2696,7 @@
 
   function renderKnockoutSnapshot() {
     if (!state.saved.knockout?.rounds || state.saved.knockout.scoreSignature !== scoreSignature()) {
-      return message("まだトーナメントを更新していません。「更新」ボタンで再計算してください。");
+      return message("まだトーナメントを更新していません。タブを切り替えると自動で再計算されます。");
     }
     const wrapper = document.createElement("div");
     wrapper.className = "knockout-list";
