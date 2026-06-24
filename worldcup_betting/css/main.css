@@ -2341,6 +2341,41 @@
       font-weight: 800;
     }
 
+    .knockout-match-id-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .knockout-match-id {
+      font-weight: 800;
+    }
+
+    .knockout-date {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .knockout-group-rank {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-left: 2px;
+    }
+
+    .knockout-provisional {
+      opacity: 0.75;
+    }
+
+    .knockout-provisional-mark {
+      font-size: 10px;
+      font-weight: 700;
+      color: #d97706;
+      margin-left: 2px;
+    }
+
     .tournament-empty,
     .tournament-error {
       padding: 16px;
@@ -3528,7 +3563,7 @@
       }
 
       .knockout-match {
-        grid-template-columns: 72px minmax(0, 1fr);
+        grid-template-columns: 82px minmax(0, 1fr);
       }
     }
 
