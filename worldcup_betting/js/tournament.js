@@ -2179,6 +2179,12 @@
     return `${pad(date.getHours())}:${pad(date.getMinutes())} JST`;
   }
 
+  function formatKnockoutDate(value) {
+    const date = jstDate(value);
+    if (Number.isNaN(date.getTime())) return "";
+    return `${date.getMonth() + 1}/${date.getDate()}（${weekdayLabels[date.getDay()]}）${pad(date.getHours())}:${pad(date.getMinutes())}`;
+  }
+
   function pad(value) {
     return String(value).padStart(2, "0");
   }
@@ -2553,12 +2559,25 @@
 
   function calculateKnockoutCards(standings) {
     const resolved = resolveEntrants(standings);
+    const provisional = resolveProvisionalEntrants(standings);
     const rounds = {};
     knockoutStageOrder.forEach((stage) => {
       rounds[stage] = [];
       sortedMatches(computedMatches().filter((match) => match.stage === stage)).forEach((match) => {
-        const home = resolveSlot(slotFor(match.match_id, "home", matchHomeId(match)), resolved);
-        const away = resolveSlot(slotFor(match.match_id, "away", matchAwayId(match)), resolved);
+        const homeSlot = slotFor(match.match_id, "home", matchHomeId(match));
+        const awaySlot = slotFor(match.match_id, "away", matchAwayId(match));
+        let home = resolveSlot(homeSlot, resolved);
+        let away = resolveSlot(awaySlot, resolved);
+        let homeProvisional = false;
+        let awayProvisional = false;
+        if (!isResolvedTeam(home)) {
+          const pHome = resolveSlot(homeSlot, provisional);
+          if (isResolvedTeam(pHome)) { home = pHome; homeProvisional = true; }
+        }
+        if (!isResolvedTeam(away)) {
+          const pAway = resolveSlot(awaySlot, provisional);
+          if (isResolvedTeam(pAway)) { away = pAway; awayProvisional = true; }
+        }
         const winnerName = winner(match.match_id, home, away);
         if (winnerName) {
           resolved[`W-${match.match_id}`] = winnerName;
@@ -2569,8 +2588,11 @@
           stage,
           home,
           away,
+          homeProvisional,
+          awayProvisional,
           score: scoreText(match.match_id),
-          winner: winnerName
+          winner: winnerName,
+          kickoff_jst: match.kickoff_jst
         });
       });
     });
@@ -2584,6 +2606,17 @@
       if (table[0]) resolved[`1${group}`] = table[0].teamId;
       if (table[1]) resolved[`2${group}`] = table[1].teamId;
       if (table[2]) resolved[`3${group}`] = table[2].teamId;
+    });
+    return resolved;
+  }
+
+  function resolveProvisionalEntrants(standings) {
+    const resolved = {};
+    Object.entries(standings || {}).forEach(([group, table]) => {
+      const maxPlayed = Math.max(0, ...table.map((team) => team.played));
+      if (maxPlayed === 0 || maxPlayed >= 3) return;
+      if (table[0]) resolved[`1${group}`] = table[0].teamId;
+      if (table[1]) resolved[`2${group}`] = table[1].teamId;
     });
     return resolved;
   }
@@ -2680,7 +2713,17 @@
         const row = document.createElement("div");
         row.className = "knockout-match";
         if (match.home === JAPAN_TEAM_ID || match.away === JAPAN_TEAM_ID) row.classList.add("japan-highlight");
-        row.append(textDiv(match.matchId), knockoutParticipantLabel(match.home), textDiv(match.score), knockoutParticipantLabel(match.away));
+        const rawMatch = state.matches.find((m) => m.match_id === match.matchId);
+        const kickoff = match.kickoff_jst ?? rawMatch?.kickoff_jst;
+        const homeProvisional = match.homeProvisional ?? isProvisionalParticipant(match.home);
+        const awayProvisional = match.awayProvisional ?? isProvisionalParticipant(match.away);
+        const idCell = document.createElement("div");
+        idCell.className = "knockout-match-id-cell";
+        idCell.appendChild(textDiv(match.matchId, "knockout-match-id"));
+        if (kickoff) {
+          idCell.appendChild(textDiv(formatKnockoutDate(kickoff), "knockout-date"));
+        }
+        row.append(idCell, knockoutParticipantLabel(match.home, homeProvisional), textDiv(match.score), knockoutParticipantLabel(match.away, awayProvisional));
         list.appendChild(row);
       });
       card.append(heading, list);
@@ -2689,8 +2732,27 @@
     return wrapper;
   }
 
-  function knockoutParticipantLabel(value) {
-    if (isResolvedTeam(value) || value === "TBD") return teamLabel(value);
+  function isProvisionalParticipant(teamId) {
+    if (!isResolvedTeam(teamId)) return false;
+    const teamData = state.teams[teamId];
+    if (!teamData) return false;
+    const group = teamData.group;
+    const groupTable = state.saved.standings?.groups?.[group] || [];
+    if (groupTable.length === 0) return false;
+    if (!groupTable.some((t) => t.played < 3)) return false;
+    const rank = groupTable.findIndex((t) => t.teamId === teamId);
+    return rank === 0 || rank === 1;
+  }
+
+  function knockoutParticipantLabel(value, provisional = false) {
+    if (isResolvedTeam(value) || value === "TBD") {
+      const label = teamLabel(value);
+      if (provisional && isResolvedTeam(value)) {
+        label.classList.add("knockout-provisional");
+        label.appendChild(textSpan("(仮)", "knockout-provisional-mark"));
+      }
+      return label;
+    }
     return textSpan(value || "未確定", "team-label knockout-placeholder");
   }
 
