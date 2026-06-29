@@ -1751,14 +1751,29 @@
   }
 
   function currentKnockoutByMatch() {
-    if (!state.saved.knockout?.rounds || state.saved.knockout.scoreSignature !== scoreSignature()) return {};
+    const rounds = currentKnockoutRounds();
+    if (!rounds) return {};
     const map = {};
-    Object.values(state.saved.knockout.rounds).forEach((matches) => {
+    Object.values(rounds).forEach((matches) => {
       (matches || []).forEach((match) => {
         map[match.matchId] = match;
       });
     });
     return map;
+  }
+
+  // 全日程などトーナメントタブを開いていない状態でも入力済みスコアから対戦カードを
+  // 解決できるよう、保存済みスナップショットが古い（スコアと不一致）場合はその場で再計算する。
+  function currentKnockoutRounds() {
+    const signature = scoreSignature();
+    if (state.saved.knockout?.rounds && state.saved.knockout.scoreSignature === signature) {
+      return state.saved.knockout.rounds;
+    }
+    if (!state.loaded) return null;
+    const standings = state.saved.standings?.groups && state.saved.standings.scoreSignature === signature
+      ? state.saved.standings.groups
+      : calculateGroupTables();
+    return calculateKnockoutCards(standings);
   }
 
   function normalizeScheduleParticipant(value) {
