@@ -1,5 +1,7 @@
 (function () {
   const STORAGE_KEY = "worldcup2026_tournament_state";
+  // 端末ごとのUI選択（タブ・絞り込みプルダウン等）。共有スコアとは分離して保持する。
+  const UI_PREFS_KEY = "worldcup2026_ui_prefs";
   const DATA_URL = "data/worldcup2026_matches.json";
   const KNOCKOUT_MAPPING_URL = "data/knockout_mapping.json";
   const JAPAN_TEAM_ID = "JPN";
@@ -996,27 +998,28 @@
     boston: "Gillette Stadium Foxboro MA.jpg"
   };
 
+  const uiPrefs = loadUiPrefs();
   const state = {
     initialized: false,
     loaded: false,
     loadError: "",
-    view: "schedule",
+    view: uiPrefs.view ?? "schedule",
     matches: [],
     teams: {},
     knockoutMapping: {},
-    groupFilter: "all",
-    countrySearch: "",
-    countryGroupFilter: "all",
-    countryConfederationFilter: "all",
-    countrySort: "group",
+    groupFilter: uiPrefs.groupFilter ?? "all",
+    countrySearch: uiPrefs.countrySearch ?? "",
+    countryGroupFilter: uiPrefs.countryGroupFilter ?? "all",
+    countryConfederationFilter: uiPrefs.countryConfederationFilter ?? "all",
+    countrySort: uiPrefs.countrySort ?? "group",
     countryScheduleOpenTeamId: "",
-    scheduleStatusFilter: "all",
-    scheduleFavoriteFilter: "all",
-    scheduleSort: "date",
+    scheduleStatusFilter: uiPrefs.scheduleStatusFilter ?? "all",
+    scheduleFavoriteFilter: uiPrefs.scheduleFavoriteFilter ?? "all",
+    scheduleSort: uiPrefs.scheduleSort ?? "date",
     scheduleOpenStages: { group: true },
-    calendarMode: "month",
+    calendarMode: uiPrefs.calendarMode ?? "month",
     calendarDate: null,
-    selectedVenueId: "toronto",
+    selectedVenueId: uiPrefs.selectedVenueId ?? "toronto",
     saved: loadSavedState(),
     elements: {}
   };
@@ -1042,6 +1045,7 @@
     state.elements.tabs.forEach((button) => {
       button.addEventListener("click", () => {
         state.view = button.dataset.tournamentView || "japan";
+        saveUiPrefs();
         if (["groups", "thirds", "knockout"].includes(state.view) && state.loaded) {
           autoUpdateSnapshotsIfStale();
         } else {
@@ -1052,6 +1056,7 @@
     state.elements.favoriteCalendarButton?.addEventListener("click", downloadFavoriteMatchesCalendar);
     state.elements.groupFilter?.addEventListener("change", () => {
       state.groupFilter = state.elements.groupFilter.value;
+      saveUiPrefs();
       renderContent();
     });
     state.elements.exportButton?.addEventListener("click", exportToClipboard);
@@ -1060,6 +1065,10 @@
     state.elements.sharedTextButton?.addEventListener("click", importSharedScoreText);
     if (state.elements.sharedUrlInput) {
       state.elements.sharedUrlInput.value = state.saved.sharedScoreUrl || "";
+    }
+    // 復元したグループ絞り込みを静的なプルダウンへ反映する。
+    if (state.elements.groupFilter) {
+      state.elements.groupFilter.value = state.groupFilter;
     }
 
     state.initialized = true;
@@ -1081,7 +1090,12 @@
     } catch (error) {
       state.loadError = `${DATA_URL} を読み込めませんでした: ${error.message || error}`;
     }
-    renderContent();
+    // 復元したタブが順位・3位・トーナメントの場合は初回ロード時にスナップショットを更新する。
+    if (["groups", "thirds", "knockout"].includes(state.view) && state.loaded) {
+      autoUpdateSnapshotsIfStale();
+    } else {
+      renderContent();
+    }
     renderActiveAuxView();
   }
 
@@ -1165,6 +1179,40 @@
       };
     } catch (error) {
       return fallback;
+    }
+  }
+
+  // 端末ごとのUI選択を localStorage から復元する（共有スコアとは別キー）。
+  function loadUiPrefs() {
+    try {
+      const raw = localStorage.getItem(UI_PREFS_KEY);
+      if (!raw) return {};
+      const parsed = JSON.parse(raw);
+      return parsed && typeof parsed === "object" ? parsed : {};
+    } catch (error) {
+      return {};
+    }
+  }
+
+  // 選択中のタブ・絞り込みプルダウン等をスナップショットして保存する。
+  function saveUiPrefs() {
+    const prefs = {
+      view: state.view,
+      groupFilter: state.groupFilter,
+      scheduleStatusFilter: state.scheduleStatusFilter,
+      scheduleFavoriteFilter: state.scheduleFavoriteFilter,
+      scheduleSort: state.scheduleSort,
+      countrySearch: state.countrySearch,
+      countryGroupFilter: state.countryGroupFilter,
+      countryConfederationFilter: state.countryConfederationFilter,
+      countrySort: state.countrySort,
+      calendarMode: state.calendarMode,
+      selectedVenueId: state.selectedVenueId
+    };
+    try {
+      localStorage.setItem(UI_PREFS_KEY, JSON.stringify(prefs));
+    } catch (error) {
+      // 保存失敗時は無視（プライベートモード等）
     }
   }
 
@@ -1453,6 +1501,7 @@
         ["pk", "PKあり"]
       ], (value) => {
         state.scheduleStatusFilter = value;
+        saveUiPrefs();
         renderContent();
       }),
       createSelectControl("お気に入り", state.scheduleFavoriteFilter, [
@@ -1460,6 +1509,7 @@
         ["favorites", "お気に入りのみ"]
       ], (value) => {
         state.scheduleFavoriteFilter = value;
+        saveUiPrefs();
         renderContent();
       }),
       createSelectControl("並び順", state.scheduleSort, [
@@ -1468,6 +1518,7 @@
         ["entered_first", "入力済みを上"]
       ], (value) => {
         state.scheduleSort = value;
+        saveUiPrefs();
         renderContent();
       })
     );
@@ -1884,6 +1935,7 @@
     ].forEach(([mode, label]) => {
       const button = calendarButton(label, () => {
         state.calendarMode = mode;
+        saveUiPrefs();
         renderContent();
       });
       button.classList.toggle("active", state.calendarMode === mode);
@@ -2824,6 +2876,7 @@
     search.addEventListener("input", () => {
       state.countrySearch = search.value;
       state.countryScheduleOpenTeamId = "";
+      saveUiPrefs();
       renderCountryNotes();
     });
     searchLabel.append(textSpan("国名検索"), search);
@@ -2832,11 +2885,13 @@
       countrySelect("グループ", state.countryGroupFilter, [["all", "全グループ"], ...groupsForTeams().map((group) => [group, `Group ${group}`])], (value) => {
         state.countryGroupFilter = value;
         state.countryScheduleOpenTeamId = "";
+        saveUiPrefs();
         renderCountryNotes();
       }),
       countrySelect("地域", state.countryConfederationFilter, [["all", "全地域"], ...confederationsForTeams().map((confederation) => [confederation, confederation])], (value) => {
         state.countryConfederationFilter = value;
         state.countryScheduleOpenTeamId = "";
+        saveUiPrefs();
         renderCountryNotes();
       }),
       countrySelect("並び順", state.countrySort, [
@@ -2846,6 +2901,7 @@
       ], (value) => {
         state.countrySort = value;
         state.countryScheduleOpenTeamId = "";
+        saveUiPrefs();
         renderCountryNotes();
       })
     );
@@ -3420,6 +3476,7 @@
 
   function selectVenue(id) {
     state.selectedVenueId = id;
+    saveUiPrefs();
     renderVenues();
   }
 
