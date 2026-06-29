@@ -689,8 +689,32 @@
       ]
     };
 
-    let activeOwner = "karin";
-    let activeView = "tournament";
+    const VIEW_PREFS_KEY = "worldcup2026_app_view_prefs";
+    const VALID_VIEWS = new Set(["tournament", "country-notes", "venues", "roster", "positions", "match-lineup", "compare", "owner", "bet"]);
+    const VALID_OWNERS = new Set(["karin", "ryo"]);
+
+    function loadViewPrefs() {
+      try {
+        const raw = localStorage.getItem(VIEW_PREFS_KEY);
+        if (!raw) return {};
+        const parsed = JSON.parse(raw);
+        return parsed && typeof parsed === "object" ? parsed : {};
+      } catch (error) {
+        return {};
+      }
+    }
+
+    function saveViewPrefs() {
+      try {
+        localStorage.setItem(VIEW_PREFS_KEY, JSON.stringify({ activeView, activeOwner }));
+      } catch (error) {
+        // 保存失敗時は無視（プライベートモード等）
+      }
+    }
+
+    const savedViewPrefs = loadViewPrefs();
+    let activeOwner = VALID_OWNERS.has(savedViewPrefs.activeOwner) ? savedViewPrefs.activeOwner : "karin";
+    let activeView = VALID_VIEWS.has(savedViewPrefs.activeView) ? savedViewPrefs.activeView : "tournament";
     let positionGuideMode = "list";
     let statusTimer = null;
     let drag = null;
@@ -3982,6 +4006,7 @@
 
     showBetButton.addEventListener("click", () => {
       activeView = "bet";
+      saveViewPrefs();
       statusMessage.textContent = "";
       window.clearTimeout(statusTimer);
       render();
@@ -4046,6 +4071,7 @@
         if (tab.dataset.owner) {
           activeOwner = tab.dataset.owner;
         }
+        saveViewPrefs();
         statusMessage.textContent = "";
         window.clearTimeout(statusTimer);
         render();
