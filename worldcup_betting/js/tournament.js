@@ -1016,7 +1016,9 @@
     scheduleStatusFilter: uiPrefs.scheduleStatusFilter ?? "all",
     scheduleFavoriteFilter: uiPrefs.scheduleFavoriteFilter ?? "all",
     scheduleSort: uiPrefs.scheduleSort ?? "date",
-    scheduleOpenStages: { group: true },
+    scheduleOpenStages: uiPrefs.scheduleOpenStages && typeof uiPrefs.scheduleOpenStages === "object"
+      ? uiPrefs.scheduleOpenStages
+      : { group: true },
     calendarMode: uiPrefs.calendarMode ?? "month",
     calendarDate: null,
     selectedVenueId: uiPrefs.selectedVenueId ?? "toronto",
@@ -1207,7 +1209,8 @@
       countryConfederationFilter: state.countryConfederationFilter,
       countrySort: state.countrySort,
       calendarMode: state.calendarMode,
-      selectedVenueId: state.selectedVenueId
+      selectedVenueId: state.selectedVenueId,
+      scheduleOpenStages: state.scheduleOpenStages
     };
     try {
       localStorage.setItem(UI_PREFS_KEY, JSON.stringify(prefs));
@@ -1461,6 +1464,7 @@
       details.open = state.scheduleOpenStages[stage] ?? stage === "group";
       details.addEventListener("toggle", () => {
         state.scheduleOpenStages[stage] = details.open;
+        saveUiPrefs();
         updateScheduleSummaryArrow(details);
       });
 
