@@ -1,69 +1,70 @@
 {
-  "version": 1,
+  "version": 2,
+  "_note": "R32は2026年大会の実際の対戦結果で固定（計算結果に依存しない）。出典: Wikipedia 2026 FIFA World Cup knockout stage。R16以降は試合JSONの W-/L- 参照でスコアから自動解決する。",
   "matches": {
     "R32-01": {
-      "home": { "type": "group_runner_up", "group": "A" },
-      "away": { "type": "group_runner_up", "group": "B" }
+      "home": { "team_id": "RSA" },
+      "away": { "team_id": "CAN" }
     },
     "R32-02": {
-      "home": { "type": "group_winner", "group": "E" },
-      "away": { "type": "best_third", "groups": ["A", "B", "C", "D", "F"] }
+      "home": { "team_id": "GER" },
+      "away": { "team_id": "PAR" }
     },
     "R32-03": {
-      "home": { "type": "group_winner", "group": "F" },
-      "away": { "type": "group_runner_up", "group": "C" }
+      "home": { "team_id": "NED" },
+      "away": { "team_id": "MAR" }
     },
     "R32-04": {
-      "home": { "type": "group_winner", "group": "C" },
-      "away": { "type": "group_runner_up", "group": "F" }
+      "home": { "team_id": "BRA" },
+      "away": { "team_id": "JPN" }
     },
     "R32-05": {
-      "home": { "type": "group_winner", "group": "I" },
-      "away": { "type": "best_third", "groups": ["C", "D", "F", "G", "H"] }
+      "home": { "team_id": "FRA" },
+      "away": { "team_id": "SWE" }
     },
     "R32-06": {
-      "home": { "type": "group_runner_up", "group": "E" },
-      "away": { "type": "group_runner_up", "group": "I" }
+      "home": { "team_id": "CIV" },
+      "away": { "team_id": "NOR" }
     },
     "R32-07": {
-      "home": { "type": "group_winner", "group": "A" },
-      "away": { "type": "best_third", "groups": ["C", "E", "F", "H", "I"] }
+      "home": { "team_id": "MEX" },
+      "away": { "team_id": "ECU" }
     },
     "R32-08": {
-      "home": { "type": "group_winner", "group": "L" },
-      "away": { "type": "best_third", "groups": ["E", "H", "I", "J", "K"] }
+      "home": { "team_id": "ENG" },
+      "away": { "team_id": "COD" }
     },
     "R32-09": {
-      "home": { "type": "group_winner", "group": "D" },
-      "away": { "type": "best_third", "groups": ["B", "E", "F", "I", "J"] }
+      "home": { "team_id": "USA" },
+      "away": { "team_id": "BIH" }
     },
     "R32-10": {
-      "home": { "type": "group_winner", "group": "G" },
-      "away": { "type": "best_third", "groups": ["A", "E", "H", "I", "J"] }
+      "home": { "team_id": "BEL" },
+      "away": { "team_id": "SEN" }
     },
     "R32-11": {
-      "home": { "type": "group_runner_up", "group": "K" },
-      "away": { "type": "group_runner_up", "group": "L" }
+      "home": { "team_id": "POR" },
+      "away": { "team_id": "CRO" }
     },
     "R32-12": {
-      "home": { "type": "group_winner", "group": "H" },
-      "away": { "type": "group_runner_up", "group": "J" }
+      "home": { "team_id": "ESP" },
+      "away": { "team_id": "AUT" }
     },
     "R32-13": {
-      "home": { "type": "group_winner", "group": "B" },
-      "away": { "type": "best_third", "groups": ["E", "F", "G", "I", "J"] }
+      "home": { "team_id": "SUI" },
+      "away": { "team_id": "ALG" }
     },
     "R32-14": {
-      "home": { "type": "group_winner", "group": "J" },
-      "away": { "type": "group_runner_up", "group": "H" }
+      "home": { "team_id": "ARG" },
+      "away": { "team_id": "CPV" }
     },
     "R32-15": {
-      "home": { "type": "group_winner", "group": "K" },
-      "away": { "type": "best_third", "groups": ["D", "E", "I", "J", "L"] }
+      "home": { "team_id": "COL" },
+      "away": { "team_id": "GHA" }
     },
     "R32-16": {
-      "home": { "type": "group_runner_up", "group": "D" },
-      "away": { "type": "group_runner_up", "group": "G" }
+      "home": { "team_id": "AUS" },
+      "away": { "team_id": "EGY" }
     }
   }
 }
