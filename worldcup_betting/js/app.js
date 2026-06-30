@@ -647,7 +647,6 @@
     let betResults = loadBetResults();
     let betResultDraft = { ...betResults };
     const championBetState = loadChampionBetState();
-    let activeBetView = "squad";
 
     const benchSortModes = {
       karin: "original",
@@ -692,6 +691,9 @@
     const VIEW_PREFS_KEY = "worldcup2026_app_view_prefs";
     const VALID_VIEWS = new Set(["tournament", "country-notes", "venues", "roster", "positions", "match-lineup", "compare", "owner", "bet"]);
     const VALID_OWNERS = new Set(["karin", "ryo"]);
+    const VALID_BET_VIEWS = new Set(["squad", "champion"]);
+    const VALID_POSITION_MODES = new Set(["list", "3-4-2-1", "4-2-3-1", "5-4-1"]);
+    const VALID_ROSTER_POSITIONS = new Set(["all", "GK", "DF", "MF", "OMF/WG", "CF"]);
 
     function loadViewPrefs() {
       try {
@@ -706,7 +708,14 @@
 
     function saveViewPrefs() {
       try {
-        localStorage.setItem(VIEW_PREFS_KEY, JSON.stringify({ activeView, activeOwner }));
+        localStorage.setItem(VIEW_PREFS_KEY, JSON.stringify({
+          activeView,
+          activeOwner,
+          activeBetView,
+          positionGuideMode,
+          rosterSearch: rosterSearchInput.value,
+          rosterPositionFilter: rosterPositionFilter.value
+        }));
       } catch (error) {
         // 保存失敗時は無視（プライベートモード等）
       }
@@ -715,7 +724,8 @@
     const savedViewPrefs = loadViewPrefs();
     let activeOwner = VALID_OWNERS.has(savedViewPrefs.activeOwner) ? savedViewPrefs.activeOwner : "karin";
     let activeView = VALID_VIEWS.has(savedViewPrefs.activeView) ? savedViewPrefs.activeView : "tournament";
-    let positionGuideMode = "list";
+    let activeBetView = VALID_BET_VIEWS.has(savedViewPrefs.activeBetView) ? savedViewPrefs.activeBetView : "squad";
+    let positionGuideMode = VALID_POSITION_MODES.has(savedViewPrefs.positionGuideMode) ? savedViewPrefs.positionGuideMode : "list";
     let statusTimer = null;
     let drag = null;
 
@@ -3988,6 +3998,7 @@
     betTabs.forEach((tab) => {
       tab.addEventListener("click", () => {
         activeBetView = tab.dataset.betView || "squad";
+        saveViewPrefs();
         if (activeBetView === "champion") renderChampionBetSheet();
         renderBetTabs();
       });
@@ -4013,13 +4024,22 @@
     });
 
     [rosterSearchInput, rosterPositionFilter].forEach((control) => {
-      control.addEventListener("input", renderRosterList);
-      control.addEventListener("change", renderRosterList);
+      control.addEventListener("input", () => {
+        renderRosterList();
+        saveViewPrefs();
+      });
+      control.addEventListener("change", () => {
+        renderRosterList();
+        saveViewPrefs();
+      });
     });
     playerImportButton.addEventListener("click", importPlayersFromText);
 
     positionModeButtons.forEach((button) => {
-      button.addEventListener("click", () => renderPositionGuideMode(button.dataset.positionMode));
+      button.addEventListener("click", () => {
+        renderPositionGuideMode(button.dataset.positionMode);
+        saveViewPrefs();
+      });
     });
 
     formationButtons.forEach((button) => {
@@ -4077,6 +4097,14 @@
         render();
       });
     });
+
+    // 復元した選手一覧の検索・絞り込みを静的な入力欄へ反映する。
+    if (typeof savedViewPrefs.rosterSearch === "string") {
+      rosterSearchInput.value = savedViewPrefs.rosterSearch;
+    }
+    if (VALID_ROSTER_POSITIONS.has(savedViewPrefs.rosterPositionFilter)) {
+      rosterPositionFilter.value = savedViewPrefs.rosterPositionFilter;
+    }
 
     renderPositionGuideMode(positionGuideMode);
     window.WorldCupTournament?.init();
