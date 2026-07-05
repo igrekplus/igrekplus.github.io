@@ -1019,6 +1019,9 @@
     scheduleOpenStages: uiPrefs.scheduleOpenStages && typeof uiPrefs.scheduleOpenStages === "object"
       ? uiPrefs.scheduleOpenStages
       : { group: true },
+    knockoutOpenStages: uiPrefs.knockoutOpenStages && typeof uiPrefs.knockoutOpenStages === "object"
+      ? uiPrefs.knockoutOpenStages
+      : {},
     calendarMode: uiPrefs.calendarMode ?? "month",
     calendarDate: null,
     selectedVenueId: uiPrefs.selectedVenueId ?? "toronto",
@@ -1210,7 +1213,8 @@
       countrySort: state.countrySort,
       calendarMode: state.calendarMode,
       selectedVenueId: state.selectedVenueId,
-      scheduleOpenStages: state.scheduleOpenStages
+      scheduleOpenStages: state.scheduleOpenStages,
+      knockoutOpenStages: state.knockoutOpenStages
     };
     try {
       localStorage.setItem(UI_PREFS_KEY, JSON.stringify(prefs));
@@ -2775,9 +2779,20 @@
       const matches = state.saved.knockout.rounds[stage] || [];
       const card = document.createElement("details");
       card.className = "knockout-card";
-      card.open = true;
+      card.open = state.knockoutOpenStages[stage] ?? true;
       const heading = document.createElement("summary");
-      heading.textContent = stageLabels[stage];
+      heading.className = "knockout-card-summary";
+      heading.append(
+        textSpan(card.open ? "▼" : "▶", "knockout-card-arrow"),
+        textSpan(stageLabels[stage], "knockout-card-title"),
+        textSpan(`${matches.length}試合`, "knockout-card-count")
+      );
+      card.addEventListener("toggle", () => {
+        state.knockoutOpenStages[stage] = card.open;
+        saveUiPrefs();
+        const arrow = card.querySelector(".knockout-card-arrow");
+        if (arrow) arrow.textContent = card.open ? "▼" : "▶";
+      });
       const list = document.createElement("div");
       list.className = "knockout-round";
       matches.forEach((match) => {
