@@ -251,6 +251,7 @@
   }
   .fac-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--fac); flex: none; }
   .p-expand-hint {
+    display: none; /* 「タップで詳細」の案内文はカード上に常時出さない */
     font-size: var(--fs-normal); color: var(--ink-3); margin-top: 10px;
     letter-spacing: .02em;
   }
@@ -264,10 +265,10 @@
 
   .rel-label {
     position: absolute; transform: translate(-50%, -50%);
-    padding: 6px 16px; border-radius: 12px;
+    padding: 8px 20px; border-radius: 14px;
     background: var(--ground); border: 1px solid var(--stroke);
-    color: var(--ink); font-size: var(--fs-normal); font-weight: 600; line-height: 1.35;
-    max-width: 480px; text-align: center; pointer-events: none;
+    color: var(--ink); font-size: calc(var(--fs-normal) * 1.5); font-weight: 600; line-height: 1.3;
+    max-width: 620px; text-align: center; pointer-events: none;
   }
   .rel-label .q { color: var(--seal); }
 
@@ -861,39 +862,39 @@ const STATUS = {
 
 // 「座標を書き出す」で得た内容をここに貼り付けると配置が固定されます。
 const SAVED_LAYOUT = [
-  { id: "nogi", x: 4574, y: 1447 },
-  { id: "beki", x: 3434, y: 2829 },
-  { id: "akemi", x: 2244, y: 3058 },
-  { id: "hiromichi", x: 1640, y: 3066 },
-  { id: "nokor", x: 4309, y: 2291 },
-  { id: "sakurai", x: 3972, y: 1376 },
-  { id: "kurosu", x: 3517, y: 315 },
-  { id: "takada", x: 4542, y: 312 },
-  { id: "wada", x: 4872, y: 316 },
-  { id: "hirose", x: 4207, y: 310 },
-  { id: "kumagai", x: 3878, y: 318 },
-  { id: "hayato", x: 3177, y: 298 },
-  { id: "nagano", x: 2659, y: 1400 },
-  { id: "usami", x: 1646, y: 273 },
-  { id: "ota", x: 1786, y: 1232 },
-  { id: "yamamoto", x: 2483, y: 293 },
-  { id: "nozaki", x: 5178, y: 1258 },
-  { id: "sano", x: 5562, y: 385 },
-  { id: "shinjo", x: 5937, y: 1748 },
-  { id: "tojo", x: 6471, y: 1078 },
-  { id: "ali", x: 2823, y: 2228 },
-  { id: "mata", x: 4278, y: 3133 },
-  { id: "shichi", x: 3891, y: 3123 },
-  { id: "chocky", x: 4704, y: 3147 },
-  { id: "yuzuki", x: 5233, y: 2529 },
-  { id: "jemaine", x: 5380, y: 3213 },
-  { id: "adiel", x: 5971, y: 3042 },
-  { id: "drum", x: 5625, y: 2520 },
-  { id: "cinggis", x: 6494, y: 2383 },
-  { id: "suzuki", x: 5892, y: 387 },
-  { id: "wakui", x: 7073, y: 1608 },
-  { id: "morita", x: 5232, y: 349 },
-  { id: "mystery_woman", x: 6647, y: 411 },
+  { id: "nogi", x: 4591, y: 1512 },
+  { id: "beki", x: 2646, y: 3755 },
+  { id: "akemi", x: 761, y: 3446 },
+  { id: "hiromichi", x: 156, y: 3486 },
+  { id: "nokor", x: 4043, y: 2753 },
+  { id: "sakurai", x: 3277, y: 1499 },
+  { id: "kurosu", x: 2864, y: -17 },
+  { id: "takada", x: 4748, y: -21 },
+  { id: "wada", x: 6153, y: -40 },
+  { id: "hirose", x: 4181, y: -22 },
+  { id: "kumagai", x: 3623, y: -13 },
+  { id: "hayato", x: 2183, y: -42 },
+  { id: "nagano", x: 1329, y: 1601 },
+  { id: "usami", x: 85, y: 157 },
+  { id: "ota", x: 36, y: 1471 },
+  { id: "yamamoto", x: 1158, y: -39 },
+  { id: "nozaki", x: 5364, y: 1157 },
+  { id: "sano", x: 7619, y: 11 },
+  { id: "shinjo", x: 6343, y: 1589 },
+  { id: "tojo", x: 8261, y: 1209 },
+  { id: "ali", x: 2149, y: 2933 },
+  { id: "mata", x: 4127, y: 3917 },
+  { id: "shichi", x: 3445, y: 3915 },
+  { id: "chocky", x: 4771, y: 3573 },
+  { id: "yuzuki", x: 5497, y: 3339 },
+  { id: "jemaine", x: 6674, y: 4126 },
+  { id: "adiel", x: 7728, y: 3931 },
+  { id: "drum", x: 7006, y: 2925 },
+  { id: "cinggis", x: 8460, y: 3172 },
+  { id: "suzuki", x: 8386, y: 51 },
+  { id: "wakui", x: 9137, y: 1675 },
+  { id: "morita", x: 6937, y: -53 },
+  { id: "mystery_woman", x: 9117, y: 270 },
 ];
 
 /* ================= ここから下は描画処理です ================= */
@@ -909,6 +910,10 @@ const REL_META = {
 const SVG_NS = "http://www.w3.org/2000/svg";
 const CANVAS_W = 4800, CANVAS_H = 3600;
 const STORE_KEY = "vivant-relmap-layout";
+// カード・文字が大きくなり、配置も広がったため、以前の下限(0.18)では
+// 「全体表示」でも収まりきらないことがあった。かなり縮小しても全体を
+// 表示できるよう下限をゆるめている。
+const MIN_SCALE = 0.02, MAX_SCALE = 2.2;
 
 const viewport = document.getElementById("viewport");
 const canvas   = document.getElementById("canvas");
@@ -1260,15 +1265,32 @@ function clipToBox(n, tx, ty) {
 
 // 関係線の相手が人物IDではなく陣営ID(secret線・野崎→別班など)の場合、
 // その陣営の現在の重心を仮のノードとして扱う(カードは持たない)
+// 陣営(背景ゾーン)の矩形範囲。drawZones() が実際に描く箱と
+// 完全に同じ計算式にしておくことで、resolveNode() が返す「陣営への
+// 線の着地点」が、見えているゾーンの箱と必ず一致するようにする。
+function zoneBounds(facId) {
+  const members = nodes.filter(n => n.homeFacId === facId);
+  if (!members.length) return null;
+  let x1 = Infinity, y1 = Infinity, x2 = -Infinity, y2 = -Infinity;
+  for (const m of members) {
+    x1 = Math.min(x1, m.x - m.w / 2); x2 = Math.max(x2, m.x + m.w / 2);
+    y1 = Math.min(y1, m.y - m.h / 2); y2 = Math.max(y2, m.y + m.h / 2);
+  }
+  const pad = 52;
+  return { x1: x1 - pad, y1: y1 - pad, x2: x2 + pad, y2: y2 + pad };
+}
+
 function resolveNode(id) {
   const n = nodeById.get(id);
   if (n) return n;
-  const members = nodes.filter(x => x.homeFacId === id);
-  if (!members.length) return null;
+  const b = zoneBounds(id);
+  if (!b) return null;
+  // w/h をゾーンの実寸にすることで、clipToBox() が箱の枠でぴったり
+  // 線を止めてくれる(見えない重心ではなく、見えている箱が終点になる)。
   return {
-    id, type: "faction-anchor", w: 26, h: 26,
-    x: members.reduce((s, m) => s + m.x, 0) / members.length,
-    y: members.reduce((s, m) => s + m.y, 0) / members.length,
+    id, type: "zone-anchor",
+    x: (b.x1 + b.x2) / 2, y: (b.y1 + b.y2) / 2,
+    w: b.x2 - b.x1, h: b.y2 - b.y1,
   };
 }
 
@@ -1285,16 +1307,9 @@ function drawZones() {
   const g = document.createElementNS(SVG_NS, "g");
   g.setAttribute("class", "zones");
   for (const f of FACTIONS) {
-    const members = nodes.filter(n => n.homeFacId === f.id);
-    if (!members.length) continue;
-
-    let x1 = Infinity, y1 = Infinity, x2 = -Infinity, y2 = -Infinity;
-    for (const m of members) {
-      x1 = Math.min(x1, m.x - m.w / 2); x2 = Math.max(x2, m.x + m.w / 2);
-      y1 = Math.min(y1, m.y - m.h / 2); y2 = Math.max(y2, m.y + m.h / 2);
-    }
-    const pad = 52;
-    x1 -= pad; y1 -= pad; x2 += pad; y2 += pad;
+    const b = zoneBounds(f.id);
+    if (!b) continue;
+    const { x1, y1, x2, y2 } = b;
 
     const rect = document.createElementNS(SVG_NS, "rect");
     rect.setAttribute("x", x1); rect.setAttribute("y", y1);
@@ -1530,7 +1545,7 @@ function zoomAt(clientX, clientY, factor) {
   const r = viewport.getBoundingClientRect();
   const mx = clientX - r.left, my = clientY - r.top;
   const bx = (mx - panX) / scale, by = (my - panY) / scale;
-  scale = Math.min(2.2, Math.max(0.18, scale * factor));
+  scale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, scale * factor));
   panX = mx - bx * scale;
   panY = my - by * scale;
   applyTransform();
@@ -1544,7 +1559,7 @@ function fitView() {
   }
   const pad = 90; // 背景ゾーンの膨らみ分の余白
   const vw = viewport.clientWidth, vh = viewport.clientHeight;
-  scale = Math.min(2.2, Math.max(0.18,
+  scale = Math.min(MAX_SCALE, Math.max(MIN_SCALE,
     Math.min(vw / (x2 - x1 + pad * 2), vh / (y2 - y1 + pad * 2))));
   panX = (vw - (x1 + x2) * scale) / 2;
   panY = (vh - (y1 + y2) * scale) / 2;
