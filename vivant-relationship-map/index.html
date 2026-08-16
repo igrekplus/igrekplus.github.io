@@ -99,7 +99,7 @@
     font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     font-feature-settings: "tnum";
   }
-  .wrap { max-width: 1320px; margin: 0 auto; padding: 28px 20px 80px; }
+  .wrap { max-width: none; margin: 0; padding: 22px 16px 80px; }
 
   header {
     display: flex; flex-wrap: wrap; gap: 16px;
@@ -152,7 +152,7 @@
 
   #viewport {
     position: relative; overflow: hidden;
-    height: min(80vh, 800px); min-height: 520px;
+    height: min(86vh, 980px); min-height: 560px;
     border: 1px solid var(--stroke); border-radius: 10px;
     background-color: var(--ground);
     background-image:
@@ -190,29 +190,42 @@
   }
   .node:active { cursor: grabbing; }
 
-  .node.person { width: 226px; padding: 11px 13px; display: flex; gap: 11px; }
-  .node.person::before {
-    content: ""; position: absolute; left: 0; top: 10px; bottom: 10px;
-    width: 3px; border-radius: 0 3px 3px 0; background: var(--fac);
+  /* 人物カード: 写真を大きく前面に出し、名前だけで人物が分かるように
+     する。長い説明文(p-note)とバッジ(chips)はクリックで開閉する。 */
+  .node.person {
+    width: 232px; padding: 0 0 12px; display: flex; flex-direction: column;
+    overflow: hidden; cursor: pointer;
+    transition: box-shadow .15s ease;
   }
+  .node.person::before {
+    content: ""; position: absolute; left: 0; right: 0; top: 0; height: 5px;
+    background: var(--fac); z-index: 1;
+  }
+  .node.person.expanded { z-index: 30; box-shadow: 0 10px 32px var(--shadow); }
   .face {
-    flex: none; width: 48px; height: 48px; border-radius: 50%;
-    display: grid; place-items: center; overflow: hidden;
+    flex: none; width: 100%; aspect-ratio: 1 / 1; overflow: hidden;
     background: var(--surface-2);
-    border: 2px solid var(--fac);
-    color: var(--fac); font-size: 17px; font-weight: 700;
+    display: grid; place-items: center;
+    color: var(--fac); font-size: 46px; font-weight: 700;
   }
   .face img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .body { min-width: 0; }
-  .p-name { font-size: 15px; font-weight: 700; letter-spacing: .02em; }
-  .p-actor { font-size: 11.5px; color: var(--ink-2); }
-  .p-dual { font-size: 10px; color: var(--seal); margin-top: 3px; font-weight: 600; }
-  .p-note { font-size: 10.5px; color: var(--ink-3); margin-top: 5px; line-height: 1.55; }
-  .chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+  .body { min-width: 0; padding: 12px 15px 0; }
+  .p-name { font-size: 19px; font-weight: 700; letter-spacing: .02em; }
+  .p-actor { font-size: 12.5px; color: var(--ink-2); margin-top: 2px; }
+  .p-tagline { font-size: 13px; color: var(--ink); margin-top: 7px; line-height: 1.55; }
+  .p-dual { font-size: 11px; color: var(--seal); margin-top: 6px; font-weight: 600; }
+  .p-note {
+    display: none; font-size: 12px; color: var(--ink-3);
+    margin-top: 9px; line-height: 1.6; border-top: 1px solid var(--stroke); padding-top: 9px;
+  }
+  .chips { display: none; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+  .node.person.expanded .p-note,
+  .node.person.expanded .chips { display: block; }
+  .node.person.expanded .chips { display: flex; }
   .chip {
     display: inline-block;
-    font-size: 9.5px; letter-spacing: .06em;
-    padding: 1px 6px; border-radius: 3px;
+    font-size: 10.5px; letter-spacing: .06em;
+    padding: 1px 7px; border-radius: 3px;
     border: 1px solid currentColor;
   }
   .chip.ok  { color: var(--fac-koan); }
@@ -221,10 +234,16 @@
 
   .p-fac {
     display: flex; align-items: center; gap: 5px;
-    font-size: 10.5px; font-weight: 600; color: var(--fac);
-    letter-spacing: .02em; margin-top: 2px;
+    font-size: 11.5px; font-weight: 600; color: var(--fac);
+    letter-spacing: .02em; margin-top: 6px;
   }
   .fac-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--fac); flex: none; }
+  .p-expand-hint {
+    font-size: 10.5px; color: var(--ink-3); margin-top: 8px;
+    letter-spacing: .04em;
+  }
+  .p-expand-hint::after { content: "タップで詳細 ▾"; }
+  .node.person.expanded .p-expand-hint::after { content: "閉じる ▴"; }
 
   #edges text {
     font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic Medium",
@@ -385,7 +404,7 @@
     <button type="button" id="btn-zoom-out">縮小 −</button>
     <button type="button" id="btn-export">座標を書き出す</button>
     <button type="button" id="btn-fullscreen">最大化 ⤢</button>
-    <span class="hint">カード=ドラッグで移動 / 背景=ドラッグでスクロール / ホイール=拡大縮小</span>
+    <span class="hint">カード=クリックで詳細 / ドラッグで移動 / 背景=ドラッグでスクロール / ホイール=拡大縮小</span>
   </div>
 
   <div id="viewport">
@@ -503,133 +522,165 @@ const PEOPLE = [
   { id: "nogi", name: "乃木憂助", actor: "堺 雅人", faction: "shosha",
     photo: "nogi.webp", officialPage: true, documented: true,
     dual: { faction: "beppan", label: "裏: 別班" },
+    tagline: "丸菱商事の商社員、その裏の顔は別班の工作員",
     bio: "主人公。表向きは丸菱商事社員、裏の顔は別班の工作員。もう一つの人格「F」を持つとされ、Fは冷静・疑い深く任務優先で、乃木本人が感情に流れたときに制止する役割とされる。" },
 
   { id: "beki", name: "ノゴーン・ベキ(本名: 乃木卓)", actor: "役所広司", faction: "tent",
     photo: "beki.webp", officialPage: false, documented: true, tag: "生死に含みあり",
+    tagline: "乃木の実父。かつて「テント」を率いた男",
     bio: "乃木憂助の実父。元公安関係者で、バルカで「テント」を率いた。第1シーズン終盤に乃木に銃撃されたが生死には含みが残り、2026年版はベキの脱獄が主要事件になっている(詳細は VIVANT人物情報.md 参照)。" },
 
   { id: "akemi", name: "乃木明美", actor: "高梨 臨", faction: "family",
     photo: null, officialPage: false, documented: true,
+    tagline: "乃木の母、ベキの妻",
     bio: "乃木憂助の母、ベキの妻。バルカで一家が襲われた事件が、乃木の人生を大きく変える発端になった。" },
 
   { id: "hiromichi", name: "乃木寛道", actor: "井上 順", faction: "family",
     photo: "hiromichi.webp", officialPage: true, documented: true,
+    tagline: "ベキの兄、乃木の伯父。日本側の乃木家",
     bio: "ベキの兄、つまり乃木憂助の伯父。日本側の乃木家の人物。" },
 
   { id: "nokor", name: "ノコル", actor: "二宮 和也", faction: "tent",
     photo: "nokor.webp", officialPage: true, documented: true,
+    tagline: "血縁なき弟分。かつての敵、今は同志",
     bio: "ベキに育てられたが実子ではない、養子的立場。乃木とは血縁上の兄弟ではないが、事実上「兄: 乃木 / 弟: ノコル」の関係とされる。序盤は乃木と敵対したが、ベキの真意を理解して以降は協力関係。2026年版でも乃木のバルカでの調査に協力している。" },
 
   { id: "sakurai", name: "櫻井里美", actor: "キムラ緑子", faction: "beppan",
     photo: "sakurai.webp", officialPage: true, documented: true,
+    tagline: "別班の司令、乃木の上官",
     bio: "別班の司令。乃木の直属の上官にあたる立場で、2026年版でも乃木に任務を与えている。" },
 
   { id: "kurosu", name: "黒須駿", actor: "松坂 桃李", faction: "beppan",
     photo: "kurosu.webp", officialPage: true, documented: true, tag: "拉致された5人",
+    tagline: "別班員。乃木の信頼厚い後輩",
     bio: "別班員。乃木の後輩・弟分的存在で、第1シーズンでは乃木とともにテントへ潜入した。乃木への信頼は厚い。2026年版の事件は、黒須を含む別班員5人が拉致されるところから始まる。" },
 
   { id: "takada", name: "高田明敏", actor: "市川 笑三郎", faction: "beppan",
     photo: "takada.webp", officialPage: true, documented: true, tag: "拉致された5人",
+    tagline: "拉致された別班員の一人",
     bio: "拉致された別班員5人の一人。" },
 
   { id: "wada", name: "和田貢", actor: "平山 祐介", faction: "beppan",
     photo: "wada.webp", officialPage: true, documented: true, tag: "拉致された5人",
+    tagline: "拉致された別班員の一人",
     bio: "拉致された別班員5人の一人。" },
 
   { id: "hirose", name: "廣瀬瑞樹", actor: "珠城 りょう", faction: "beppan",
     photo: "hirose.webp", officialPage: true, documented: true, tag: "拉致された5人",
+    tagline: "拉致された別班員の一人",
     bio: "拉致された別班員5人の一人。" },
 
   { id: "kumagai", name: "熊谷一輝", actor: "西山 潤", faction: "beppan",
     photo: "kumagai.webp", officialPage: true, documented: true, tag: "拉致された5人",
+    tagline: "拉致された別班員の一人",
     bio: "拉致された別班員5人の一人。世界各地でほぼ同時に襲撃・拉致された。犯人側が全員の身元と現在地を把握していたことから、別班内部か日本側からの情報漏洩が疑われている。" },
 
   { id: "hayato", name: "AIハヤト", actor: "高山 みなみ(声)", faction: "beppan",
     photo: "hayato.webp", officialPage: true, documented: true,
+    tagline: "別班を支えるスーパーAI",
     bio: "別班のスーパーコンピューター/AI。データ分析・人物追跡・情報解析・作戦支援を担う。" },
 
   { id: "nagano", name: "長野利彦", actor: "小日向 文世", faction: "shosha",
     photo: "nagano.webp", officialPage: true, documented: true,
     dual: { faction: "beppan", label: "裏: 別班(東南アジア方面責任者)" },
+    tagline: "丸菱商事専務、その正体は別班幹部",
     bio: "表向きは丸菱商事専務で乃木の上司。第13話で別班・東南アジア方面責任者と確定。1985年防衛大学校卒業→陸自入隊→1987年心理戦防護課程合格→除隊→別班配置→一橋大学大学院在学中に別班訓練→1989年丸菱商事入社という経歴が明かされた。第1シーズンで語った「薬物依存で更生施設に」という空白期間の説明は、別班在籍を隠す偽装だった。「妻も別班」と話すが、恋愛結婚ではなく体面上の形式的な婚姻とされ、妻が誰かは未確定。" },
 
   { id: "usami", name: "宇佐美哲也", actor: "市川 猿弥", faction: "shosha",
     photo: "usami.webp", officialPage: true, documented: true,
+    tagline: "乃木の上司、エネルギー事業部長",
     bio: "エネルギー事業部長。乃木の上司。裏組織との関係は現時点で確認されていない。" },
 
   { id: "ota", name: "太田梨歩", actor: "花岡すみれ", faction: "shosha",
     photo: "ota.webp", officialPage: true, documented: true, tag: "Blue Walker",
+    tagline: "元社員のハッカー、通称 Blue Walker",
     bio: "元丸菱商事社員、天才ハッカー(通称 Blue Walker)。長野への接近は不倫ではなく、テントのモニター山本巧から身を守るための行動だったと第13話で判明。太田の解析から「別班情報を売った人物は国内にいる」ことが判明し、そこから野崎に疑いがつながっていく。" },
 
   { id: "yamamoto", name: "山本巧", actor: "迫田 孝也", faction: "shosha",
     photo: "yamamoto.webp", officialPage: false, documented: true, tag: "故人(第1季)",
     dual: { faction: "tent", label: "裏: テント・モニター" },
+    tagline: "乃木の同僚、その裏はテントのモニター",
     bio: "丸菱商事社員、表向きは乃木の同僚だが裏はテントのモニター。公安に情報を漏らすなどしたため、乃木と黒須により処理された。丸菱商事という一つの会社に、別班(乃木・長野)、テントのモニター(山本)、ハッカー(太田)が同居していた点が本作の入れ子構造を象徴する。" },
 
   { id: "nozaki", name: "野崎守", actor: "阿部 寛", faction: "koan",
     photo: "nozaki.webp", officialPage: true, documented: true, tag: "動機不明(要第14話)",
+    tagline: "公安部の男。今、黒幕として浮上",
     bio: "警視庁公安部・外事第4課。第1シーズンでは乃木を追う立場だったが、結果的に共闘した。第13話終了時点で、別班員5人拉致事件の黒幕として証拠が浮上している状態。動機(なぜ拉致したのか、裏切りか、潜入作戦か偽装か)は未説明で、「敵と確定」ではなく「黒幕として提示された」段階。第14話予告で全貌が明かされるとされる。" },
 
   { id: "sano", name: "佐野雄太郎", actor: "坂東 彌十郎", faction: "koan",
     photo: "sano.webp", officialPage: true, documented: true,
+    tagline: "公安部長、野崎の上司",
     bio: "公安部長。野崎の直属の上司。野崎の行動をどこまで把握しているかは第13話時点で未確定。" },
 
   { id: "shinjo", name: "新庄浩太郎", actor: "竜星 涼", faction: "koan",
     photo: "shinjo.webp", officialPage: true, documented: true,
     dual: { faction: "tent", label: "裏: テント・モニター" },
+    tagline: "野崎の部下、その裏はテントのモニター",
     bio: "表は警視庁公安部・野崎の部下。裏はテントのモニター(第1シーズン終盤で判明)。2026年版ではベキの脱獄を手引きしたことが判明。第13話時点で、今回の別班員拉致事件そのものには関与していないことも判明した。" },
 
   { id: "tojo", name: "東条翔太", actor: "濱田 岳", faction: "koan",
     photo: "tojo.webp", officialPage: true, documented: true,
+    tagline: "サイバー班、野崎の協力者",
     bio: "警視庁サイバー犯罪対策課。野崎と協力関係。新庄逃亡時、野崎の依頼で空港映像を加工していたとされ、これが「なぜ野崎が新庄を逃がすような動きをしたのか」という疑惑につながっている。" },
 
   { id: "ali", name: "アリ", actor: "山中 崇", faction: "tent",
     photo: "ali.webp", officialPage: true, documented: true,
+    tagline: "元テント幹部。今は限定的な情報源",
     bio: "元テント幹部。第1シーズンで乃木の尋問を受け、家族を守るためテントについて証言した。2026年版ではキプロスにおり、乃木が再接触。新庄の居場所を突き止める手がかりとなる。乃木との関係は「元敵対→限定的な情報源・協力」という位置づけ。" },
 
   { id: "mata", name: "マタ", actor: "内村 遥", faction: "tent",
     photo: "mata.webp", officialPage: true, documented: true,
+    tagline: "テントのメンバー",
     bio: "テントのメンバー。" },
 
   { id: "shichi", name: "シチ", actor: "井上 肇", faction: "tent",
     photo: "shichi.webp", officialPage: true, documented: true,
+    tagline: "テントのメンバー",
     bio: "テントのメンバー。" },
 
   { id: "chocky", name: "チョッキー・テーパーニット", actor: "Tanapak Jongjaiphar", faction: "tent",
     photo: "chocky.webp", officialPage: true, documented: true, tag: "新キャラ(2026)",
+    tagline: "新庄を慕うタイの実業家、テントのモニター",
     bio: "2026年新キャラクター。タイの実業家で、新庄と同じくテントのモニター。新庄を慕い、タイで匿っていた。乃木・長野らにより新庄とともに拘束された。" },
 
   { id: "yuzuki", name: "柚木薫", actor: "二階堂ふみ", faction: "balka",
     photo: "yuzuki.webp", officialPage: true, documented: true, tag: "所属に謎(考察段階)",
+    tagline: "医師。乃木の恋人、所属は謎のまま",
     bio: "医師。ジャミーンの主治医的存在で、乃木とは恋愛関係にある。テント・別班いずれへの所属も確定していない(疑わせる演出はあったが未確定のまま)。第13話で長野が乃木に「愛する人がいるなら大事にしなさい」と語る場面があり、その対象は薫とされる。" },
 
   { id: "jemaine", name: "ジャミーン", actor: "本間さえ", faction: "balka",
     photo: "jemaine.webp", officialPage: true, documented: true,
+    tagline: "バルカの少女。皆に愛される存在",
     bio: "バルカの少女。父はアディエル。薫が保護・治療し、乃木は家族的な愛情を注ぎ、ドラムも強い愛着を持つ。ベキとも過去に関わりがある。" },
 
   { id: "adiel", name: "アディエル", actor: "Tsaschiher Khatanzorig", faction: "balka",
     photo: "adiel.webp", officialPage: true, documented: true, tag: "故人",
+    tagline: "ジャミーンの父。故人",
     bio: "ジャミーンの父。爆破事件で死亡。かつてベキに助けられたことがある。" },
 
   { id: "drum", name: "ドラム", actor: "富栄ドラム", faction: "balka",
     photo: "drum.webp", officialPage: true, documented: true,
+    tagline: "乃木の相棒、世界を共に駆ける",
     bio: "元は野崎の現地協力者。現在は乃木とも強い信頼関係にあり、2026年版では乃木と世界各地を移動して調査・作戦に同行する、実質的な中心人物の一人。" },
 
   { id: "cinggis", name: "チンギス", actor: "Barslkhagva Batbold", faction: "balka",
     photo: "cinggis.webp", officialPage: true, documented: true,
+    tagline: "バルカ警察、今や信頼できる協力者",
     bio: "バルカ警察。序盤は乃木・野崎を追跡する立場だったが、途中から協力関係に転じ、最終的に野崎とは信頼できる国際協力関係になった。" },
 
   { id: "suzuki", name: "鈴木祥", actor: "内野 謙太", faction: "koan",
     photo: "suzuki.webp", officialPage: true, documented: true,
+    tagline: "公安部の捜査官、野崎の部下",
     bio: "公安部外事第4課の捜査官。野崎の部下で、野崎の指示により乃木の経歴を調査する任務を担当している。留学先に関する重要な報告を見落としたとされる描写があり、伏線の可能性が指摘されている。" },
 
   { id: "wakui", name: "和久井俊作", actor: "田中 俊介", faction: "koan",
     photo: "wakui.webp", officialPage: true, documented: true, tag: "動向注目(第12話)",
+    tagline: "公安部の捜査官、その動向が今、注目",
     bio: "公安部外事第4課の捜査官。野崎の指示で乃木の護衛を担当。第1シーズンにも登場し、当時は乃木を監視する側だった。第12話で野崎が公安メンバーに退出を指示した際、名残惜しそうに一同を見つめる様子が描かれ、視聴者間で「怪しい」と話題になった。" },
 
   { id: "morita", name: "森田喜一", actor: "谷口 翔太", faction: "koan",
     photo: "morita.webp", officialPage: true, documented: true,
+    tagline: "公安部の捜査官、乃木を護衛する",
     bio: "公安部外事第4課の捜査官。和久井とともに、野崎の指示で秘かに乃木の護衛を行っている。" },
 ];
 
@@ -780,10 +831,12 @@ function buildNodes() {
       `<div class="body">` +
         `<div class="p-name">${esc(n.name)}</div>` +
         `<div class="p-actor">演: ${esc(n.actor)}</div>` +
+        (n.tagline ? `<div class="p-tagline">${esc(n.tagline)}</div>` : "") +
         (fac ? `<div class="p-fac"><span class="fac-dot"></span>${esc(fac.name)}</div>` : "") +
         (n.dual ? `<div class="p-dual">${esc(n.dual.label)}</div>` : "") +
         `<div class="p-note">${esc(n.bio)}</div>` +
         `<div class="chips">${chips.join("")}</div>` +
+        `<div class="p-expand-hint"></div>` +
       `</div>`;
 
     canvas.appendChild(el);
@@ -821,11 +874,18 @@ function autoArrange() {
   const cx = CANVAS_W / 2, cy = CANVAS_H / 2;
   const used = FACTIONS.filter(f => PEOPLE.some(p => p.faction === f.id));
   const list = used.length ? used : FACTIONS;
-  const sector = (Math.PI * 2) / list.length;
-  const homeR = 980;
+  // 陣営のホーム地点は円周上ではなく格子状(6陣営なら3×2)に配置する。
+  // 横に広いビューポートを無駄なく使え、対角の陣営どうしも近くなる。
+  const cols = Math.ceil(Math.sqrt(list.length));
+  const rows = Math.ceil(list.length / cols);
+  const gridGapX = 1900, gridGapY = 1650;
   const facHome = new Map(list.map((f, i) => {
-    const a = -Math.PI / 2 + i * sector;
-    return [f.id, { x: cx + Math.cos(a) * homeR, y: cy + Math.sin(a) * homeR }];
+    const col = i % cols, row = Math.floor(i / cols);
+    // 最終行が埋まっていない場合は中央寄せにする
+    const rowCount = Math.min(cols, list.length - row * cols);
+    const offsetX = (col - (rowCount - 1) / 2) * gridGapX;
+    const offsetY = (row - (rows - 1) / 2) * gridGapY;
+    return [f.id, { x: cx + offsetX, y: cy + offsetY }];
   }));
 
   const isFixed = n => {
@@ -853,8 +913,7 @@ function autoArrange() {
     n.vx = 0; n.vy = 0;
   }
 
-  const nodeRadius = n => Math.max(n.w || 226, n.h || 140) / 2;
-  const REPEL = 620000, SPRING_K = 0.02, SPRING_LEN = 420;
+  const REPEL = 1350000, SPRING_K = 0.02, SPRING_LEN = 560;
   const FAC_K = 0.012, HOME_K = 0.0035, DAMP = 0.82, DT = 0.02;
 
   for (let iter = 0; iter < 420; iter++) {
@@ -944,23 +1003,31 @@ function autoArrange() {
   }
 
   // 仕上げ: シミュレーションが収束しきらずカードが重なった場合に備え、
-  // 最小距離を下回るペアを直接押し出す(0件になるまで/上限回数まで)
-  const pushApart = (a, b, minGap, bIsWall) => {
+  // 矩形どうしとして重なりを判定し、めり込みが小さい軸方向に押し出す
+  // (円で近似すると、今回のように縦長のカードでは斜め方向に判定漏れが
+  // 出るため、幅・高さそれぞれの軸で正しく判定する)
+  const MARGIN = 30;
+  const pushApart = (a, b, bIsWall) => {
+    const ahw = a.w / 2 + MARGIN / 2, ahh = a.h / 2 + MARGIN / 2;
+    const bhw = b.w / 2 + MARGIN / 2, bhh = b.h / 2 + MARGIN / 2;
     let dx = a.x - b.x, dy = a.y - b.y;
-    let d = Math.hypot(dx, dy);
-    if (d >= minGap) return;
-    if (d < 1) { dx = (rand() - 0.5) || 0.05; dy = (rand() - 0.5) || 0.05; d = Math.hypot(dx, dy); }
-    const push = minGap - d, ux = dx / d, uy = dy / d;
-    if (bIsWall) { a.x += ux * push; a.y += uy * push; }
-    else { a.x += ux * push / 2; a.y += uy * push / 2; b.x -= ux * push / 2; b.y -= uy * push / 2; }
+    if (!dx && !dy) { dx = (rand() - 0.5) || 0.05; dy = (rand() - 0.5) || 0.05; }
+    const overlapX = (ahw + bhw) - Math.abs(dx);
+    const overlapY = (ahh + bhh) - Math.abs(dy);
+    if (overlapX <= 0 || overlapY <= 0) return;
+    if (overlapX < overlapY) {
+      const push = overlapX * (dx < 0 ? -1 : 1);
+      if (bIsWall) { a.x += push; } else { a.x += push / 2; b.x -= push / 2; }
+    } else {
+      const push = overlapY * (dy < 0 ? -1 : 1);
+      if (bIsWall) { a.y += push; } else { a.y += push / 2; b.y -= push / 2; }
+    }
   };
-  for (let pass = 0; pass < 140; pass++) {
+  for (let pass = 0; pass < 160; pass++) {
     for (let i = 0; i < movable.length; i++) {
       const a = movable[i];
-      for (let j = i + 1; j < movable.length; j++) {
-        pushApart(a, movable[j], nodeRadius(a) + nodeRadius(movable[j]) + 26);
-      }
-      for (const b of fixed) pushApart(a, b, nodeRadius(a) + nodeRadius(b) + 26, true);
+      for (let j = i + 1; j < movable.length; j++) pushApart(a, movable[j]);
+      for (const b of fixed) pushApart(a, b, true);
     }
   }
 }
@@ -1019,36 +1086,13 @@ function resolveNode(id) {
 }
 
 /* ---------- 背景ゾーン(陣営ごとの色分け) ----------
-   各陣営のメンバーが実際に占めているカード4隅の点から凸包を求め、
-   外側に少し膨らませて塗りつぶす。1人だけの陣営でもカードを囲む
-   四角形になるので、境界ケースを特別扱いする必要がない。         */
-function convexHull(points) {
-  const pts = points.slice().sort((a, b) => a.x - b.x || a.y - b.y);
-  if (pts.length <= 2) return pts;
-  const cross = (o, a, b) => (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x);
-  const lower = [];
-  for (const p of pts) {
-    while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], p) <= 0) lower.pop();
-    lower.push(p);
-  }
-  const upper = [];
-  for (let i = pts.length - 1; i >= 0; i--) {
-    const p = pts[i];
-    while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], p) <= 0) upper.pop();
-    upper.push(p);
-  }
-  upper.pop(); lower.pop();
-  return lower.concat(upper);
-}
-function padHull(hull, pad) {
-  if (hull.length < 3) return hull;
-  const cx = hull.reduce((s, p) => s + p.x, 0) / hull.length;
-  const cy = hull.reduce((s, p) => s + p.y, 0) / hull.length;
-  return hull.map(p => {
-    const dx = p.x - cx, dy = p.y - cy;
-    const d = Math.hypot(dx, dy) || 1;
-    return { x: p.x + (dx / d) * pad, y: p.y + (dy / d) * pad };
-  });
+   各陣営のメンバーのカード範囲を包む角丸長方形を敷き、左上に陣営名の
+   ラベルチップを重ねる。輪郭のはっきりした「オブジェクト」に見える
+   よう、あえて凸包のような曲線ではなく直線的な矩形にしている。     */
+function estTextWidth(text, fontSize) {
+  let w = 0;
+  for (const ch of text) w += /[\x00-\xff]/.test(ch) ? fontSize * 0.56 : fontSize * 1.02;
+  return w;
 }
 function drawZones() {
   const g = document.createElementNS(SVG_NS, "g");
@@ -1056,36 +1100,46 @@ function drawZones() {
   for (const f of FACTIONS) {
     const members = nodes.filter(n => n.facId === f.id);
     if (!members.length) continue;
-    const pts = [];
+
+    let x1 = Infinity, y1 = Infinity, x2 = -Infinity, y2 = -Infinity;
     for (const m of members) {
-      const hw = m.w / 2, hh = m.h / 2;
-      pts.push(
-        { x: m.x - hw, y: m.y - hh }, { x: m.x + hw, y: m.y - hh },
-        { x: m.x - hw, y: m.y + hh }, { x: m.x + hw, y: m.y + hh },
-      );
+      x1 = Math.min(x1, m.x - m.w / 2); x2 = Math.max(x2, m.x + m.w / 2);
+      y1 = Math.min(y1, m.y - m.h / 2); y2 = Math.max(y2, m.y + m.h / 2);
     }
-    const hull = padHull(convexHull(pts), 46);
-    if (hull.length < 3) continue;
+    const pad = 52;
+    x1 -= pad; y1 -= pad; x2 += pad; y2 += pad;
 
-    const poly = document.createElementNS(SVG_NS, "polygon");
-    poly.setAttribute("points", hull.map(p => `${p.x},${p.y}`).join(" "));
-    poly.setAttribute("fill", facColor(f.id));
-    poly.setAttribute("fill-opacity", "0.09");
-    poly.setAttribute("stroke", facColor(f.id));
-    poly.setAttribute("stroke-opacity", "0.4");
-    poly.setAttribute("stroke-width", "1.5");
-    poly.setAttribute("stroke-linejoin", "round");
-    g.appendChild(poly);
+    const rect = document.createElementNS(SVG_NS, "rect");
+    rect.setAttribute("x", x1); rect.setAttribute("y", y1);
+    rect.setAttribute("width", x2 - x1); rect.setAttribute("height", y2 - y1);
+    rect.setAttribute("rx", 26);
+    rect.setAttribute("fill", facColor(f.id));
+    rect.setAttribute("fill-opacity", "0.14");
+    rect.setAttribute("stroke", facColor(f.id));
+    rect.setAttribute("stroke-opacity", "0.75");
+    rect.setAttribute("stroke-width", "2.5");
+    g.appendChild(rect);
 
-    const minX = Math.min(...hull.map(p => p.x));
-    const minY = Math.min(...hull.map(p => p.y));
+    // ラベルチップ(枠の左上に少し掛かる位置に、下地色で切り抜いたように置く)
+    const fontSize = 18;
+    const textW = estTextWidth(f.name, fontSize);
+    const chipX = x1 + 22, chipY = y1 - 17, chipPadX = 14, chipH = 36;
+    const chip = document.createElementNS(SVG_NS, "rect");
+    chip.setAttribute("x", chipX); chip.setAttribute("y", chipY);
+    chip.setAttribute("width", textW + chipPadX * 2); chip.setAttribute("height", chipH);
+    chip.setAttribute("rx", 9);
+    chip.setAttribute("fill", "var(--ground)");
+    chip.setAttribute("stroke", facColor(f.id));
+    chip.setAttribute("stroke-width", "2");
+    g.appendChild(chip);
+
     const label = document.createElementNS(SVG_NS, "text");
-    label.setAttribute("x", minX + 18);
-    label.setAttribute("y", minY + 32);
+    label.setAttribute("x", chipX + chipPadX);
+    label.setAttribute("y", chipY + chipH / 2 + fontSize * 0.36);
     label.setAttribute("fill", facColor(f.id));
-    label.setAttribute("font-size", "21");
+    label.setAttribute("font-size", String(fontSize));
     label.setAttribute("font-weight", "700");
-    label.setAttribute("letter-spacing", "0.05em");
+    label.setAttribute("letter-spacing", "0.04em");
     label.textContent = f.name;
     g.appendChild(label);
   }
@@ -1222,17 +1276,24 @@ function toCanvas(ev) {
   return { x: (ev.clientX - r.left - panX) / scale, y: (ev.clientY - r.top - panY) / scale };
 }
 
+// カードは「ドラッグで移動」と「クリックで詳細開閉」を兼ねる。
+// pointerdown からの移動量がしきい値以下なら「クリック」とみなす。
+function toggleExpand(n) {
+  n.el.classList.toggle("expanded");
+}
 function enableDrag(n) {
-  let offX = 0, offY = 0, id = null;
+  let offX = 0, offY = 0, id = null, startX = 0, startY = 0, moved = false;
   n.el.addEventListener("pointerdown", ev => {
     ev.stopPropagation();
     id = ev.pointerId;
     n.el.setPointerCapture(id);
     const p = toCanvas(ev);
     offX = p.x - n.x; offY = p.y - n.y;
+    startX = ev.clientX; startY = ev.clientY; moved = false;
   });
   n.el.addEventListener("pointermove", ev => {
     if (ev.pointerId !== id) return;
+    if (Math.hypot(ev.clientX - startX, ev.clientY - startY) > 4) moved = true;
     const p = toCanvas(ev);
     n.x = Math.round(p.x - offX);
     n.y = Math.round(p.y - offY);
@@ -1240,7 +1301,11 @@ function enableDrag(n) {
     n.el.style.top  = n.y + "px";
     drawEdges();
   });
-  const end = ev => { if (ev.pointerId === id) { id = null; writeStore(); } };
+  const end = ev => {
+    if (ev.pointerId !== id) return;
+    id = null;
+    if (moved) writeStore(); else toggleExpand(n);
+  };
   n.el.addEventListener("pointerup", end);
   n.el.addEventListener("pointercancel", end);
 }
