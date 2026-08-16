@@ -219,12 +219,17 @@
   .chip.tbd { color: var(--seal); }
   .chip.muted { color: var(--ink-3); }
 
-  .node.faction {
-    width: 182px; padding: 9px 12px; text-align: center;
-    border-color: var(--fac); background: var(--surface);
+  .p-fac {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 10.5px; font-weight: 600; color: var(--fac);
+    letter-spacing: .02em; margin-top: 2px;
   }
-  .f-name { font-size: 13.5px; font-weight: 700; color: var(--fac); letter-spacing: .04em; }
-  .f-note { font-size: 10px; color: var(--ink-3); margin-top: 2px; line-height: 1.5; }
+  .fac-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--fac); flex: none; }
+
+  #edges text {
+    font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic Medium",
+                 "Noto Sans JP", system-ui, sans-serif;
+  }
 
   .rel-label {
     position: absolute; transform: translate(-50%, -50%);
@@ -396,14 +401,15 @@
       <ul id="lg-rel"></ul>
     </div>
     <div>
-      <h3>陣営(カード左端の色)</h3>
+      <h3>陣営(カード左端の色・背景の色分け)</h3>
       <ul id="lg-fac"></ul>
     </div>
     <div>
       <h3>線・バッジの読み方</h3>
       <ul>
         <li><span class="swatch" style="border-top-color:var(--ink-3);border-top-style:dashed"></span>破線 = 未確定・考察段階</li>
-        <li>細い実線 = 所属(陣営の色) / 太線 = 裏の所属(secret)</li>
+        <li>太線 = 裏の所属(secret)を示す関係線</li>
+        <li>背景の色つき領域 = 陣営ごとのまとまり(力学的に自動配置)</li>
         <li><span class="chip tbd">要確認</span> 役割・関係の裏取りが未整理</li>
       </ul>
     </div>
@@ -497,11 +503,10 @@ const PEOPLE = [
   { id: "nogi", name: "乃木憂助", actor: "堺 雅人", faction: "shosha",
     photo: "nogi.webp", officialPage: true, documented: true,
     dual: { faction: "beppan", label: "裏: 別班" },
-    bio: "主人公。表向きは丸菱商事社員、裏の顔は別班の工作員。もう一つの人格「F」を持つとされ、Fは冷静・疑い深く任務優先で、乃木本人が感情に流れたときに制止する役割とされる。",
-    x: 2400, y: 1800 },
+    bio: "主人公。表向きは丸菱商事社員、裏の顔は別班の工作員。もう一つの人格「F」を持つとされ、Fは冷静・疑い深く任務優先で、乃木本人が感情に流れたときに制止する役割とされる。" },
 
   { id: "beki", name: "ノゴーン・ベキ(本名: 乃木卓)", actor: "役所広司", faction: "tent",
-    photo: null, officialPage: false, documented: true, tag: "生死に含みあり",
+    photo: "beki.webp", officialPage: false, documented: true, tag: "生死に含みあり",
     bio: "乃木憂助の実父。元公安関係者で、バルカで「テント」を率いた。第1シーズン終盤に乃木に銃撃されたが生死には含みが残り、2026年版はベキの脱獄が主要事件になっている(詳細は VIVANT人物情報.md 参照)。" },
 
   { id: "akemi", name: "乃木明美", actor: "高梨 臨", faction: "family",
@@ -557,8 +562,8 @@ const PEOPLE = [
     photo: "ota.webp", officialPage: true, documented: true, tag: "Blue Walker",
     bio: "元丸菱商事社員、天才ハッカー(通称 Blue Walker)。長野への接近は不倫ではなく、テントのモニター山本巧から身を守るための行動だったと第13話で判明。太田の解析から「別班情報を売った人物は国内にいる」ことが判明し、そこから野崎に疑いがつながっていく。" },
 
-  { id: "yamamoto", name: "山本巧", actor: "(第1シーズン)", faction: "shosha",
-    photo: null, officialPage: false, documented: true, tag: "故人(第1季)",
+  { id: "yamamoto", name: "山本巧", actor: "迫田 孝也", faction: "shosha",
+    photo: "yamamoto.webp", officialPage: false, documented: true, tag: "故人(第1季)",
     dual: { faction: "tent", label: "裏: テント・モニター" },
     bio: "丸菱商事社員、表向きは乃木の同僚だが裏はテントのモニター。公安に情報を漏らすなどしたため、乃木と黒須により処理された。丸菱商事という一つの会社に、別班(乃木・長野)、テントのモニター(山本)、ハッカー(太田)が同居していた点が本作の入れ子構造を象徴する。" },
 
@@ -728,17 +733,16 @@ const svg      = document.getElementById("edges");
 canvas.style.width  = CANVAS_W + "px";
 canvas.style.height = CANVAS_H + "px";
 
-const nodes = [
-  ...FACTIONS.map(f => ({ ...f, type: "faction", facId: f.id })),
-  ...PEOPLE.map(p => ({ ...p, type: "person", facId: p.faction })),
-];
+// 陣営は「カード」として置かず、背景の色分け(ゾーン)とカードのバッジ・
+// 左端の色で示す。そのため nodes/nodeById には人物だけを載せる。
+const nodes = PEOPLE.map(p => ({ ...p, type: "person", facId: p.faction }));
 const nodeById = new Map(nodes.map(n => [n.id, n]));
 const facById  = new Map(FACTIONS.map(f => [f.id, f]));
 
+// 「所属」を示す線(旧: belong)は、背景ゾーン+カードバッジに役目を譲って
+// 廃止した(丸菱商事など人数の多い陣営で線が密集し、図が大きく重く見える
+// 一因だったため)。裏の所属(secret)と通常の関係線だけを描画する。
 const edges = [
-  ...PEOPLE
-    .filter(p => facById.has(p.faction))
-    .map(p => ({ from: p.id, to: p.faction, kind: "belong" })),
   ...PEOPLE
     .filter(p => p.dual && facById.has(p.dual.faction))
     .map(p => ({ from: p.id, to: p.dual.faction, kind: "secret", dir: "none", label: p.dual.label })),
@@ -759,31 +763,28 @@ function buildNodes() {
     el.className = `node ${n.type}`;
     el.style.setProperty("--fac", facColor(n.facId));
 
-    if (n.type === "person") {
-      const src = n.photo ? PHOTO_BASE + n.photo : null;
-      const chips = [];
-      chips.push(n.documented
-        ? `<span class="chip ok">整理済み</span>`
-        : `<span class="chip tbd">要確認</span>`);
-      if (!n.officialPage) chips.push(`<span class="chip muted">公式ページ未掲載</span>`);
-      if (n.tag) chips.push(`<span class="chip muted">${esc(n.tag)}</span>`);
+    const src = n.photo ? PHOTO_BASE + n.photo : null;
+    const chips = [];
+    chips.push(n.documented
+      ? `<span class="chip ok">整理済み</span>`
+      : `<span class="chip tbd">要確認</span>`);
+    if (!n.officialPage) chips.push(`<span class="chip muted">公式ページ未掲載</span>`);
+    if (n.tag) chips.push(`<span class="chip muted">${esc(n.tag)}</span>`);
 
-      el.innerHTML =
-        `<div class="face">` +
-          (src ? `<img src="${esc(src)}" alt="${esc(n.name)}" loading="lazy">` : esc(n.name.charAt(0))) +
-        `</div>` +
-        `<div class="body">` +
-          `<div class="p-name">${esc(n.name)}</div>` +
-          `<div class="p-actor">演: ${esc(n.actor)}</div>` +
-          (n.dual ? `<div class="p-dual">${esc(n.dual.label)}</div>` : "") +
-          `<div class="p-note">${esc(n.bio)}</div>` +
-          `<div class="chips">${chips.join("")}</div>` +
-        `</div>`;
-    } else {
-      el.innerHTML =
-        `<div class="f-name">${esc(n.name)}</div>` +
-        `<div class="f-note">${esc(n.note)}</div>`;
-    }
+    const fac = facById.get(n.facId);
+
+    el.innerHTML =
+      `<div class="face">` +
+        (src ? `<img src="${esc(src)}" alt="${esc(n.name)}" loading="lazy">` : esc(n.name.charAt(0))) +
+      `</div>` +
+      `<div class="body">` +
+        `<div class="p-name">${esc(n.name)}</div>` +
+        `<div class="p-actor">演: ${esc(n.actor)}</div>` +
+        (fac ? `<div class="p-fac"><span class="fac-dot"></span>${esc(fac.name)}</div>` : "") +
+        (n.dual ? `<div class="p-dual">${esc(n.dual.label)}</div>` : "") +
+        `<div class="p-note">${esc(n.bio)}</div>` +
+        `<div class="chips">${chips.join("")}</div>` +
+      `</div>`;
 
     canvas.appendChild(el);
     n.el = el;
@@ -799,78 +800,169 @@ function measure() {
   }
 }
 
-/* ---------- 自動整列 ----------
-   陣営ごとに扇形の持ち場を割り当て、メンバー数に応じてリング数を
-   増やしながら外周に配置します。人物を1人足しても、座標を書かずに
-   衝突しにくい位置へ収まります。
+/* ---------- 自動整列(力学的レイアウト) ----------
+   関係線でつながっている人物どうしがバネで引き合い、すべての人物が
+   互いに反発しあう、簡易な force-directed シミュレーションで配置を
+   決めます。関係が強い人ほど自然に近づき、関係の薄い人は自然に
+   離れるので、扇形の固定リングだった頃より「関係の距離」が見た目の
+   距離に近づきます。
 
-   陣営をまたぐ関係は、相手の陣営が自分の持ち場から見てどちら向きかを
-   計算し、リング内の並び順をその向きに寄せることで、線の長さを
-   多少なり縮めています(「lean」= 関係の重心方向)。ただし乃木のように
-   陣営の枠を超えて全方向とつながる人物は、どう並べても一定の距離が
-   残ります。これは扇形レイアウトの構造上の限界です。               */
+   ただし、明示的な関係線を持たない人物(拉致された別班員など)は
+   何にも引っ張られず散らばってしまうため、①同じ陣営どうしのごく
+   弱い引力 ②陣営ごとの持ち場(ホーム地点)へのさらに弱い重力、の
+   2つを補助的にかけて、陣営としてのまとまりを保っています。陣営
+   そのものは「所属」で示すため、位置で厳密に区切る必要はありません
+   (色分けされた背景ゾーンとカードのバッジで示しています)。
+
+   座標を手で固定している人物(ドラッグ後に「座標を書き出す」で
+   貼り付けた人物)はシミュレーションの対象から外し、他の人物からの
+   反発だけを及ぼす「動かない壁」として扱います。                   */
 function autoArrange() {
   const cx = CANVAS_W / 2, cy = CANVAS_H / 2;
-  const hubR = 760, memberR0 = 1150, ringGap = 410;
   const used = FACTIONS.filter(f => PEOPLE.some(p => p.faction === f.id));
   const list = used.length ? used : FACTIONS;
   const sector = (Math.PI * 2) / list.length;
+  const homeR = 980;
+  const facHome = new Map(list.map((f, i) => {
+    const a = -Math.PI / 2 + i * sector;
+    return [f.id, { x: cx + Math.cos(a) * homeR, y: cy + Math.sin(a) * homeR }];
+  }));
 
-  // 各陣営の中心角を先に確定させる(人物の lean 計算に使うため)
-  const facAngle = new Map(list.map((f, i) => [f.id, -Math.PI / 2 + i * sector]));
+  const isFixed = n => {
+    const p = PEOPLE.find(pp => pp.id === n.id);
+    return !!(p && Number.isFinite(p.x) && Number.isFinite(p.y));
+  };
+  const fixed = nodes.filter(isFixed);
+  const movable = nodes.filter(n => !isFixed(n));
 
-  function leanOf(personId, ownFacId) {
-    const ownA = facAngle.get(ownFacId);
-    let lean = 0;
-    for (const e of edges) {
-      if (e.kind === "belong") continue;
-      let otherId = null;
-      if (e.from === personId) otherId = e.to;
-      else if (e.to === personId) otherId = e.from;
-      else continue;
-      const other = nodeById.get(otherId);
-      if (!other) continue;
-      const otherFacId = other.type === "faction" ? other.id : other.facId;
-      if (!otherFacId || otherFacId === ownFacId || !facAngle.has(otherFacId)) continue;
-      const delta = Math.atan2(Math.sin(facAngle.get(otherFacId) - ownA), Math.cos(facAngle.get(otherFacId) - ownA));
-      lean += Math.sign(delta);
-    }
-    return lean;
+  // 毎回同じ結果になるよう、決定論的な疑似乱数で初期位置をばらつかせる
+  let seed = 20260816;
+  const rand = () => {
+    seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+    return seed / 0x7fffffff;
+  };
+
+  for (const n of fixed) {
+    const p = PEOPLE.find(pp => pp.id === n.id);
+    n.x = p.x; n.y = p.y; n.vx = 0; n.vy = 0;
+  }
+  for (const n of movable) {
+    const home = facHome.get(n.facId) || { x: cx, y: cy };
+    n.x = home.x + (rand() - 0.5) * 620;
+    n.y = home.y + (rand() - 0.5) * 620;
+    n.vx = 0; n.vy = 0;
   }
 
-  list.forEach((f, i) => {
-    const a = facAngle.get(f.id);
-    const hub = nodeById.get(f.id);
-    hub.x = cx + Math.cos(a) * hubR;
-    hub.y = cy + Math.sin(a) * hubR;
+  const nodeRadius = n => Math.max(n.w || 226, n.h || 140) / 2;
+  const REPEL = 620000, SPRING_K = 0.02, SPRING_LEN = 420;
+  const FAC_K = 0.012, HOME_K = 0.0035, DAMP = 0.82, DT = 0.02;
 
-    // 座標を手で固定している人物(乃木など)はリング計算から除外する。
-    // 含めてしまうと後で座標を上書きするだけの「空き枠」ができて、
-    // 残りメンバーの間隔がかえって詰まってしまうため。
-    const members = PEOPLE
-      .filter(p => p.faction === f.id && !(Number.isFinite(p.x) && Number.isFinite(p.y)))
-      .map(p => nodeById.get(p.id))
-      .sort((m1, m2) => leanOf(m1.id, f.id) - leanOf(m2.id, f.id));
-    const ringCount = Math.max(1, Math.ceil(members.length / 2));
-    const rings = Array.from({ length: ringCount }, () => []);
-    members.forEach((m, j) => rings[j % ringCount].push(m));
+  for (let iter = 0; iter < 420; iter++) {
+    const fx = new Map(movable.map(n => [n.id, 0]));
+    const fy = new Map(movable.map(n => [n.id, 0]));
 
-    rings.forEach((group, ri) => {
-      const r = memberR0 + ri * ringGap;
-      const n = group.length;
-      group.forEach((m, gi) => {
-        const off = n === 1 ? 0 : (gi / (n - 1) - 0.5) * sector * 0.6;
-        m.x = cx + Math.cos(a + off) * r;
-        m.y = cy + Math.sin(a + off) * r;
+    // 反発: すべての人物どうし(固定されている人物も「押し返す壁」として含む)
+    for (let i = 0; i < movable.length; i++) {
+      const a = movable[i];
+      for (let j = i + 1; j < movable.length; j++) {
+        const b = movable[j];
+        let dx = a.x - b.x, dy = a.y - b.y;
+        let d2 = dx * dx + dy * dy;
+        if (d2 < 1) { dx = rand() - 0.5; dy = rand() - 0.5; d2 = 1; }
+        const d = Math.sqrt(d2);
+        const force = REPEL / d2;
+        const ux = dx / d, uy = dy / d;
+        fx.set(a.id, fx.get(a.id) + ux * force); fy.set(a.id, fy.get(a.id) + uy * force);
+        fx.set(b.id, fx.get(b.id) - ux * force); fy.set(b.id, fy.get(b.id) - uy * force);
+      }
+      for (const b of fixed) {
+        let dx = a.x - b.x, dy = a.y - b.y;
+        let d2 = dx * dx + dy * dy;
+        if (d2 < 1) { dx = rand() - 0.5; dy = rand() - 0.5; d2 = 1; }
+        const d = Math.sqrt(d2);
+        const force = REPEL * 1.3 / d2;
+        fx.set(a.id, fx.get(a.id) + dx / d * force); fy.set(a.id, fy.get(a.id) + dy / d * force);
+      }
+    }
+
+    // 引力: 関係線に沿ったバネ。相手が「陣営そのもの」(secret線など)の
+    // 場合は、その陣営の現在の重心へ向けて弱めに引く
+    for (const e of edges) {
+      const a = nodeById.get(e.from);
+      if (!a) continue;
+      const bDirect = nodeById.get(e.to);
+      let b = bDirect;
+      if (!b) {
+        const members = nodes.filter(m => m.facId === e.to);
+        if (!members.length) continue;
+        b = {
+          id: e.to,
+          x: members.reduce((s, m) => s + m.x, 0) / members.length,
+          y: members.reduce((s, m) => s + m.y, 0) / members.length,
+        };
+      }
+      const aMove = fx.has(a.id), bMove = fx.has(b.id);
+      if (!aMove && !bMove) continue;
+      let dx = b.x - a.x, dy = b.y - a.y;
+      const d = Math.hypot(dx, dy) || 1;
+      const k = bDirect ? SPRING_K : SPRING_K * 0.5;
+      const force = (d - SPRING_LEN) * k;
+      const ux = dx / d, uy = dy / d;
+      if (aMove) { fx.set(a.id, fx.get(a.id) + ux * force); fy.set(a.id, fy.get(a.id) + uy * force); }
+      if (bMove) { fx.set(b.id, fx.get(b.id) - ux * force); fy.set(b.id, fy.get(b.id) - uy * force); }
+    }
+
+    // 陣営内の弱い凝集力 + 持ち場へのさらに弱い重力(発散防止)
+    const centroid = new Map();
+    for (const f of list) {
+      const members = movable.filter(n => n.facId === f.id);
+      if (!members.length) continue;
+      centroid.set(f.id, {
+        x: members.reduce((s, n) => s + n.x, 0) / members.length,
+        y: members.reduce((s, n) => s + n.y, 0) / members.length,
       });
-    });
-  });
+    }
+    for (const n of movable) {
+      const c = centroid.get(n.facId);
+      if (c) {
+        fx.set(n.id, fx.get(n.id) + (c.x - n.x) * FAC_K);
+        fy.set(n.id, fy.get(n.id) + (c.y - n.y) * FAC_K);
+      }
+      const home = facHome.get(n.facId);
+      if (home) {
+        fx.set(n.id, fx.get(n.id) + (home.x - n.x) * HOME_K);
+        fy.set(n.id, fy.get(n.id) + (home.y - n.y) * HOME_K);
+      }
+    }
 
-  FACTIONS.filter(f => !list.includes(f)).forEach((f, i) => {
-    const hub = nodeById.get(f.id);
-    hub.x = cx + hubR * 1.7;
-    hub.y = cy - hubR + i * 130;
-  });
+    for (const n of movable) {
+      n.vx = (n.vx || 0) * DAMP + fx.get(n.id) * DT;
+      n.vy = (n.vy || 0) * DAMP + fy.get(n.id) * DT;
+      n.x += n.vx;
+      n.y += n.vy;
+    }
+  }
+
+  // 仕上げ: シミュレーションが収束しきらずカードが重なった場合に備え、
+  // 最小距離を下回るペアを直接押し出す(0件になるまで/上限回数まで)
+  const pushApart = (a, b, minGap, bIsWall) => {
+    let dx = a.x - b.x, dy = a.y - b.y;
+    let d = Math.hypot(dx, dy);
+    if (d >= minGap) return;
+    if (d < 1) { dx = (rand() - 0.5) || 0.05; dy = (rand() - 0.5) || 0.05; d = Math.hypot(dx, dy); }
+    const push = minGap - d, ux = dx / d, uy = dy / d;
+    if (bIsWall) { a.x += ux * push; a.y += uy * push; }
+    else { a.x += ux * push / 2; a.y += uy * push / 2; b.x -= ux * push / 2; b.y -= uy * push / 2; }
+  };
+  for (let pass = 0; pass < 140; pass++) {
+    for (let i = 0; i < movable.length; i++) {
+      const a = movable[i];
+      for (let j = i + 1; j < movable.length; j++) {
+        pushApart(a, movable[j], nodeRadius(a) + nodeRadius(movable[j]) + 26);
+      }
+      for (const b of fixed) pushApart(a, b, nodeRadius(a) + nodeRadius(b) + 26, true);
+    }
+  }
 }
 
 function applyLayout({ useStore = true } = {}) {
@@ -910,6 +1002,94 @@ function clipToBox(n, tx, ty) {
     Math.abs(dy) > 1e-6 ? hh / Math.abs(dy) : Infinity
   );
   return { x: n.x + dx * k, y: n.y + dy * k };
+}
+
+// 関係線の相手が人物IDではなく陣営ID(secret線・野崎→別班など)の場合、
+// その陣営の現在の重心を仮のノードとして扱う(カードは持たない)
+function resolveNode(id) {
+  const n = nodeById.get(id);
+  if (n) return n;
+  const members = nodes.filter(x => x.facId === id);
+  if (!members.length) return null;
+  return {
+    id, type: "faction-anchor", w: 26, h: 26,
+    x: members.reduce((s, m) => s + m.x, 0) / members.length,
+    y: members.reduce((s, m) => s + m.y, 0) / members.length,
+  };
+}
+
+/* ---------- 背景ゾーン(陣営ごとの色分け) ----------
+   各陣営のメンバーが実際に占めているカード4隅の点から凸包を求め、
+   外側に少し膨らませて塗りつぶす。1人だけの陣営でもカードを囲む
+   四角形になるので、境界ケースを特別扱いする必要がない。         */
+function convexHull(points) {
+  const pts = points.slice().sort((a, b) => a.x - b.x || a.y - b.y);
+  if (pts.length <= 2) return pts;
+  const cross = (o, a, b) => (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x);
+  const lower = [];
+  for (const p of pts) {
+    while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], p) <= 0) lower.pop();
+    lower.push(p);
+  }
+  const upper = [];
+  for (let i = pts.length - 1; i >= 0; i--) {
+    const p = pts[i];
+    while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], p) <= 0) upper.pop();
+    upper.push(p);
+  }
+  upper.pop(); lower.pop();
+  return lower.concat(upper);
+}
+function padHull(hull, pad) {
+  if (hull.length < 3) return hull;
+  const cx = hull.reduce((s, p) => s + p.x, 0) / hull.length;
+  const cy = hull.reduce((s, p) => s + p.y, 0) / hull.length;
+  return hull.map(p => {
+    const dx = p.x - cx, dy = p.y - cy;
+    const d = Math.hypot(dx, dy) || 1;
+    return { x: p.x + (dx / d) * pad, y: p.y + (dy / d) * pad };
+  });
+}
+function drawZones() {
+  const g = document.createElementNS(SVG_NS, "g");
+  g.setAttribute("class", "zones");
+  for (const f of FACTIONS) {
+    const members = nodes.filter(n => n.facId === f.id);
+    if (!members.length) continue;
+    const pts = [];
+    for (const m of members) {
+      const hw = m.w / 2, hh = m.h / 2;
+      pts.push(
+        { x: m.x - hw, y: m.y - hh }, { x: m.x + hw, y: m.y - hh },
+        { x: m.x - hw, y: m.y + hh }, { x: m.x + hw, y: m.y + hh },
+      );
+    }
+    const hull = padHull(convexHull(pts), 46);
+    if (hull.length < 3) continue;
+
+    const poly = document.createElementNS(SVG_NS, "polygon");
+    poly.setAttribute("points", hull.map(p => `${p.x},${p.y}`).join(" "));
+    poly.setAttribute("fill", facColor(f.id));
+    poly.setAttribute("fill-opacity", "0.09");
+    poly.setAttribute("stroke", facColor(f.id));
+    poly.setAttribute("stroke-opacity", "0.4");
+    poly.setAttribute("stroke-width", "1.5");
+    poly.setAttribute("stroke-linejoin", "round");
+    g.appendChild(poly);
+
+    const minX = Math.min(...hull.map(p => p.x));
+    const minY = Math.min(...hull.map(p => p.y));
+    const label = document.createElementNS(SVG_NS, "text");
+    label.setAttribute("x", minX + 18);
+    label.setAttribute("y", minY + 32);
+    label.setAttribute("fill", facColor(f.id));
+    label.setAttribute("font-size", "21");
+    label.setAttribute("font-weight", "700");
+    label.setAttribute("letter-spacing", "0.05em");
+    label.textContent = f.name;
+    g.appendChild(label);
+  }
+  return g;
 }
 
 function ensureMarkers() {
@@ -978,29 +1158,18 @@ function drawEdges() {
   svg.setAttribute("width", CANVAS_W);
   svg.setAttribute("height", CANVAS_H);
   svg.replaceChildren();
+  svg.appendChild(drawZones());
   ensureMarkers();
   canvas.querySelectorAll(".rel-label").forEach(e => e.remove());
 
-  const groupMeta = buildEdgeGroups(edges.filter(e => e.kind !== "belong"));
+  const groupMeta = buildEdgeGroups(edges);
 
   for (const e of edges) {
-    const a = nodeById.get(e.from), b = nodeById.get(e.to);
+    const a = resolveNode(e.from), b = resolveNode(e.to);
     if (!a || !b) continue;
 
     const p1 = clipToBox(a, b.x, b.y);
     const p2 = clipToBox(b, a.x, a.y);
-
-    if (e.kind === "belong") {
-      const line = document.createElementNS(SVG_NS, "line");
-      line.setAttribute("x1", p1.x); line.setAttribute("y1", p1.y);
-      line.setAttribute("x2", p2.x); line.setAttribute("y2", p2.y);
-      line.setAttribute("stroke-linecap", "round");
-      line.setAttribute("stroke", facColor(b.id));
-      line.setAttribute("stroke-width", "2");
-      line.setAttribute("opacity", "0.5");
-      svg.appendChild(line);
-      continue;
-    }
 
     // 関係線は直線ではなく弧で描く(中央での重なり・完全一致を回避)
     const { idx, size } = groupMeta.get(e);
@@ -1024,7 +1193,7 @@ function drawEdges() {
 
     const meta = REL_META[e.kind] || REL_META.secret;
     path.setAttribute("stroke", `var(${meta.color})`);
-    path.setAttribute("stroke-width", e.dual ? "3.4" : "2.6");
+    path.setAttribute("stroke-width", e.kind === "secret" ? "3.4" : "2.6");
     if (e.unsure) path.setAttribute("stroke-dasharray", "7 6");
     if (e.dir === "to" || e.dir === "both") path.setAttribute("marker-end", `url(#ar-${e.kind}-e)`);
     if (e.dir === "both") path.setAttribute("marker-start", `url(#ar-${e.kind}-s)`);
@@ -1119,7 +1288,7 @@ function fitView() {
     x1 = Math.min(x1, n.x - n.w / 2); x2 = Math.max(x2, n.x + n.w / 2);
     y1 = Math.min(y1, n.y - n.h / 2); y2 = Math.max(y2, n.y + n.h / 2);
   }
-  const pad = 60;
+  const pad = 90; // 背景ゾーンの膨らみ分の余白
   const vw = viewport.clientWidth, vh = viewport.clientHeight;
   scale = Math.min(2.2, Math.max(0.18,
     Math.min(vw / (x2 - x1 + pad * 2), vh / (y2 - y1 + pad * 2))));
