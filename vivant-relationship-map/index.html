@@ -162,8 +162,25 @@
     cursor: grab; touch-action: none;
   }
   #viewport.panning { cursor: grabbing; }
+  /* 最大化: ブラウザの Fullscreen API はプレビュー環境(iframe埋め込み等)で
+     許可されないことがあるため使わず、position:fixed で画面いっぱいに
+     広げる自前実装にしている。どの環境でも確実に動く。 */
+  #viewport.is-maxed {
+    position: fixed; inset: 12px; z-index: 1000;
+    height: auto; min-height: 0;
+  }
+  body.viewport-maxed { overflow: hidden; }
   #canvas { position: absolute; top: 0; left: 0; transform-origin: 0 0; }
   #edges { position: absolute; top: 0; left: 0; overflow: visible; pointer-events: none; }
+  .exit-maxed {
+    display: none; position: absolute; top: 12px; right: 12px; z-index: 20;
+    align-items: center; gap: 6px;
+    font: inherit; font-size: 12px; padding: 7px 13px; cursor: pointer;
+    color: var(--ink); background: var(--surface); border: 1px solid var(--stroke);
+    border-radius: 6px; box-shadow: 0 4px 14px var(--shadow);
+  }
+  .exit-maxed:hover { background: var(--surface-2); }
+  #viewport.is-maxed .exit-maxed { display: inline-flex; }
 
   .node {
     position: absolute; transform: translate(-50%, -50%);
@@ -362,6 +379,7 @@
     <button type="button" id="btn-zoom-in">拡大 ＋</button>
     <button type="button" id="btn-zoom-out">縮小 −</button>
     <button type="button" id="btn-export">座標を書き出す</button>
+    <button type="button" id="btn-fullscreen">最大化 ⤢</button>
     <span class="hint">カード=ドラッグで移動 / 背景=ドラッグでスクロール / ホイール=拡大縮小</span>
   </div>
 
@@ -369,6 +387,7 @@
     <div id="canvas">
       <svg id="edges" aria-hidden="true"></svg>
     </div>
+    <button type="button" id="btn-exit-maxed" class="exit-maxed">✕ 元に戻す</button>
   </div>
 
   <div class="legend">
@@ -783,7 +802,13 @@ function measure() {
 /* ---------- 自動整列 ----------
    陣営ごとに扇形の持ち場を割り当て、メンバー数に応じてリング数を
    増やしながら外周に配置します。人物を1人足しても、座標を書かずに
-   衝突しにくい位置へ収まります。                                   */
+   衝突しにくい位置へ収まります。
+
+   陣営をまたぐ関係は、相手の陣営が自分の持ち場から見てどちら向きかを
+   計算し、リング内の並び順をその向きに寄せることで、線の長さを
+   多少なり縮めています(「lean」= 関係の重心方向)。ただし乃木のように
+   陣営の枠を超えて全方向とつながる人物は、どう並べても一定の距離が
+   残ります。これは扇形レイアウトの構造上の限界です。               */
 function autoArrange() {
   const cx = CANVAS_W / 2, cy = CANVAS_H / 2;
   const hubR = 760, memberR0 = 1150, ringGap = 410;
@@ -791,8 +816,30 @@ function autoArrange() {
   const list = used.length ? used : FACTIONS;
   const sector = (Math.PI * 2) / list.length;
 
+  // 各陣営の中心角を先に確定させる(人物の lean 計算に使うため)
+  const facAngle = new Map(list.map((f, i) => [f.id, -Math.PI / 2 + i * sector]));
+
+  function leanOf(personId, ownFacId) {
+    const ownA = facAngle.get(ownFacId);
+    let lean = 0;
+    for (const e of edges) {
+      if (e.kind === "belong") continue;
+      let otherId = null;
+      if (e.from === personId) otherId = e.to;
+      else if (e.to === personId) otherId = e.from;
+      else continue;
+      const other = nodeById.get(otherId);
+      if (!other) continue;
+      const otherFacId = other.type === "faction" ? other.id : other.facId;
+      if (!otherFacId || otherFacId === ownFacId || !facAngle.has(otherFacId)) continue;
+      const delta = Math.atan2(Math.sin(facAngle.get(otherFacId) - ownA), Math.cos(facAngle.get(otherFacId) - ownA));
+      lean += Math.sign(delta);
+    }
+    return lean;
+  }
+
   list.forEach((f, i) => {
-    const a = -Math.PI / 2 + i * sector;
+    const a = facAngle.get(f.id);
     const hub = nodeById.get(f.id);
     hub.x = cx + Math.cos(a) * hubR;
     hub.y = cy + Math.sin(a) * hubR;
@@ -802,7 +849,8 @@ function autoArrange() {
     // 残りメンバーの間隔がかえって詰まってしまうため。
     const members = PEOPLE
       .filter(p => p.faction === f.id && !(Number.isFinite(p.x) && Number.isFinite(p.y)))
-      .map(p => nodeById.get(p.id));
+      .map(p => nodeById.get(p.id))
+      .sort((m1, m2) => leanOf(m1.id, f.id) - leanOf(m2.id, f.id));
     const ringCount = Math.max(1, Math.ceil(members.length / 2));
     const rings = Array.from({ length: ringCount }, () => []);
     members.forEach((m, j) => rings[j % ringCount].push(m));
@@ -1117,6 +1165,25 @@ document.getElementById("btn-zoom-in").addEventListener("click", () => {
 document.getElementById("btn-zoom-out").addEventListener("click", () => {
   const r = viewport.getBoundingClientRect();
   zoomAt(r.left + r.width / 2, r.top + r.height / 2, 1 / 1.2);
+});
+
+/* ---------- 最大化 ---------- */
+const btnFullscreen = document.getElementById("btn-fullscreen");
+function setMaxed(on) {
+  viewport.classList.toggle("is-maxed", on);
+  document.body.classList.toggle("viewport-maxed", on);
+  btnFullscreen.textContent = on ? "元に戻す ⤡" : "最大化 ⤢";
+  // サイズが変わるため、表示を再フィットする
+  requestAnimationFrame(fitView);
+}
+btnFullscreen.addEventListener("click", () => setMaxed(!viewport.classList.contains("is-maxed")));
+const btnExitMaxed = document.getElementById("btn-exit-maxed");
+// #viewport の背景パン処理(pointerdown)が親要素として拾ってしまい、
+// このボタンの click が発火しなくなるため、先に止めておく。
+btnExitMaxed.addEventListener("pointerdown", ev => ev.stopPropagation());
+btnExitMaxed.addEventListener("click", () => setMaxed(false));
+document.addEventListener("keydown", ev => {
+  if (ev.key === "Escape" && viewport.classList.contains("is-maxed")) setMaxed(false);
 });
 
 /* ---------- 凡例 ---------- */
