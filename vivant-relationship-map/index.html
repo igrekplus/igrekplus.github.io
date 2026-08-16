@@ -343,13 +343,16 @@
   .fac-head h3 { margin: 0; font-size: 30px; font-weight: 900; color: var(--fac-g); }
   .fac-head p { margin: 0; font-size: 20px; color: var(--ink-3); }
   .bio-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(760px, 1fr));
     gap: 16px;
   }
   .bio-card {
     background: var(--surface); border: 1px solid var(--stroke); border-radius: 10px;
     padding: 17px 18px; display: flex; gap: 16px;
   }
+  /* flexアイテムはデフォルトで中身の幅より縮まないため、min-width:0 が
+     ないと長い説明文が折り返されず1行に伸び続けてしまう。 */
+  .bio-info { min-width: 0; }
   .bio-face {
     flex: none; width: 76px; height: 76px; border-radius: 50%; overflow: hidden;
     border: 2px solid var(--fac-g); background: var(--surface-2);
@@ -1681,7 +1684,7 @@ function buildBioGroups() {
       const src = p.photo ? PHOTO_BASE + p.photo : null;
       return `<div class="bio-card">
         <div class="bio-face">${src ? `<img src="${esc(src)}" alt="${esc(p.name)}" loading="lazy">` : esc(p.name.charAt(0))}</div>
-        <div>
+        <div class="bio-info">
           <div class="bio-name">${esc(p.name)}${p.dual ? ` <span style="color:var(--seal);font-size:19px;">(${esc(p.dual.label)})</span>` : ""}</div>
           <div class="bio-actor">演: ${esc(p.actor)}</div>
           <div class="bio-text">${esc(p.bio)}</div>
