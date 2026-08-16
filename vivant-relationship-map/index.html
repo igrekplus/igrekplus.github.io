@@ -1,0 +1,1199 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VIVANT 人物相関図</title>
+<style>
+  :root {
+    --ground:      #e6e5dd;
+    --ground-grid: #d6d5cb;
+    --surface:     #f3f2ec;
+    --surface-2:   #e9e8e0;
+    --stroke:      #c2c0b3;
+    --ink:         #1d2226;
+    --ink-2:       #5c6168;
+    --ink-3:       #868a8e;
+    --seal:        #a8392a;
+    --shadow:      rgba(29,34,38,.16);
+
+    --fac-shosha:  #3c6699;
+    --fac-koan:    #2c7568;
+    --fac-beppan:  #6f52a0;
+    --fac-tent:    #a8392a;
+    --fac-balka:   #7f6a22;
+    --fac-family:  #2a7f8f;
+    --fac-unknown: #6a6f76;
+
+    --rel-trust:   #2c7568;
+    --rel-hostile: #a8392a;
+    --rel-watch:   #9a6c1e;
+    --rel-bond:    #6f52a0;
+    --rel-secret:  #7c8087;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:      #0f1317;
+      --ground-grid: #191e24;
+      --surface:     #171d23;
+      --surface-2:   #1f262d;
+      --stroke:      #333c45;
+      --ink:         #dee3e7;
+      --ink-2:       #98a1a9;
+      --ink-3:       #737b83;
+      --seal:        #e0705a;
+      --shadow:      rgba(0,0,0,.55);
+
+      --fac-shosha:  #6e9fd8;
+      --fac-koan:    #4dae9b;
+      --fac-beppan:  #a288db;
+      --fac-tent:    #e0705a;
+      --fac-balka:   #c3a648;
+      --fac-family:  #59c2d3;
+      --fac-unknown: #99a1a9;
+
+      --rel-trust:   #4dae9b;
+      --rel-hostile: #e0705a;
+      --rel-watch:   #d0a13f;
+      --rel-bond:    #a288db;
+      --rel-secret:  #868e96;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:      #0f1317;
+    --ground-grid: #191e24;
+    --surface:     #171d23;
+    --surface-2:   #1f262d;
+    --stroke:      #333c45;
+    --ink:         #dee3e7;
+    --ink-2:       #98a1a9;
+    --ink-3:       #737b83;
+    --seal:        #e0705a;
+    --shadow:      rgba(0,0,0,.55);
+
+    --fac-shosha:  #6e9fd8;
+    --fac-koan:    #4dae9b;
+    --fac-beppan:  #a288db;
+    --fac-tent:    #e0705a;
+    --fac-balka:   #c3a648;
+    --fac-family:  #59c2d3;
+    --fac-unknown: #99a1a9;
+
+    --rel-trust:   #4dae9b;
+    --rel-hostile: #e0705a;
+    --rel-watch:   #d0a13f;
+    --rel-bond:    #a288db;
+    --rel-secret:  #868e96;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic Medium",
+                 "Noto Sans JP", system-ui, sans-serif;
+    line-height: 1.7;
+  }
+  .mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-feature-settings: "tnum";
+  }
+  .wrap { max-width: 1320px; margin: 0 auto; padding: 28px 20px 80px; }
+
+  header {
+    display: flex; flex-wrap: wrap; gap: 16px;
+    align-items: flex-end; justify-content: space-between;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--stroke);
+  }
+  .eyebrow {
+    font-size: 11px; letter-spacing: .18em; color: var(--ink-3);
+    text-transform: uppercase;
+  }
+  h1 {
+    margin: 6px 0 4px;
+    font-size: clamp(24px, 3.6vw, 34px);
+    letter-spacing: .06em; font-weight: 700;
+    text-wrap: balance;
+  }
+  .lede { font-size: 13.5px; color: var(--ink-2); max-width: 66ch; }
+  .seal {
+    align-self: center; white-space: nowrap;
+    border: 2px solid var(--seal); color: var(--seal);
+    padding: 7px 13px; border-radius: 3px;
+    font-size: 11.5px; letter-spacing: .16em;
+    transform: rotate(-3.5deg);
+  }
+
+  .caution {
+    margin: 20px 0 22px; padding: 13px 16px;
+    background: var(--surface); border: 1px solid var(--stroke);
+    border-left: 3px solid var(--seal); border-radius: 0 6px 6px 0;
+    font-size: 12.5px; color: var(--ink-2);
+  }
+  .caution + .caution { margin-top: -12px; border-left-color: var(--ink-3); }
+  .caution b { color: var(--ink); }
+  .caution code { background: var(--surface-2); padding: 1px 5px; border-radius: 3px; font-size: 11.5px; }
+
+  .toolbar {
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+    margin-bottom: 10px;
+  }
+  .toolbar button {
+    font: inherit; font-size: 12px;
+    padding: 6px 12px; cursor: pointer;
+    color: var(--ink); background: var(--surface);
+    border: 1px solid var(--stroke); border-radius: 5px;
+  }
+  .toolbar button:hover { background: var(--surface-2); }
+  .toolbar button:focus-visible { outline: 2px solid var(--fac-shosha); outline-offset: 2px; }
+  .toolbar .hint { font-size: 11.5px; color: var(--ink-3); margin-left: auto; }
+
+  #viewport {
+    position: relative; overflow: hidden;
+    height: min(80vh, 800px); min-height: 520px;
+    border: 1px solid var(--stroke); border-radius: 10px;
+    background-color: var(--ground);
+    background-image:
+      linear-gradient(var(--ground-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--ground-grid) 1px, transparent 1px);
+    background-size: 30px 30px;
+    cursor: grab; touch-action: none;
+  }
+  #viewport.panning { cursor: grabbing; }
+  #canvas { position: absolute; top: 0; left: 0; transform-origin: 0 0; }
+  #edges { position: absolute; top: 0; left: 0; overflow: visible; pointer-events: none; }
+
+  .node {
+    position: absolute; transform: translate(-50%, -50%);
+    background: var(--surface); border: 1px solid var(--stroke);
+    border-radius: 9px; box-shadow: 0 4px 12px var(--shadow);
+    cursor: grab; touch-action: none;
+  }
+  .node:active { cursor: grabbing; }
+
+  .node.person { width: 226px; padding: 11px 13px; display: flex; gap: 11px; }
+  .node.person::before {
+    content: ""; position: absolute; left: 0; top: 10px; bottom: 10px;
+    width: 3px; border-radius: 0 3px 3px 0; background: var(--fac);
+  }
+  .face {
+    flex: none; width: 48px; height: 48px; border-radius: 50%;
+    display: grid; place-items: center; overflow: hidden;
+    background: var(--surface-2);
+    border: 2px solid var(--fac);
+    color: var(--fac); font-size: 17px; font-weight: 700;
+  }
+  .face img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .body { min-width: 0; }
+  .p-name { font-size: 15px; font-weight: 700; letter-spacing: .02em; }
+  .p-actor { font-size: 11.5px; color: var(--ink-2); }
+  .p-dual { font-size: 10px; color: var(--seal); margin-top: 3px; font-weight: 600; }
+  .p-note { font-size: 10.5px; color: var(--ink-3); margin-top: 5px; line-height: 1.55; }
+  .chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+  .chip {
+    display: inline-block;
+    font-size: 9.5px; letter-spacing: .06em;
+    padding: 1px 6px; border-radius: 3px;
+    border: 1px solid currentColor;
+  }
+  .chip.ok  { color: var(--fac-koan); }
+  .chip.tbd { color: var(--seal); }
+  .chip.muted { color: var(--ink-3); }
+
+  .node.faction {
+    width: 182px; padding: 9px 12px; text-align: center;
+    border-color: var(--fac); background: var(--surface);
+  }
+  .f-name { font-size: 13.5px; font-weight: 700; color: var(--fac); letter-spacing: .04em; }
+  .f-note { font-size: 10px; color: var(--ink-3); margin-top: 2px; line-height: 1.5; }
+
+  .rel-label {
+    position: absolute; transform: translate(-50%, -50%);
+    padding: 2px 7px; border-radius: 9px;
+    background: var(--ground); border: 1px solid var(--stroke);
+    color: var(--ink-2); font-size: 10.5px; line-height: 1.4;
+    max-width: 168px; text-align: center; pointer-events: none;
+  }
+  .rel-label .q { color: var(--seal); }
+
+  .legend {
+    margin-top: 14px; display: grid; gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    font-size: 12px; color: var(--ink-2);
+  }
+  .legend h3 {
+    margin: 0 0 7px; font-size: 11px; letter-spacing: .12em;
+    color: var(--ink-3); font-weight: 600;
+  }
+  .legend ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 5px 14px; }
+  .legend li { display: flex; align-items: center; gap: 6px; }
+  .swatch { width: 26px; height: 0; border-top-width: 3px; border-top-style: solid; flex: none; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+
+  dialog {
+    width: min(620px, 92vw); padding: 0;
+    border: 1px solid var(--stroke); border-radius: 10px;
+    background: var(--surface); color: var(--ink);
+  }
+  dialog::backdrop { background: rgba(0,0,0,.5); }
+  .dlg-head { padding: 15px 18px 0; }
+  .dlg-head h2 { margin: 0 0 5px; font-size: 15px; }
+  .dlg-head p { margin: 0; font-size: 12px; color: var(--ink-2); }
+  dialog textarea {
+    display: block; width: calc(100% - 36px); margin: 13px 18px;
+    height: 190px; resize: vertical;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 11.5px; line-height: 1.6;
+    background: var(--ground); color: var(--ink);
+    border: 1px solid var(--stroke); border-radius: 6px; padding: 10px;
+  }
+  .dlg-foot { display: flex; gap: 8px; justify-content: flex-end; padding: 0 18px 16px; }
+  .dlg-foot button {
+    font: inherit; font-size: 12px; padding: 6px 14px; cursor: pointer;
+    border: 1px solid var(--stroke); border-radius: 5px;
+    background: var(--surface-2); color: var(--ink);
+  }
+
+  /* ---------- 二重構造テーブル ---------- */
+  section.block { margin-top: 46px; }
+  section.block h2 {
+    font-size: 16px; letter-spacing: .03em; margin: 0 0 4px;
+  }
+  section.block .block-lede {
+    font-size: 12.5px; color: var(--ink-2); margin: 0 0 16px; max-width: 72ch;
+  }
+  .table-scroll { overflow-x: auto; border: 1px solid var(--stroke); border-radius: 8px; }
+  table.dual {
+    width: 100%; border-collapse: collapse; font-size: 12.5px; background: var(--surface);
+  }
+  table.dual th, table.dual td {
+    text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--stroke);
+    white-space: nowrap;
+  }
+  table.dual th { color: var(--ink-3); font-weight: 600; font-size: 11px; letter-spacing: .05em; }
+  table.dual td.status { color: var(--seal); font-weight: 600; }
+  table.dual td.status.done { color: var(--fac-koan); }
+  table.dual tr:last-child td { border-bottom: none; }
+
+  /* ---------- 人物情報カード ---------- */
+  .fac-group { margin-top: 30px; }
+  .fac-head {
+    display: flex; align-items: baseline; gap: 10px;
+    padding-bottom: 6px; margin-bottom: 12px;
+    border-bottom: 2px solid var(--fac-g);
+  }
+  .fac-head .dot { width: 11px; height: 11px; border-radius: 50%; background: var(--fac-g); }
+  .fac-head h3 { margin: 0; font-size: 15px; color: var(--fac-g); }
+  .fac-head p { margin: 0; font-size: 11.5px; color: var(--ink-3); }
+  .bio-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+  .bio-card {
+    background: var(--surface); border: 1px solid var(--stroke); border-radius: 9px;
+    padding: 13px 14px; display: flex; gap: 12px;
+  }
+  .bio-face {
+    flex: none; width: 56px; height: 56px; border-radius: 50%; overflow: hidden;
+    border: 2px solid var(--fac-g); background: var(--surface-2);
+    display: grid; place-items: center; color: var(--fac-g); font-weight: 700; font-size: 19px;
+  }
+  .bio-face img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .bio-name { font-size: 14.5px; font-weight: 700; }
+  .bio-actor { font-size: 11px; color: var(--ink-2); margin-bottom: 5px; }
+  .bio-text { font-size: 11.5px; color: var(--ink-2); line-height: 1.7; }
+
+  /* ---------- 確定/未確定まとめ ---------- */
+  .status-cols {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px;
+  }
+  .status-col {
+    background: var(--surface); border: 1px solid var(--stroke); border-radius: 8px; padding: 14px 16px;
+  }
+  .status-col h4 { margin: 0 0 8px; font-size: 12.5px; }
+  .status-col.ok h4 { color: var(--fac-koan); }
+  .status-col.watch h4 { color: var(--seal); }
+  .status-col.guess h4 { color: var(--ink-3); }
+  .status-col ul { margin: 0; padding-left: 18px; font-size: 12px; color: var(--ink-2); line-height: 1.9; }
+
+  footer {
+    margin-top: 48px; padding-top: 14px;
+    border-top: 1px solid var(--stroke);
+    font-size: 11.5px; color: var(--ink-3); line-height: 1.9;
+  }
+  footer code { background: var(--surface); padding: 1px 5px; border-radius: 3px; }
+  footer b { color: var(--ink-2); }
+
+  @media print {
+    .toolbar, .caution { display: none; }
+    #viewport { height: auto; border: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div>
+      <div class="eyebrow mono">FILE No. VIVANT-2023/2026 &nbsp;/&nbsp; TBS 日曜劇場</div>
+      <h1>「VIVANT(ヴィヴァン)」人物相関図</h1>
+      <p class="lede">商社員・乃木憂助が、赴任先バルカでの不正送金事件をきっかけに、武装組織「テント」と自らの出自をめぐる謎に巻き込まれていく物語。2023年の第1シーズンに続き、2026年に新章が放送されている。</p>
+    </div>
+    <div class="seal mono">第13話時点</div>
+  </header>
+
+  <div class="caution">
+    <b>基準時点: 2026年8月16日(日)17:11。</b> 最新放送済みは第13話まで、第14話は同日21:00放送のため未反映です。
+    氏名・俳優名は <a href="https://www.tbs.co.jp/VIVANT_tbs/chara/" target="_blank" rel="noopener">TBS公式サイトの登場人物ページ</a> に基づき確定していますが、
+    第13話時点で「そう見せられているだけで全貌不明」な関係(点線 + <span style="color:var(--seal)">?</span>)も多く含まれます。
+    詳しい根拠は同ディレクトリの <code>VIVANT人物情報.md</code> にまとめています。データを直す場合は、まず MD を編集してから
+    <code>index.html</code> の <code>PEOPLE</code> / <code>RELATIONS</code> に反映してください。
+  </div>
+  <div class="caution">
+    <b>画像について。</b> 人物写真は TBS公式サイトの掲載画像を個人利用の範囲でトリミング・縮小して使用しています。
+    著作権は放送局・制作サイドに帰属します。公開範囲(GitHub Pages 掲載可否)はご自身でご判断のうえ調整してください。
+  </div>
+
+  <div class="toolbar">
+    <button type="button" id="btn-arrange">自動整列</button>
+    <button type="button" id="btn-fit">全体表示</button>
+    <button type="button" id="btn-zoom-in">拡大 ＋</button>
+    <button type="button" id="btn-zoom-out">縮小 −</button>
+    <button type="button" id="btn-export">座標を書き出す</button>
+    <span class="hint">カード=ドラッグで移動 / 背景=ドラッグでスクロール / ホイール=拡大縮小</span>
+  </div>
+
+  <div id="viewport">
+    <div id="canvas">
+      <svg id="edges" aria-hidden="true"></svg>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div>
+      <h3>関係の種類(線の色)</h3>
+      <ul id="lg-rel"></ul>
+    </div>
+    <div>
+      <h3>陣営(カード左端の色)</h3>
+      <ul id="lg-fac"></ul>
+    </div>
+    <div>
+      <h3>線・バッジの読み方</h3>
+      <ul>
+        <li><span class="swatch" style="border-top-color:var(--ink-3);border-top-style:dashed"></span>破線 = 未確定・考察段階</li>
+        <li>細い実線 = 所属(陣営の色) / 太線 = 裏の所属(secret)</li>
+        <li><span class="chip tbd">要確認</span> 役割・関係の裏取りが未整理</li>
+      </ul>
+    </div>
+  </div>
+
+  <dialog id="dlg">
+    <div class="dlg-head">
+      <h2>現在の配置</h2>
+      <p><code>index.html</code> 内の <code>const SAVED_LAYOUT = [];</code> の行を、以下で丸ごと置き換えてください。</p>
+    </div>
+    <textarea id="dlg-text" readonly spellcheck="false"></textarea>
+    <div class="dlg-foot">
+      <button type="button" id="dlg-copy">コピー</button>
+      <button type="button" id="dlg-close">閉じる</button>
+    </div>
+  </dialog>
+
+  <!-- ============ 二重構造 ============ -->
+  <section class="block">
+    <h2>二重構造の一覧</h2>
+    <p class="block-lede">『VIVANT』は「表の所属」と「裏の所属」が食い違う人物が多く、これを押さえないと相関図が読めません。</p>
+    <div class="table-scroll">
+      <table class="dual" id="tbl-dual"></table>
+    </div>
+  </section>
+
+  <!-- ============ 人物情報(陣営別) ============ -->
+  <section class="block">
+    <h2>人物情報</h2>
+    <p class="block-lede">相関図と同じデータから生成しています。陣営ごとにまとめました。</p>
+    <div id="bio-groups"></div>
+  </section>
+
+  <!-- ============ 確定/未確定まとめ ============ -->
+  <section class="block">
+    <h2>第13話終了時点の確定 / 未確定</h2>
+    <div class="status-cols">
+      <div class="status-col ok">
+        <h4>確定</h4>
+        <ul id="st-ok"></ul>
+      </div>
+      <div class="status-col watch">
+        <h4>そう見せられているが全貌不明(要第14話)</h4>
+        <ul id="st-watch"></ul>
+      </div>
+      <div class="status-col guess">
+        <h4>完全に考察段階(裏付けなし)</h4>
+        <ul id="st-guess"></ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <b>データ源:</b> <code>themes/vivant-relationship-map/VIVANT人物情報.md</code> が一次情報です。役名・関係を直すときはまず MD を編集し、
+    このページの <code>PEOPLE</code> / <code>RELATIONS</code> / <code>STATUS</code> に反映してください(自動連携はしていません)。<br>
+    <b>写真:</b> <code>img/</code> 配下に TBS公式サイトの掲載画像をトリミングして置いています。<code>PHOTO_BASE</code> と各人物の <code>photo</code> を変更すれば差し替えできます。<br>
+    <b>公開について:</b> <code>igrekplus.github.io</code> はサブモジュールのため直接編集せず、デプロイ時にご自身でコピーしてください。
+  </footer>
+</div>
+
+<script>
+"use strict";
+
+/* ==================================================================
+   データはここから下の3ブロック(FACTIONS / PEOPLE / RELATIONS)と
+   末尾の STATUS を編集するだけで、図・二重構造表・人物情報・確定
+   まとめの4か所すべてに反映されます。一次情報は VIVANT人物情報.md
+   です。
+   ================================================================== */
+
+const PHOTO_BASE = "img/";
+
+const FACTIONS = [
+  { id: "shosha",  name: "丸菱商事",  note: "乃木・長野らが籍を置く商社(表の顔)", color: "--fac-shosha" },
+  { id: "beppan",  name: "別班",      note: "自衛隊の非公然情報組織", color: "--fac-beppan" },
+  { id: "koan",    name: "警視庁公安部", note: "野崎・佐野が所属", color: "--fac-koan" },
+  { id: "tent",    name: "テント",    note: "バルカを拠点とする武装組織。ベキが率いる", color: "--fac-tent" },
+  { id: "balka",   name: "バルカ / 周辺協力者", note: "物語の主舞台の国と、その周辺人物", color: "--fac-balka" },
+  { id: "family",  name: "乃木家",    note: "乃木憂助の血縁", color: "--fac-family" },
+  { id: "unknown", name: "所属・役割 要確認", note: "公式サイト掲載のみで、詳細は未整理", color: "--fac-unknown" },
+];
+
+/*
+  documented : このMD/ページで役割を裏取りできているか(false=要確認)
+  officialPage: 2026年版のTBS公式「登場人物」ページに掲載されているか
+                (false の3名=ベキ・明美・山本は現行ページ非掲載。写真なし)
+  dual       : 裏の所属がある場合 { faction, label }
+  tag        : 補足の一言バッジ
+*/
+const PEOPLE = [
+  { id: "nogi", name: "乃木憂助", actor: "堺 雅人", faction: "shosha",
+    photo: "nogi.webp", officialPage: true, documented: true,
+    dual: { faction: "beppan", label: "裏: 別班" },
+    bio: "主人公。表向きは丸菱商事社員、裏の顔は別班の工作員。もう一つの人格「F」を持つとされ、Fは冷静・疑い深く任務優先で、乃木本人が感情に流れたときに制止する役割とされる。",
+    x: 2400, y: 1800 },
+
+  { id: "beki", name: "ノゴーン・ベキ(本名: 乃木卓)", actor: "役所広司", faction: "tent",
+    photo: null, officialPage: false, documented: true, tag: "生死に含みあり",
+    bio: "乃木憂助の実父。元公安関係者で、バルカで「テント」を率いた。第1シーズン終盤に乃木に銃撃されたが生死には含みが残り、2026年版はベキの脱獄が主要事件になっている(詳細は VIVANT人物情報.md 参照)。" },
+
+  { id: "akemi", name: "乃木明美", actor: "高梨 臨", faction: "family",
+    photo: null, officialPage: false, documented: true,
+    bio: "乃木憂助の母、ベキの妻。バルカで一家が襲われた事件が、乃木の人生を大きく変える発端になった。" },
+
+  { id: "hiromichi", name: "乃木寛道", actor: "井上 順", faction: "family",
+    photo: "hiromichi.webp", officialPage: true, documented: true,
+    bio: "ベキの兄、つまり乃木憂助の伯父。日本側の乃木家の人物。" },
+
+  { id: "nokor", name: "ノコル", actor: "二宮 和也", faction: "tent",
+    photo: "nokor.webp", officialPage: true, documented: true,
+    bio: "ベキに育てられたが実子ではない、養子的立場。乃木とは血縁上の兄弟ではないが、事実上「兄: 乃木 / 弟: ノコル」の関係とされる。序盤は乃木と敵対したが、ベキの真意を理解して以降は協力関係。2026年版でも乃木のバルカでの調査に協力している。" },
+
+  { id: "sakurai", name: "櫻井里美", actor: "キムラ緑子", faction: "beppan",
+    photo: "sakurai.webp", officialPage: true, documented: true,
+    bio: "別班の司令。乃木の直属の上官にあたる立場で、2026年版でも乃木に任務を与えている。" },
+
+  { id: "kurosu", name: "黒須駿", actor: "松坂 桃李", faction: "beppan",
+    photo: "kurosu.webp", officialPage: true, documented: true, tag: "拉致された5人",
+    bio: "別班員。乃木の後輩・弟分的存在で、第1シーズンでは乃木とともにテントへ潜入した。乃木への信頼は厚い。2026年版の事件は、黒須を含む別班員5人が拉致されるところから始まる。" },
+
+  { id: "takada", name: "高田明敏", actor: "市川 笑三郎", faction: "beppan",
+    photo: "takada.webp", officialPage: true, documented: true, tag: "拉致された5人",
+    bio: "拉致された別班員5人の一人。" },
+
+  { id: "wada", name: "和田貢", actor: "平山 祐介", faction: "beppan",
+    photo: "wada.webp", officialPage: true, documented: true, tag: "拉致された5人",
+    bio: "拉致された別班員5人の一人。" },
+
+  { id: "hirose", name: "廣瀬瑞樹", actor: "珠城 りょう", faction: "beppan",
+    photo: "hirose.webp", officialPage: true, documented: true, tag: "拉致された5人",
+    bio: "拉致された別班員5人の一人。" },
+
+  { id: "kumagai", name: "熊谷一輝", actor: "西山 潤", faction: "beppan",
+    photo: "kumagai.webp", officialPage: true, documented: true, tag: "拉致された5人",
+    bio: "拉致された別班員5人の一人。世界各地でほぼ同時に襲撃・拉致された。犯人側が全員の身元と現在地を把握していたことから、別班内部か日本側からの情報漏洩が疑われている。" },
+
+  { id: "hayato", name: "AIハヤト", actor: "高山 みなみ(声)", faction: "beppan",
+    photo: "hayato.webp", officialPage: true, documented: true,
+    bio: "別班のスーパーコンピューター/AI。データ分析・人物追跡・情報解析・作戦支援を担う。" },
+
+  { id: "nagano", name: "長野利彦", actor: "小日向 文世", faction: "shosha",
+    photo: "nagano.webp", officialPage: true, documented: true,
+    dual: { faction: "beppan", label: "裏: 別班(東南アジア方面責任者)" },
+    bio: "表向きは丸菱商事専務で乃木の上司。第13話で別班・東南アジア方面責任者と確定。1985年防衛大学校卒業→陸自入隊→1987年心理戦防護課程合格→除隊→別班配置→一橋大学大学院在学中に別班訓練→1989年丸菱商事入社という経歴が明かされた。第1シーズンで語った「薬物依存で更生施設に」という空白期間の説明は、別班在籍を隠す偽装だった。「妻も別班」と話すが、恋愛結婚ではなく体面上の形式的な婚姻とされ、妻が誰かは未確定。" },
+
+  { id: "usami", name: "宇佐美哲也", actor: "市川 猿弥", faction: "shosha",
+    photo: "usami.webp", officialPage: true, documented: true,
+    bio: "エネルギー事業部長。乃木の上司。裏組織との関係は現時点で確認されていない。" },
+
+  { id: "ota", name: "太田梨歩", actor: "花岡すみれ", faction: "shosha",
+    photo: "ota.webp", officialPage: true, documented: true, tag: "Blue Walker",
+    bio: "元丸菱商事社員、天才ハッカー(通称 Blue Walker)。長野への接近は不倫ではなく、テントのモニター山本巧から身を守るための行動だったと第13話で判明。太田の解析から「別班情報を売った人物は国内にいる」ことが判明し、そこから野崎に疑いがつながっていく。" },
+
+  { id: "yamamoto", name: "山本巧", actor: "(第1シーズン)", faction: "shosha",
+    photo: null, officialPage: false, documented: true, tag: "故人(第1季)",
+    dual: { faction: "tent", label: "裏: テント・モニター" },
+    bio: "丸菱商事社員、表向きは乃木の同僚だが裏はテントのモニター。公安に情報を漏らすなどしたため、乃木と黒須により処理された。丸菱商事という一つの会社に、別班(乃木・長野)、テントのモニター(山本)、ハッカー(太田)が同居していた点が本作の入れ子構造を象徴する。" },
+
+  { id: "nozaki", name: "野崎守", actor: "阿部 寛", faction: "koan",
+    photo: "nozaki.webp", officialPage: true, documented: true, tag: "動機不明(要第14話)",
+    bio: "警視庁公安部・外事第4課。第1シーズンでは乃木を追う立場だったが、結果的に共闘した。第13話終了時点で、別班員5人拉致事件の黒幕として証拠が浮上している状態。動機(なぜ拉致したのか、裏切りか、潜入作戦か偽装か)は未説明で、「敵と確定」ではなく「黒幕として提示された」段階。第14話予告で全貌が明かされるとされる。" },
+
+  { id: "sano", name: "佐野雄太郎", actor: "坂東 彌十郎", faction: "koan",
+    photo: "sano.webp", officialPage: true, documented: true,
+    bio: "公安部長。野崎の直属の上司。野崎の行動をどこまで把握しているかは第13話時点で未確定。" },
+
+  { id: "shinjo", name: "新庄浩太郎", actor: "竜星 涼", faction: "koan",
+    photo: "shinjo.webp", officialPage: true, documented: true,
+    dual: { faction: "tent", label: "裏: テント・モニター" },
+    bio: "表は警視庁公安部・野崎の部下。裏はテントのモニター(第1シーズン終盤で判明)。2026年版ではベキの脱獄を手引きしたことが判明。第13話時点で、今回の別班員拉致事件そのものには関与していないことも判明した。" },
+
+  { id: "tojo", name: "東条翔太", actor: "濱田 岳", faction: "koan",
+    photo: "tojo.webp", officialPage: true, documented: true,
+    bio: "警視庁サイバー犯罪対策課。野崎と協力関係。新庄逃亡時、野崎の依頼で空港映像を加工していたとされ、これが「なぜ野崎が新庄を逃がすような動きをしたのか」という疑惑につながっている。" },
+
+  { id: "ali", name: "アリ", actor: "山中 崇", faction: "tent",
+    photo: "ali.webp", officialPage: true, documented: true,
+    bio: "元テント幹部。第1シーズンで乃木の尋問を受け、家族を守るためテントについて証言した。2026年版ではキプロスにおり、乃木が再接触。新庄の居場所を突き止める手がかりとなる。乃木との関係は「元敵対→限定的な情報源・協力」という位置づけ。" },
+
+  { id: "mata", name: "マタ", actor: "内村 遥", faction: "tent",
+    photo: "mata.webp", officialPage: true, documented: true,
+    bio: "テントのメンバー。" },
+
+  { id: "shichi", name: "シチ", actor: "井上 肇", faction: "tent",
+    photo: "shichi.webp", officialPage: true, documented: true,
+    bio: "テントのメンバー。" },
+
+  { id: "chocky", name: "チョッキー・テーパーニット", actor: "Tanapak Jongjaiphar", faction: "tent",
+    photo: "chocky.webp", officialPage: true, documented: true, tag: "新キャラ(2026)",
+    bio: "2026年新キャラクター。タイの実業家で、新庄と同じくテントのモニター。新庄を慕い、タイで匿っていた。乃木・長野らにより新庄とともに拘束された。" },
+
+  { id: "yuzuki", name: "柚木薫", actor: "二階堂ふみ", faction: "balka",
+    photo: "yuzuki.webp", officialPage: true, documented: true, tag: "所属に謎(考察段階)",
+    bio: "医師。ジャミーンの主治医的存在で、乃木とは恋愛関係にある。テント・別班いずれへの所属も確定していない(疑わせる演出はあったが未確定のまま)。第13話で長野が乃木に「愛する人がいるなら大事にしなさい」と語る場面があり、その対象は薫とされる。" },
+
+  { id: "jemaine", name: "ジャミーン", actor: "本間さえ", faction: "balka",
+    photo: "jemaine.webp", officialPage: true, documented: true,
+    bio: "バルカの少女。父はアディエル。薫が保護・治療し、乃木は家族的な愛情を注ぎ、ドラムも強い愛着を持つ。ベキとも過去に関わりがある。" },
+
+  { id: "adiel", name: "アディエル", actor: "Tsaschiher Khatanzorig", faction: "balka",
+    photo: "adiel.webp", officialPage: true, documented: true, tag: "故人",
+    bio: "ジャミーンの父。爆破事件で死亡。かつてベキに助けられたことがある。" },
+
+  { id: "drum", name: "ドラム", actor: "富栄ドラム", faction: "balka",
+    photo: "drum.webp", officialPage: true, documented: true,
+    bio: "元は野崎の現地協力者。現在は乃木とも強い信頼関係にあり、2026年版では乃木と世界各地を移動して調査・作戦に同行する、実質的な中心人物の一人。" },
+
+  { id: "cinggis", name: "チンギス", actor: "Barslkhagva Batbold", faction: "balka",
+    photo: "cinggis.webp", officialPage: true, documented: true,
+    bio: "バルカ警察。序盤は乃木・野崎を追跡する立場だったが、途中から協力関係に転じ、最終的に野崎とは信頼できる国際協力関係になった。" },
+
+  { id: "suzuki", name: "鈴木祥", actor: "内野 謙太", faction: "koan",
+    photo: "suzuki.webp", officialPage: true, documented: true,
+    bio: "公安部外事第4課の捜査官。野崎の部下で、野崎の指示により乃木の経歴を調査する任務を担当している。留学先に関する重要な報告を見落としたとされる描写があり、伏線の可能性が指摘されている。" },
+
+  { id: "wakui", name: "和久井俊作", actor: "田中 俊介", faction: "koan",
+    photo: "wakui.webp", officialPage: true, documented: true, tag: "動向注目(第12話)",
+    bio: "公安部外事第4課の捜査官。野崎の指示で乃木の護衛を担当。第1シーズンにも登場し、当時は乃木を監視する側だった。第12話で野崎が公安メンバーに退出を指示した際、名残惜しそうに一同を見つめる様子が描かれ、視聴者間で「怪しい」と話題になった。" },
+
+  { id: "morita", name: "森田喜一", actor: "谷口 翔太", faction: "koan",
+    photo: "morita.webp", officialPage: true, documented: true,
+    bio: "公安部外事第4課の捜査官。和久井とともに、野崎の指示で秘かに乃木の護衛を行っている。" },
+];
+
+/*
+  kind : trust(信頼・協力) / hostile(敵対・追及) / watch(監視・追跡) / bond(因縁・血縁) / secret(正体・伏線)
+  dir  : to(片方向) / both(相互) / none(向きなし)
+  label: from→to方向、back: to→from方向(省略可)
+  unsure: true で破線+「?」表示(未確定・考察段階)
+*/
+const RELATIONS = [
+  // -- 乃木家 --
+  { from: "beki", to: "nogi", kind: "bond", dir: "none", label: "実父(生死に含みあり)" },
+  { from: "beki", to: "akemi", kind: "bond", dir: "none", label: "夫婦" },
+  { from: "beki", to: "hiromichi", kind: "bond", dir: "none", label: "兄弟" },
+  { from: "nogi", to: "akemi", kind: "bond", dir: "none", label: "母子" },
+  { from: "beki", to: "nokor", kind: "bond", dir: "none", label: "育ての親" },
+  { from: "nogi", to: "nokor", kind: "bond", dir: "both", label: "義兄弟", back: "義兄弟" },
+  { from: "beki", to: "adiel", kind: "trust", dir: "to", label: "かつて助けた" },
+
+  // -- 別班 --
+  { from: "sakurai", to: "nogi", kind: "trust", dir: "to", label: "指令", back: "従う" },
+  { from: "nogi", to: "kurosu", kind: "trust", dir: "both", label: "先輩として指導", back: "尊敬・信頼" },
+
+  // -- 丸菱商事の裏側 --
+  { from: "ota", to: "nagano", kind: "trust", dir: "both", label: "身を守るため接近", back: "保護" },
+  { from: "ota", to: "yamamoto", kind: "watch", dir: "to", label: "警戒" },
+  { from: "nogi", to: "yamamoto", kind: "hostile", dir: "to", label: "追及・対処(作中描写)" },
+
+  // -- 公安・別班拉致事件 --
+  { from: "nozaki", to: "beppan", kind: "hostile", dir: "to", unsure: true, label: "拉致事件の黒幕として浮上(動機不明)" },
+  { from: "sano", to: "nozaki", kind: "watch", dir: "to", label: "上司" },
+  { from: "nozaki", to: "tojo", kind: "trust", dir: "both", label: "捜査協力" },
+  { from: "nozaki", to: "tojo", kind: "secret", dir: "to", unsure: true, label: "映像加工を依頼(疑惑の発端)" },
+  { from: "cinggis", to: "nozaki", kind: "trust", dir: "both", label: "国際協力" },
+  { from: "drum", to: "nozaki", kind: "trust", dir: "both", label: "元来の相棒" },
+  { from: "nozaki", to: "suzuki", kind: "watch", dir: "to", label: "乃木の経歴調査を指示" },
+  { from: "nozaki", to: "wakui", kind: "watch", dir: "to", label: "乃木の護衛を指示" },
+  { from: "nozaki", to: "morita", kind: "watch", dir: "to", label: "乃木の護衛を指示" },
+  { from: "wakui", to: "nogi", kind: "watch", dir: "to", label: "護衛" },
+  { from: "morita", to: "nogi", kind: "watch", dir: "to", label: "護衛" },
+
+  // -- 新庄まわり --
+  { from: "shinjo", to: "beki", kind: "trust", dir: "to", label: "脱獄を支援" },
+  { from: "chocky", to: "shinjo", kind: "trust", dir: "to", label: "慕う・匿う" },
+
+  // -- 乃木とバルカ側 --
+  { from: "nogi", to: "yuzuki", kind: "bond", dir: "both", label: "恋愛関係" },
+  { from: "yuzuki", to: "jemaine", kind: "trust", dir: "to", label: "保護・治療" },
+  { from: "nogi", to: "jemaine", kind: "trust", dir: "to", label: "保護・家族的愛情" },
+  { from: "drum", to: "jemaine", kind: "trust", dir: "to", label: "強い愛情" },
+  { from: "nogi", to: "drum", kind: "trust", dir: "both", label: "強い協力関係" },
+  { from: "nogi", to: "ali", kind: "trust", dir: "both", label: "手掛かりを提供", back: "尋問→限定協力" },
+
+  // -- 未確定・考察段階 --
+  { from: "nagano", to: "sakurai", kind: "bond", dir: "none", unsure: true, label: "妻ではとの説(考察)" },
+  { from: "yuzuki", to: "tent", kind: "secret", dir: "none", unsure: true, label: "テント関係者では、との旧演出(未確定)" },
+];
+
+/* 確定/未確定まとめ(第10節)。テキストのみで図には反映しません。 */
+const STATUS = {
+  ok: [
+    "乃木 → 別班", "黒須ほか拉致された5人 → 別班", "櫻井 → 別班司令",
+    "長野 → 別班・東南アジア方面責任者(丸菱商事専務は表の顔)", "AIハヤト → 別班のシステム",
+    "新庄 → 元公安/テントのモニター、ベキの脱獄を支援。ただし今回の別班員拉致には関与せず",
+    "山本巧 → テントのモニター", "チョッキー → テントのモニター",
+    "太田梨歩 → Blue Walker。長野への接近は不倫ではなく身を守るため",
+    "ノコル → ベキの養子的存在、乃木の弟分",
+    "鈴木祥・和久井俊作・森田喜一 → 公安部外事第4課。野崎の指示で乃木の経歴調査・護衛を担当",
+  ],
+  watch: [
+    "野崎 → 別班員拉致事件の黒幕として証拠は出ているが、動機・真意は不明(第14話で全貌)",
+    "和久井俊作 → 第12話の描写から「怪しい動き」が視聴者間で話題だが、裏切り・伏線かは未確定",
+  ],
+  guess: [
+    "長野の妻 = 櫻井司令、という説", "野崎自身も別班なのでは、という説",
+    "薫に別の正体があるのでは、という説", "ベキの現在の真意",
+  ],
+};
+
+// 「座標を書き出す」で得た内容をここに貼り付けると配置が固定されます。
+const SAVED_LAYOUT = [];
+
+/* ================= ここから下は描画処理です ================= */
+
+const REL_META = {
+  trust:   { color: "--rel-trust",   label: "信頼・協力" },
+  hostile: { color: "--rel-hostile", label: "敵対・追及" },
+  watch:   { color: "--rel-watch",   label: "監視・追跡" },
+  bond:    { color: "--rel-bond",    label: "因縁・血縁" },
+  secret:  { color: "--rel-secret",  label: "正体・伏線" },
+};
+
+const SVG_NS = "http://www.w3.org/2000/svg";
+const CANVAS_W = 4800, CANVAS_H = 3600;
+const STORE_KEY = "vivant-relmap-layout";
+
+const viewport = document.getElementById("viewport");
+const canvas   = document.getElementById("canvas");
+const svg      = document.getElementById("edges");
+
+canvas.style.width  = CANVAS_W + "px";
+canvas.style.height = CANVAS_H + "px";
+
+const nodes = [
+  ...FACTIONS.map(f => ({ ...f, type: "faction", facId: f.id })),
+  ...PEOPLE.map(p => ({ ...p, type: "person", facId: p.faction })),
+];
+const nodeById = new Map(nodes.map(n => [n.id, n]));
+const facById  = new Map(FACTIONS.map(f => [f.id, f]));
+
+const edges = [
+  ...PEOPLE
+    .filter(p => facById.has(p.faction))
+    .map(p => ({ from: p.id, to: p.faction, kind: "belong" })),
+  ...PEOPLE
+    .filter(p => p.dual && facById.has(p.dual.faction))
+    .map(p => ({ from: p.id, to: p.dual.faction, kind: "secret", dir: "none", label: p.dual.label })),
+  ...RELATIONS,
+];
+
+let scale = 1, panX = 0, panY = 0;
+
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c =>
+  ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+const facColor = id => `var(${(facById.get(id) || {}).color || "--fac-unknown"})`;
+
+/* ---------- カード生成 ---------- */
+function buildNodes() {
+  for (const n of nodes) {
+    const el = document.createElement("div");
+    el.className = `node ${n.type}`;
+    el.style.setProperty("--fac", facColor(n.facId));
+
+    if (n.type === "person") {
+      const src = n.photo ? PHOTO_BASE + n.photo : null;
+      const chips = [];
+      chips.push(n.documented
+        ? `<span class="chip ok">整理済み</span>`
+        : `<span class="chip tbd">要確認</span>`);
+      if (!n.officialPage) chips.push(`<span class="chip muted">公式ページ未掲載</span>`);
+      if (n.tag) chips.push(`<span class="chip muted">${esc(n.tag)}</span>`);
+
+      el.innerHTML =
+        `<div class="face">` +
+          (src ? `<img src="${esc(src)}" alt="${esc(n.name)}" loading="lazy">` : esc(n.name.charAt(0))) +
+        `</div>` +
+        `<div class="body">` +
+          `<div class="p-name">${esc(n.name)}</div>` +
+          `<div class="p-actor">演: ${esc(n.actor)}</div>` +
+          (n.dual ? `<div class="p-dual">${esc(n.dual.label)}</div>` : "") +
+          `<div class="p-note">${esc(n.bio)}</div>` +
+          `<div class="chips">${chips.join("")}</div>` +
+        `</div>`;
+    } else {
+      el.innerHTML =
+        `<div class="f-name">${esc(n.name)}</div>` +
+        `<div class="f-note">${esc(n.note)}</div>`;
+    }
+
+    canvas.appendChild(el);
+    n.el = el;
+    enableDrag(n);
+  }
+  measure();
+}
+
+function measure() {
+  for (const n of nodes) {
+    n.w = n.el.offsetWidth;
+    n.h = n.el.offsetHeight;
+  }
+}
+
+/* ---------- 自動整列 ----------
+   陣営ごとに扇形の持ち場を割り当て、メンバー数に応じてリング数を
+   増やしながら外周に配置します。人物を1人足しても、座標を書かずに
+   衝突しにくい位置へ収まります。                                   */
+function autoArrange() {
+  const cx = CANVAS_W / 2, cy = CANVAS_H / 2;
+  const hubR = 760, memberR0 = 1150, ringGap = 410;
+  const used = FACTIONS.filter(f => PEOPLE.some(p => p.faction === f.id));
+  const list = used.length ? used : FACTIONS;
+  const sector = (Math.PI * 2) / list.length;
+
+  list.forEach((f, i) => {
+    const a = -Math.PI / 2 + i * sector;
+    const hub = nodeById.get(f.id);
+    hub.x = cx + Math.cos(a) * hubR;
+    hub.y = cy + Math.sin(a) * hubR;
+
+    // 座標を手で固定している人物(乃木など)はリング計算から除外する。
+    // 含めてしまうと後で座標を上書きするだけの「空き枠」ができて、
+    // 残りメンバーの間隔がかえって詰まってしまうため。
+    const members = PEOPLE
+      .filter(p => p.faction === f.id && !(Number.isFinite(p.x) && Number.isFinite(p.y)))
+      .map(p => nodeById.get(p.id));
+    const ringCount = Math.max(1, Math.ceil(members.length / 2));
+    const rings = Array.from({ length: ringCount }, () => []);
+    members.forEach((m, j) => rings[j % ringCount].push(m));
+
+    rings.forEach((group, ri) => {
+      const r = memberR0 + ri * ringGap;
+      const n = group.length;
+      group.forEach((m, gi) => {
+        const off = n === 1 ? 0 : (gi / (n - 1) - 0.5) * sector * 0.6;
+        m.x = cx + Math.cos(a + off) * r;
+        m.y = cy + Math.sin(a + off) * r;
+      });
+    });
+  });
+
+  FACTIONS.filter(f => !list.includes(f)).forEach((f, i) => {
+    const hub = nodeById.get(f.id);
+    hub.x = cx + hubR * 1.7;
+    hub.y = cy - hubR + i * 130;
+  });
+}
+
+function applyLayout({ useStore = true } = {}) {
+  autoArrange();
+
+  for (const n of nodes) {
+    const src = n.type === "person" ? PEOPLE.find(p => p.id === n.id) : null;
+    if (src && Number.isFinite(src.x) && Number.isFinite(src.y)) { n.x = src.x; n.y = src.y; }
+  }
+  for (const s of SAVED_LAYOUT) {
+    const n = nodeById.get(s.id);
+    if (n && Number.isFinite(s.x) && Number.isFinite(s.y)) { n.x = s.x; n.y = s.y; }
+  }
+  if (useStore) {
+    for (const s of readStore()) {
+      const n = nodeById.get(s.id);
+      if (n && Number.isFinite(s.x) && Number.isFinite(s.y)) { n.x = s.x; n.y = s.y; }
+    }
+  }
+  placeAll();
+}
+
+function placeAll() {
+  for (const n of nodes) {
+    n.el.style.left = n.x + "px";
+    n.el.style.top  = n.y + "px";
+  }
+  drawEdges();
+}
+
+function clipToBox(n, tx, ty) {
+  const dx = tx - n.x, dy = ty - n.y;
+  if (!dx && !dy) return { x: n.x, y: n.y };
+  const hw = n.w / 2 + 7, hh = n.h / 2 + 7;
+  const k = Math.min(
+    Math.abs(dx) > 1e-6 ? hw / Math.abs(dx) : Infinity,
+    Math.abs(dy) > 1e-6 ? hh / Math.abs(dy) : Infinity
+  );
+  return { x: n.x + dx * k, y: n.y + dy * k };
+}
+
+function ensureMarkers() {
+  const defs = document.createElementNS(SVG_NS, "defs");
+  for (const [kind, meta] of Object.entries(REL_META)) {
+    for (const suffix of ["s", "e"]) {
+      const m = document.createElementNS(SVG_NS, "marker");
+      m.setAttribute("id", `ar-${kind}-${suffix}`);
+      m.setAttribute("viewBox", "0 0 10 10");
+      m.setAttribute("refX", "9"); m.setAttribute("refY", "5");
+      m.setAttribute("markerWidth", "7"); m.setAttribute("markerHeight", "7");
+      m.setAttribute("orient", suffix === "e" ? "auto" : "auto-start-reverse");
+      const p = document.createElementNS(SVG_NS, "path");
+      p.setAttribute("d", "M0,1 L10,5 L0,9 z");
+      p.setAttribute("fill", `var(${meta.color})`);
+      m.appendChild(p); defs.appendChild(m);
+    }
+  }
+  svg.appendChild(defs);
+}
+
+/* ---------- 曲線ユーティリティ ----------
+   直線のままだと、陣営をまたぐ関係線がキャンバス中央付近で
+   束になって重なり合ってしまう(特に乃木は中心固定のため他の
+   線が集中しやすい)。関係線は緩い弧で描き、①同じ2人を結ぶ線が
+   複数ある場合はずらす②線ごとに曲がる向き・強さを散らす、こと
+   で重なりを避ける。*/
+function hashStr(s) {
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+function qPoint(p1, c, p2, t) {
+  const mt = 1 - t;
+  return {
+    x: mt * mt * p1.x + 2 * mt * t * c.x + t * t * p2.x,
+    y: mt * mt * p1.y + 2 * mt * t * c.y + t * t * p2.y,
+  };
+}
+function qTangent(p1, c, p2, t) {
+  const mt = 1 - t;
+  return {
+    x: 2 * mt * (c.x - p1.x) + 2 * t * (p2.x - c.x),
+    y: 2 * mt * (c.y - p1.y) + 2 * t * (p2.y - c.y),
+  };
+}
+// 同じ2人を結ぶ辺(往復・二重所属など)をグループ化し、番号を振る
+function buildEdgeGroups(list) {
+  const groups = new Map();
+  for (const e of list) {
+    const key = e.from < e.to ? `${e.from}|${e.to}` : `${e.to}|${e.from}`;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(e);
+  }
+  const meta = new Map();
+  for (const arr of groups.values()) {
+    arr.forEach((e, i) => meta.set(e, { idx: i, size: arr.length }));
+  }
+  return meta;
+}
+
+function drawEdges() {
+  svg.setAttribute("width", CANVAS_W);
+  svg.setAttribute("height", CANVAS_H);
+  svg.replaceChildren();
+  ensureMarkers();
+  canvas.querySelectorAll(".rel-label").forEach(e => e.remove());
+
+  const groupMeta = buildEdgeGroups(edges.filter(e => e.kind !== "belong"));
+
+  for (const e of edges) {
+    const a = nodeById.get(e.from), b = nodeById.get(e.to);
+    if (!a || !b) continue;
+
+    const p1 = clipToBox(a, b.x, b.y);
+    const p2 = clipToBox(b, a.x, a.y);
+
+    if (e.kind === "belong") {
+      const line = document.createElementNS(SVG_NS, "line");
+      line.setAttribute("x1", p1.x); line.setAttribute("y1", p1.y);
+      line.setAttribute("x2", p2.x); line.setAttribute("y2", p2.y);
+      line.setAttribute("stroke-linecap", "round");
+      line.setAttribute("stroke", facColor(b.id));
+      line.setAttribute("stroke-width", "2");
+      line.setAttribute("opacity", "0.5");
+      svg.appendChild(line);
+      continue;
+    }
+
+    // 関係線は直線ではなく弧で描く(中央での重なり・完全一致を回避)
+    const { idx, size } = groupMeta.get(e);
+    const dx = p2.x - p1.x, dy = p2.y - p1.y;
+    const len = Math.hypot(dx, dy) || 1;
+    const nx = -dy / len, ny = dx / len;
+    const mx = (p1.x + p2.x) / 2, my = (p1.y + p2.y) / 2;
+
+    const h = hashStr(`${e.from}>${e.to}:${e.kind}:${e.label || ""}`);
+    const dirSign = (h & 1) ? 1 : -1;
+    const jitter = 0.5 + ((h >> 3) % 100) / 100 * 0.5; // 0.5–1.0
+    const spread = size > 1 ? (idx - (size - 1) / 2) : 0; // 同じ2人を結ぶ線同士のずらし
+    const bow = Math.min(len * 0.18, 260) * jitter * dirSign + spread * 50;
+
+    const ctrl = { x: mx + nx * bow, y: my + ny * bow };
+
+    const path = document.createElementNS(SVG_NS, "path");
+    path.setAttribute("d", `M ${p1.x} ${p1.y} Q ${ctrl.x} ${ctrl.y} ${p2.x} ${p2.y}`);
+    path.setAttribute("fill", "none");
+    path.setAttribute("stroke-linecap", "round");
+
+    const meta = REL_META[e.kind] || REL_META.secret;
+    path.setAttribute("stroke", `var(${meta.color})`);
+    path.setAttribute("stroke-width", e.dual ? "3.4" : "2.6");
+    if (e.unsure) path.setAttribute("stroke-dasharray", "7 6");
+    if (e.dir === "to" || e.dir === "both") path.setAttribute("marker-end", `url(#ar-${e.kind}-e)`);
+    if (e.dir === "both") path.setAttribute("marker-start", `url(#ar-${e.kind}-s)`);
+    svg.appendChild(path);
+
+    const put = (text, t, side) => {
+      const pt = qPoint(p1, ctrl, p2, t);
+      const tan = qTangent(p1, ctrl, p2, t);
+      const tlen = Math.hypot(tan.x, tan.y) || 1;
+      const lnx = -tan.y / tlen, lny = tan.x / tlen;
+      const el = document.createElement("div");
+      el.className = "rel-label";
+      el.innerHTML = esc(text) + (e.unsure ? ` <span class="q">?</span>` : "");
+      el.style.left = (pt.x + lnx * side * 15) + "px";
+      el.style.top  = (pt.y + lny * side * 15) + "px";
+      canvas.appendChild(el);
+    };
+    if (e.back) { put(e.label, 0.62, 1); put(e.back, 0.34, -1); }
+    else if (e.label) { put(e.label, 0.5, 1); }
+  }
+}
+
+/* ---------- ドラッグ / パン / ズーム ---------- */
+function toCanvas(ev) {
+  const r = viewport.getBoundingClientRect();
+  return { x: (ev.clientX - r.left - panX) / scale, y: (ev.clientY - r.top - panY) / scale };
+}
+
+function enableDrag(n) {
+  let offX = 0, offY = 0, id = null;
+  n.el.addEventListener("pointerdown", ev => {
+    ev.stopPropagation();
+    id = ev.pointerId;
+    n.el.setPointerCapture(id);
+    const p = toCanvas(ev);
+    offX = p.x - n.x; offY = p.y - n.y;
+  });
+  n.el.addEventListener("pointermove", ev => {
+    if (ev.pointerId !== id) return;
+    const p = toCanvas(ev);
+    n.x = Math.round(p.x - offX);
+    n.y = Math.round(p.y - offY);
+    n.el.style.left = n.x + "px";
+    n.el.style.top  = n.y + "px";
+    drawEdges();
+  });
+  const end = ev => { if (ev.pointerId === id) { id = null; writeStore(); } };
+  n.el.addEventListener("pointerup", end);
+  n.el.addEventListener("pointercancel", end);
+}
+
+function applyTransform() {
+  canvas.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+}
+
+(function enablePan() {
+  let on = false, sx = 0, sy = 0, ox = 0, oy = 0;
+  viewport.addEventListener("pointerdown", ev => {
+    on = true; viewport.classList.add("panning");
+    viewport.setPointerCapture(ev.pointerId);
+    sx = ev.clientX; sy = ev.clientY; ox = panX; oy = panY;
+  });
+  viewport.addEventListener("pointermove", ev => {
+    if (!on) return;
+    panX = ox + (ev.clientX - sx);
+    panY = oy + (ev.clientY - sy);
+    applyTransform();
+  });
+  const stop = () => { on = false; viewport.classList.remove("panning"); };
+  viewport.addEventListener("pointerup", stop);
+  viewport.addEventListener("pointercancel", stop);
+})();
+
+viewport.addEventListener("wheel", ev => {
+  ev.preventDefault();
+  zoomAt(ev.clientX, ev.clientY, ev.deltaY < 0 ? 1.12 : 1 / 1.12);
+}, { passive: false });
+
+function zoomAt(clientX, clientY, factor) {
+  const r = viewport.getBoundingClientRect();
+  const mx = clientX - r.left, my = clientY - r.top;
+  const bx = (mx - panX) / scale, by = (my - panY) / scale;
+  scale = Math.min(2.2, Math.max(0.18, scale * factor));
+  panX = mx - bx * scale;
+  panY = my - by * scale;
+  applyTransform();
+}
+
+function fitView() {
+  let x1 = Infinity, y1 = Infinity, x2 = -Infinity, y2 = -Infinity;
+  for (const n of nodes) {
+    x1 = Math.min(x1, n.x - n.w / 2); x2 = Math.max(x2, n.x + n.w / 2);
+    y1 = Math.min(y1, n.y - n.h / 2); y2 = Math.max(y2, n.y + n.h / 2);
+  }
+  const pad = 60;
+  const vw = viewport.clientWidth, vh = viewport.clientHeight;
+  scale = Math.min(2.2, Math.max(0.18,
+    Math.min(vw / (x2 - x1 + pad * 2), vh / (y2 - y1 + pad * 2))));
+  panX = (vw - (x1 + x2) * scale) / 2;
+  panY = (vh - (y1 + y2) * scale) / 2;
+  applyTransform();
+}
+
+/* ---------- 配置の保存と書き出し ---------- */
+function readStore() {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; }
+  catch { return []; }
+}
+function writeStore() {
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify(nodes.map(n => ({ id: n.id, x: n.x, y: n.y }))));
+  } catch { /* 保存できない環境では黙って諦めます */ }
+}
+
+const dlg = document.getElementById("dlg");
+document.getElementById("btn-export").addEventListener("click", () => {
+  const body = nodes.map(n => `  { id: "${n.id}", x: ${Math.round(n.x)}, y: ${Math.round(n.y)} },`).join("\n");
+  document.getElementById("dlg-text").value = `const SAVED_LAYOUT = [\n${body}\n];`;
+  dlg.showModal();
+});
+document.getElementById("dlg-copy").addEventListener("click", async () => {
+  const ta = document.getElementById("dlg-text");
+  try { await navigator.clipboard.writeText(ta.value); }
+  catch { ta.select(); document.execCommand("copy"); }
+});
+document.getElementById("dlg-close").addEventListener("click", () => dlg.close());
+
+document.getElementById("btn-arrange").addEventListener("click", () => {
+  try { localStorage.removeItem(STORE_KEY); } catch { /* noop */ }
+  applyLayout({ useStore: false });
+  fitView();
+});
+document.getElementById("btn-fit").addEventListener("click", fitView);
+document.getElementById("btn-zoom-in").addEventListener("click", () => {
+  const r = viewport.getBoundingClientRect();
+  zoomAt(r.left + r.width / 2, r.top + r.height / 2, 1.2);
+});
+document.getElementById("btn-zoom-out").addEventListener("click", () => {
+  const r = viewport.getBoundingClientRect();
+  zoomAt(r.left + r.width / 2, r.top + r.height / 2, 1 / 1.2);
+});
+
+/* ---------- 凡例 ---------- */
+function buildLegend() {
+  document.getElementById("lg-rel").innerHTML = Object.values(REL_META)
+    .map(m => `<li><span class="swatch" style="border-top-color:var(${m.color})"></span>${esc(m.label)}</li>`).join("");
+  document.getElementById("lg-fac").innerHTML = FACTIONS
+    .map(f => `<li><span class="dot" style="background:var(${f.color})"></span>${esc(f.name)}</li>`).join("");
+}
+
+/* ---------- 二重構造テーブル ---------- */
+function buildDualTable() {
+  const rows = PEOPLE.filter(p => p.dual).map(p => {
+    const front = facById.get(p.faction);
+    const back = facById.get(p.dual.faction);
+    return `<tr>
+      <td><b>${esc(p.name)}</b></td>
+      <td>${esc(front ? front.name : p.faction)}</td>
+      <td>${esc(back ? back.name : p.dual.faction)}</td>
+      <td class="status ${p.tag && p.tag.includes("動機不明") ? "" : "done"}">${esc(p.tag && p.tag.includes("動機不明") ? "未確定" : "確定")}</td>
+    </tr>`;
+  });
+  // 野崎は dual を持たないが二重構造表に重要なので特別に追加する
+  rows.push(`<tr>
+    <td><b>野崎守</b></td>
+    <td>警視庁公安部</td>
+    <td>別班員拉致事件の黒幕として浮上</td>
+    <td class="status">未確定・第14話で全貌</td>
+  </tr>`);
+  document.getElementById("tbl-dual").innerHTML =
+    `<thead><tr><th>人物</th><th>表の所属</th><th>裏の所属 / 疑惑</th><th>状態</th></tr></thead><tbody>${rows.join("")}</tbody>`;
+}
+
+/* ---------- 人物情報(陣営別カード) ---------- */
+function buildBioGroups() {
+  const box = document.getElementById("bio-groups");
+  box.innerHTML = FACTIONS.map(f => {
+    const members = PEOPLE.filter(p => p.faction === f.id);
+    if (!members.length) return "";
+    const cards = members.map(p => {
+      const src = p.photo ? PHOTO_BASE + p.photo : null;
+      return `<div class="bio-card">
+        <div class="bio-face">${src ? `<img src="${esc(src)}" alt="${esc(p.name)}" loading="lazy">` : esc(p.name.charAt(0))}</div>
+        <div>
+          <div class="bio-name">${esc(p.name)}${p.dual ? ` <span style="color:var(--seal);font-size:11px;">(${esc(p.dual.label)})</span>` : ""}</div>
+          <div class="bio-actor">演: ${esc(p.actor)}</div>
+          <div class="bio-text">${esc(p.bio)}</div>
+        </div>
+      </div>`;
+    }).join("");
+    return `<div class="fac-group">
+      <div class="fac-head" style="--fac-g:${facColor(f.id).replace("var(", "").replace(")", "")}">
+        <span class="dot" style="background:${facColor(f.id)}"></span>
+        <h3>${esc(f.name)}</h3><p>${esc(f.note)}</p>
+      </div>
+      <div class="bio-grid">${cards}</div>
+    </div>`;
+  }).join("");
+}
+
+/* ---------- 確定/未確定まとめ ---------- */
+function buildStatus() {
+  const li = arr => arr.map(t => `<li>${esc(t)}</li>`).join("");
+  document.getElementById("st-ok").innerHTML = li(STATUS.ok);
+  document.getElementById("st-watch").innerHTML = li(STATUS.watch);
+  document.getElementById("st-guess").innerHTML = li(STATUS.guess);
+}
+
+/* ---------- 起動 ---------- */
+buildNodes();
+buildLegend();
+buildDualTable();
+buildBioGroups();
+buildStatus();
+applyLayout();
+fitView();
+window.addEventListener("resize", () => { measure(); drawEdges(); });
+</script>
+</body>
+</html>
