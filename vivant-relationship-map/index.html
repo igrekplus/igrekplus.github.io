@@ -117,7 +117,7 @@
     letter-spacing: .06em; font-weight: 700;
     text-wrap: balance;
   }
-  .lede { font-size: 13.5px; color: var(--ink-2); max-width: 66ch; }
+  .lede { font-size: 15px; color: var(--ink-2); max-width: 70ch; }
   .seal {
     align-self: center; white-space: nowrap;
     border: 2px solid var(--seal); color: var(--seal);
@@ -127,28 +127,28 @@
   }
 
   .caution {
-    margin: 20px 0 22px; padding: 13px 16px;
+    margin: 20px 0 22px; padding: 14px 17px;
     background: var(--surface); border: 1px solid var(--stroke);
     border-left: 3px solid var(--seal); border-radius: 0 6px 6px 0;
-    font-size: 12.5px; color: var(--ink-2);
+    font-size: 14px; color: var(--ink-2);
   }
   .caution + .caution { margin-top: -12px; border-left-color: var(--ink-3); }
   .caution b { color: var(--ink); }
-  .caution code { background: var(--surface-2); padding: 1px 5px; border-radius: 3px; font-size: 11.5px; }
+  .caution code { background: var(--surface-2); padding: 1px 5px; border-radius: 3px; font-size: 12.5px; }
 
   .toolbar {
     display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
     margin-bottom: 10px;
   }
   .toolbar button {
-    font: inherit; font-size: 12px;
-    padding: 6px 12px; cursor: pointer;
+    font: inherit; font-size: 13.5px;
+    padding: 7px 13px; cursor: pointer;
     color: var(--ink); background: var(--surface);
     border: 1px solid var(--stroke); border-radius: 5px;
   }
   .toolbar button:hover { background: var(--surface-2); }
   .toolbar button:focus-visible { outline: 2px solid var(--fac-shosha); outline-offset: 2px; }
-  .toolbar .hint { font-size: 11.5px; color: var(--ink-3); margin-left: auto; }
+  .toolbar .hint { font-size: 12.5px; color: var(--ink-3); margin-left: auto; }
 
   #viewport {
     position: relative; overflow: hidden;
@@ -209,23 +209,23 @@
     color: var(--fac); font-size: 46px; font-weight: 700;
   }
   .face img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .body { min-width: 0; padding: 12px 15px 0; }
-  .p-name { font-size: 19px; font-weight: 700; letter-spacing: .02em; }
-  .p-actor { font-size: 12.5px; color: var(--ink-2); margin-top: 2px; }
-  .p-tagline { font-size: 13px; color: var(--ink); margin-top: 7px; line-height: 1.55; }
-  .p-dual { font-size: 11px; color: var(--seal); margin-top: 6px; font-weight: 600; }
+  .body { min-width: 0; padding: 13px 16px 0; }
+  .p-name { font-size: 21px; font-weight: 700; letter-spacing: .02em; }
+  .p-actor { font-size: 13.5px; color: var(--ink-2); margin-top: 3px; }
+  .p-tagline { font-size: 14.5px; color: var(--ink); margin-top: 8px; line-height: 1.55; }
+  .p-dual { font-size: 12.5px; color: var(--seal); margin-top: 7px; font-weight: 600; }
   .p-note {
-    display: none; font-size: 12px; color: var(--ink-3);
-    margin-top: 9px; line-height: 1.6; border-top: 1px solid var(--stroke); padding-top: 9px;
+    display: none; font-size: 13.5px; color: var(--ink-3);
+    margin-top: 10px; line-height: 1.6; border-top: 1px solid var(--stroke); padding-top: 10px;
   }
-  .chips { display: none; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+  .chips { display: none; flex-wrap: wrap; gap: 5px; margin-top: 9px; }
   .node.person.expanded .p-note,
   .node.person.expanded .chips { display: block; }
   .node.person.expanded .chips { display: flex; }
   .chip {
     display: inline-block;
-    font-size: 10.5px; letter-spacing: .06em;
-    padding: 1px 7px; border-radius: 3px;
+    font-size: 11.5px; letter-spacing: .06em;
+    padding: 2px 8px; border-radius: 3px;
     border: 1px solid currentColor;
   }
   .chip.ok  { color: var(--fac-koan); }
@@ -234,12 +234,12 @@
 
   .p-fac {
     display: flex; align-items: center; gap: 5px;
-    font-size: 11.5px; font-weight: 600; color: var(--fac);
-    letter-spacing: .02em; margin-top: 6px;
+    font-size: 12.5px; font-weight: 600; color: var(--fac);
+    letter-spacing: .02em; margin-top: 7px;
   }
   .fac-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--fac); flex: none; }
   .p-expand-hint {
-    font-size: 10.5px; color: var(--ink-3); margin-top: 8px;
+    font-size: 11.5px; color: var(--ink-3); margin-top: 9px;
     letter-spacing: .04em;
   }
   .p-expand-hint::after { content: "タップで詳細 ▾"; }
@@ -252,20 +252,20 @@
 
   .rel-label {
     position: absolute; transform: translate(-50%, -50%);
-    padding: 2px 7px; border-radius: 9px;
+    padding: 3px 9px; border-radius: 9px;
     background: var(--ground); border: 1px solid var(--stroke);
-    color: var(--ink-2); font-size: 10.5px; line-height: 1.4;
-    max-width: 168px; text-align: center; pointer-events: none;
+    color: var(--ink); font-size: 13px; font-weight: 600; line-height: 1.4;
+    max-width: 200px; text-align: center; pointer-events: none;
   }
   .rel-label .q { color: var(--seal); }
 
   .legend {
     margin-top: 14px; display: grid; gap: 16px;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    font-size: 12px; color: var(--ink-2);
+    font-size: 13.5px; color: var(--ink-2);
   }
   .legend h3 {
-    margin: 0 0 7px; font-size: 11px; letter-spacing: .12em;
+    margin: 0 0 7px; font-size: 12.5px; letter-spacing: .12em;
     color: var(--ink-3); font-weight: 600;
   }
   .legend ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 5px 14px; }
@@ -279,20 +279,20 @@
     background: var(--surface); color: var(--ink);
   }
   dialog::backdrop { background: rgba(0,0,0,.5); }
-  .dlg-head { padding: 15px 18px 0; }
-  .dlg-head h2 { margin: 0 0 5px; font-size: 15px; }
-  .dlg-head p { margin: 0; font-size: 12px; color: var(--ink-2); }
+  .dlg-head { padding: 16px 18px 0; }
+  .dlg-head h2 { margin: 0 0 5px; font-size: 16.5px; }
+  .dlg-head p { margin: 0; font-size: 13px; color: var(--ink-2); }
   dialog textarea {
     display: block; width: calc(100% - 36px); margin: 13px 18px;
     height: 190px; resize: vertical;
     font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    font-size: 11.5px; line-height: 1.6;
+    font-size: 12.5px; line-height: 1.6;
     background: var(--ground); color: var(--ink);
     border: 1px solid var(--stroke); border-radius: 6px; padding: 10px;
   }
   .dlg-foot { display: flex; gap: 8px; justify-content: flex-end; padding: 0 18px 16px; }
   .dlg-foot button {
-    font: inherit; font-size: 12px; padding: 6px 14px; cursor: pointer;
+    font: inherit; font-size: 13px; padding: 7px 15px; cursor: pointer;
     border: 1px solid var(--stroke); border-radius: 5px;
     background: var(--surface-2); color: var(--ink);
   }
@@ -300,20 +300,20 @@
   /* ---------- 二重構造テーブル ---------- */
   section.block { margin-top: 46px; }
   section.block h2 {
-    font-size: 16px; letter-spacing: .03em; margin: 0 0 4px;
+    font-size: 18px; letter-spacing: .03em; margin: 0 0 4px;
   }
   section.block .block-lede {
-    font-size: 12.5px; color: var(--ink-2); margin: 0 0 16px; max-width: 72ch;
+    font-size: 14px; color: var(--ink-2); margin: 0 0 16px; max-width: 76ch;
   }
   .table-scroll { overflow-x: auto; border: 1px solid var(--stroke); border-radius: 8px; }
   table.dual {
-    width: 100%; border-collapse: collapse; font-size: 12.5px; background: var(--surface);
+    width: 100%; border-collapse: collapse; font-size: 14.5px; background: var(--surface);
   }
   table.dual th, table.dual td {
-    text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--stroke);
+    text-align: left; padding: 10px 13px; border-bottom: 1px solid var(--stroke);
     white-space: nowrap;
   }
-  table.dual th { color: var(--ink-3); font-weight: 600; font-size: 11px; letter-spacing: .05em; }
+  table.dual th { color: var(--ink-3); font-weight: 600; font-size: 12.5px; letter-spacing: .05em; }
   table.dual td.status { color: var(--seal); font-weight: 600; }
   table.dual td.status.done { color: var(--fac-koan); }
   table.dual tr:last-child td { border-bottom: none; }
@@ -326,8 +326,8 @@
     border-bottom: 2px solid var(--fac-g);
   }
   .fac-head .dot { width: 11px; height: 11px; border-radius: 50%; background: var(--fac-g); }
-  .fac-head h3 { margin: 0; font-size: 15px; color: var(--fac-g); }
-  .fac-head p { margin: 0; font-size: 11.5px; color: var(--ink-3); }
+  .fac-head h3 { margin: 0; font-size: 17px; color: var(--fac-g); }
+  .fac-head p { margin: 0; font-size: 13px; color: var(--ink-3); }
   .bio-grid {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 12px;
@@ -342,9 +342,9 @@
     display: grid; place-items: center; color: var(--fac-g); font-weight: 700; font-size: 19px;
   }
   .bio-face img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .bio-name { font-size: 14.5px; font-weight: 700; }
-  .bio-actor { font-size: 11px; color: var(--ink-2); margin-bottom: 5px; }
-  .bio-text { font-size: 11.5px; color: var(--ink-2); line-height: 1.7; }
+  .bio-name { font-size: 16.5px; font-weight: 700; }
+  .bio-actor { font-size: 12.5px; color: var(--ink-2); margin-bottom: 5px; }
+  .bio-text { font-size: 13.5px; color: var(--ink-2); line-height: 1.7; }
 
   /* ---------- 確定/未確定まとめ ---------- */
   .status-cols {
@@ -353,16 +353,16 @@
   .status-col {
     background: var(--surface); border: 1px solid var(--stroke); border-radius: 8px; padding: 14px 16px;
   }
-  .status-col h4 { margin: 0 0 8px; font-size: 12.5px; }
+  .status-col h4 { margin: 0 0 8px; font-size: 14px; }
   .status-col.ok h4 { color: var(--fac-koan); }
   .status-col.watch h4 { color: var(--seal); }
   .status-col.guess h4 { color: var(--ink-3); }
-  .status-col ul { margin: 0; padding-left: 18px; font-size: 12px; color: var(--ink-2); line-height: 1.9; }
+  .status-col ul { margin: 0; padding-left: 18px; font-size: 13.5px; color: var(--ink-2); line-height: 1.9; }
 
   footer {
     margin-top: 48px; padding-top: 14px;
     border-top: 1px solid var(--stroke);
-    font-size: 11.5px; color: var(--ink-3); line-height: 1.9;
+    font-size: 13px; color: var(--ink-3); line-height: 1.9;
   }
   footer code { background: var(--surface); padding: 1px 5px; border-radius: 3px; }
   footer b { color: var(--ink-2); }
@@ -403,6 +403,7 @@
     <button type="button" id="btn-zoom-in">拡大 ＋</button>
     <button type="button" id="btn-zoom-out">縮小 −</button>
     <button type="button" id="btn-export">座標を書き出す</button>
+    <button type="button" id="btn-import">座標を読み込む</button>
     <button type="button" id="btn-fullscreen">最大化 ⤢</button>
     <span class="hint">カード=クリックで詳細 / ドラッグで移動 / 背景=ドラッグでスクロール / ホイール=拡大縮小</span>
   </div>
@@ -437,12 +438,27 @@
   <dialog id="dlg">
     <div class="dlg-head">
       <h2>現在の配置</h2>
-      <p><code>index.html</code> 内の <code>const SAVED_LAYOUT = [];</code> の行を、以下で丸ごと置き換えてください。</p>
+      <p><code>index.html</code> 内の <code>const SAVED_LAYOUT = [];</code> の行を、以下で丸ごと置き換えてください。
+        右の「読み込む」ダイアログに貼り付ければ、このブラウザにもすぐ反映できます。</p>
     </div>
     <textarea id="dlg-text" readonly spellcheck="false"></textarea>
     <div class="dlg-foot">
       <button type="button" id="dlg-copy">コピー</button>
       <button type="button" id="dlg-close">閉じる</button>
+    </div>
+  </dialog>
+
+  <dialog id="dlg-import">
+    <div class="dlg-head">
+      <h2>配置を読み込む</h2>
+      <p>「座標を書き出す」で出力した内容(<code>const SAVED_LAYOUT = [...]</code> でも配列部分だけでも可)を
+        貼り付けてください。このブラウザに保存され、次回以降もこの配置で表示されます
+        (「自動整列」を押すか、ブラウザの保存データを消すまで有効です)。</p>
+    </div>
+    <textarea id="dlg-import-text" spellcheck="false" placeholder='[ { id: "nogi", x: 2400, y: 1800 }, ... ]'></textarea>
+    <div class="dlg-foot">
+      <button type="button" id="dlg-import-apply">適用</button>
+      <button type="button" id="dlg-import-cancel">キャンセル</button>
     </div>
   </dialog>
 
@@ -501,13 +517,19 @@
 
 const PHOTO_BASE = "img/";
 
+// 配列の順序がそのまま格子配置(3列なら3×2)の並び順になる。
+// 「丸菱商事-別班-公安 / 乃木家-テント-周辺人物」の並びは、関係線が
+// 隣接する陣営どうしをできるだけ多く結ぶように選んでいる(テントは
+// 公安・バルカ・乃木家の3陣営と関係が強く、全部には隣接できないが、
+// この並びだとテントの上下左右3方向のうち2つ(乃木家・バルカ)を
+// 隣接させられる)。
 const FACTIONS = [
   { id: "shosha",  name: "丸菱商事",  note: "乃木・長野らが籍を置く商社(表の顔)", color: "--fac-shosha" },
   { id: "beppan",  name: "別班",      note: "自衛隊の非公然情報組織", color: "--fac-beppan" },
   { id: "koan",    name: "警視庁公安部", note: "野崎・佐野が所属", color: "--fac-koan" },
+  { id: "family",  name: "乃木家",    note: "乃木憂助の血縁", color: "--fac-family" },
   { id: "tent",    name: "テント",    note: "バルカを拠点とする武装組織。ベキが率いる", color: "--fac-tent" },
   { id: "balka",   name: "バルカ / 周辺協力者", note: "物語の主舞台の国と、その周辺人物", color: "--fac-balka" },
-  { id: "family",  name: "乃木家",    note: "乃木憂助の血縁", color: "--fac-family" },
   { id: "unknown", name: "所属・役割 要確認", note: "公式サイト掲載のみで、詳細は未整理", color: "--fac-unknown" },
 ];
 
@@ -520,6 +542,12 @@ const FACTIONS = [
 */
 const PEOPLE = [
   { id: "nogi", name: "乃木憂助", actor: "堺 雅人", faction: "shosha",
+    // homeFaction: 図の配置(クラスター化)だけに使う「本当の居場所」。
+    // 表の所属(faction=丸菱商事)・裏の所属(dual=別班)という二重構造の
+    // 情報はそのまま保ち、バッジ・色・二重構造表の表示は変えない。
+    // ただし乃木の関係の大半は別班側の人物に集中しているため、配置上は
+    // 別班のクラスターに含める。
+    homeFaction: "beppan",
     photo: "nogi.webp", officialPage: true, documented: true,
     dual: { faction: "beppan", label: "裏: 別班" },
     tagline: "丸菱商事の商社員、その裏の顔は別班の工作員",
@@ -786,7 +814,14 @@ canvas.style.height = CANVAS_H + "px";
 
 // 陣営は「カード」として置かず、背景の色分け(ゾーン)とカードのバッジ・
 // 左端の色で示す。そのため nodes/nodeById には人物だけを載せる。
-const nodes = PEOPLE.map(p => ({ ...p, type: "person", facId: p.faction }));
+// facId: バッジ・カード左端の色・二重構造表など「表の所属」を表示する
+//        すべての箇所で使う(narrative上の正しさを保つため常に faction)。
+// homeFacId: 図の配置(クラスター化・背景ゾーン)にだけ使う「実際に
+//        近くにいる陣営」。通常は facId と同じだが、homeFaction を
+//        指定した人物(乃木など)だけ異なる。
+const nodes = PEOPLE.map(p => ({
+  ...p, type: "person", facId: p.faction, homeFacId: p.homeFaction || p.faction,
+}));
 const nodeById = new Map(nodes.map(n => [n.id, n]));
 const facById  = new Map(FACTIONS.map(f => [f.id, f]));
 
@@ -863,16 +898,23 @@ function measure() {
    ただし、明示的な関係線を持たない人物(拉致された別班員など)は
    何にも引っ張られず散らばってしまうため、①同じ陣営どうしのごく
    弱い引力 ②陣営ごとの持ち場(ホーム地点)へのさらに弱い重力、の
-   2つを補助的にかけて、陣営としてのまとまりを保っています。陣営
-   そのものは「所属」で示すため、位置で厳密に区切る必要はありません
-   (色分けされた背景ゾーンとカードのバッジで示しています)。
+   2つを補助的にかけて、陣営としてのまとまりを保っています。①は
+   関係線の本数(次数)が多い人ほど強く、少ない人ほど弱くかけているため、
+   関係の薄い人物は自然とクラスターの外側に落ち着きます。陣営そのもの
+   は「所属」で示すため、位置で厳密に区切る必要はありません(色分けされ
+   た背景ゾーンとカードのバッジで示しています)。
+
+   クラスター化(①②とゾーンの所属判定)には facId(表の所属)ではなく
+   homeFacId を使う。通常は同じだが、乃木のように「表の所属」と
+   「実際に関係が集中している陣営」が異なる人物だけ homeFaction で
+   ずらせる。
 
    座標を手で固定している人物(ドラッグ後に「座標を書き出す」で
    貼り付けた人物)はシミュレーションの対象から外し、他の人物からの
    反発だけを及ぼす「動かない壁」として扱います。                   */
 function autoArrange() {
   const cx = CANVAS_W / 2, cy = CANVAS_H / 2;
-  const used = FACTIONS.filter(f => PEOPLE.some(p => p.faction === f.id));
+  const used = FACTIONS.filter(f => nodes.some(n => n.homeFacId === f.id));
   const list = used.length ? used : FACTIONS;
   // 陣営のホーム地点は円周上ではなく格子状(6陣営なら3×2)に配置する。
   // 横に広いビューポートを無駄なく使え、対角の陣営どうしも近くなる。
@@ -895,6 +937,14 @@ function autoArrange() {
   const fixed = nodes.filter(isFixed);
   const movable = nodes.filter(n => !isFixed(n));
 
+  // 関係線の本数(次数)。多いほどクラスターの中心へ強く、少ないほど
+  // 外側へ(=クラスターの中心へ引く力を弱める)。
+  const degree = new Map(nodes.map(n => [n.id, 0]));
+  for (const e of edges) {
+    if (degree.has(e.from)) degree.set(e.from, degree.get(e.from) + 1);
+    if (degree.has(e.to)) degree.set(e.to, degree.get(e.to) + 1);
+  }
+
   // 毎回同じ結果になるよう、決定論的な疑似乱数で初期位置をばらつかせる
   let seed = 20260816;
   const rand = () => {
@@ -907,14 +957,14 @@ function autoArrange() {
     n.x = p.x; n.y = p.y; n.vx = 0; n.vy = 0;
   }
   for (const n of movable) {
-    const home = facHome.get(n.facId) || { x: cx, y: cy };
+    const home = facHome.get(n.homeFacId) || { x: cx, y: cy };
     n.x = home.x + (rand() - 0.5) * 620;
     n.y = home.y + (rand() - 0.5) * 620;
     n.vx = 0; n.vy = 0;
   }
 
   const REPEL = 1350000, SPRING_K = 0.02, SPRING_LEN = 560;
-  const FAC_K = 0.012, HOME_K = 0.0035, DAMP = 0.82, DT = 0.02;
+  const FAC_K = 0.017, HOME_K = 0.0035, DAMP = 0.82, DT = 0.02;
 
   for (let iter = 0; iter < 420; iter++) {
     const fx = new Map(movable.map(n => [n.id, 0]));
@@ -945,14 +995,15 @@ function autoArrange() {
     }
 
     // 引力: 関係線に沿ったバネ。相手が「陣営そのもの」(secret線など)の
-    // 場合は、その陣営の現在の重心へ向けて弱めに引く
+    // 場合は、その陣営(homeFacId基準のクラスター)の現在の重心へ向けて
+    // 弱めに引く
     for (const e of edges) {
       const a = nodeById.get(e.from);
       if (!a) continue;
       const bDirect = nodeById.get(e.to);
       let b = bDirect;
       if (!b) {
-        const members = nodes.filter(m => m.facId === e.to);
+        const members = nodes.filter(m => m.homeFacId === e.to);
         if (!members.length) continue;
         b = {
           id: e.to,
@@ -971,10 +1022,11 @@ function autoArrange() {
       if (bMove) { fx.set(b.id, fx.get(b.id) - ux * force); fy.set(b.id, fy.get(b.id) - uy * force); }
     }
 
-    // 陣営内の弱い凝集力 + 持ち場へのさらに弱い重力(発散防止)
+    // 陣営内の凝集力(関係の多い人物ほど強く=内側に、少ない人物ほど
+    // 弱く=外側に) + 持ち場へのさらに弱い重力(発散防止)
     const centroid = new Map();
     for (const f of list) {
-      const members = movable.filter(n => n.facId === f.id);
+      const members = movable.filter(n => n.homeFacId === f.id);
       if (!members.length) continue;
       centroid.set(f.id, {
         x: members.reduce((s, n) => s + n.x, 0) / members.length,
@@ -982,12 +1034,13 @@ function autoArrange() {
       });
     }
     for (const n of movable) {
-      const c = centroid.get(n.facId);
+      const c = centroid.get(n.homeFacId);
       if (c) {
-        fx.set(n.id, fx.get(n.id) + (c.x - n.x) * FAC_K);
-        fy.set(n.id, fy.get(n.id) + (c.y - n.y) * FAC_K);
+        const k = FAC_K * (1 - 1 / ((degree.get(n.id) || 0) + 2));
+        fx.set(n.id, fx.get(n.id) + (c.x - n.x) * k);
+        fy.set(n.id, fy.get(n.id) + (c.y - n.y) * k);
       }
-      const home = facHome.get(n.facId);
+      const home = facHome.get(n.homeFacId);
       if (home) {
         fx.set(n.id, fx.get(n.id) + (home.x - n.x) * HOME_K);
         fy.set(n.id, fy.get(n.id) + (home.y - n.y) * HOME_K);
@@ -1076,7 +1129,7 @@ function clipToBox(n, tx, ty) {
 function resolveNode(id) {
   const n = nodeById.get(id);
   if (n) return n;
-  const members = nodes.filter(x => x.facId === id);
+  const members = nodes.filter(x => x.homeFacId === id);
   if (!members.length) return null;
   return {
     id, type: "faction-anchor", w: 26, h: 26,
@@ -1098,7 +1151,7 @@ function drawZones() {
   const g = document.createElementNS(SVG_NS, "g");
   g.setAttribute("class", "zones");
   for (const f of FACTIONS) {
-    const members = nodes.filter(n => n.facId === f.id);
+    const members = nodes.filter(n => n.homeFacId === f.id);
     if (!members.length) continue;
 
     let x1 = Infinity, y1 = Infinity, x2 = -Infinity, y2 = -Infinity;
@@ -1121,7 +1174,7 @@ function drawZones() {
     g.appendChild(rect);
 
     // ラベルチップ(枠の左上に少し掛かる位置に、下地色で切り抜いたように置く)
-    const fontSize = 18;
+    const fontSize = 20;
     const textW = estTextWidth(f.name, fontSize);
     const chipX = x1 + 22, chipY = y1 - 17, chipPadX = 14, chipH = 36;
     const chip = document.createElementNS(SVG_NS, "rect");
@@ -1385,6 +1438,40 @@ document.getElementById("dlg-copy").addEventListener("click", async () => {
   catch { ta.select(); document.execCommand("copy"); }
 });
 document.getElementById("dlg-close").addEventListener("click", () => dlg.close());
+
+// 「座標を読み込む」: 「書き出す」で出力した内容(または配列部分だけ)を
+// 貼り付けると、このブラウザの localStorage に保存して即座に反映する。
+// SAVED_LAYOUT はクォート無しキーの JS オブジェクトリテラルなので
+// JSON.parse は使えず、Function で式として評価する(貼り付けるのは
+// 自分自身のブラウザにしか影響しないため、通常の paste-and-apply
+// ユーティリティとして許容できる範囲と判断)。
+const dlgImport = document.getElementById("dlg-import");
+document.getElementById("btn-import").addEventListener("click", () => {
+  document.getElementById("dlg-import-text").value = "";
+  dlgImport.showModal();
+});
+document.getElementById("dlg-import-cancel").addEventListener("click", () => dlgImport.close());
+document.getElementById("dlg-import-apply").addEventListener("click", () => {
+  const raw = document.getElementById("dlg-import-text").value.trim();
+  if (!raw) { alert("貼り付け内容が空です。"); return; }
+  try {
+    const jsSrc = raw.replace(/^const\s+SAVED_LAYOUT\s*=\s*/, "").replace(/;\s*$/, "");
+    const arr = Function(`"use strict"; return (${jsSrc});`)();
+    if (!Array.isArray(arr)) throw new Error("配列(角カッコ [...])の形式で貼り付けてください。");
+    let applied = 0;
+    for (const s of arr) {
+      const n = s && nodeById.get(s.id);
+      if (n && Number.isFinite(s.x) && Number.isFinite(s.y)) { n.x = s.x; n.y = s.y; applied++; }
+    }
+    if (!applied) throw new Error("id が一致する人物が見つかりませんでした。");
+    placeAll();
+    writeStore();
+    dlgImport.close();
+    alert(`${applied}件の座標を反映しました。このブラウザに保存済みです。`);
+  } catch (err) {
+    alert("読み込みに失敗しました: " + err.message);
+  }
+});
 
 document.getElementById("btn-arrange").addEventListener("click", () => {
   try { localStorage.removeItem(STORE_KEY); } catch { /* noop */ }
