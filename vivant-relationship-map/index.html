@@ -386,7 +386,8 @@
   </header>
 
   <div class="caution">
-    <b>基準時点: 2026年8月16日(日)17:11。</b> 最新放送済みは第13話まで、第14話は同日21:00放送のため未反映です。
+    <b>基準時点: 2026年8月16日(日)19:05。</b> 最新放送済みは第13話まで、第14話(サブタイトル「ノアの箱舟」)は同日21:00放送のため未反映です。
+    予告で「今作最大の宿敵」と紹介されている謎の女性(演: 宮下今日子)のみ、放送前情報として仮に含めています。
     氏名・俳優名は <a href="https://www.tbs.co.jp/VIVANT_tbs/chara/" target="_blank" rel="noopener">TBS公式サイトの登場人物ページ</a> に基づき確定していますが、
     第13話時点で「そう見せられているだけで全貌不明」な関係(点線 + <span style="color:var(--seal)">?</span>)も多く含まれます。
     詳しい根拠は同ディレクトリの <code>VIVANT人物情報.md</code> にまとめています。データを直す場合は、まず MD を編集してから
@@ -593,7 +594,7 @@ const PEOPLE = [
     tagline: "拉致された別班員の一人",
     bio: "拉致された別班員5人の一人。" },
 
-  { id: "hirose", name: "廣瀬瑞樹", actor: "珠城 りょう", faction: "beppan",
+  { id: "hirose", name: "廣瀬瑞稀", actor: "珠城 りょう", faction: "beppan",
     photo: "hirose.webp", officialPage: true, documented: true, tag: "拉致された5人",
     tagline: "拉致された別班員の一人",
     bio: "拉致された別班員5人の一人。" },
@@ -710,6 +711,11 @@ const PEOPLE = [
     photo: "morita.webp", officialPage: true, documented: true,
     tagline: "公安部の捜査官、乃木を護衛する",
     bio: "公安部外事第4課の捜査官。和久井とともに、野崎の指示で秘かに乃木の護衛を行っている。" },
+
+  { id: "mystery_woman", name: "謎の女性(第4の組織幹部)", actor: "宮下 今日子", faction: "unknown",
+    photo: null, officialPage: false, documented: false, tag: "第14話に本格登場",
+    tagline: "「今作最大の宿敵」、正体は今夜の第14話で",
+    bio: "第14話(2026年8月16日21:00放送、サブタイトル「ノアの箱舟」)の予告で「今作最大の宿敵」として登場が予告されている人物。野崎が密航したイスラエル(エルサレム)を拠点とする組織の幹部とみられるが、正体・組織の詳細は放送前時点では未確定。" },
 ];
 
 /*
@@ -749,6 +755,8 @@ const RELATIONS = [
   { from: "nozaki", to: "morita", kind: "watch", dir: "to", label: "乃木の護衛を指示" },
   { from: "wakui", to: "nogi", kind: "watch", dir: "to", label: "護衛" },
   { from: "morita", to: "nogi", kind: "watch", dir: "to", label: "護衛" },
+  { from: "nozaki", to: "mystery_woman", kind: "secret", dir: "none", unsure: true,
+    label: "エルサレムで密談(第14話予告)" },
 
   // -- 新庄まわり --
   { from: "shinjo", to: "beki", kind: "trust", dir: "to", label: "脱獄を支援" },
@@ -781,6 +789,7 @@ const STATUS = {
   watch: [
     "野崎 → 別班員拉致事件の黒幕として証拠は出ているが、動機・真意は不明(第14話で全貌)",
     "和久井俊作 → 第12話の描写から「怪しい動き」が視聴者間で話題だが、裏切り・伏線かは未確定",
+    "謎の女性(演: 宮下今日子) → 第14話予告で「今作最大の宿敵」と予告されているが、正体・組織は放送(今夜21:00)まで未確定",
   ],
   guess: [
     "長野の妻 = 櫻井司令、という説", "野崎自身も別班なのでは、という説",
