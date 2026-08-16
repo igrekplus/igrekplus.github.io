@@ -6,6 +6,12 @@
 <title>VIVANT 人物相関図</title>
 <style>
   :root {
+    /* 文字サイズは「名前・組織名(超特大)」「説明・関係(普通)」の
+       2種類だけに単純化している。まず大きめに振って、実際の見た目を
+       見ながら必要なら小さくする運用。 */
+    --fs-huge:   34px;
+    --fs-normal: 18px;
+
     --ground:      #e6e5dd;
     --ground-grid: #d6d5cb;
     --surface:     #f3f2ec;
@@ -193,7 +199,7 @@
   /* 人物カード: 写真を大きく前面に出し、名前だけで人物が分かるように
      する。長い説明文(p-note)とバッジ(chips)はクリックで開閉する。 */
   .node.person {
-    width: 232px; padding: 0 0 12px; display: flex; flex-direction: column;
+    width: 300px; padding: 0 0 14px; display: flex; flex-direction: column;
     overflow: hidden; cursor: pointer;
     transition: box-shadow .15s ease;
   }
@@ -210,22 +216,22 @@
   }
   .face img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .body { min-width: 0; padding: 13px 16px 0; }
-  .p-name { font-size: 21px; font-weight: 700; letter-spacing: .02em; }
-  .p-actor { font-size: 13.5px; color: var(--ink-2); margin-top: 3px; }
-  .p-tagline { font-size: 14.5px; color: var(--ink); margin-top: 8px; line-height: 1.55; }
-  .p-dual { font-size: 12.5px; color: var(--seal); margin-top: 7px; font-weight: 600; }
+  .p-name { font-size: var(--fs-huge); font-weight: 700; letter-spacing: .02em; line-height: 1.25; }
+  .p-actor { font-size: var(--fs-normal); color: var(--ink-2); margin-top: 4px; }
+  .p-tagline { font-size: var(--fs-normal); color: var(--ink); margin-top: 9px; line-height: 1.5; }
+  .p-dual { font-size: var(--fs-normal); color: var(--seal); margin-top: 8px; font-weight: 600; }
   .p-note {
-    display: none; font-size: 13.5px; color: var(--ink-3);
-    margin-top: 10px; line-height: 1.6; border-top: 1px solid var(--stroke); padding-top: 10px;
+    display: none; font-size: var(--fs-normal); color: var(--ink-3);
+    margin-top: 11px; line-height: 1.55; border-top: 1px solid var(--stroke); padding-top: 11px;
   }
-  .chips { display: none; flex-wrap: wrap; gap: 5px; margin-top: 9px; }
+  .chips { display: none; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
   .node.person.expanded .p-note,
   .node.person.expanded .chips { display: block; }
   .node.person.expanded .chips { display: flex; }
   .chip {
     display: inline-block;
-    font-size: 11.5px; letter-spacing: .06em;
-    padding: 2px 8px; border-radius: 3px;
+    font-size: var(--fs-normal); letter-spacing: .04em;
+    padding: 2px 9px; border-radius: 3px;
     border: 1px solid currentColor;
   }
   .chip.ok  { color: var(--fac-koan); }
@@ -233,14 +239,14 @@
   .chip.muted { color: var(--ink-3); }
 
   .p-fac {
-    display: flex; align-items: center; gap: 5px;
-    font-size: 12.5px; font-weight: 600; color: var(--fac);
-    letter-spacing: .02em; margin-top: 7px;
+    display: flex; align-items: center; gap: 6px;
+    font-size: var(--fs-normal); font-weight: 600; color: var(--fac);
+    letter-spacing: .02em; margin-top: 8px;
   }
-  .fac-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--fac); flex: none; }
+  .fac-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--fac); flex: none; }
   .p-expand-hint {
-    font-size: 11.5px; color: var(--ink-3); margin-top: 9px;
-    letter-spacing: .04em;
+    font-size: var(--fs-normal); color: var(--ink-3); margin-top: 10px;
+    letter-spacing: .02em;
   }
   .p-expand-hint::after { content: "タップで詳細 ▾"; }
   .node.person.expanded .p-expand-hint::after { content: "閉じる ▴"; }
@@ -252,10 +258,10 @@
 
   .rel-label {
     position: absolute; transform: translate(-50%, -50%);
-    padding: 3px 9px; border-radius: 9px;
+    padding: 4px 11px; border-radius: 10px;
     background: var(--ground); border: 1px solid var(--stroke);
-    color: var(--ink); font-size: 13px; font-weight: 600; line-height: 1.4;
-    max-width: 200px; text-align: center; pointer-events: none;
+    color: var(--ink); font-size: var(--fs-normal); font-weight: 600; line-height: 1.4;
+    max-width: 260px; text-align: center; pointer-events: none;
   }
   .rel-label .q { color: var(--seal); }
 
@@ -1003,6 +1009,45 @@ function measure() {
    座標を手で固定している人物(ドラッグ後に「座標を書き出す」で
    貼り付けた人物)はシミュレーションの対象から外し、他の人物からの
    反発だけを及ぼす「動かない壁」として扱います。                   */
+
+// 矩形どうしとして重なりを判定し、めり込みが小さい軸方向に押し出す
+// (円で近似すると縦長のカードでは斜め方向に判定漏れが出るため、
+// 幅・高さそれぞれの軸で正しく判定する)。SAVED_LAYOUT や localStorage
+// から読み込んだ座標は、文字サイズ変更などでカードの実寸が変わると
+// 重なることがあるため、force-directed シミュレーションの仕上げだけで
+// なく、あらゆる配置経路の最後に必ずこれを通す。
+function resolveOverlaps(movable, fixed = [], passes = 160) {
+  let seed = 4242;
+  const rand = () => {
+    seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+    return seed / 0x7fffffff;
+  };
+  const MARGIN = 30;
+  const pushApart = (a, b, bIsWall) => {
+    const ahw = a.w / 2 + MARGIN / 2, ahh = a.h / 2 + MARGIN / 2;
+    const bhw = b.w / 2 + MARGIN / 2, bhh = b.h / 2 + MARGIN / 2;
+    let dx = a.x - b.x, dy = a.y - b.y;
+    if (!dx && !dy) { dx = (rand() - 0.5) || 0.05; dy = (rand() - 0.5) || 0.05; }
+    const overlapX = (ahw + bhw) - Math.abs(dx);
+    const overlapY = (ahh + bhh) - Math.abs(dy);
+    if (overlapX <= 0 || overlapY <= 0) return;
+    if (overlapX < overlapY) {
+      const push = overlapX * (dx < 0 ? -1 : 1);
+      if (bIsWall) { a.x += push; } else { a.x += push / 2; b.x -= push / 2; }
+    } else {
+      const push = overlapY * (dy < 0 ? -1 : 1);
+      if (bIsWall) { a.y += push; } else { a.y += push / 2; b.y -= push / 2; }
+    }
+  };
+  for (let pass = 0; pass < passes; pass++) {
+    for (let i = 0; i < movable.length; i++) {
+      const a = movable[i];
+      for (let j = i + 1; j < movable.length; j++) pushApart(a, movable[j]);
+      for (const b of fixed) pushApart(a, b, true);
+    }
+  }
+}
+
 function autoArrange() {
   const cx = CANVAS_W / 2, cy = CANVAS_H / 2;
   const used = FACTIONS.filter(f => nodes.some(n => n.homeFacId === f.id));
@@ -1147,33 +1192,9 @@ function autoArrange() {
   }
 
   // 仕上げ: シミュレーションが収束しきらずカードが重なった場合に備え、
-  // 矩形どうしとして重なりを判定し、めり込みが小さい軸方向に押し出す
-  // (円で近似すると、今回のように縦長のカードでは斜め方向に判定漏れが
-  // 出るため、幅・高さそれぞれの軸で正しく判定する)
-  const MARGIN = 30;
-  const pushApart = (a, b, bIsWall) => {
-    const ahw = a.w / 2 + MARGIN / 2, ahh = a.h / 2 + MARGIN / 2;
-    const bhw = b.w / 2 + MARGIN / 2, bhh = b.h / 2 + MARGIN / 2;
-    let dx = a.x - b.x, dy = a.y - b.y;
-    if (!dx && !dy) { dx = (rand() - 0.5) || 0.05; dy = (rand() - 0.5) || 0.05; }
-    const overlapX = (ahw + bhw) - Math.abs(dx);
-    const overlapY = (ahh + bhh) - Math.abs(dy);
-    if (overlapX <= 0 || overlapY <= 0) return;
-    if (overlapX < overlapY) {
-      const push = overlapX * (dx < 0 ? -1 : 1);
-      if (bIsWall) { a.x += push; } else { a.x += push / 2; b.x -= push / 2; }
-    } else {
-      const push = overlapY * (dy < 0 ? -1 : 1);
-      if (bIsWall) { a.y += push; } else { a.y += push / 2; b.y -= push / 2; }
-    }
-  };
-  for (let pass = 0; pass < 160; pass++) {
-    for (let i = 0; i < movable.length; i++) {
-      const a = movable[i];
-      for (let j = i + 1; j < movable.length; j++) pushApart(a, movable[j]);
-      for (const b of fixed) pushApart(a, b, true);
-    }
-  }
+  // 矩形どうしの重なりを解消する(関数は resolveOverlaps に切り出し済み。
+  // applyLayout() の最後でも、座標の由来を問わず同じ処理を必ず通す)。
+  resolveOverlaps(movable, fixed);
 }
 
 function applyLayout({ useStore = true } = {}) {
@@ -1193,6 +1214,17 @@ function applyLayout({ useStore = true } = {}) {
       if (n && Number.isFinite(s.x) && Number.isFinite(s.y)) { n.x = s.x; n.y = s.y; }
     }
   }
+
+  // SAVED_LAYOUT・localStorage の座標は、文字サイズやカード幅を変えると
+  // (今回のように)重なりが生じることがある。由来を問わず、PEOPLE に
+  // 直接 x/y を書いた「固定」人物だけは動かさず、それ以外は最後に
+  // もう一度だけ重なり解消を通す。
+  const isHardFixed = n => {
+    const p = PEOPLE.find(pp => pp.id === n.id);
+    return !!(p && Number.isFinite(p.x) && Number.isFinite(p.y));
+  };
+  resolveOverlaps(nodes.filter(n => !isHardFixed(n)), nodes.filter(isHardFixed), 80);
+
   placeAll();
 }
 
@@ -1265,9 +1297,11 @@ function drawZones() {
     g.appendChild(rect);
 
     // ラベルチップ(枠の左上に少し掛かる位置に、下地色で切り抜いたように置く)
-    const fontSize = 20;
+    // 組織名なので文字サイズは --fs-huge と揃える(CSS変数はSVG属性に直接
+    // 使えないため、getComputedStyle で解決した実際のpx値を使う)。
+    const fontSize = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--fs-huge")) || 34;
     const textW = estTextWidth(f.name, fontSize);
-    const chipX = x1 + 22, chipY = y1 - 17, chipPadX = 14, chipH = 36;
+    const chipX = x1 + 22, chipY = y1 - 26, chipPadX = 16, chipH = fontSize * 1.7;
     const chip = document.createElementNS(SVG_NS, "rect");
     chip.setAttribute("x", chipX); chip.setAttribute("y", chipY);
     chip.setAttribute("width", textW + chipPadX * 2); chip.setAttribute("height", chipH);
