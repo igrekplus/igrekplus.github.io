@@ -419,6 +419,39 @@
       font: inherit;
     }
 
+    .routeMapLegend {
+      min-width: 182px;
+      padding: 9px 11px;
+      border: 1px solid rgba(100, 116, 139, 0.35);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.16);
+      color: #1f2937;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .routeMapLegendTitle {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 700;
+    }
+
+    .routeMapLegendItem {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 4px;
+    }
+
+    .routeMapLegendSwatch {
+      display: inline-block;
+      width: 20px;
+      height: 4px;
+      border-radius: 999px;
+      background: var(--route-color);
+    }
+
     .routeStopIcon {
       background: transparent;
       border: 0;
@@ -648,6 +681,16 @@
           points: [[35.643, 139.698], [35.482, 138.795], [35.698, 138.472], [35.611, 139.186], [35.643, 139.698], [35.460, 139.521]],
           stays: ["富士吉田", "北杜市明野", "相模湖"],
         },
+        "茨城・海と奥久慈周遊": {
+          color: "#d97706",
+          points: [[35.643, 139.698], [35.735, 140.650], [36.770, 140.350], [36.210, 140.080], [35.643, 139.698], [35.460, 139.521]],
+          stays: ["神栖", "大子町", "つくば"],
+        },
+        "南伊豆・下田周遊": {
+          color: "#7c3aed",
+          points: [[35.643, 139.698], [35.023, 138.950], [34.755, 138.934], [35.611, 139.186], [35.643, 139.698], [35.460, 139.521]],
+          stays: ["伊豆の国市", "河津（下田観光）", "相模湖"],
+        },
       };
 
       for (const mapRoot of mapRoots) {
@@ -690,6 +733,15 @@
         L.marker([35.643, 139.698]).bindTooltip("中目黒（出発・帰宅）").addTo(map);
         L.marker([35.460, 139.521]).bindTooltip("横浜万騎が原（返却）").addTo(map);
         L.control.layers(null, layers, { collapsed: false, position: "topright" }).addTo(map);
+        const legend = L.control({ position: "bottomleft" });
+        legend.onAdd = () => {
+          const element = L.DomUtil.create("div", "routeMapLegend");
+          element.innerHTML = `<span class="routeMapLegendTitle">周遊案の色</span>${Object.entries(routes).map(([name, route]) => `<span class="routeMapLegendItem"><i class="routeMapLegendSwatch" style="--route-color:${route.color}"></i>${name}</span>`).join("")}`;
+          L.DomEvent.disableClickPropagation(element);
+          L.DomEvent.disableScrollPropagation(element);
+          return element;
+        };
+        legend.addTo(map);
         map.fitBounds(routeBounds, { padding: [24, 24] });
       }
     }
