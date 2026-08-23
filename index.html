@@ -472,20 +472,6 @@
       line-height: 1;
     }
 
-    .routeSharedStop {
-      min-width: 108px;
-      padding: 5px 8px;
-      border: 2px solid #ffffff;
-      border-radius: 8px;
-      background: #334155;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
-      color: #ffffff;
-      font-size: 12px;
-      font-weight: 700;
-      text-align: center;
-      white-space: nowrap;
-    }
-
     .routeMapNote {
       margin: 0 0 20px;
       color: var(--muted);
@@ -730,7 +716,18 @@
           line.bindTooltip(name, { sticky: true });
           line.addTo(layer);
           route.stays.forEach((stay, index) => {
-            if (stay === "相模原市") return;
+            if (stay === "相模原市") {
+              if (index !== 0) return;
+              L.marker(route.points[index + 1], {
+                icon: L.divIcon({
+                  className: "routeStopIcon",
+                  html: `<span class="routeStopNumber" style="--route-color:${route.color}">①③</span>`,
+                  iconSize: [40, 30],
+                  iconAnchor: [20, 15],
+                }),
+              }).bindTooltip(`${name}：①・③泊目（相模原市）`, { direction: "top" }).addTo(layer);
+              return;
+            }
             const number = index + 1;
             L.marker(route.points[number], {
               icon: L.divIcon({
@@ -741,23 +738,15 @@
               }),
             }).bindTooltip(`${name}：${number}泊目（${stay}）`, { direction: "top" }).addTo(layer);
           });
-          layer.addTo(map);
           layers[name] = layer;
           route.points.forEach((point) => routeBounds.extend(point));
         }
 
-        L.marker([35.611, 139.186], {
-          icon: L.divIcon({
-            className: "routeStopIcon",
-            html: '<span class="routeSharedStop">相模原市：山①③・長①③・伊①③</span>',
-            iconSize: [130, 34],
-            iconAnchor: [65, 17],
-          }),
-        }).bindTooltip("相模原市：山梨・長野・伊豆案の1泊目・3泊目", { direction: "top" }).addTo(map);
+        layers[Object.keys(routes)[0]].addTo(map);
 
         L.marker([35.643, 139.698]).bindTooltip("中目黒（出発・帰宅）").addTo(map);
         L.marker([35.460, 139.521]).bindTooltip("横浜万騎が原（返却）").addTo(map);
-        L.control.layers(null, layers, { collapsed: false, position: "topright" }).addTo(map);
+        L.control.layers(layers, null, { collapsed: false, position: "topright" }).addTo(map);
         const legend = L.control({ position: "bottomleft" });
         legend.onAdd = () => {
           const element = L.DomUtil.create("div", "routeMapLegend");
