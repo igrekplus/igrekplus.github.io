@@ -244,20 +244,7 @@ CAMPING CAR GATE東墨田は営業時間が7:00〜20:00のため、当日7:00受
 
 ### 一次整理
 
-| 候補 | エリア | キャンピングカー・電源条件 | 一次判定 |
-| --- | --- | --- | --- |
-| [PICA富士西湖](https://www.pica-resort.jp/saiko/stay/site/campingcar.html) | 山梨県富士河口湖町 | キャンピングカー専用2区画。AC電源、給水・排水口、ダンプステーションあり | 比較対象 |
-| [PICA富士吉田](https://www.pica-resort.jp/yoshida/stay/site/tent-power.html) | 山梨県富士吉田市 | 自走式キャンピングカーは全長約6mまで。電源20A | 比較対象 |
-| [PICAさがみ湖](https://www.pica-resort.jp/sagamiko/stay/site/auto_power.html) | 神奈川県相模原市 | 電源15A・定員6名。車両寸法を伝え、利用可能区画を事前確認する方式 | 比較対象（要事前確認） |
-| [ワンダフルガーデン柏](https://www.wonderfulgarden.jp/) | 千葉県柏市 | RVサイトは4人・15A・幅6m×長さ7〜11m。車中泊・焚き火・オーニング可 | 比較対象 |
-| [キャンプ・アンド・キャビンズ山中湖](https://www.camp-cabins.com/yamanakako/stay/list/2519/) | 山梨県山中湖村 | オートサイトは20A程度。キャンピングカーの車両寸法・4人料金は要確認 | 比較対象（要事前確認） |
-| [RVパーク KARUIZAWA](https://web.rv-park.jp/spaces/detail/561) | 長野県軽井沢町 | キャブコン可。全サイト20A、24時間トイレ、給水、ゴミ処理あり | 比較対象 |
-| [みなかみアウトドア・ログ＆オートキャンプ場](https://www.minakami-ariston.jp/facilities/) | 群馬県みなかみ町 | AC電源付きオートサイト12区画。キャンピングカー利用区画の確認が必要 | 比較対象（要事前確認） |
-| [オートリゾート in はぎビレッジ](https://autoresortfun.wixsite.com/autoresort/stay/vanarea) | 茨城県高萩市 | 電源付きVANエリアは約6m×4.5m、4人料金込み、最大6人 | 比較対象 |
-| [RVパーク CD BASE SANO](https://web.rv-park.jp/spaces/detail/18) | 栃木県佐野市 | キャブコン可。20A電源サイト、焚き火・BBQ可 | 比較対象 |
-| [RV GROUND NASU](https://www.rvgroundnasu.com/) | 栃木県那須町 | RV専用。全29サイトがあり、フルフックアップ区画は30A・給排水を備える | 比較対象（所要時間要確認） |
-
-### 詳細比較
+各候補の移動・車両適合・電源・料金・注意点を一つの表に集約します。
 
 | 候補 | 移動目安 | 4人・車両適合 | 電源・給排水 | 料金の目安 | 注意点 |
 | --- | --- | --- | --- | --- | --- |
