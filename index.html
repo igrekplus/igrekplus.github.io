@@ -676,11 +676,13 @@
           color: "#0f766e",
           points: [[35.643, 139.698], [35.611, 139.186], [35.720, 138.458], [35.611, 139.186], [35.643, 139.698], [35.460, 139.521]],
           stays: ["相模原市", "北杜市", "相模原市"],
+          sharedMarkerAnchor: [20, 48],
         },
         "長野・軽井沢周遊": {
           color: "#16a34a",
           points: [[35.643, 139.698], [35.611, 139.186], [36.342, 138.636], [35.611, 139.186], [35.643, 139.698], [35.460, 139.521]],
           stays: ["相模原市", "軽井沢町", "相模原市"],
+          sharedMarkerAnchor: [-12, 16],
         },
         "茨城・奥久慈周遊": {
           color: "#d97706",
@@ -691,6 +693,7 @@
           color: "#7c3aed",
           points: [[35.643, 139.698], [35.611, 139.186], [34.755, 138.934], [35.611, 139.186], [35.643, 139.698], [35.460, 139.521]],
           stays: ["相模原市", "河津町（下田観光）", "相模原市"],
+          sharedMarkerAnchor: [52, 16],
         },
       };
 
@@ -723,7 +726,7 @@
                   className: "routeStopIcon",
                   html: `<span class="routeStopNumber" style="--route-color:${route.color}">①③</span>`,
                   iconSize: [40, 30],
-                  iconAnchor: [20, 15],
+                  iconAnchor: route.sharedMarkerAnchor || [20, 15],
                 }),
               }).bindTooltip(`${name}：①・③泊目（相模原市）`, { direction: "top" }).addTo(layer);
               return;
@@ -738,15 +741,14 @@
               }),
             }).bindTooltip(`${name}：${number}泊目（${stay}）`, { direction: "top" }).addTo(layer);
           });
+          layer.addTo(map);
           layers[name] = layer;
           route.points.forEach((point) => routeBounds.extend(point));
         }
 
-        layers[Object.keys(routes)[0]].addTo(map);
-
         L.marker([35.643, 139.698]).bindTooltip("中目黒（出発・帰宅）").addTo(map);
         L.marker([35.460, 139.521]).bindTooltip("横浜万騎が原（返却）").addTo(map);
-        L.control.layers(layers, null, { collapsed: false, position: "topright" }).addTo(map);
+        L.control.layers(null, layers, { collapsed: false, position: "topright" }).addTo(map);
         const legend = L.control({ position: "bottomleft" });
         legend.onAdd = () => {
           const element = L.DomUtil.create("div", "routeMapLegend");
