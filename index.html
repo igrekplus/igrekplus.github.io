@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>旅行レポート</title>
   <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQszS+2S1oMZb3L6L5e2w4D8lxF2Ho=" crossorigin="" />
   <style>
     :root {
       --bg: #ffffff;
@@ -398,6 +399,25 @@
       color: var(--drawer-muted);
     }
 
+    .routeMap {
+      height: 440px;
+      margin: 16px 0 8px;
+      border: 1px solid var(--table-border);
+      border-radius: 14px;
+      overflow: hidden;
+      background: #eef4f5;
+    }
+
+    .routeMap .leaflet-control-layers {
+      font: inherit;
+    }
+
+    .routeMapNote {
+      margin: 0 0 20px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
     @media (max-width: 640px) {
       article {
         padding: 20px;
@@ -409,6 +429,10 @@
 
       article table {
         font-size: 14px;
+      }
+
+      .routeMap {
+        height: 360px;
       }
     }
 
@@ -454,6 +478,7 @@
     </article>
   </main>
 
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
     const content = document.getElementById("content");
@@ -577,6 +602,50 @@
 
         const initial = buttons.find((button) => button.getAttribute("aria-selected") === "true") || buttons[0];
         activate(initial.dataset.shopTabTarget);
+      }
+
+      const mapRoots = Array.from(root.querySelectorAll(".routeMap[data-route-map='silver-week-2026']"));
+      const routes = {
+        "北陸・信州周遊": {
+          color: "#2563eb",
+          points: [[35.643, 139.698], [36.342, 138.636], [36.566, 136.933], [36.200, 138.243], [35.643, 139.698], [35.460, 139.521]],
+        },
+        "福島・那須周遊": {
+          color: "#dc2626",
+          points: [[35.643, 139.698], [36.779, 139.050], [37.460, 139.840], [37.074, 140.000], [35.643, 139.698], [35.460, 139.521]],
+        },
+        "富士・八ヶ岳・相模湖周遊": {
+          color: "#0f766e",
+          points: [[35.643, 139.698], [35.482, 138.795], [35.698, 138.472], [35.611, 139.186], [35.643, 139.698], [35.460, 139.521]],
+        },
+      };
+
+      for (const mapRoot of mapRoots) {
+        if (mapRoot.dataset.mapReady) continue;
+        mapRoot.dataset.mapReady = "true";
+        if (!window.L) {
+          mapRoot.textContent = "地図を読み込めませんでした。";
+          continue;
+        }
+
+        const map = L.map(mapRoot, { scrollWheelZoom: false, zoomControl: true });
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 18,
+          attribution: "© OpenStreetMap contributors",
+        }).addTo(map);
+
+        const layers = {};
+        for (const [name, route] of Object.entries(routes)) {
+          const layer = L.polyline(route.points, { color: route.color, weight: 4, opacity: 0.82 });
+          layer.bindTooltip(name, { sticky: true });
+          layer.addTo(map);
+          layers[name] = layer;
+        }
+
+        L.marker([35.643, 139.698]).bindTooltip("中目黒（出発・帰宅）").addTo(map);
+        L.marker([35.460, 139.521]).bindTooltip("横浜万騎が原（返却）").addTo(map);
+        L.control.layers(null, layers, { collapsed: false, position: "topright" }).addTo(map);
+        map.fitBounds(L.featureGroup(Object.values(layers)).getBounds(), { padding: [24, 24] });
       }
     }
 
