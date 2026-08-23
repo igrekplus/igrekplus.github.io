@@ -472,6 +472,20 @@
       line-height: 1;
     }
 
+    .routeSharedStop {
+      min-width: 108px;
+      padding: 5px 8px;
+      border: 2px solid #ffffff;
+      border-radius: 8px;
+      background: #334155;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+      white-space: nowrap;
+    }
+
     .routeMapNote {
       margin: 0 0 20px;
       color: var(--muted);
@@ -676,13 +690,11 @@
           color: "#0f766e",
           points: [[35.643, 139.698], [35.611, 139.186], [35.720, 138.458], [35.611, 139.186], [35.643, 139.698], [35.460, 139.521]],
           stays: ["相模湖", "北杜市明野", "相模湖"],
-          markerOffsets: [[18, -18], [0, 0], [18, -18]],
         },
         "長野・軽井沢周遊": {
           color: "#16a34a",
           points: [[35.643, 139.698], [35.611, 139.186], [36.342, 138.636], [35.611, 139.186], [35.643, 139.698], [35.460, 139.521]],
           stays: ["相模湖", "軽井沢", "相模湖"],
-          markerOffsets: [[0, 18], [0, 0], [0, 18]],
         },
         "茨城・奥久慈周遊": {
           color: "#d97706",
@@ -693,7 +705,6 @@
           color: "#7c3aed",
           points: [[35.643, 139.698], [35.611, 139.186], [34.755, 138.934], [35.611, 139.186], [35.643, 139.698], [35.460, 139.521]],
           stays: ["相模湖", "河津（下田観光）", "相模湖"],
-          markerOffsets: [[-18, 18], [0, 0], [-18, 18]],
         },
       };
 
@@ -719,12 +730,12 @@
           line.bindTooltip(name, { sticky: true });
           line.addTo(layer);
           route.stays.forEach((stay, index) => {
+            if (stay === "相模湖") return;
             const number = index + 1;
-            const [offsetX, offsetY] = route.markerOffsets?.[index] || [0, 0];
             L.marker(route.points[number], {
               icon: L.divIcon({
                 className: "routeStopIcon",
-                html: `<span class="routeStopNumber" style="--route-color:${route.color}; transform:translate(${offsetX}px, ${offsetY}px)">${number}</span>`,
+                html: `<span class="routeStopNumber" style="--route-color:${route.color}">${number}</span>`,
                 iconSize: [30, 30],
                 iconAnchor: [15, 15],
               }),
@@ -734,6 +745,15 @@
           layers[name] = layer;
           route.points.forEach((point) => routeBounds.extend(point));
         }
+
+        L.marker([35.611, 139.186], {
+          icon: L.divIcon({
+            className: "routeStopIcon",
+            html: '<span class="routeSharedStop">相模湖：山①③・長①③・伊①③</span>',
+            iconSize: [130, 34],
+            iconAnchor: [65, 17],
+          }),
+        }).bindTooltip("相模湖：山梨・長野・伊豆案の1泊目・3泊目", { direction: "top" }).addTo(map);
 
         L.marker([35.643, 139.698]).bindTooltip("中目黒（出発・帰宅）").addTo(map);
         L.marker([35.460, 139.521]).bindTooltip("横浜万騎が原（返却）").addTo(map);
