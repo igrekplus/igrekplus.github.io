@@ -623,6 +623,11 @@
     }
 
     function enhanceContent(root) {
+      for (const link of root.querySelectorAll("a[href]")) {
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+      }
+
       const tables = Array.from(root.querySelectorAll("table"));
       for (const table of tables) {
         const parent = table.parentElement;
@@ -780,6 +785,32 @@
         { name: "RVパーク CD BASE SANO", point: [36.295, 139.567], group: "近距離・代替", power: "20A" },
         { name: "オートリゾート in はぎビレッジ", point: [36.358, 139.714], group: "近距離・代替", power: "15A" },
       ];
+      const campSiteUrls = {
+        "PICA富士西湖": "https://www.pica-resort.jp/saiko/stay/site/campingcar.html",
+        "PICA富士吉田": "https://www.pica-resort.jp/yoshida/stay/site/tent-power.html",
+        "PICAさがみ湖": "https://www.pica-resort.jp/sagamiko/stay/site/auto_power.html",
+        "キャンプ・アンド・キャビンズ山中湖": "https://www.camp-cabins.com/yamanakako/stay/list/2519/",
+        "PICA八ヶ岳明野": "https://www.pica-resort.jp/akeno/stay/site/littlecampervillage_power.html",
+        "八ヶ岳オートキャンプ場": "https://www.yatsugatake-autocamp.com/information.html",
+        "ライジング・フィールド軽井沢": "https://www.rising-field.com/rfk-camp",
+        "RVパーク KARUIZAWA": "https://web.rv-park.jp/spaces/detail/561",
+        "閑乗寺公園キャンプ場": "https://www.city.nanto.toyama.jp/soshiki/kensetsuiji/3/1297.html",
+        "桂湖オートキャンプ場": "https://www.pref.toyama.jp/1563/kendodukuri/shinrinkasen/kasen/sakaigawa/kj00007720.html",
+        "ミヤシタヒルズ・オートキャンプ場": "https://www.miyashitahills.jp/fac_price/",
+        "みなかみアウトドア・ログ＆オートキャンプ場": "https://www.minakami-ariston.jp/facilities/",
+        "會津山村リゾート": "https://aizu-sanson.com/facility/camp/",
+        "那須たかはらオートキャンプ場": "https://takaharaac.jp/guide/",
+        "那須高原オートキャンプ場": "https://www.nasu-autocamp.jp/contents/annai.htm",
+        "RV GROUND NASU": "https://www.rvgroundnasu.com/",
+        "大子広域公園オートキャンプ場グリンヴィラ": "https://www.greenvila.jp/shisetsu/",
+        "ウォーターガーデンリゾート": "https://www.water-garden-resort.com/facility/tent/autosite/",
+        "つくば市筑波ふれあいの里": "https://www.tsukubafri.jp/",
+        "モビリティーパーク": "https://mobility-park.jp/facility/tent/",
+        "河津七滝オートキャンプ場": "https://www.nanatakiauto.com/",
+        "ワンダフルガーデン柏": "https://www.wonderfulgarden.jp/",
+        "RVパーク CD BASE SANO": "https://web.rv-park.jp/spaces/detail/18",
+        "オートリゾート in はぎビレッジ": "https://autoresortfun.wixsite.com/autoresort/stay/vanarea",
+      };
 
       for (const mapRoot of campMapRoots) {
         if (mapRoot.dataset.mapReady) continue;
@@ -806,7 +837,7 @@
               weight: 2,
               fillColor: color,
               fillOpacity: 0.95,
-            }).bindPopup(`<strong>${site.name}</strong><br>${site.group}<br>電源：${site.power}`).addTo(layers[name]);
+            }).bindPopup(`<strong>${site.name}</strong><br>${site.group}<br>電源：${site.power}<br><a href="${campSiteUrls[site.name]}" target="_blank" rel="noopener noreferrer">公式サイトを開く ↗</a>`).addTo(layers[name]);
             campBounds.extend(site.point);
           });
           layers[name].addTo(map);
@@ -822,6 +853,11 @@
         };
         legend.addTo(map);
         map.fitBounds(campBounds, { padding: [24, 24] });
+      }
+
+      for (const link of root.querySelectorAll("a[href]")) {
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
       }
     }
 
