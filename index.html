@@ -419,6 +419,26 @@
       font: inherit;
     }
 
+    .routeStopIcon {
+      background: transparent;
+      border: 0;
+    }
+
+    .routeStopNumber {
+      display: grid;
+      width: 30px;
+      height: 30px;
+      place-items: center;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      background: var(--route-color);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
     .routeMapNote {
       margin: 0 0 20px;
       color: var(--muted);
@@ -616,14 +636,17 @@
         "北陸・信州周遊": {
           color: "#2563eb",
           points: [[35.643, 139.698], [36.342, 138.636], [36.566, 136.933], [36.200, 138.243], [35.643, 139.698], [35.460, 139.521]],
+          stays: ["軽井沢", "南砺市", "長和町"],
         },
         "福島・那須周遊": {
           color: "#dc2626",
           points: [[35.643, 139.698], [36.779, 139.050], [37.460, 139.840], [37.074, 140.000], [35.643, 139.698], [35.460, 139.521]],
+          stays: ["みなかみ", "会津美里", "那須"],
         },
         "富士・八ヶ岳・相模湖周遊": {
           color: "#0f766e",
           points: [[35.643, 139.698], [35.482, 138.795], [35.698, 138.472], [35.611, 139.186], [35.643, 139.698], [35.460, 139.521]],
+          stays: ["富士吉田", "北杜市明野", "相模湖"],
         },
       };
 
@@ -642,17 +665,32 @@
         }).addTo(map);
 
         const layers = {};
+        const routeBounds = L.latLngBounds();
         for (const [name, route] of Object.entries(routes)) {
-          const layer = L.polyline(route.points, { color: route.color, weight: 4, opacity: 0.82 });
-          layer.bindTooltip(name, { sticky: true });
+          const layer = L.layerGroup();
+          const line = L.polyline(route.points, { color: route.color, weight: 4, opacity: 0.82 });
+          line.bindTooltip(name, { sticky: true });
+          line.addTo(layer);
+          route.stays.forEach((stay, index) => {
+            const number = index + 1;
+            L.marker(route.points[number], {
+              icon: L.divIcon({
+                className: "routeStopIcon",
+                html: `<span class="routeStopNumber" style="--route-color:${route.color}">${number}</span>`,
+                iconSize: [30, 30],
+                iconAnchor: [15, 15],
+              }),
+            }).bindTooltip(`${name}：${number}泊目（${stay}）`, { direction: "top" }).addTo(layer);
+          });
           layer.addTo(map);
           layers[name] = layer;
+          route.points.forEach((point) => routeBounds.extend(point));
         }
 
         L.marker([35.643, 139.698]).bindTooltip("中目黒（出発・帰宅）").addTo(map);
         L.marker([35.460, 139.521]).bindTooltip("横浜万騎が原（返却）").addTo(map);
         L.control.layers(null, layers, { collapsed: false, position: "topright" }).addTo(map);
-        map.fitBounds(L.featureGroup(Object.values(layers)).getBounds(), { padding: [24, 24] });
+        map.fitBounds(routeBounds, { padding: [24, 24] });
       }
     }
 
