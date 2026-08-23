@@ -665,6 +665,7 @@
       }
 
       const mapRoots = Array.from(root.querySelectorAll(".routeMap[data-route-map='silver-week-2026']"));
+      const campMapRoots = Array.from(root.querySelectorAll(".routeMap[data-camp-map='silver-week-2026']"));
       const routes = {
         "北陸・信州周遊": {
           color: "#2563eb",
@@ -743,6 +744,84 @@
         };
         legend.addTo(map);
         map.fitBounds(routeBounds, { padding: [24, 24] });
+      }
+
+      const campGroups = {
+        "北陸・信州": "#2563eb",
+        "福島・那須": "#dc2626",
+        "富士・八ヶ岳・相模湖": "#0f766e",
+        "茨城": "#d97706",
+        "南伊豆・下田": "#7c3aed",
+        "近距離・代替": "#64748b",
+      };
+      const campSites = [
+        { name: "PICA富士西湖", point: [35.501, 138.750], group: "富士・八ヶ岳・相模湖", power: "AC電源・給排水" },
+        { name: "PICA富士吉田", point: [35.455, 138.790], group: "富士・八ヶ岳・相模湖", power: "20A" },
+        { name: "PICAさがみ湖", point: [35.611, 139.186], group: "富士・八ヶ岳・相模湖", power: "15A / 1,500W" },
+        { name: "キャンプ・アンド・キャビンズ山中湖", point: [35.421, 138.866], group: "富士・八ヶ岳・相模湖", power: "20A程度 / 2,000W" },
+        { name: "PICA八ヶ岳明野", point: [35.720, 138.458], group: "富士・八ヶ岳・相模湖", power: "電源付き（容量確認）" },
+        { name: "八ヶ岳オートキャンプ場", point: [35.874, 138.411], group: "富士・八ヶ岳・相模湖", power: "AC電源は別料金" },
+        { name: "ライジング・フィールド軽井沢", point: [36.356, 138.616], group: "北陸・信州", power: "電源付きオートサイト" },
+        { name: "RVパーク KARUIZAWA", point: [36.326, 138.599], group: "北陸・信州", power: "20A" },
+        { name: "閑乗寺公園キャンプ場", point: [36.547, 136.932], group: "北陸・信州", power: "AC電源（容量確認）" },
+        { name: "桂湖オートキャンプ場", point: [36.406, 136.941], group: "北陸・信州", power: "電源あり（容量確認）" },
+        { name: "ミヤシタヒルズ・オートキャンプ場", point: [36.247, 138.271], group: "北陸・信州", power: "AC電源12区画" },
+        { name: "みなかみアウトドア・ログ＆オートキャンプ場", point: [36.779, 139.050], group: "福島・那須", power: "AC電源" },
+        { name: "會津山村リゾート", point: [37.444, 139.842], group: "福島・那須", power: "AC電源付きAサイト" },
+        { name: "那須たかはらオートキャンプ場", point: [36.969, 140.022], group: "福島・那須", power: "専用電源（容量確認）" },
+        { name: "那須高原オートキャンプ場", point: [37.085, 140.050], group: "福島・那須", power: "15A" },
+        { name: "RV GROUND NASU", point: [37.075, 140.004], group: "福島・那須", power: "30A・20A、給排水" },
+        { name: "大子広域公園オートキャンプ場グリンヴィラ", point: [36.770, 140.350], group: "茨城", power: "20A、給排水" },
+        { name: "ウォーターガーデンリゾート", point: [35.735, 140.650], group: "茨城", power: "10A" },
+        { name: "つくば市筑波ふれあいの里", point: [36.207, 140.095], group: "茨城", power: "1,500W" },
+        { name: "モビリティーパーク", point: [35.023, 138.950], group: "南伊豆・下田", power: "1,500W" },
+        { name: "河津七滝オートキャンプ場", point: [34.755, 138.934], group: "南伊豆・下田", power: "AC電源（容量確認）" },
+        { name: "ワンダフルガーデン柏", point: [35.834, 140.008], group: "近距離・代替", power: "15A / 1,500W" },
+        { name: "RVパーク CD BASE SANO", point: [36.295, 139.567], group: "近距離・代替", power: "20A" },
+        { name: "オートリゾート in はぎビレッジ", point: [36.358, 139.714], group: "近距離・代替", power: "15A" },
+      ];
+
+      for (const mapRoot of campMapRoots) {
+        if (mapRoot.dataset.mapReady) continue;
+        mapRoot.dataset.mapReady = "true";
+        if (!window.L) {
+          mapRoot.textContent = "地図を読み込めませんでした。";
+          continue;
+        }
+
+        const map = L.map(mapRoot, { scrollWheelZoom: false, zoomControl: true });
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 18,
+          attribution: "© OpenStreetMap contributors",
+        }).addTo(map);
+
+        const layers = {};
+        const campBounds = L.latLngBounds();
+        for (const [name, color] of Object.entries(campGroups)) {
+          layers[name] = L.layerGroup();
+          campSites.filter((site) => site.group === name).forEach((site) => {
+            L.circleMarker(site.point, {
+              radius: 7,
+              color: "#ffffff",
+              weight: 2,
+              fillColor: color,
+              fillOpacity: 0.95,
+            }).bindPopup(`<strong>${site.name}</strong><br>${site.group}<br>電源：${site.power}`).addTo(layers[name]);
+            campBounds.extend(site.point);
+          });
+          layers[name].addTo(map);
+        }
+        L.control.layers(null, layers, { collapsed: false, position: "topright" }).addTo(map);
+        const legend = L.control({ position: "bottomleft" });
+        legend.onAdd = () => {
+          const element = L.DomUtil.create("div", "routeMapLegend");
+          element.innerHTML = `<span class="routeMapLegendTitle">候補のエリア</span>${Object.entries(campGroups).map(([name, color]) => `<span class="routeMapLegendItem"><i class="routeMapLegendSwatch" style="--route-color:${color}"></i>${name}</span>`).join("")}`;
+          L.DomEvent.disableClickPropagation(element);
+          L.DomEvent.disableScrollPropagation(element);
+          return element;
+        };
+        legend.addTo(map);
+        map.fitBounds(campBounds, { padding: [24, 24] });
       }
     }
 
