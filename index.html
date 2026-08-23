@@ -676,6 +676,13 @@
           color: "#0f766e",
           points: [[35.643, 139.698], [35.611, 139.186], [35.720, 138.458], [35.611, 139.186], [35.643, 139.698], [35.460, 139.521]],
           stays: ["相模湖", "北杜市明野", "相模湖"],
+          markerOffsets: [[18, -18], [0, 0], [18, -18]],
+        },
+        "長野・軽井沢周遊": {
+          color: "#16a34a",
+          points: [[35.643, 139.698], [35.611, 139.186], [36.342, 138.636], [35.611, 139.186], [35.643, 139.698], [35.460, 139.521]],
+          stays: ["相模湖", "軽井沢", "相模湖"],
+          markerOffsets: [[0, 18], [0, 0], [0, 18]],
         },
         "茨城・奥久慈周遊": {
           color: "#d97706",
@@ -686,6 +693,7 @@
           color: "#7c3aed",
           points: [[35.643, 139.698], [35.611, 139.186], [34.755, 138.934], [35.611, 139.186], [35.643, 139.698], [35.460, 139.521]],
           stays: ["相模湖", "河津（下田観光）", "相模湖"],
+          markerOffsets: [[-18, 18], [0, 0], [-18, 18]],
         },
       };
 
@@ -712,10 +720,11 @@
           line.addTo(layer);
           route.stays.forEach((stay, index) => {
             const number = index + 1;
+            const [offsetX, offsetY] = route.markerOffsets?.[index] || [0, 0];
             L.marker(route.points[number], {
               icon: L.divIcon({
                 className: "routeStopIcon",
-                html: `<span class="routeStopNumber" style="--route-color:${route.color}">${number}</span>`,
+                html: `<span class="routeStopNumber" style="--route-color:${route.color}; transform:translate(${offsetX}px, ${offsetY}px)">${number}</span>`,
                 iconSize: [30, 30],
                 iconAnchor: [15, 15],
               }),
@@ -745,6 +754,7 @@
         "北陸・信州": "#2563eb",
         "福島・那須": "#dc2626",
         "富士・八ヶ岳・相模湖": "#0f766e",
+        "長野・軽井沢": "#16a34a",
         "茨城": "#d97706",
         "南伊豆・下田": "#7c3aed",
         "近距離・代替": "#64748b",
@@ -756,8 +766,8 @@
         { name: "キャンプ・アンド・キャビンズ山中湖", point: [35.421, 138.866], group: "富士・八ヶ岳・相模湖", power: "20A程度 / 2,000W" },
         { name: "PICA八ヶ岳明野", point: [35.720, 138.458], group: "富士・八ヶ岳・相模湖", power: "電源付き（容量確認）" },
         { name: "八ヶ岳オートキャンプ場", point: [35.874, 138.411], group: "富士・八ヶ岳・相模湖", power: "AC電源は別料金" },
-        { name: "ライジング・フィールド軽井沢", point: [36.356, 138.616], group: "北陸・信州", power: "電源付きオートサイト" },
-        { name: "RVパーク KARUIZAWA", point: [36.326, 138.599], group: "北陸・信州", power: "20A" },
+        { name: "ライジング・フィールド軽井沢", point: [36.356, 138.616], group: "長野・軽井沢", power: "電源付きオートサイト" },
+        { name: "RVパーク KARUIZAWA", point: [36.326, 138.599], group: "長野・軽井沢", power: "20A" },
         { name: "閑乗寺公園キャンプ場", point: [36.547, 136.932], group: "北陸・信州", power: "AC電源（容量確認）" },
         { name: "桂湖オートキャンプ場", point: [36.406, 136.941], group: "北陸・信州", power: "電源あり（容量確認）" },
         { name: "ミヤシタヒルズ・オートキャンプ場", point: [36.247, 138.271], group: "北陸・信州", power: "AC電源12区画" },
