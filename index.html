@@ -672,28 +672,20 @@
       const mapRoots = Array.from(root.querySelectorAll(".routeMap[data-route-map='silver-week-2026']"));
       const campMapRoots = Array.from(root.querySelectorAll(".routeMap[data-camp-map='silver-week-2026']"));
       const routes = {
-        "山梨・高原周遊": {
+        "A：街歩き→森キャンプ": {
           color: "#0f766e",
-          points: [[35.643, 139.698], [35.611, 139.186], [35.720, 138.458], [35.611, 139.186], [35.643, 139.698], [35.460, 139.521]],
-          stays: ["相模原市", "北杜市", "相模原市"],
-          sharedMarkerAnchor: [20, 48],
+          points: [[35.643, 139.698], [36.342, 138.636], [36.356, 138.616], [35.460, 139.521]],
+          stays: ["軽井沢町（市街地）", "軽井沢町（森）"],
         },
-        "長野・軽井沢周遊": {
+        "B：森キャンプ→街歩き": {
           color: "#16a34a",
-          points: [[35.643, 139.698], [35.611, 139.186], [36.342, 138.636], [35.611, 139.186], [35.643, 139.698], [35.460, 139.521]],
-          stays: ["相模原市", "軽井沢町", "相模原市"],
-          sharedMarkerAnchor: [-12, 16],
+          points: [[35.643, 139.698], [36.356, 138.616], [36.342, 138.636], [35.460, 139.521]],
+          stays: ["軽井沢町（森）", "軽井沢町（市街地）"],
         },
-        "茨城・奥久慈周遊": {
+        "C：街歩き→八ヶ岳高原": {
           color: "#d97706",
-          points: [[35.643, 139.698], [35.834, 140.008], [36.770, 140.350], [36.210, 140.080], [35.643, 139.698], [35.460, 139.521]],
-          stays: ["柏市", "大子町", "つくば市"],
-        },
-        "伊豆・下田周遊": {
-          color: "#7c3aed",
-          points: [[35.643, 139.698], [35.611, 139.186], [34.755, 138.934], [35.611, 139.186], [35.643, 139.698], [35.460, 139.521]],
-          stays: ["相模原市", "河津町（下田観光）", "相模原市"],
-          sharedMarkerAnchor: [52, 16],
+          points: [[35.643, 139.698], [36.342, 138.636], [35.720, 138.458], [35.460, 139.521]],
+          stays: ["軽井沢町（市街地）", "北杜市"],
         },
       };
 
@@ -719,18 +711,6 @@
           line.bindTooltip(name, { sticky: true });
           line.addTo(layer);
           route.stays.forEach((stay, index) => {
-            if (stay === "相模原市") {
-              if (index !== 0) return;
-              L.marker(route.points[index + 1], {
-                icon: L.divIcon({
-                  className: "routeStopIcon",
-                  html: `<span class="routeStopNumber" style="--route-color:${route.color}">①③</span>`,
-                  iconSize: [40, 30],
-                  iconAnchor: route.sharedMarkerAnchor || [20, 15],
-                }),
-              }).bindTooltip(`${name}：①・③泊目（相模原市）`, { direction: "top" }).addTo(layer);
-              return;
-            }
             const number = index + 1;
             L.marker(route.points[number], {
               icon: L.divIcon({
