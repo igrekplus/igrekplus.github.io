@@ -672,20 +672,10 @@
       const mapRoots = Array.from(root.querySelectorAll(".routeMap[data-route-map='silver-week-2026']"));
       const campMapRoots = Array.from(root.querySelectorAll(".routeMap[data-camp-map='silver-week-2026']"));
       const routes = {
-        "A：街歩き→森キャンプ": {
+        "浜名湖プラン（確定）": {
           color: "#0f766e",
-          points: [[35.643, 139.698], [36.342, 138.636], [36.356, 138.616], [35.460, 139.521]],
-          stays: ["軽井沢町（市街地）", "軽井沢町（森）"],
-        },
-        "B：森キャンプ→街歩き": {
-          color: "#16a34a",
-          points: [[35.643, 139.698], [36.356, 138.616], [36.342, 138.636], [35.460, 139.521]],
-          stays: ["軽井沢町（森）", "軽井沢町（市街地）"],
-        },
-        "C：街歩き→八ヶ岳高原": {
-          color: "#d97706",
-          points: [[35.643, 139.698], [36.342, 138.636], [35.720, 138.458], [35.460, 139.521]],
-          stays: ["軽井沢町（市街地）", "北杜市"],
+          points: [[35.460, 139.521], [34.700, 137.558], [34.687, 137.543], [35.460, 139.521]],
+          stays: ["浜名湖カナルオートキャンプ場（9/20〜21）", "浜名湖パークビレッジ（9/21〜22）"],
         },
       };
 
@@ -726,8 +716,7 @@
           route.points.forEach((point) => routeBounds.extend(point));
         }
 
-        L.marker([35.643, 139.698]).bindTooltip("中目黒（出発・帰宅）").addTo(map);
-        L.marker([35.460, 139.521]).bindTooltip("横浜万騎が原（返却）").addTo(map);
+        L.marker([35.460, 139.521]).bindTooltip("横浜万騎が原ステーション（貸出・返却）").addTo(map);
         L.control.layers(null, layers, { collapsed: false, position: "topright" }).addTo(map);
         const legend = L.control({ position: "bottomleft" });
         legend.onAdd = () => {
@@ -742,16 +731,15 @@
       }
 
       const campGroups = {
-        "軽井沢": "#16a34a",
-        "八ヶ岳": "#d97706",
+        "浜名湖": "#0f766e",
       };
       const campSites = [
-        { name: "ライジング・フィールド軽井沢", point: [36.356, 138.616], group: "軽井沢", power: "電源付きオートサイト" },
-        { name: "RVパーク KARUIZAWA", point: [36.326, 138.599], group: "軽井沢", power: "20A" },
-        { name: "PICA八ヶ岳明野", point: [35.720, 138.458], group: "八ヶ岳", power: "電源付き（容量確認）" },
-        { name: "八ヶ岳オートキャンプ場", point: [35.874, 138.411], group: "八ヶ岳", power: "AC電源は別料金" },
+        { name: "浜名湖カナルオートキャンプ場（芝生エリア電源サイト）", point: [34.700, 137.558], group: "浜名湖", power: "電源サイト（8,900円/1泊）" },
+        { name: "浜名湖パークビレッジ（RVサイト）", point: [34.687, 137.543], group: "浜名湖", power: "RVサイト・電源あり（9,020円/1泊）" },
       ];
       const campSiteUrls = {
+        "浜名湖カナルオートキャンプ場（芝生エリア電源サイト）": "https://www.nap-camp.com/shizuoka/16146",
+        "浜名湖パークビレッジ（RVサイト）": "https://www.nap-camp.com/shizuoka/15120",
         "PICA富士西湖": "https://www.pica-resort.jp/saiko/stay/site/campingcar.html",
         "PICA富士吉田": "https://www.pica-resort.jp/yoshida/stay/site/tent-power.html",
         "PICAさがみ湖": "https://www.pica-resort.jp/sagamiko/stay/site/auto_power.html",
