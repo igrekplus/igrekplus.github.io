@@ -674,7 +674,7 @@
       const routes = {
         "浜名湖プラン（確定）": {
           color: "#0f766e",
-          points: [[35.460, 139.521], [34.700, 137.558], [34.687, 137.543], [35.460, 139.521]],
+          points: [[35.4552, 139.5324], [34.7346, 137.5946], [34.6905, 137.5681], [35.4552, 139.5324]],
           stays: ["浜名湖カナルオートキャンプ場（9/20〜21）", "浜名湖パークビレッジ（9/21〜22）"],
         },
       };
@@ -716,7 +716,7 @@
           route.points.forEach((point) => routeBounds.extend(point));
         }
 
-        L.marker([35.460, 139.521]).bindTooltip("横浜万騎が原ステーション（貸出・返却）").addTo(map);
+        L.marker([35.4552, 139.5324]).bindTooltip("横浜万騎が原ステーション（貸出・返却）").addTo(map);
         L.control.layers(null, layers, { collapsed: false, position: "topright" }).addTo(map);
         const legend = L.control({ position: "bottomleft" });
         legend.onAdd = () => {
@@ -731,39 +731,20 @@
       }
 
       const campGroups = {
-        "浜名湖": "#0f766e",
+        "宿泊地": "#0f766e",
+        "観光候補": "#ea580c",
       };
       const campSites = [
-        { name: "浜名湖カナルオートキャンプ場（芝生エリア電源サイト）", point: [34.700, 137.558], group: "浜名湖", power: "電源サイト（8,900円/1泊）" },
-        { name: "浜名湖パークビレッジ（RVサイト）", point: [34.687, 137.543], group: "浜名湖", power: "RVサイト・電源あり（9,020円/1泊）" },
+        { name: "浜名湖カナルオートキャンプ場（芝生エリア電源サイト）", point: [34.7346, 137.5946], group: "宿泊地", power: "電源サイト（8,900円/1泊）" },
+        { name: "浜名湖パークビレッジ（RVサイト）", point: [34.6905, 137.5681], group: "宿泊地", power: "RVサイト・電源あり（9,020円/1泊）" },
+        { name: "竜ヶ岩洞", point: [34.8451, 137.6490], group: "観光候補", power: "東海地方最大級の鍾乳洞。キャンプ場から車で30〜40分（ななみん提案）" },
+        { name: "弁天島海浜公園", point: [34.6891, 137.6025], group: "観光候補", power: "無人島ツアー集合地点／渡し船でいかり瀬へも行ける" },
       ];
       const campSiteUrls = {
-        "浜名湖カナルオートキャンプ場（芝生エリア電源サイト）": "https://www.nap-camp.com/shizuoka/16146",
-        "浜名湖パークビレッジ（RVサイト）": "https://www.nap-camp.com/shizuoka/15120",
-        "PICA富士西湖": "https://www.pica-resort.jp/saiko/stay/site/campingcar.html",
-        "PICA富士吉田": "https://www.pica-resort.jp/yoshida/stay/site/tent-power.html",
-        "PICAさがみ湖": "https://www.pica-resort.jp/sagamiko/stay/site/auto_power.html",
-        "キャンプ・アンド・キャビンズ山中湖": "https://www.camp-cabins.com/yamanakako/stay/list/2519/",
-        "PICA八ヶ岳明野": "https://www.pica-resort.jp/akeno/stay/site/littlecampervillage_power.html",
-        "八ヶ岳オートキャンプ場": "https://www.yatsugatake-autocamp.com/information.html",
-        "ライジング・フィールド軽井沢": "https://www.rising-field.com/rfk-camp",
-        "RVパーク KARUIZAWA": "https://web.rv-park.jp/spaces/detail/561",
-        "閑乗寺公園キャンプ場": "https://www.city.nanto.toyama.jp/soshiki/kensetsuiji/3/1297.html",
-        "桂湖オートキャンプ場": "https://www.pref.toyama.jp/1563/kendodukuri/shinrinkasen/kasen/sakaigawa/kj00007720.html",
-        "ミヤシタヒルズ・オートキャンプ場": "https://www.miyashitahills.jp/fac_price/",
-        "みなかみアウトドア・ログ＆オートキャンプ場": "https://www.minakami-ariston.jp/facilities/",
-        "會津山村リゾート": "https://aizu-sanson.com/facility/camp/",
-        "那須たかはらオートキャンプ場": "https://takaharaac.jp/guide/",
-        "那須高原オートキャンプ場": "https://www.nasu-autocamp.jp/contents/annai.htm",
-        "RV GROUND NASU": "https://www.rvgroundnasu.com/",
-        "大子広域公園オートキャンプ場グリンヴィラ": "https://www.greenvila.jp/shisetsu/",
-        "ウォーターガーデンリゾート": "https://www.water-garden-resort.com/facility/tent/autosite/",
-        "つくば市筑波ふれあいの里": "https://www.tsukubafri.jp/",
-        "モビリティーパーク": "https://mobility-park.jp/facility/tent/",
-        "河津七滝オートキャンプ場": "https://www.nanatakiauto.com/",
-        "ワンダフルガーデン柏": "https://www.wonderfulgarden.jp/",
-        "RVパーク CD BASE SANO": "https://web.rv-park.jp/spaces/detail/18",
-        "オートリゾート in はぎビレッジ": "https://autoresortfun.wixsite.com/autoresort/stay/vanarea",
+        "浜名湖カナルオートキャンプ場（芝生エリア電源サイト）": "https://www.nap-camp.com/shizuoka/15120",
+        "浜名湖パークビレッジ（RVサイト）": "https://www.nap-camp.com/shizuoka/16146",
+        "竜ヶ岩洞": "https://www.google.com/maps/search/?api=1&query=%E7%AB%9C%E3%83%B6%E5%B2%A9%E6%B4%9E",
+        "弁天島海浜公園": "https://www.google.com/maps/search/?api=1&query=%E5%BC%81%E5%A4%A9%E5%B3%B6%E6%B5%B7%E6%B5%9C%E5%85%AC%E5%9C%92",
       };
 
       for (const mapRoot of campMapRoots) {
@@ -791,7 +772,7 @@
               weight: 2,
               fillColor: color,
               fillOpacity: 0.95,
-            }).bindPopup(`<strong>${site.name}</strong><br>${site.group}<br>電源：${site.power}<br><a href="${campSiteUrls[site.name]}" target="_blank" rel="noopener noreferrer">公式サイトを開く ↗</a>`).addTo(layers[name]);
+            }).bindPopup(`<strong>${site.name}</strong><br>${site.group}<br>${site.power}<br><a href="${campSiteUrls[site.name]}" target="_blank" rel="noopener noreferrer">地図・詳細を開く ↗</a>`).addTo(layers[name]);
             campBounds.extend(site.point);
           });
           layers[name].addTo(map);
