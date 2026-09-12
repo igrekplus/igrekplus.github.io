@@ -478,6 +478,21 @@
       font-size: 13px;
     }
 
+    .routeDistanceLabel {
+      padding: 1px 6px;
+      border: 1px solid rgba(100, 116, 139, 0.35);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.92);
+      color: #475569;
+      font-size: 11px;
+      font-weight: 600;
+      box-shadow: none;
+    }
+
+    .leaflet-tooltip.routeDistanceLabel::before {
+      display: none;
+    }
+
     @media (max-width: 640px) {
       article {
         padding: 20px;
@@ -718,6 +733,7 @@
 
         L.marker([35.4552, 139.5324]).bindTooltip("横浜万騎が原ステーション（貸出・返却）").addTo(map);
         L.control.layers(null, layers, { collapsed: false, position: "topright" }).addTo(map);
+        L.control.scale({ metric: true, imperial: false, position: "bottomright" }).addTo(map);
         const legend = L.control({ position: "bottomleft" });
         legend.onAdd = () => {
           const element = L.DomUtil.create("div", "routeMapLegend");
@@ -728,6 +744,19 @@
         };
         legend.addTo(map);
         map.fitBounds(routeBounds, { padding: [24, 24] });
+      }
+
+      // 2点間の直線距離（km、Haversine公式）。地図上の距離感の目安表示に使う。
+      // 実際の走行距離ではない（道なりだと湖を迂回する分、これより長くなる）。
+      function haversineKm([lat1, lon1], [lat2, lon2]) {
+        const toRad = (deg) => (deg * Math.PI) / 180;
+        const earthRadiusKm = 6371;
+        const dLat = toRad(lat2 - lat1);
+        const dLon = toRad(lon2 - lon1);
+        const a =
+          Math.sin(dLat / 2) ** 2 +
+          Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+        return earthRadiusKm * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
       }
 
       const campGroups = {
@@ -763,23 +792,42 @@
           attribution: "© OpenStreetMap contributors",
         }).addTo(map);
 
+        const stayBaseSite = campSites.find((site) => site.group === "宿泊地");
+
         const layers = {};
+        const distanceLayer = L.layerGroup();
         const campBounds = L.latLngBounds();
         for (const [name, color] of Object.entries(campGroups)) {
           layers[name] = L.layerGroup();
           campSites.filter((site) => site.group === name).forEach((site) => {
+            let distanceLabel = "";
+            if (stayBaseSite && site !== stayBaseSite) {
+              const km = haversineKm(stayBaseSite.point, site.point);
+              distanceLabel = `<br>宿泊地から直線距離 約${km.toFixed(1)}km（道なりの実際の距離はこれより長くなります）`;
+              L.polyline([stayBaseSite.point, site.point], {
+                color: "#94a3b8",
+                weight: 2,
+                dashArray: "4 6",
+                opacity: 0.8,
+              })
+                .bindTooltip(`約${km.toFixed(1)}km`, { permanent: true, direction: "center", className: "routeDistanceLabel" })
+                .addTo(distanceLayer);
+            }
             L.circleMarker(site.point, {
               radius: 7,
               color: "#ffffff",
               weight: 2,
               fillColor: color,
               fillOpacity: 0.95,
-            }).bindPopup(`<strong>${site.name}</strong><br>${site.group}<br>${site.power}<br><a href="${campSiteUrls[site.name]}" target="_blank" rel="noopener noreferrer">地図・詳細を開く ↗</a>`).addTo(layers[name]);
+            }).bindPopup(`<strong>${site.name}</strong><br>${site.group}<br>${site.power}${distanceLabel}<br><a href="${campSiteUrls[site.name]}" target="_blank" rel="noopener noreferrer">地図・詳細を開く ↗</a>`).addTo(layers[name]);
             campBounds.extend(site.point);
           });
           layers[name].addTo(map);
         }
+        distanceLayer.addTo(map);
+        layers["宿泊地からの距離"] = distanceLayer;
         L.control.layers(null, layers, { collapsed: false, position: "topright" }).addTo(map);
+        L.control.scale({ metric: true, imperial: false, position: "bottomright" }).addTo(map);
         const legend = L.control({ position: "bottomleft" });
         legend.onAdd = () => {
           const element = L.DomUtil.create("div", "routeMapLegend");
