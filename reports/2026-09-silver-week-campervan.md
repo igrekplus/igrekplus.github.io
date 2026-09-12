@@ -125,24 +125,53 @@
 
 ## 💡 みんなからの観光提案
 
-2日目・3日目の空き時間向けに、グループのやり取りで出た候補です。まだ「いつ・どれを入れるか」は決めていません。
+2日目・3日目の空き時間向けに、グループのやり取りで出た候補です。まだ「いつ・どれを入れるか」は決めていません。降水確率が想像より高そうという話も出ているので、天気で選べるように晴れ・雨で分けています。
+
+<div class="shopTabs">
+<div class="shopTabLabels" role="tablist" aria-label="観光提案">
+<button type="button" class="shopTabButton" role="tab" aria-selected="true" data-shop-tab-target="weather-panel-sunny">☀️ 晴れ・くもりなら</button>
+<button type="button" class="shopTabButton" role="tab" aria-selected="false" data-shop-tab-target="weather-panel-rainy">☔️ 雨・小雨なら</button>
+</div>
+<div class="shopTabPanels">
+<section id="weather-panel-sunny" class="shopTabPanel" role="tabpanel">
 
 | 候補 | 内容 | 目安 |
 | --- | --- | --- |
-| 🕳️ [竜ヶ岩洞](https://www.google.com/maps/search/?api=1&query=%E7%AB%9C%E3%83%B6%E5%B2%A9%E6%B4%9E) | 東海地方最大級の鍾乳洞。屋内なので雨天でも安心（「この中だと鍾乳洞ならセーフ」との声も） | キャンプ場から車で30〜40分 |
 | 🚴 [サイクリング](https://recommend.jr-central.co.jp/hamanako-cyc/rental/) | [弁天島サイクルゲート](https://www.google.com/maps/search/?api=1&query=%E5%BC%81%E5%A4%A9%E5%B3%B6%E6%B5%B7%E6%B5%9C%E5%85%AC%E5%9C%92)（弁天島海浜公園と同じ場所）でレンタル。弁天島⇔舘山寺の約12km、初心者向けのゆるいコース | クロスバイク4,000円〜、電動アシスト4,500〜5,500円。9:00〜16:30 |
-| 🥧 [うなぎパイファクトリー＆ぬくもりの森](https://www.google.com/maps/search/?api=1&query=%E3%81%86%E3%81%AA%E3%81%8E%E3%83%91%E3%82%A4%E3%83%95%E3%82%A1%E3%82%AF%E3%83%88%E3%83%AA%E3%83%BC) | 移動の合間にドライブがてら立ち寄れる工場・観光施設 | 移動ルート次第 |
 | 🎣 湖畔での釣り | カナルキャンプ場前から糸を垂らすとハゼが釣れるらしい。釣具は手薄なので現地調達も検討 | キャンプ場すぐ |
-| 🍢 [天保うなぎ養鰻場](https://www.unagi-tenpo.com/)で直売＆見学 | 創業55年以上のうなぎ養鰻場。白焼き直売所（9:00〜18:30）でうなぎを買ってキャンプ場で炭火焼きにできるほか、うなぎを観察・接触できる40分の見学ツアー「浜名湖うなぎ探検隊」もある | カナルキャンプ場から近い（はまゆう大橋そば） |
+| 🥧 [うなぎパイファクトリー＆ぬくもりの森](https://www.google.com/maps/search/?api=1&query=%E3%81%86%E3%81%AA%E3%81%8E%E3%83%91%E3%82%A4%E3%83%95%E3%82%A1%E3%82%AF%E3%83%88%E3%83%AA%E3%83%BC) | 移動の合間にドライブがてら立ち寄れる工場・観光施設。雨でも屋内なので実は天気を選ばない | 移動ルート次第 |
 
-> ☔️ 冒頭「この旅行について」の天気予報も参照。1〜2日目は雨がちな予報なので、屋内の竜ヶ岩洞・天保うなぎ養鰻場あたりが雨天プランの候補です。
+</section>
+<section id="weather-panel-rainy" class="shopTabPanel" role="tabpanel" hidden>
+
+小雨程度なら屋根のある乗り物、本降りなら屋内の鍾乳洞・温泉が候補です。無人島カヤックツアー（9/21）が雨天中止になった場合の代替としても良さそうという声が出ています。
+
+| 候補 | 内容 | 目安 |
+| --- | --- | --- |
+| 🚡 [かんざんじロープウェイ](https://www.google.com/maps/search/?api=1&query=%E3%81%8B%E3%82%93%E3%81%96%E3%82%93%E3%81%98%E3%83%AD%E3%83%BC%E3%83%97%E3%82%A6%E3%82%A7%E3%82%A4) | 舘山寺温泉から大草山山頂へ。小雨でも運行 | 小雨OK |
+| 🚢 [浜名湖遊覧船](https://www.google.com/maps/search/?api=1&query=%E6%B5%9C%E5%90%8D%E6%B9%96%E9%81%8A%E8%A6%A7%E8%88%B9+%E3%81%8B%E3%82%93%E3%81%96%E3%82%93%E3%81%98%E6%B8%AF) | かんざんじ港発。小雨でも運航 | 小雨OK |
+| 🕳️ [竜ヶ岩洞](https://www.google.com/maps/search/?api=1&query=%E7%AB%9C%E3%83%B6%E5%B2%A9%E6%B4%9E) | 東海地方最大級の鍾乳洞。屋内なので本降りでも安心（「この中だと鍾乳洞ならセーフ」との声も） | キャンプ場から車で30〜40分 |
+| ♨️ 舘山寺温泉（[華咲](https://maps.app.goo.gl/usMAeNNwWngDt99W6?g_st=ic)／[時わすれ開華亭](https://maps.app.goo.gl/6QEKNhBbdt4BZcYG6?g_st=ic)／[湯風景しおり](https://maps.app.goo.gl/L7wazVyLjfMW8Y1z6?g_st=ic)） | 本降りの日の候補。日帰り入浴の可否・料金は各施設へ確認 | 舘山寺エリア |
+
+</section>
+</div>
+</div>
+
+### 🍢 うなぎ、どう食べる？
+
+| 選択肢 | 内容 |
+| --- | --- |
+| 🔥 直売所で買ってキャンプ場で炭火焼き | [天保うなぎ養鰻場](https://www.unagi-tenpo.com/)。創業55年以上、白焼き直売所（9:00〜18:30）。うなぎを観察・接触できる40分の見学ツアー「浜名湖うなぎ探検隊」もある。カナルキャンプ場から近い（はまゆう大橋そば） |
+| 🍽️ お店で食べる（うなぎ百名店） | [炭焼鰻 はじめ](https://tabelog.com/shizuoka/A2202/A220201/22030160/)／[さくめ](https://tabelog.com/shizuoka/A2202/A220201/22011080/)／[うなぎ千草](https://tabelog.com/shizuoka/A2202/A220201/22004714/)。「実際は百名店のほうがうまそう」との声も |
+
+> ☔️ 冒頭「この旅行について」の天気予報も参照。1〜2日目は雨がちな予報なので、雨タブの候補が出番になりそうです。
 
 ---
 
 ## ⚠️ 検討中・要確認の事項
 
 1. 💰 ファイン号の返却日変更（9/23→9/22）に伴う、既払い93,510円との差額精算
-2. 🗺️ 2日目午後〜3日目の観光をどう入れるか（鍾乳洞／サイクリング／うなぎ工場見学／釣り／渡し船でいかり瀬 など、上記候補から）
+2. 🗺️ 2日目午後〜3日目の観光をどう入れるか（サイクリング／釣り／鍾乳洞／ロープウェイ／遊覧船／温泉／うなぎ工場見学／渡し船でいかり瀬 など、上記候補から。天気次第で入れ替える想定）
 
 ---
 
