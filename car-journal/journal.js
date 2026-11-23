@@ -1,7 +1,7 @@
 'use strict';
 // Article content and the entire lineup remain readable without JavaScript.
 const stamp = document.querySelector('time[data-content-updated]');
-if (stamp) fetch(new URL('content-meta.json', document.currentScript.src))
+if (stamp) fetch(new URL('content-meta.json', document.currentScript.src), { cache: 'no-store' })
   .then(r => { if (!r.ok) throw new Error('Content date unavailable'); return r.json(); })
   .then(meta => { stamp.textContent = meta.label; stamp.dateTime = meta.contentUpdatedAt; })
   .catch(() => {});
