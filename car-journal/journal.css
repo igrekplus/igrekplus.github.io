@@ -15,3 +15,4 @@
 @media(max-width:760px){.ed-cover h1{font-size:clamp(1.8rem,8.5vw,2.3rem)}.ed-header nav a{font-size:.875rem}}
 
 .ed-item-number{display:inline-block;color:#285246;background:#e8f0e9;padding:3px 8px;font:600 .875rem/1.6 'Barlow Condensed',sans-serif;letter-spacing:.08em;white-space:nowrap;font-variant-numeric:tabular-nums}.ed-lineup .ed-item-number{margin-right:8px;vertical-align:baseline}.ed-article-meta .ed-item-number{align-self:center}
+.ed-lineup ol{list-style:none;padding-left:0}.ed-lineup li{padding-left:0}
