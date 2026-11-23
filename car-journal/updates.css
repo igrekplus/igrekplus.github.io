@@ -1,0 +1,109 @@
+.header-actions{display:flex;align-items:center;gap:23px;flex-shrink:0}.content-updated{color:#6c766b;white-space:nowrap;line-height:1.5;text-align:right}.content-updated>span{font-size:.75rem;display:block;letter-spacing:.03em}.content-updated>time{display:block;font-size:.875rem;font-variant-numeric:tabular-nums;letter-spacing:.01em;color:#39483b}.selection-totals{display:flex;align-items:center;gap:20px;margin:0 0 17px;font-size:.875rem;color:#73816e}.selection-totals strong{font-weight:500;color:#324a35;font-variant-numeric:tabular-nums}.selection-totals .excluded-total{color:#92978d}.excluded-history{margin:21px 0 28px;border:1px solid #dcded7;background:#f6f7f3}.excluded-history>summary{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:14px 18px;cursor:pointer;list-style:none;color:#727e6b;font-size:.875rem}.excluded-history>summary::-webkit-details-marker{display:none}.excluded-history>summary>span:last-child{font-size:.8125rem;color:#919787}.excluded-history>summary:after{content:'＋';font-size:1rem;line-height:1;margin-left:auto;color:#7b8673}.excluded-history[open]>summary:after{content:'−'}.excluded-history[open]>summary{border-bottom:1px solid #dcded7}.excluded-history em{font-style:normal;display:inline-block;padding:0 7px;background:#e8ebe3;margin-left:7px;border-radius:2px;font-variant-numeric:tabular-nums}.excluded-record{display:grid;grid-template-columns:145px 1fr auto;align-items:center;gap:24px;padding:22px}.excluded-record>img{width:145px;height:100px;object-fit:contain;filter:grayscale(.75);background:#edf0e8}.excluded-record-brand{font:500 .875rem var(--display);letter-spacing:.07em;color:#8e9886;display:flex;align-items:center;gap:12px}.excluded-record h3{font-size:1.1rem;font-weight:500;color:#68745f;margin-top:4px}.excluded-record>div>p:not(.excluded-record-brand){font-size:.8125rem;color:#929a8b;line-height:1.85;margin-top:6px}.excluded-record time{font-size:.75rem;color:#a1a598;display:block;margin-top:7px}.excluded-badge{font-family:var(--font);display:inline-block;padding:2px 8px;border:1px solid #cbd2c3;border-radius:2px;color:#8a947f;font-size:.75rem;font-weight:400;line-height:1.5;letter-spacing:.01em;vertical-align:middle}.excluded-detail-note{font-size:.875rem;color:#88937c;margin-top:9px;line-height:1.8;max-width:650px}.excluded-query-note{font-size:.875rem;padding:14px 18px;background:#f1f3eb;border-left:2px solid #b6bda9;margin:15px 0;color:#7e8d70}.interior-review{padding-top:25px;margin-bottom:30px;border-bottom:1px solid var(--line);padding-bottom:26px}.interior-review-heading{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:20px}.interior-review-heading .eyebrow{font-size:.875rem;color:#94a085;margin-bottom:9px}.interior-review-heading h3{font-family:var(--serif);font-weight:400;font-size:1.35rem}.interior-review-heading>p{color:#8a9580;font-size:.8125rem}.interior-view-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}.interior-view{margin:0;min-width:0}.interior-view>button{display:block;position:relative;width:100%;padding:0;background:#eef1ea;aspect-ratio:3/2;overflow:hidden}.interior-view>button>img{width:100%;height:100%;object-fit:contain}.interior-view>button>span{position:absolute;right:9px;bottom:9px;background:#fffffff0;padding:4px 8px;color:#6c7b61;font-size:.75rem}.interior-view figcaption{padding-top:13px}.interior-view strong{font-size:.9375rem;font-weight:500;display:block;color:#586c4c}.interior-view figcaption>p{font-size:.75rem;color:#8c9781;margin-top:7px;line-height:1.9}.interior-view figcaption>a{font-size:.75rem;color:#829274;text-decoration:underline;text-underline-offset:4px;display:inline-block;margin-top:9px}.vehicle-photo-credit{position:absolute;right:12px;top:14px;z-index:1;font-size:.75rem;padding:4px 10px;color:#fff;background:#12201875;border:1px solid #ffffff60}.vehicle-photo-credit:hover{text-decoration:underline}.vehicle-gallery{gap:16px;flex-wrap:wrap}.gallery-choices{gap:8px}.gallery-choices button{white-space:nowrap}.photo-badge{pointer-events:none}
+@media(max-width:1100px){.site-header nav a:nth-child(n+3){display:none}.header-actions{gap:18px}.site-header nav{gap:20px}.content-updated>time{font-size:.8125rem}}
+@media(max-width:850px){.header-actions{gap:16px}.content-updated>time{font-size:.8125rem}.interior-view-grid{gap:14px}.interior-review-heading{align-items:start}.excluded-record{grid-template-columns:110px 1fr;gap:18px}.excluded-record>img{width:110px;height:90px}.excluded-record>.text-button{grid-column:2;justify-self:start}}
+@media(max-width:560px){.site-header{height:102px;padding-block:8px;align-items:center}.header-actions{display:flex;flex-direction:column;align-items:end;gap:7px}.content-updated{line-height:1.4}.content-updated>span{font-size:.75rem}.content-updated>time{font-size:.75rem;letter-spacing:0}.header-actions .nav-compare{padding:6px 10px;font-size:.75rem;min-height:29px}.header-actions .nav-compare span{min-width:20px}.site-header .brand{font-size:.8125rem;gap:8px}.site-header .brand small{font-size:.5625rem;letter-spacing:.07em}.site-header .brand-icon{width:22px;font-size:1.8rem}.selection-totals{font-size:.8125rem;gap:16px;margin-bottom:12px}.excluded-history>summary{padding:14px 13px;font-size:.8125rem;gap:12px}.excluded-history>summary>span:last-child{display:none}.excluded-record{padding:18px 14px;grid-template-columns:85px 1fr;gap:15px}.excluded-record>img{width:85px;height:85px}.excluded-record h3{font-size:1rem}.excluded-record-brand{font-size:.8125rem;gap:8px}.excluded-badge{font-size:.75rem;padding:1px 6px}.excluded-record>div>p:not(.excluded-record-brand){font-size:.75rem}.excluded-record time{font-size:.75rem}.excluded-record>.text-button{font-size:.8125rem}.interior-review{padding-top:18px;margin-bottom:20px}.interior-review-heading{display:block;margin-bottom:17px}.interior-review-heading .eyebrow{font-size:.8125rem}.interior-review-heading h3{font-size:1.25rem}.interior-review-heading>p{font-size:.8125rem;margin-top:9px}.interior-view-grid{grid-template-columns:1fr;gap:25px}.interior-view>button{aspect-ratio:3/2}.interior-view figcaption{padding-top:11px}.interior-view figcaption>p{font-size:.8125rem}.interior-view figcaption>a{font-size:.75rem}.vehicle-gallery{padding:12px 16px}.gallery-choices{gap:7px}.gallery-choices button{font-size:.75rem;padding:7px 9px}.excluded-query-note{font-size:.8125rem;padding:12px 15px}.vehicle-photo-credit{right:10px;top:12px;font-size:.75rem}.excluded-detail-note{font-size:.8125rem}html{scroll-padding-top:116px}.world{scroll-margin-top:0}}
+@media print{.content-updated{display:block}.header-actions .nav-compare{display:none}.excluded-history{display:block}.excluded-record{display:grid}.excluded-record>.text-button{display:none}.interior-view-grid{grid-template-columns:repeat(3,1fr)}.interior-view>button>span{display:none}.interior-review{break-inside:avoid}.vehicle-photo-credit{display:none}}
+.auth-dialog{max-width:440px}.auth-dialog .detail-copy{padding:36px 32px}#auth-form{display:flex;flex-direction:column;gap:14px;margin-top:20px}#auth-form label{font-size:.875rem}#auth-signed-in{margin-top:18px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;font-size:.875rem}#auth-form-status{font-size:.8125rem;color:var(--muted);margin-top:14px}.notes-bottom+.notes-bottom{margin-top:10px}
+.confirm-dialog{max-width:480px;width:min(480px,calc(100vw - 32px))}.confirm-dialog>.close-dialog{position:absolute;right:14px;top:14px}.confirm-dialog .detail-copy{padding:34px 30px 28px}.confirm-dialog .eyebrow{margin-bottom:10px}.confirm-dialog h2{font-family:var(--serif);font-size:1.35rem;font-weight:400;line-height:1.5;margin-bottom:14px}.confirm-message{font-size:.9375rem;line-height:1.85;color:var(--ink)}.confirm-points{margin:16px 0 0;padding:14px 16px 14px 30px;background:#f6f7f3;border:1px solid #dcded7;font-size:.8125rem;line-height:1.85;color:#556352}.confirm-points li+li{margin-top:6px}.confirm-actions{display:flex;justify-content:flex-end;align-items:center;gap:12px;margin-top:24px;flex-wrap:wrap}.confirm-actions .button{min-height:44px;padding:10px 20px;font-size:.875rem}@media(max-width:560px){.confirm-dialog .detail-copy{padding:26px 20px 22px}.confirm-actions{flex-direction:column-reverse;align-items:stretch}}
+.save-state{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin:0 0 25px;color:#778371;font-size:.875rem}.save-state button,.save-state a{text-decoration:underline;text-underline-offset:4px;font-size:.875rem;color:#526b48}.save-error{color:#9b5938}.card-actions{display:flex;flex-direction:column;align-items:flex-end;gap:10px}.exclude-button{font-size:.8125rem;color:#7b8772;text-decoration:underline;text-underline-offset:4px}.detail-decision-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}.detail-decision-actions button:disabled{opacity:.55;cursor:default}.exclusion-reason-label{display:block;font-size:.8125rem;color:#788470;margin-top:12px}.exclusion-reason-label input{display:block;width:100%;margin-top:6px;background:#fff;border:1px solid #d6ddce;color:#4b5b42;font:inherit;padding:10px 12px;border-radius:0}.excluded-actions{display:flex;flex-direction:column;gap:16px;align-items:flex-start}.restore-button{border:1px solid #9cae8d;color:#536b43;background:transparent;font-size:.875rem;padding:10px 13px;white-space:nowrap}.restore-button:hover{background:#e9eee2}.cargo-guide{display:flex;align-items:flex-start;gap:25px;padding:20px 24px;background:#eef2e8;border-left:2px solid #8a9e76;margin:24px 0;color:#5b6c4d}.cargo-guide>div{min-width:180px}.cargo-guide strong{font-family:var(--serif);font-weight:400;font-size:1.15rem}.cargo-guide p{font-size:.875rem;line-height:1.9}.cargo-guide details{font-size:.8125rem;line-height:1.8}.cargo-guide summary{cursor:pointer;text-decoration:underline;text-underline-offset:4px}.cargo-guide details p{margin-top:8px}.cargo-rating{display:flex;align-items:center;gap:9px;font-size:.875rem;color:#77866b;padding:14px 0 0}.cargo-rating strong{font-size:.9375rem;font-weight:500;color:#4e6643}.cargo-rating small{font-size:.75rem;margin-left:auto}.cargo-detail{display:grid;grid-template-columns:230px 1fr;gap:30px;padding:26px;background:#f0f3ec;border-top:1px solid #d5decd;margin:25px 0;color:#5f7051}.cargo-detail>div{display:flex;flex-direction:column;gap:7px}.cargo-detail span{font-size:.875rem}.cargo-detail strong{font-family:var(--serif);font-size:2rem;font-weight:400}.cargo-detail small{font-size:.8125rem;line-height:1.8;display:block}.cargo-detail p{font-size:.9375rem;line-height:1.9}.cargo-detail p small{margin-top:9px;color:#87957c}.cargo-detail a{display:inline-block;margin-top:10px;font-size:.8125rem;text-decoration:underline;text-underline-offset:4px}
+@media(max-width:850px){.excluded-actions{grid-column:2;flex-direction:row;align-items:center;flex-wrap:wrap}.cargo-guide{display:block}.cargo-guide>div{margin-bottom:10px}.cargo-detail{grid-template-columns:170px 1fr;gap:20px}.vehicle-title-row{flex-wrap:wrap}}
+@media(max-width:560px){.cargo-guide{padding:17px 18px}.cargo-rating{flex-wrap:wrap}.cargo-rating small{width:100%;margin-left:0}.detail-decision-actions{justify-content:flex-start}.detail-decision-actions .button{font-size:.8125rem;padding:12px 14px}.cargo-detail{grid-template-columns:1fr;padding:20px;gap:15px}.excluded-actions{flex-direction:column;gap:13px;align-items:flex-start}.exclusion-reason-label input{font-size:1rem}.card-bottom>span{max-width:90px}.save-state{font-size:.8125rem;gap:10px}}
+.cargo-guide>p{flex:1;margin:0}.cargo-guide>p>strong,.cargo-guide>p>span{display:block}.cargo-guide>p>span{margin-top:6px}.cargo-guide>details{flex:1;min-width:170px;max-width:48%}
+@media(max-width:850px){.cargo-guide>details{max-width:none;margin-top:14px}}
+
+@media(max-width:560px){.content-updated>time{font-size:.875rem}}
+
+.hero-photo-meta{display:inline-flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:wrap}
+.hero-credit-link,.world-credit-link{font-size:.75rem;text-decoration:underline;text-underline-offset:3px;opacity:.88;white-space:nowrap}
+.hero-credit-link:hover,.world-credit-link:hover{opacity:1}
+.world figcaption{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.cockpit-photo-caption{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.footer-actions{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.excluded-image-fallback{width:145px;height:100px;background:#edf0e8;color:#72806e;display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;font-size:.8125rem}
+
+.vehicle-photo--empty{background:#f2f4ee;padding:32px}
+.vehicle-photo-empty{max-width:420px;text-align:left;color:var(--ink)}
+.vehicle-photo-empty h3{font-family:var(--serif);font-weight:400;font-size:1.25rem;margin-top:8px}
+.vehicle-photo-empty p:not(.interior-link-eyebrow){font-size:.875rem;color:var(--muted);margin:12px 0 18px;line-height:1.85}
+
+.vehicle-photo-meta{padding:12px 40px 14px;background:#f8faf7;border-bottom:1px solid var(--line)}
+.photo-meta{font-size:.75rem;color:#6c7967;line-height:1.75}
+.photo-meta-list{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline}
+.photo-meta-item{display:inline-flex;flex-wrap:wrap;gap:5px;align-items:baseline}
+.photo-meta-item a{text-decoration:underline;text-underline-offset:3px;color:#4f6549}
+.photo-meta-key{font-size:.6875rem;color:#899482;letter-spacing:.03em}
+.photo-meta-pill{display:inline-block;padding:1px 7px;background:#e8eee5;color:#485d44;border-radius:2px;font-size:.6875rem}
+.photo-meta-sa{margin-top:6px;font-size:.7rem;color:#73806c;line-height:1.7}
+.photo-meta-links{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:7px}
+.photo-meta-links a{color:#5e7256;text-decoration:underline;text-underline-offset:3px}
+.photo-meta--compact{margin-top:9px;padding-top:8px;border-top:1px solid #e4e9e0}
+.photo-meta--compact .photo-meta-list{flex-direction:column;gap:3px}
+
+.interior-view--link-only{display:flex;flex-direction:column}
+.interior-link-card{aspect-ratio:3/2;background:#f3f5ef;border:1px solid #d9dfd3;padding:20px 18px;display:flex;flex-direction:column;justify-content:space-between;gap:10px;color:#39473a}
+.interior-link-eyebrow{font-family:var(--display);font-size:.75rem;letter-spacing:.12em;color:#829078}
+.interior-link-card h4{font-family:var(--serif);font-size:1rem;font-weight:500;line-height:1.6;color:#2b3a2e}
+.interior-link-card p:not(.interior-link-eyebrow){font-size:.75rem;color:#6d7a69;line-height:1.75;margin:0}
+.interior-official-link{display:inline-flex;align-items:center;gap:6px;width:max-content;max-width:100%;font-size:.8125rem;color:#284539;border-bottom:1px solid #6b816f;padding-bottom:3px;font-weight:500}
+.interior-official-link:hover{text-decoration:none;opacity:.78}
+
+.credits-page{background:#fbfcf9}
+.credits-back-link{display:inline-flex;align-items:center}
+.credits-hero{background:#182420;color:#f2f3ee;padding:64px 0 54px}
+.credits-hero .eyebrow{color:#d2b78e;margin-bottom:12px}
+.credits-hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(1.9rem,3vw,2.75rem);line-height:1.5;margin:0 0 18px}
+.credits-lead{max-width:760px;font-size:.9375rem;line-height:2;color:#ced8d1}
+.credits-section{padding-block:58px}
+.credits-section+.credits-section{border-top:1px solid var(--line)}
+.credits-policy-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.credits-policy-card{background:#fff;border:1px solid var(--line);padding:24px 24px 26px}
+.credits-policy-card h3{font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:10px}
+.credits-policy-card p{font-size:.875rem;color:var(--muted);line-height:1.9}
+.credits-toolbar{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:28px;flex-wrap:wrap}
+.credits-search{flex:1;min-width:240px;max-width:460px}
+.credits-search span{display:block;font-size:.8125rem;color:var(--muted);margin-bottom:6px}
+.credits-count{font-size:.875rem;color:var(--muted)}
+.credits-car-list{display:flex;flex-direction:column;gap:34px}
+.credits-car-group{background:#fff;border:1px solid var(--line);padding:24px 26px}
+.credits-car-header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:16px;margin-bottom:18px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.credits-car-header h3{font-size:1.25rem;font-weight:600;margin-top:2px}
+.credits-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.credits-photo-item{display:grid;grid-template-columns:132px minmax(0,1fr);gap:16px;padding:14px;background:#f8faf7;border:1px solid #e4e9e1;align-items:start}
+.credits-photo-item.is-link-only{background:#f4f6f1}
+.credits-thumb{width:132px;aspect-ratio:3/2;background:#e9eee6;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.credits-thumb img{width:100%;height:100%;object-fit:contain}
+.credits-thumb-fallback{font-size:.75rem;color:#6c7b67;padding:8px;text-align:center}
+.credits-photo-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.credits-photo-head h4{font-size:.9375rem;font-weight:600;color:var(--ink)}
+.credits-dl{margin:0;display:grid;gap:4px;font-size:.75rem;line-height:1.65}
+.credits-dl>div{display:grid;grid-template-columns:76px minmax(0,1fr);gap:8px}
+.credits-dl dt{color:#7c8876}
+.credits-dl dd{margin:0;color:#334237;overflow-wrap:anywhere}
+.credits-dl dd a{color:#2b4a3d;text-decoration:underline;text-underline-offset:3px}
+.credits-note{font-size:.75rem;color:var(--muted);margin-top:8px;line-height:1.7}
+.credits-sa-note{font-size:.72rem;color:#5a6b54;background:#edf2ea;padding:6px 9px;margin-top:8px;line-height:1.65}
+.credits-loading,.credits-noscript{color:var(--muted);font-size:.9375rem;padding:24px 0}
+
+@media(max-width:960px){
+  .credits-policy-grid{grid-template-columns:1fr}
+  .credits-list{grid-template-columns:1fr}
+}
+@media(max-width:850px){
+  .vehicle-photo-meta{padding:12px 28px}
+  .excluded-image-fallback{width:110px;height:90px}
+}
+@media(max-width:560px){
+  .hero-photo-meta{justify-content:flex-start;gap:8px}
+  .vehicle-photo-meta{padding:10px 18px}
+  .excluded-image-fallback{width:85px;height:85px;font-size:.7rem}
+  .credits-hero{padding:44px 0 38px}
+  .credits-section{padding-block:38px}
+  .credits-car-group{padding:18px 16px}
+  .credits-photo-item{grid-template-columns:1fr}
+  .credits-thumb{width:100%;max-width:240px}
+  .credits-dl>div{grid-template-columns:70px minmax(0,1fr)}
+}
+@media print{
+  .hero-credit-link,.world-credit-link,.vehicle-photo-meta{display:none}
+  .credits-back-link,.credits-toolbar{display:none}
+}
