@@ -22,3 +22,18 @@
 .ed-published-list{list-style:none;padding:0;margin:28px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 35px}.ed-published-item{padding:24px 26px;border:1px solid var(--ed-line);background:#fff;display:flex;flex-direction:column;min-width:0}.ed-published-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;font-size:.8125rem;color:var(--ed-muted);line-height:1.6}.ed-published-meta time{font-weight:600;color:var(--ed-ink);font-variant-numeric:tabular-nums}.ed-published-item h3{font:500 1.25rem/1.75 'Noto Serif JP',serif;margin:14px 0 10px}.ed-published-item h3 a{text-decoration:none}.ed-published-item>p{font-size:.9375rem;color:var(--ed-muted);line-height:1.85}.ed-published-read{display:inline-block;margin-top:auto;padding-top:18px;font-size:.875rem;font-weight:500}
 .ed-next-actions{display:flex;flex-wrap:wrap;align-items:center;gap:16px 24px;margin-top:22px}.ed-next-actions .ed-button,.ed-next-actions .ed-text-link{margin-top:0}
 @media(max-width:760px){.ed-published-section{padding:46px 0 50px}.ed-published-list{grid-template-columns:1fr;gap:18px}.ed-published-item{padding:20px}}
+
+.ed-reading-path{padding:64px 0 68px;border-bottom:1px solid var(--ed-line)}
+.ed-path-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:28px 35px;margin-top:26px}
+.ed-path-card{padding:26px 28px;border:1px solid var(--ed-line);background:#fff;display:flex;flex-direction:column;min-width:0}
+.ed-path-card.is-entry{background:#f4f7f4;border-top:3px solid #285246}
+.ed-path-card.is-deepdive{border-top:3px solid #8ba292}
+.ed-step-badge{display:inline-block;align-self:flex-start;font-size:.75rem;font-weight:600;letter-spacing:.06em;color:#285246;background:#e4eee6;padding:4px 10px;margin-bottom:14px}
+.ed-path-card h3{font:500 1.25rem/1.75 'Noto Serif JP',serif;margin:10px 0 12px}
+.ed-path-card h3 a{text-decoration:none}
+.ed-path-card>p{font-size:.9375rem;color:var(--ed-muted);line-height:1.85}
+.ed-deepdive-list{list-style:none;padding:0;margin:18px 0 0;display:flex;flex-direction:column;gap:12px}
+.ed-deepdive-list li{padding-top:12px;border-top:1px solid var(--ed-line)}
+.ed-deepdive-list li a{display:flex;align-items:baseline;gap:10px;text-decoration:none;font-size:.9375rem;line-height:1.7}
+.ed-deepdive-list li small{display:block;font-size:.75rem;color:var(--ed-muted);margin-top:4px}
+@media(max-width:760px){.ed-reading-path{padding:46px 0 50px}.ed-path-grid{grid-template-columns:1fr;gap:20px}.ed-path-card{padding:20px}}
